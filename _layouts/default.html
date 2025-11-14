@@ -133,122 +133,134 @@
     </div>
 
     <!-- === 시간 + 수동 전환 + localStorage 기반 Day/Night 테마 스크립트 === -->
-    <!-- === 시간 + 수동 전환 + localStorage 기반 Day/Night 테마 스크립트 === -->
     <script>
-      (function () {
-        var STORAGE_KEY_MODE = 'themeMode';
-        var STORAGE_KEY_TZ   = 'themeTimezone';
+    (function () {
+      var STORAGE_KEY_MODE = 'themeMode';
+      var STORAGE_KEY_TZ   = 'themeTimezone';
 
-        var modeSelect = null;
-        var tzSelect   = null;
+      var modeSelect = null;
+      var tzSelect   = null;
 
-        function loadMode() {
-          try {
-            var saved = localStorage.getItem(STORAGE_KEY_MODE);
-            if (saved === 'day' || saved === 'night' || saved === 'auto') {
-              return saved;
-            }
-          } catch (e) {}
-          return 'auto';
-        }
-
-        function loadTimezone() {
-          try {
-            var saved = localStorage.getItem(STORAGE_KEY_TZ);
-            if (saved === 'browser' || saved === 'kst' || saved === 'london') {
-              return saved;
-            }
-          } catch (e) {}
-          return 'browser';
-        }
-
-        function getHourByTimezone(tz) {
-          var now = new Date();
-          if (tz === 'browser') {
-            return now.getHours();
+      function loadMode() {
+        try {
+          var saved = localStorage.getItem(STORAGE_KEY_MODE);
+          if (saved === 'day' || saved === 'night' || saved === 'auto') {
+            return saved;
           }
-          var utcHour = now.getUTCHours();
-          if (tz === 'kst') {
-            return (utcHour + 9 + 24) % 24;   // UTC+9
+        } catch (e) {}
+        return 'auto';
+      }
+
+      function loadTimezone() {
+        try {
+          var saved = localStorage.getItem(STORAGE_KEY_TZ);
+          if (saved === 'browser' || saved === 'kst' || saved === 'london') {
+            return saved;
           }
-          if (tz === 'london') {
-            return (utcHour + 0 + 24) % 24;   // UTC+0
-          }
-          return now.getHours();
-        }
+        } catch (e) {}
+        return 'browser';
+      }
 
-        // 🔥 여기서 body 클래스 + 인라인 스타일 둘 다 바꿔서
-        // CSS가 안 먹어도 무조건 색이 바뀌도록 함
-        function setBodyTheme(isDay) {
-          var body = document.body;
-          if (!body) return;
+      function getHourByTimezone(tz) {
+        var now = new Date();
+        if (tz === 'browser') return now.getHours();
 
-          body.classList.remove('theme-day', 'theme-night');
+        var utcHour = now.getUTCHours();
+        if (tz === 'kst') return (utcHour + 9) % 24;
+        if (tz === 'london') return utcHour % 24;
 
-          if (isDay) {
-            body.classList.add('theme-day');
-            body.style.backgroundColor = '#fdfdfd';
-            body.style.color           = '#111111';
-          } else {
-            body.classList.add('theme-night');
-            body.style.backgroundColor = '#020617';
-            body.style.color           = '#e5e7eb';
-          }
-        }
+        return now.getHours();
+      }
 
-        function applyTheme() {
-          var mode = loadMode();
-          var tz   = loadTimezone();
+      /* =======================================
+        🌇 노을 그라데이션 NIGHT 테마 적용
+        ======================================= */
+      function setBodyTheme(isDay) {
+        var body = document.body;
+        if (!body) return;
 
-          if (mode === 'day') {
-            setBodyTheme(true);
-          } else if (mode === 'night') {
-            setBodyTheme(false);
-          } else { // auto
-            var hour  = getHourByTimezone(tz);
-            var isDay = (hour >= 7 && hour < 19);
-            setBodyTheme(isDay);
-          }
+        body.classList.remove('theme-day', 'theme-night');
 
-          if (modeSelect) modeSelect.value = mode;
-          if (tzSelect)   tzSelect.value   = tz;
-        }
+        if (isDay) {
+          /* DAY MODE */
+          body.classList.add('theme-day');
+          body.style.background = '#fdfdfd';
+          body.style.color      = '#111111';
 
-        function initThemeUI() {
-          modeSelect = document.getElementById('theme-mode-select');
-          tzSelect   = document.getElementById('theme-tz-select');
+          document.documentElement.style.setProperty('--link-color', '#2a7ae2');
+          document.documentElement.style.setProperty('--link-visited', '#1656a8');
+          document.documentElement.style.setProperty('--link-hover', '#111111');
 
-          if (modeSelect) {
-            modeSelect.addEventListener('change', function (e) {
-              try {
-                localStorage.setItem(STORAGE_KEY_MODE, e.target.value);
-              } catch (err) {}
-              applyTheme();
-            });
-          }
-
-          if (tzSelect) {
-            tzSelect.addEventListener('change', function (e) {
-              try {
-                localStorage.setItem(STORAGE_KEY_TZ, e.target.value);
-              } catch (err) {}
-              applyTheme();
-            });
-          }
-        }
-
-        function boot() {
-          initThemeUI();
-          applyTheme();
-        }
-
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', boot);
         } else {
-          boot();
+          /* NIGHT MODE — 🌇 Sunset Gradient */
+          body.classList.add('theme-night');
+
+          body.style.background = `
+            linear-gradient(
+              180deg,
+              #ff9a9e 0%,
+              #fad0c4 50%,
+              #fbc2eb 100%
+            )
+          `;
+          body.style.backgroundAttachment = 'fixed';   /* 스크롤해도 고정 */
+          body.style.color = '#2c1e1e';  /* 노을 위에서 잘 보이는 어두운 브라운 */
+
+          /* 링크 색상 */
+          document.documentElement.style.setProperty('--link-color', '#5d2a42');
+          document.documentElement.style.setProperty('--link-visited', '#7a3b52');
+          document.documentElement.style.setProperty('--link-hover', '#000000');
         }
-      })();
+      }
+
+      function applyTheme() {
+        var mode = loadMode();
+        var tz   = loadTimezone();
+
+        if (mode === 'day') setBodyTheme(true);
+        else if (mode === 'night') setBodyTheme(false);
+        else {
+          var hour = getHourByTimezone(tz);
+          var isDay = (hour >= 7 && hour < 19);
+          setBodyTheme(isDay);
+        }
+
+        if (modeSelect) modeSelect.value = mode;
+        if (tzSelect)   tzSelect.value   = tz;
+      }
+
+      function initThemeUI() {
+        modeSelect = document.getElementById('theme-mode-select');
+        tzSelect   = document.getElementById('theme-tz-select');
+
+        if (modeSelect) {
+          modeSelect.addEventListener('change', function (e) {
+            try { localStorage.setItem(STORAGE_KEY_MODE, e.target.value); } catch (err) {}
+            applyTheme();
+          });
+        }
+
+        if (tzSelect) {
+          tzSelect.addEventListener('change', function (e) {
+            try { localStorage.setItem(STORAGE_KEY_TZ, e.target.value); } catch (err) {}
+            applyTheme();
+          });
+        }
+      }
+
+      function boot() {
+        initThemeUI();
+        applyTheme();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+    })();
     </script>
+
 
 
   </body>
