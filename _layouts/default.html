@@ -238,10 +238,10 @@
       }
 
       /* =======================================
-        🌇 노을 그라데이션 / Day 테마 적용
+        🌇 그라데이션 / Day 테마 적용
         ======================================= */
       // isDay = true  → Day
-      // isDay = false → 노을(선셋) 테마
+      // isDay = false → Night(네이비→그레이 그라데이션)
       function setBodyTheme(isDay) {
         var body = document.body;
         if (!body) return;
@@ -259,12 +259,12 @@
           document.documentElement.style.setProperty('--link-hover',   '#111111');
 
         } else {
-          // NIGHT MODE — 🌇 Sunset Gradient
+          // NIGHT MODE — 🔵 네이비 → 그레이 그라데이션
           body.classList.add('theme-night');
 
-          body.style.background = 'linear-gradient(180deg, #ff9a9e 0%, #fad0c4 50%, #fbc2eb 100%)';
+          body.style.background = 'linear-gradient(180deg, #33406c 0%, #4a4f5a 50%, #2f3138 100%)';
           body.style.backgroundAttachment = 'fixed';   // 스크롤해도 고정
-          body.style.color = '#e5e7eb';  // 노을 위에서 잘 보이는 어두운 브라운
+          body.style.color = '#e5e7eb';  // 어두운 배경 위에서 잘 보이는 연한 회색
 
           document.documentElement.style.setProperty('--link-color',   '#cbd5e1');
           document.documentElement.style.setProperty('--link-visited', '#94a3b8');
@@ -277,7 +277,7 @@
         if (tzSelect)   tzSelect.value   = tz;
       }
 
-      // Auto 모드에서: 07:00 ~ 일몰 전 → Day, 그 외 → Sunset
+      // Auto 모드에서: 07:00 ~ 일몰 전 → Day, 그 외 → Night
       function applyTheme() {
         var mode = loadMode();
         var tz   = loadTimezone();
@@ -289,7 +289,7 @@
           return;
         }
         if (mode === 'night') {
-          setBodyTheme(false);  // 항상 노을 테마
+          setBodyTheme(false);  // 항상 Night 그라데이션
           updateSelectValues(mode, tz);
           return;
         }
@@ -304,7 +304,7 @@
             var hour = getHourByTimezone(tz);
             isDay = (hour >= 7 && hour < 19);
           } else {
-            // 07:00 ~ 일몰 전까지 Day, 이후는 Sunset
+            // 07:00 ~ 일몰 전까지 Day, 이후는 Night 그라데이션
             var hourLocal = now.getHours();
             if (hourLocal >= 7 && now < sunset) {
               isDay = true;
