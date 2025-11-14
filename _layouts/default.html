@@ -13,7 +13,7 @@
     <meta name="description"
           content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
 
-    <!-- main.css 안에 body.theme-day / body.theme-night 스타일이 있다고 가정 -->
+    <!-- main.css 안에 기본 스타일이 있다고 가정 -->
     <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
     <link rel="shortcut icon" href="{{ "/favicon.ico" | relative_url }}">
   </head>
@@ -132,7 +132,10 @@
       </label>
     </div>
 
-    <!-- === 시간 + 수동 전환 + localStorage 기반 Day/Night 테마 스크립트 === -->
+    <!-- SunCalc: 일몰 시간 계산용 라이브러리 -->
+    <script src="https://unpkg.com/suncalc@1.9.0/suncalc.js"></script>
+
+    <!-- === 일몰 + 수동 전환 + localStorage 기반 Day/노을 테마 스크립트 === -->
     <script>
     (function () {
       var STORAGE_KEY_MODE = 'themeMode';
@@ -141,7 +144,6 @@
       var modeSelect = null;
       var tzSelect   = null;
 
-      // 캐시된 일몰 시간 (해당 날짜 기준)
       var cachedSunsetDate = null;
       var cachedSunset     = null;
 
@@ -176,7 +178,7 @@
         return now.getHours();
       }
 
-      // 좌표 가져오기: browser / kst / london
+      // 타임존에 따른 기준 좌표
       function getCoordsForTimezone(tz, callback) {
         if (tz === 'kst') {
           // 서울
@@ -189,7 +191,7 @@
           return;
         }
 
-        // 브라우저 위치 (geolocation 허용 시)
+        // 브라우저 위치 사용 (허용 시)
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             function (pos) {
@@ -199,7 +201,7 @@
               });
             },
             function () {
-              callback(null); // 실패 → 기본 규칙 사용
+              callback(null);
             },
             { enableHighAccuracy: false, timeout: 5000, maximumAge: 3600000 }
           );
@@ -208,7 +210,7 @@
         }
       }
 
-      // SunCalc로 오늘 일몰 시간 계산
+      // 오늘 날짜 기준 일몰 시간 계산
       function computeTodaySunset(tz, done) {
         var todayKey = new Date().toDateString();
         if (cachedSunsetDate === todayKey && cachedSunset) {
@@ -216,9 +218,13 @@
           return;
         }
 
+        if (typeof SunCalc === 'undefined') {
+          done(null);
+          return;
+        }
+
         getCoordsForTimezone(tz, function (coords) {
-          if (!coords || typeof SunCalc === 'undefined') {
-            // 좌표나 SunCalc가 없으면 null 반환 → 기본 hour 룰 사용
+          if (!coords) {
             done(null);
             return;
           }
@@ -232,16 +238,18 @@
       }
 
       /* =======================================
-        🌅 노을 그라데이션 / Day 스타일 적용
+        🌇 노을 그라데이션 / Day 테마 적용
         ======================================= */
-      function setBodyTheme(mode) {
-        // mode: 'day' | 'sunset'
+      // isDay = true  → Day
+      // isDay = false → 노을(선셋) 테마
+      function setBodyTheme(isDay) {
         var body = document.body;
         if (!body) return;
 
-        body.classList.remove('theme-day', 'theme-night', 'theme-sunset');
+        body.classList.remove('theme-day', 'theme-night');
 
-        if (mode === 'day') {
+        if (isDay) {
+          // DAY MODE
           body.classList.add('theme-day');
           body.style.background = '#fdfdfd';
           body.style.color      = '#111111';
@@ -249,12 +257,13 @@
           document.documentElement.style.setProperty('--link-color',   '#2a7ae2');
           document.documentElement.style.setProperty('--link-visited', '#1656a8');
           document.documentElement.style.setProperty('--link-hover',   '#111111');
+
         } else {
-          // 🌇 SUNSET 모드
-          body.classList.add('theme-sunset');
+          // NIGHT MODE — 🌇 Sunset Gradient
+          body.classList.add('theme-night');
 
           body.style.background = 'linear-gradient(180deg, #ff9a9e 0%, #fad0c4 50%, #fbc2eb 100%)';
-          body.style.backgroundAttachment = 'fixed';
+          body.style.backgroundAttachment = 'fixed';   // 스크롤해도 고정
           body.style.color = '#2c1e1e';  // 노을 위에서 잘 보이는 어두운 브라운
 
           document.documentElement.style.setProperty('--link-color',   '#5d2a42');
@@ -263,44 +272,49 @@
         }
       }
 
-      // Auto 모드에서 사용할 로직: 일몰 기준으로 day/sunset 나누기
-      function applyThemeWithSunset() {
+      function updateSelectValues(mode, tz) {
+        if (modeSelect) modeSelect.value = mode;
+        if (tzSelect)   tzSelect.value   = tz;
+      }
+
+      // Auto 모드에서: 07:00 ~ 일몰 전 → Day, 그 외 → Sunset
+      function applyTheme() {
         var mode = loadMode();
         var tz   = loadTimezone();
-        var now  = new Date();
 
+        // 수동 Day/Night 우선
         if (mode === 'day') {
-          setBodyTheme('day');
+          setBodyTheme(true);
+          updateSelectValues(mode, tz);
           return;
         }
         if (mode === 'night') {
-          setBodyTheme('sunset');  // 수동 night → 항상 노을 테마
+          setBodyTheme(false);  // 항상 노을 테마
+          updateSelectValues(mode, tz);
           return;
         }
 
-        // Auto 모드: 일몰 시간 기준으로
+        // Auto 모드: 일몰 시간 기반
         computeTodaySunset(tz, function (sunset) {
-          if (!sunset) {
-            // fallback: 예전처럼 07~19시만 day
-            var hour  = getHourByTimezone(tz);
-            var isDay = (hour >= 7 && hour < 19);
-            setBodyTheme(isDay ? 'day' : 'sunset');
-          } else {
-            // 같은 타임존 기준으로 비교 (sunset은 현지 시각 Date 객체)
-            var hour = now.getHours();
-            var isDay;
+          var now = new Date();
+          var isDay;
 
-            // 07:00 ~ 일몰 전 → day, 나머지 → sunset
-            if (hour >= 7 && now < sunset) {
+          if (!sunset) {
+            // SunCalc 또는 위치 실패 시: 기본 07~19 규칙
+            var hour = getHourByTimezone(tz);
+            isDay = (hour >= 7 && hour < 19);
+          } else {
+            // 07:00 ~ 일몰 전까지 Day, 이후는 Sunset
+            var hourLocal = now.getHours();
+            if (hourLocal >= 7 && now < sunset) {
               isDay = true;
             } else {
               isDay = false;
             }
-            setBodyTheme(isDay ? 'day' : 'sunset');
           }
 
-          if (modeSelect) modeSelect.value = mode;
-          if (tzSelect)   tzSelect.value   = tz;
+          setBodyTheme(isDay);
+          updateSelectValues(mode, tz);
         });
       }
 
@@ -311,24 +325,24 @@
         if (modeSelect) {
           modeSelect.addEventListener('change', function (e) {
             try { localStorage.setItem(STORAGE_KEY_MODE, e.target.value); } catch (err) {}
-            applyThemeWithSunset();
+            applyTheme();
           });
         }
 
         if (tzSelect) {
           tzSelect.addEventListener('change', function (e) {
             try { localStorage.setItem(STORAGE_KEY_TZ, e.target.value); } catch (err) {}
-            // 타임존 바뀌면 일몰도 달라지므로 캐시 초기화
-            cachedSunset     = null;
+            // 타임존 바뀌면 일몰 캐시 초기화
             cachedSunsetDate = null;
-            applyThemeWithSunset();
+            cachedSunset     = null;
+            applyTheme();
           });
         }
       }
 
       function boot() {
         initThemeUI();
-        applyThemeWithSunset();
+        applyTheme();
       }
 
       if (document.readyState === 'loading') {
@@ -338,8 +352,6 @@
       }
     })();
     </script>
-
-
 
   </body>
 </html>

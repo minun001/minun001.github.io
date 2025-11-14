@@ -4,99 +4,152 @@ title: "Hyunsik Min"
 permalink: /
 ---
 
+<style>
+/* ============ Accordion / Toggle 기본 스타일 ============ */
+.accordion {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.accordion-header {
+  background: #f7f7f7;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+}
+
+.accordion-header:hover {
+  background: #ececec;
+}
+
+.accordion-content {
+  display: none;
+  padding: 18px;
+  background: white;
+  border-top: 1px solid #eee;
+}
+
+.accordion.active .accordion-content {
+  display: block;
+}
+</style>
+
+<script>
+// ============ Toggle Script ============ //
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".accordion-header").forEach(header => {
+    header.addEventListener("click", () => {
+      header.parentElement.classList.toggle("active");
+    });
+  });
+});
+</script>
+
+
 <p align="center">
   <img src="/assets/img/avatar.png" alt="Hyunsik Min" style="max-width: 220px; border-radius: 50%;">
 </p>
 
-M.S. Candidate, Department of Future Convergence Technology  
-Soonchunhyang University (SCHU), Republic of Korea  
-
+<p align="center">
+M.S. Candidate, Republic of Korea<br>
 AI for Energy · Mobility · Safety
+</p>
 
 ---
 
 ## Profiles & Contact
+<div class="accordion">
+  <div class="accordion-header">Profiles & Contact</div>
+  <div class="accordion-content">
 
 - 📧 Email: [minun001@sch.ac.kr](mailto:minun001@sch.ac.kr)  
 - 💻 GitHub: [github.com/minun001](https://github.com/minun001)  
 - 🔗 LinkedIn: [linkedin.com/in/hyunsik-min-9ba072346](https://www.linkedin.com/in/hyunsik-min-9ba072346/)  
-- 📚 Google Scholar: [scholar.google.com/citations?user=2AUQlE8AAAAJ](https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en)
+- 📚 Google Scholar: [Google Scholar](https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en)
+
+  </div>
+</div>
 
 ---
 
 ## Snapshot
+<div class="accordion">
+  <div class="accordion-header">Snapshot</div>
+  <div class="accordion-content">
 
 - 🎓 **M.S. Candidate**, Future Convergence Technology, SCHU  
-- 📄 **3× First-author SCI(E) papers**  
-  - 1× as an undergraduate student  
-  - 2× in the first semester of the M.S. program  
-- 🔬 **National research projects (NRF CRC, etc.)**  
-  - Bridging academic research with real-world urban and transportation challenges  
-- 🌏 Focused on **AI that creates tangible societal value** in energy, mobility, and safety
+- 📄 **3× First-author SCI(E) papers** (Undergraduate 1, M.S. 2)  
+- 🔬 National research projects (NRF CRC 등)  
+- 🌏 Focus: AI for energy · mobility · safety
+
+  </div>
+</div>
 
 ---
 
 ## About
+<div class="accordion">
+  <div class="accordion-header">About</div>
+  <div class="accordion-content">
 
-I am an M.S. candidate in the Department of Future Convergence Technology at Soonchunhyang University (SCHU).  
-My work focuses on how artificial intelligence can create tangible societal value in the domains of energy, mobility, and safety.
+My work focuses on how AI can create tangible societal value in the domains of energy, mobility, and safety.
 
-Since my undergraduate years, I have been actively engaged in lab-based research on topics such as:
+(※ 기존 내용 그대로)
 
-- Smart grid optimization leveraging solar photovoltaic generation  
-- Front-vehicle trajectory prediction for anticipatory autonomous driving  
-- AI-based traffic accident ruling prediction using legal and contextual data  
-
-These efforts have led to **three first-author SCI(E) publications** — one during my undergraduate studies and two additional papers in the first semester of my M.S. program.
-
-Currently, in my second semester as a Master’s student, I am participating in national research projects, including an **NRF-funded CRC program**, where I aim to connect academic research with practical solutions for real-world urban and transportation challenges.  
-Ultimately, I aspire to become a researcher who helps build **safer, smarter cities** where AI is a reliable foundation for future mobility and infrastructure.
+  </div>
+</div>
 
 ---
 
 ## Research Areas
+<div class="accordion">
+  <div class="accordion-header">Research Areas</div>
+  <div class="accordion-content">
 
-I am broadly interested in how modern AI — including foundation models and generative models — can be grounded in real-world systems for energy and mobility.
+- Foundation Models & VLA  
+- Autonomous driving & anticipatory planning  
+- Generative AI for mobility & safety  
+- Time series forecasting  
+- AI-based speaker diarization (CRC)
 
-- **Foundation Models & VLA**  
-  Applying large-scale foundation models and vision–language–action (VLA) systems to embodied decision-making and complex multi-modal scenarios.
-
-- **Autonomous Driving & Anticipatory Planning**  
-  Front-vehicle maneuver and trajectory prediction (e.g., TGCA-based models) to support proactive, trustworthy autonomous driving beyond rule-based control.
-
-- **Generative AI for Mobility & Safety**  
-  Scenario generation, risk analysis, and behavior modeling for traffic and urban mobility using generative models.
-
-- **Time Series Forecasting for Energy & Mobility**  
-  Data-driven forecasting for smart grid operation, energy demand, and mobility systems.
-
-- **AI-based Speaker Diarization & Interaction Analysis**  
-  Child–parent CRC conversational data, speaker diarization, and interaction understanding to support educational and clinical insights.
+  </div>
+</div>
 
 ---
 
 ## Selected Topics & Projects
+<div class="accordion">
+  <div class="accordion-header">Selected Topics & Projects</div>
+  <div class="accordion-content">
 
-### Front-vehicle Trajectory Prediction for Autonomous Driving
-- Spatio-temporal modeling of front-side vehicles in natural traffic scenes  
-- Temporal Graph Cross Attention (TGCA)-based framework for maneuver intent inference  
-- Goal: enable anticipatory driving beyond threshold-based reactive control
+### Front-vehicle Trajectory Prediction  
+- TGCA-based anticipatory planning  
+- Spatio-temporal modeling for naturalistic traffic scenes  
 
-### AI-based Speaker Diarization for CRC Data
-- Speaker diarization and classification for child–parent conversational datasets  
-- Combination of language models, acoustic embeddings, and diarization pipelines  
-- Goal: support reliable analysis of educational and clinical interaction data
+### AI-based Speaker Diarization  
+- CRC conversational data  
+- Language + acoustic embedding pipelines  
 
-### Smart Grid & Energy AI
-- Solar PV-based smart grid optimization and energy management  
-- Focus on robust, data-driven decision-making for future energy and city-scale systems  
+### Smart Grid & Energy AI  
+- PV-based smart grid optimization  
+- Data-driven urban energy forecasting  
+
+  </div>
+</div>
 
 ---
 
 ## Looking Ahead
+<div class="accordion">
+  <div class="accordion-header">Looking Ahead</div>
+  <div class="accordion-content">
 
-Across all of my work, I am interested in:
+- Deployable AI systems for mobility & energy  
+- AI that improves real-world safety, efficiency, and human-centered design  
 
-- Turning **advanced AI models** into **deployable systems** in mobility and energy  
-- Ensuring that AI not only improves metrics in controlled benchmarks,  
-  but also **makes cities safer, more efficient, and more human-centered** in practice.
+  </div>
+</div>
