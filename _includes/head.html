@@ -1,0 +1,64 @@
+{%- capture seo_tags -%}
+  {%- seo -%}
+{%- endcapture -%}
+{{ seo_tags }}
+
+<!-- ============================
+     기본 메타 정보
+     ============================ -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- ============================
+     파비콘
+     ============================ -->
+<link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}">
+
+<!-- ============================
+     CSS 로딩
+     (Chirpy는 style.css 하나를 씁니다)
+     ============================ -->
+<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+<!-- ============================
+     GOOGLE ANALYTICS (if enabled)
+     ============================ -->
+{% if jekyll.environment == 'production' and site.analytics.provider and site.analytics.provider != empty %}
+  {% include analytics.html %}
+{% endif %}
+
+<!-- ============================================
+     ⭐ 시간 기반 Light/Dark 자동 선택 스크립트 ⭐
+     ============================================ -->
+<script>
+(function () {
+  try {
+    // 사용자가 직접 라이트/다크를 선택한 기록
+    var saved = localStorage.getItem('mode');
+
+    // 저장된 모드가 있으면 그걸 우선 적용 (Chirpy 기본 동작 존중)
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-mode', saved);
+      return;
+    }
+
+    // 저장 기록이 없다면 → 자동 모드 (시간 기반)
+    var now  = new Date();
+    var hour = now.getHours();
+    var isDay = (hour >= 7 && hour < 19);
+    var mode  = isDay ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-mode', mode);
+    localStorage.setItem('mode', mode);
+  } catch (e) {
+    // 오류 발생 시 아무것도 하지 않음
+  }
+})();
+</script>
+
+<!-- ============================
+     Chirpy 내부 JS 로딩
+     ============================ -->
+{% include js-selector.html lang=lang %}
+
+{% include metadata-hook.html %}
