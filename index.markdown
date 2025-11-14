@@ -4,7 +4,11 @@ title: "Hyunsik Min"
 permalink: /
 ---
 
-# Hyunsik Min
+<p align="center">
+  <img src="/assets/img/avatar.png"
+       alt="Profile photo of Hyunsik Min"
+       style="width:180px; border-radius:50%; border:2px solid #ddd; margin-bottom:1.0rem;">
+</p>
 
 M.S. Candidate, Department of Future Convergence Technology  
 Soonchunhyang University (SCHU), Republic of Korea  

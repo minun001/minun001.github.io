@@ -6,8 +6,12 @@ permalink: /about/
 
 # About
 
+<p align="center">
+  <img src="/assets/img/KakaoTalk_20250110_182313239.jpg" alt="Hyunsik Min" style="max-width: 220px; border-radius: 50%;">
+</p>
+
 I am an M.S. candidate in the Department of Future Convergence Technology at Soonchunhyang University (SCHU), Republic of Korea.  
-My research focuses on how artificial intelligence can create tangible societal value in the domains of energy, mobility, and safety.
+My research focuses on how artificial intelligence can create tangible societal value in the domains of **energy, mobility, and safety**.
 
 Since my undergraduate years, I have been actively engaged in lab-based research on topics such as:
 
@@ -15,10 +19,10 @@ Since my undergraduate years, I have been actively engaged in lab-based research
 - Front-vehicle trajectory prediction for anticipatory autonomous driving  
 - AI-based traffic accident ruling prediction using legal and contextual data  
 
-These efforts have led to **three first-author SCI(E) publications** — one during my undergraduate studies and two additional papers in the first semester of my M.S. program.
+These efforts have led to **three first-author SCI(E) publications** — one during my undergraduate studies and two in the first semester of my M.S. program.
 
 Currently, in my second semester as a Master’s student, I am participating in national research projects, including an **NRF-funded CRC program**, where I aim to connect academic research with practical solutions for real-world urban and transportation challenges.  
-Ultimately, I aspire to become a researcher who helps build **safer, smarter cities** where AI is a reliable foundation for future mobility and infrastructure.
+Ultimately, I aspire to help build **safer, smarter cities** where AI is a reliable foundation for future mobility and infrastructure.
 
 ---
 
