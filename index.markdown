@@ -106,6 +106,17 @@ permalink: /
 ---
 
 <style>
+/* ====== Minima 기본 제목/Posts/RS S 숨기기 ====== */
+.home .post-list,
+.home .rss-subscribe,
+.home .page-heading,
+.page .post-list,
+.page .rss-subscribe,
+.page .page-heading,
+.page .post-title {
+  display: none !important;
+}
+
 /* ====== 전체 레이아웃 / 기본 스타일 ====== */
 .hs-page-wrapper {
   max-width: 1040px;
@@ -135,43 +146,6 @@ permalink: /
   color: #666;
 }
 
-/* ====== 상단 탭 네비게이션 ====== */
-.hs-topnav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.5rem 0 1.25rem;
-  padding: 0.5rem;
-  border-radius: 999px;
-  background: #f5f5f7;
-  overflow-x: auto;
-}
-
-.hs-topnav a {
-  flex: 0 0 auto;
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  text-decoration: none;
-  color: #333;
-  background: transparent;
-  border: 1px solid transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
-  white-space: nowrap;
-}
-
-.hs-topnav a:hover {
-  background: #fff;
-  border-color: #ddd;
-  transform: translateY(-1px);
-}
-
-.hs-topnav a.hs-topnav-active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
-
 /* ====== 콘텐츠 레이아웃 (사이드바 + 본문) ====== */
 .hs-main-layout {
   display: flex;
@@ -195,32 +169,43 @@ permalink: /
   margin-bottom: 0.5rem;
 }
 
+/* 사이드바 탭(버튼) – 배경과 잘 섞이는 유리 느낌 */
 .hs-sidenav {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 .hs-sidenav button {
   text-align: left;
-  padding: 0.4rem 0.75rem;
+  padding: 0.42rem 0.9rem;
   border-radius: 999px;
-  border: none;
-  background: transparent;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
   font-size: 0.9rem;
-  color: #444;
+  color: #555;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, transform 0.1s;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
 }
 
 .hs-sidenav button:hover {
-  background: #f3f3f5;
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(15, 23, 42, 0.12);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
   transform: translateX(1px);
 }
 
 .hs-sidenav button.hs-sidenav-active {
-  background: #111;
+  background: #1f2933;
   color: #fff;
+  border-color: #1f2933;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.4);
 }
 
 /* 모바일일 때 사이드바를 위로 올리고 가로형 탭처럼 */
@@ -352,10 +337,8 @@ permalink: /
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const sections = Array.from(document.querySelectorAll(".hs-section"));
-  const topNavLinks = Array.from(document.querySelectorAll(".hs-topnav a[data-target]"));
   const sideNavButtons = Array.from(document.querySelectorAll(".hs-sidenav button[data-target]"));
 
-  // 내부에서 섹션 열기/닫기 공통 함수
   function openSection(targetId, scrollIntoView = false) {
     sections.forEach(section => {
       const bodyWrap = section.querySelector(".hs-section-body-wrap");
@@ -363,31 +346,22 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!bodyWrap) return;
 
       if (id === targetId) {
-        // 열기
         section.classList.add("active");
         bodyWrap.style.maxHeight = bodyWrap.scrollHeight + "px";
       } else {
-        // 닫기
         section.classList.remove("active");
         bodyWrap.style.maxHeight = "0px";
       }
     });
 
-    // 상단 탭 active 상태
-    topNavLinks.forEach(link => {
-      link.classList.toggle("hs-topnav-active", link.dataset.target === targetId);
-    });
-
-    // 사이드바 active 상태
     sideNavButtons.forEach(btn => {
       btn.classList.toggle("hs-sidenav-active", btn.dataset.target === targetId);
     });
 
-    // 필요 시 스크롤
     if (scrollIntoView) {
       const el = document.getElementById(targetId);
       if (el) {
-        const offset = 80; // 상단 고정 헤더 있을 수 있으니 약간 여유
+        const offset = 80;
         const rect = el.getBoundingClientRect();
         const absoluteY = window.scrollY + rect.top - offset;
         window.scrollTo({ top: absoluteY, behavior: "smooth" });
@@ -406,28 +380,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const isActive = section.classList.contains("active");
 
       if (isActive) {
-        // 현재 열려 있으면 닫기
         section.classList.remove("active");
         bodyWrap.style.maxHeight = "0px";
-        topNavLinks.forEach(link => {
-          if (link.dataset.target === id) link.classList.remove("hs-topnav-active");
-        });
         sideNavButtons.forEach(btn => {
           if (btn.dataset.target === id) btn.classList.remove("hs-sidenav-active");
         });
       } else {
-        // 다른 건 닫고 이 섹션만 열기
         openSection(id);
       }
-    });
-  });
-
-  // 상단 탭 클릭
-  topNavLinks.forEach(link => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      const targetId = link.dataset.target;
-      openSection(targetId, true);
     });
   });
 
@@ -455,16 +415,6 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
     <div class="hs-hero-subtitle">AI for Energy · Mobility · Safety</div>
   </section>
-
-  <!-- 상단 탭 네비게이션 -->
-  <nav class="hs-topnav">
-    <a href="#section-profiles" data-target="section-profiles">Profiles &amp; Contact</a>
-    <a href="#section-snapshot" data-target="section-snapshot">Snapshot</a>
-    <a href="#section-about" data-target="section-about">About</a>
-    <a href="#section-research" data-target="section-research">Research Areas</a>
-    <a href="#section-projects" data-target="section-projects">Selected Projects</a>
-    <a href="#section-future" data-target="section-future">Looking Ahead</a>
-  </nav>
 
   <div class="hs-main-layout">
     <!-- 사이드바 네비 -->
