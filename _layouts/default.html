@@ -238,36 +238,106 @@
       }
 
       /* =======================================
-        🌇 그라데이션 / Day 테마 적용
-        ======================================= */
-      // isDay = true  → Day
-      // isDay = false → Night(네이비→그레이 그라데이션)
+         🌇 Day / Night(노을) 테마 적용
+         - Night: 상단 푸른 네이비 → 중단 그레이 네이비 → 하단 짙은 그레이
+         - Night에서 텍스트 색상들을 강제로 거의 흰색으로 변경
+      ======================================= */
       function setBodyTheme(isDay) {
         var body = document.body;
         if (!body) return;
 
         body.classList.remove('theme-day', 'theme-night');
 
+        // Night 모드에서 텍스트를 강제 덮어쓰는 <style> 태그
+        var nightStyle = document.getElementById('night-theme-override');
+
         if (isDay) {
-          // DAY MODE
+          // === DAY MODE ===
           body.classList.add('theme-day');
           body.style.background = '#fdfdfd';
           body.style.color      = '#111111';
 
+          // Night용 override 제거
+          if (nightStyle && nightStyle.parentNode) {
+            nightStyle.parentNode.removeChild(nightStyle);
+          }
+
           document.documentElement.style.setProperty('--link-color',   '#2a7ae2');
           document.documentElement.style.setProperty('--link-visited', '#1656a8');
           document.documentElement.style.setProperty('--link-hover',   '#111111');
-
         } else {
-          // NIGHT MODE — 🔵 네이비 → 그레이 그라데이션
+          // === NIGHT (노을) MODE ===
           body.classList.add('theme-night');
 
-          body.style.background = 'linear-gradient(180deg, #33406c 0%, #4a4f5a 50%, #2f3138 100%)';
-          body.style.backgroundAttachment = 'fixed';   // 스크롤해도 고정
-          body.style.color = '#e5e7eb';  // 어두운 배경 위에서 잘 보이는 연한 회색
+          // 상단 푸른 네이비 → 중단 그레이 네이비 → 하단 짙은 그레이
+          body.style.background = 'linear-gradient(180deg, #0b1220 0%, #1e293b 45%, #020617 100%)';
+          body.style.backgroundAttachment = 'fixed';
+          body.style.color = '#f9fafb';
 
-          document.documentElement.style.setProperty('--link-color',   '#cbd5e1');
-          document.documentElement.style.setProperty('--link-visited', '#94a3b8');
+          if (!nightStyle) {
+            nightStyle = document.createElement('style');
+            nightStyle.id = 'night-theme-override';
+            nightStyle.textContent = `
+              body.theme-night,
+              body.theme-night .page-content,
+              body.theme-night .wrapper,
+              body.theme-night .post,
+              body.theme-night .post-content,
+              body.theme-night .post-header,
+              body.theme-night .post-title,
+              body.theme-night .post-meta,
+              body.theme-night .site-header,
+              body.theme-night .site-footer,
+              body.theme-night .site-title,
+              body.theme-night .site-subtitle,
+              body.theme-night h1,
+              body.theme-night h2,
+              body.theme-night h3,
+              body.theme-night h4,
+              body.theme-night h5,
+              body.theme-night h6,
+              body.theme-night p,
+              body.theme-night li,
+              body.theme-night span,
+              body.theme-night table,
+              body.theme-night th,
+              body.theme-night td {
+                color: #f9fafb !important;
+              }
+
+              body.theme-night a {
+                color: #e0f2fe !important;
+              }
+
+              body.theme-night a:visited {
+                color: #c4ddf5 !important;
+              }
+
+              body.theme-night a:hover {
+                color: #ffffff !important;
+              }
+
+              body.theme-night .site-header,
+              body.theme-night .site-footer {
+                background: transparent !important;
+                border-color: rgba(148, 163, 184, 0.4) !important;
+              }
+
+              body.theme-night .theme-switcher {
+                background: rgba(15, 23, 42, 0.9) !important;
+                color: #e5e7eb !important;
+              }
+
+              body.theme-night .theme-switcher select {
+                background: #020617 !important;
+                color: #e5e7eb !important;
+              }
+            `;
+            document.head.appendChild(nightStyle);
+          }
+
+          document.documentElement.style.setProperty('--link-color',   '#e0f2fe');
+          document.documentElement.style.setProperty('--link-visited', '#c4ddf5');
           document.documentElement.style.setProperty('--link-hover',   '#ffffff');
         }
       }
@@ -277,7 +347,7 @@
         if (tzSelect)   tzSelect.value   = tz;
       }
 
-      // Auto 모드에서: 07:00 ~ 일몰 전 → Day, 그 외 → Night
+      // Auto 모드: 07:00 ~ 일몰 전 → Day, 나머지는 Night(노을)
       function applyTheme() {
         var mode = loadMode();
         var tz   = loadTimezone();
@@ -289,7 +359,7 @@
           return;
         }
         if (mode === 'night') {
-          setBodyTheme(false);  // 항상 Night 그라데이션
+          setBodyTheme(false);  // 항상 Night(노을)
           updateSelectValues(mode, tz);
           return;
         }
@@ -304,7 +374,7 @@
             var hour = getHourByTimezone(tz);
             isDay = (hour >= 7 && hour < 19);
           } else {
-            // 07:00 ~ 일몰 전까지 Day, 이후는 Night 그라데이션
+            // 07:00 ~ 일몰 전까지 Day, 이후는 Night(노을)
             var hourLocal = now.getHours();
             if (hourLocal >= 7 && now < sunset) {
               isDay = true;
