@@ -1,14 +1,23 @@
 ---
-layout: home
-title: "Hyunsik Min"
+layout: page
+title: "About"
+permalink: /
 ---
 
 # Hyunsik Min
 
-M.S. Candidate, Department of Future Convergence Technology  
-Soonchunhyang University (SCHU), Republic of Korea  
+M.S. Candidate, Department of Future Convergence Technology, Republic of Korea  
 
 AI for Energy · Mobility · Safety
+
+---
+
+## Profiles & Contact
+
+- 📧 Email: [minun001@sch.ac.kr](mailto:minun001@sch.ac.kr)  
+- 💻 GitHub: [github.com/minun001](https://github.com/minun001)  
+- 🔗 LinkedIn: [linkedin.com/in/hyunsik-min-9ba072346](https://www.linkedin.com/in/hyunsik-min-9ba072346/)  
+- 📚 Google Scholar: [scholar.google.com/citations?user=2AUQlE8AAAAJ](https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en)
 
 ---
 
@@ -67,12 +76,3 @@ Ultimately, I aspire to become a researcher who helps build **safer, smarter cit
 ### Smart Grid & Energy AI
 - Solar PV-based smart grid optimization and energy management  
 - Focus on stable, data-driven decision-making for future energy systems  
-
----
-
-## Profiles & Contact
-
-- 📧 Email: [minun001@sch.ac.kr](mailto:minun001@sch.ac.kr)  
-- 💻 GitHub: [github.com/minun001](https://github.com/minun001)  
-- 🔗 LinkedIn: [linkedin.com/in/hyunsik-min-9ba072346](https://www.linkedin.com/in/hyunsik-min-9ba072346/)  
-- 📚 Google Scholar: [scholar.google.com/citations?user=2AUQlE8AAAAJ](https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en)
