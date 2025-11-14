@@ -5,9 +5,7 @@ permalink: /
 ---
 
 <p align="center">
-  <img src="/assets/img/avatar.png"
-       alt="Profile photo of Hyunsik Min"
-       style="width:180px; border-radius:50%; border:2px solid #ddd; margin-bottom:1.0rem;">
+  <img src="/assets/img/avatar.png" alt="Hyunsik Min" style="max-width: 220px; border-radius: 50%;">
 </p>
 
 M.S. Candidate, Department of Future Convergence Technology  
