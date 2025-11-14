@@ -6,8 +6,8 @@ email: "minun001@sch.ac.kr"
 
 description: >-
   M.S. Candidate in Future Convergence Technology at SCHU.
-  Research areas: Autonomous Driving (TGCA), SOFC Property Prediction
-  (CorrGATNet / GraphSeqPIM), AI-based Speaker Diarization.
+  Research areas: Autonomous Driving (TGCA), Smart Grid & Energy AI,
+  AI-based Speaker Diarization, and Data-driven Mobility Safety.
 
 url: "https://minun001.github.io"
 baseurl: ""   # GitHub Pages root URL이므로 빈 값 유지
@@ -30,15 +30,16 @@ markdown: kramdown
 highlighter: rouge
 
 # ============================================================
-# Optional values (향후 활용 가능)
+# Author Information
 # ============================================================
 author:
   name: "Hyunsik Min"
   affiliation: "Future Convergence Technology, SCHU"
   email: "minun001@sch.ac.kr"
 
-# 페이지 상단의 네비게이션 메뉴 (원하면 커스텀)
-# minima 기본에는 메뉴가 없지만, override 목적으로 남겨둠
+# ============================================================
+# Navigation (원하면 layout 커스터마이징해 메뉴 추가 가능)
+# ============================================================
 nav:
   - name: "About"
     link: "/"
@@ -48,7 +49,7 @@ nav:
     link: "/news"
 
 # ============================================================
-# Exclude default paths
+# Exclude from build
 # ============================================================
 exclude:
   - Gemfile
