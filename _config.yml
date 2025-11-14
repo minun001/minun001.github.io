@@ -1,55 +1,57 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-#
-# If you need help with YAML syntax, here are some quick references for you:
-# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
-# https://learnxinyminutes.com/docs/yaml/
-#
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
+# ============================================================
+# Site Information
+# ============================================================
+title: "Hyunsik Min"
+email: "minun001@sch.ac.kr"
 
-title: Your awesome title
-email: your-email@example.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+description: >-
+  M.S. Candidate in Future Convergence Technology at SCHU.
+  Research areas: Autonomous Driving (TGCA), SOFC Property Prediction
+  (CorrGATNet / GraphSeqPIM), AI-based Speaker Diarization.
 
-# Build settings
+url: "https://minun001.github.io"
+baseurl: ""   # GitHub Pages root URL이므로 빈 값 유지
+
+# Social links (필요 없는 것은 비워두기)
+twitter_username: ""
+github_username: minun001
+
+# ============================================================
+# Theme & Plugins
+# ============================================================
 theme: minima
 plugins:
   - jekyll-feed
 
-# Exclude from processing.
-# The following items will not be processed, by default.
-# Any item listed under the `exclude:` key here will be automatically added to
-# the internal "default list".
-#
-# Excluded items can be processed by explicitly listing the directories or
-# their entries' file path in the `include:` list.
-#
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+# ============================================================
+# Markdown / Layout Settings
+# ============================================================
+markdown: kramdown
+highlighter: rouge
+
+# ============================================================
+# Optional values (향후 활용 가능)
+# ============================================================
+author:
+  name: "Hyunsik Min"
+  affiliation: "Future Convergence Technology, SCHU"
+  email: "minun001@sch.ac.kr"
+
+# 페이지 상단의 네비게이션 메뉴 (원하면 커스텀)
+# minima 기본에는 메뉴가 없지만, override 목적으로 남겨둠
+nav:
+  - name: "About"
+    link: "/"
+  - name: "Publications"
+    link: "/publications"
+  - name: "News"
+    link: "/news"
+
+# ============================================================
+# Exclude default paths
+# ============================================================
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
