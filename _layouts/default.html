@@ -274,64 +274,66 @@
           body.style.backgroundAttachment = 'fixed';
           body.style.color = ''; // 본문 글씨는 main.css 그대로 사용
 
+          // style 태그가 이미 있어도 항상 내용을 덮어쓴다 (이 부분이 핵심 수정)
           if (!nightStyle) {
             nightStyle = document.createElement('style');
             nightStyle.id = 'night-theme-override';
-            nightStyle.textContent = `
-              /* 헤더와 그 안의 텍스트/링크만 흰색 계열 */
-              body.theme-night .site-header,
-              body.theme-night .site-header *,
-              body.theme-night .site-title,
-              body.theme-night .site-title a,
-              body.theme-night .site-nav .page-link {
-                color: #f9fafb !important;
-              }
-
-              body.theme-night .site-header a {
-                color: #e0f2fe !important;
-              }
-
-              body.theme-night .site-header a:hover {
-                color: #ffffff !important;
-              }
-
-              /* 푸터와 그 안의 텍스트/링크만 흰색 계열 */
-              body.theme-night .site-footer,
-              body.theme-night .site-footer *,
-              body.theme-night .footer-heading,
-              body.theme-night .footer-col,
-              body.theme-night .footer-col li,
-              body.theme-night .footer-col a {
-                color: #e5e7eb !important;
-              }
-
-              body.theme-night .site-footer a {
-                color: #dbeafe !important;
-              }
-
-              body.theme-night .site-footer a:hover {
-                color: #ffffff !important;
-              }
-
-              body.theme-night .site-header,
-              body.theme-night .site-footer {
-                background: transparent !important;
-                border-color: rgba(148, 163, 184, 0.5) !important;
-              }
-
-              /* 테마 스위처는 밤 모드에서도 잘 보이게 */
-              body.theme-night .theme-switcher {
-                background: rgba(15, 23, 42, 0.95) !important;
-                color: #e5e7eb !important;
-              }
-
-              body.theme-night .theme-switcher select {
-                background: #020617 !important;
-                color: #e5e7eb !important;
-              }
-            `;
             document.head.appendChild(nightStyle);
           }
+
+          nightStyle.textContent = `
+            /* 헤더와 그 안의 텍스트/링크만 흰색 계열 */
+            body.theme-night .site-header,
+            body.theme-night .site-header *,
+            body.theme-night .site-title,
+            body.theme-night .site-title a,
+            body.theme-night .site-nav .page-link {
+              color: #f9fafb !important;
+            }
+
+            body.theme-night .site-header a {
+              color: #e0f2fe !important;
+            }
+
+            body.theme-night .site-header a:hover {
+              color: #ffffff !important;
+            }
+
+            /* 푸터와 그 안의 텍스트/링크만 흰색 계열 */
+            body.theme-night .site-footer,
+            body.theme-night .site-footer *,
+            body.theme-night .footer-heading,
+            body.theme-night .footer-col,
+            body.theme-night .footer-col li,
+            body.theme-night .footer-col a {
+              color: #e5e7eb !important;
+            }
+
+            body.theme-night .site-footer a {
+              color: #dbeafe !important;
+            }
+
+            body.theme-night .site-footer a:hover {
+              color: #ffffff !important;
+            }
+
+            body.theme-night .site-header,
+            body.theme-night .site-footer {
+              background: transparent !important;
+              border-color: rgba(148, 163, 184, 0.5) !important;
+            }
+
+            /* 테마 스위처는 밤 모드에서도 잘 보이게 */
+            body.theme-night .theme-switcher {
+              background: rgba(15, 23, 42, 0.95) !important;
+              color: #e5e7eb !important;
+            }
+
+            body.theme-night .theme-switcher select {
+              background: #020617 !important;
+              color: #e5e7eb !important;
+            }
+          `;
 
           document.documentElement.style.setProperty('--link-color',   '#2a7ae2');
           document.documentElement.style.setProperty('--link-visited', '#1656a8');
