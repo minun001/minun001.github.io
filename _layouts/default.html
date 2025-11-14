@@ -1,5 +1,8 @@
+---
+---
+
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
   <head>
     <meta charset="utf-8">
 
@@ -168,19 +171,26 @@
             return (utcHour + 9 + 24) % 24;   // UTC+9
           }
           if (tz === 'london') {
-            return (utcHour + 0 + 24) % 24;   // UTC+0 (DST 미반영 단순버전)
+            return (utcHour + 0 + 24) % 24;   // UTC+0
           }
           return now.getHours();
         }
 
+        // 여기서 직접 body 스타일도 함께 변경해서, CSS 충돌이 있어도 확실히 색이 바뀌도록 함
         function setBodyTheme(isDay) {
           var body = document.body;
           if (!body) return;
+
           body.classList.remove('theme-day', 'theme-night');
+
           if (isDay) {
             body.classList.add('theme-day');
+            body.style.backgroundColor = '#fdfdfd';
+            body.style.color = '#111111';
           } else {
             body.classList.add('theme-night');
+            body.style.backgroundColor = '#020617';
+            body.style.color = '#e5e7eb';
           }
         }
 
@@ -192,7 +202,7 @@
             setBodyTheme(true);
           } else if (mode === 'night') {
             setBodyTheme(false);
-          } else { // auto
+          } else {
             var hour  = getHourByTimezone(tz);
             var isDay = (hour >= 7 && hour < 19);
             setBodyTheme(isDay);
