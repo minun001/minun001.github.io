@@ -240,7 +240,7 @@
       /* =======================================
          🌇 Day / Night(노을) 테마 적용
          - Night: 상단 푸른 네이비 → 중단 그레이 네이비 → 하단 짙은 그레이
-         - Night에서 텍스트 색상들을 강제로 거의 흰색으로 변경
+         - Night에서: 배경 위(헤더/푸터/스위처)만 흰색 계열, 본문 텍스트는 기존 CSS 색 유지
       ======================================= */
       function setBodyTheme(isDay) {
         var body = document.body;
@@ -248,14 +248,14 @@
 
         body.classList.remove('theme-day', 'theme-night');
 
-        // Night 모드에서 텍스트를 강제 덮어쓰는 <style> 태그
+        // Night 모드에서 헤더/푸터만 덮어쓰는 <style> 태그
         var nightStyle = document.getElementById('night-theme-override');
 
         if (isDay) {
           // === DAY MODE ===
           body.classList.add('theme-day');
           body.style.background = '#fdfdfd';
-          body.style.color      = '#111111';
+          body.style.color      = ''; // 기본 CSS 사용
 
           // Night용 override 제거
           if (nightStyle && nightStyle.parentNode) {
@@ -270,61 +270,58 @@
           body.classList.add('theme-night');
 
           // 상단 푸른 네이비 → 중단 그레이 네이비 → 하단 짙은 그레이
-          body.style.background = 'linear-gradient(180deg, #0b1220 0%, #1e293b 45%, #020617 100%)';
+          body.style.background = 'linear-gradient(180deg, #33406c 0%, #4a4f5a 50%, #2f3138 100%)';
           body.style.backgroundAttachment = 'fixed';
-          body.style.color = '#f9fafb';
+          body.style.color = ''; // 본문 글씨는 main.css 그대로 사용
 
           if (!nightStyle) {
             nightStyle = document.createElement('style');
             nightStyle.id = 'night-theme-override';
             nightStyle.textContent = `
-              body.theme-night,
-              body.theme-night .page-content,
-              body.theme-night .wrapper,
-              body.theme-night .post,
-              body.theme-night .post-content,
-              body.theme-night .post-header,
-              body.theme-night .post-title,
-              body.theme-night .post-meta,
+              /* 헤더와 그 안의 텍스트/링크만 흰색 계열 */
               body.theme-night .site-header,
-              body.theme-night .site-footer,
+              body.theme-night .site-header *,
               body.theme-night .site-title,
-              body.theme-night .site-subtitle,
-              body.theme-night h1,
-              body.theme-night h2,
-              body.theme-night h3,
-              body.theme-night h4,
-              body.theme-night h5,
-              body.theme-night h6,
-              body.theme-night p,
-              body.theme-night li,
-              body.theme-night span,
-              body.theme-night table,
-              body.theme-night th,
-              body.theme-night td {
+              body.theme-night .site-title a,
+              body.theme-night .site-nav .page-link {
                 color: #f9fafb !important;
               }
 
-              body.theme-night a {
+              body.theme-night .site-header a {
                 color: #e0f2fe !important;
               }
 
-              body.theme-night a:visited {
-                color: #c4ddf5 !important;
+              body.theme-night .site-header a:hover {
+                color: #ffffff !important;
               }
 
-              body.theme-night a:hover {
+              /* 푸터와 그 안의 텍스트/링크만 흰색 계열 */
+              body.theme-night .site-footer,
+              body.theme-night .site-footer *,
+              body.theme-night .footer-heading,
+              body.theme-night .footer-col,
+              body.theme-night .footer-col li,
+              body.theme-night .footer-col a {
+                color: #e5e7eb !important;
+              }
+
+              body.theme-night .site-footer a {
+                color: #dbeafe !important;
+              }
+
+              body.theme-night .site-footer a:hover {
                 color: #ffffff !important;
               }
 
               body.theme-night .site-header,
               body.theme-night .site-footer {
                 background: transparent !important;
-                border-color: rgba(148, 163, 184, 0.4) !important;
+                border-color: rgba(148, 163, 184, 0.5) !important;
               }
 
+              /* 테마 스위처는 밤 모드에서도 잘 보이게 */
               body.theme-night .theme-switcher {
-                background: rgba(15, 23, 42, 0.9) !important;
+                background: rgba(15, 23, 42, 0.95) !important;
                 color: #e5e7eb !important;
               }
 
@@ -336,9 +333,9 @@
             document.head.appendChild(nightStyle);
           }
 
-          document.documentElement.style.setProperty('--link-color',   '#e0f2fe');
-          document.documentElement.style.setProperty('--link-visited', '#c4ddf5');
-          document.documentElement.style.setProperty('--link-hover',   '#ffffff');
+          document.documentElement.style.setProperty('--link-color',   '#2a7ae2');
+          document.documentElement.style.setProperty('--link-visited', '#1656a8');
+          document.documentElement.style.setProperty('--link-hover',   '#111111');
         }
       }
 
