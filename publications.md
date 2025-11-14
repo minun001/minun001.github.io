@@ -32,6 +32,67 @@ permalink: /publications/
   font-size: 0.97rem;
 }
 
+/* 상단 프로필 하이라이트 카드 */
+.hs-pub-highlight {
+  margin-top: 0.8rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: radial-gradient(circle at top left, #f5f7ff, #ffffff);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  align-items: center;
+}
+
+.hs-pub-highlight-main {
+  flex: 1;
+  min-width: 240px;
+}
+
+.hs-pub-highlight-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.hs-pub-highlight-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.hs-pub-highlight-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.hs-pub-highlight-links a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #1d4ed8;
+}
+
+.hs-pub-highlight-links a:hover {
+  text-decoration: underline;
+}
+
+/* 모바일에서 정렬 보정 */
+@media (max-width: 600px) {
+  .hs-pub-highlight {
+    padding: 0.8rem 0.85rem;
+  }
+  .hs-pub-highlight-links {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
 /* ====== 메인 레이아웃 (사이드바 + 본문) ====== */
 .hs-main-layout {
   display: flex;
@@ -341,6 +402,32 @@ document.addEventListener("DOMContentLoaded", function () {
       Below is a selected list of my <strong>first-author peer-reviewed publications</strong>.<br>
       Representative figures are included for key projects.
     </p>
+
+    <!-- 🔹 상단 Profiles 하이라이트 -->
+    <div class="hs-pub-highlight">
+      <div class="hs-pub-highlight-main">
+        <div class="hs-pub-highlight-title">
+          <span class="hs-chip">Scholar &amp; network</span>
+          <span class="hs-pub-highlight-label">Profiles</span>
+        </div>
+        <div class="hs-pub-highlight-links">
+          <div>
+            📚 <strong>Google Scholar</strong><br>
+            <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
+               target="_blank" rel="noopener">
+              scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en
+            </a>
+          </div>
+          <div>
+            🔗 <strong>LinkedIn</strong><br>
+            <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/"
+               target="_blank" rel="noopener">
+              linkedin.com/in/hyunsik-min-9ba072346
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <div class="hs-main-layout">
@@ -351,7 +438,6 @@ document.addEventListener("DOMContentLoaded", function () {
         <button type="button" data-target="pub-2025">2025 — Master’s (SCI(E) &amp; Intl.)</button>
         <button type="button" data-target="pub-2024-scie">2024 — Undergraduate SCI(E)</button>
         <button type="button" data-target="pub-2024-domestic">2024–2025 — Domestic</button>
-        <button type="button" data-target="pub-profiles">Profiles</button>
       </div>
     </aside>
 
@@ -562,36 +648,6 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      <!-- Profiles -->
-      <section id="pub-profiles" class="hs-section">
-        <div class="hs-section-header">
-          <div>
-            <div class="hs-section-title">Profiles</div>
-            <div class="hs-section-tag">External profiles &amp; links</div>
-          </div>
-          <div class="hs-section-icon">▶</div>
-        </div>
-        <div class="hs-section-body-wrap">
-          <div class="hs-section-body">
-            <p><span class="hs-chip">Scholar &amp; network</span></p>
-            <ul>
-              <li>
-                📚 <strong>Google Scholar:</strong><br>
-                <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">
-                  https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en
-                </a>
-              </li>
-              <li>
-                🔗 <strong>LinkedIn:</strong><br>
-                <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">
-                  https://www.linkedin.com/in/hyunsik-min-9ba072346/
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
       </section>
