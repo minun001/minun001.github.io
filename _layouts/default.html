@@ -7,8 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>{{ page.title | escape }} | {{ site.title | escape }}</title>
-    <meta name="description" content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
+    <meta name="description"
+          content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
 
+    <!-- 메인 CSS (여기에 body.theme-day / body.theme-night 스타일이 있어야 함) -->
     <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
     <link rel="shortcut icon" href="{{ "/favicon.ico" | relative_url }}">
   </head>
@@ -23,7 +25,8 @@
           <label for="nav-trigger">
             <span class="menu-icon">
               <svg viewBox="0 0 18 15" width="18px" height="15px">
-                <path fill="#424242" d="M0,1.5 L18,1.5 L18,0 L0,0 L0,1.5 Z M0,7.5 L18,7.5 L18,6 L0,6 L0,7.5 Z M0,14.5 L18,14.5 L18,13 L0,13 L0,14.5 Z"></path>
+                <path fill="#424242"
+                      d="M0,1.5 L18,1.5 L18,0 L0,0 L0,1.5 Z M0,7.5 L18,7.5 L18,6 L0,6 L0,7.5 Z M0,14.5 L18,14.5 L18,13 L0,13 L0,14.5 Z"></path>
               </svg>
             </span>
           </label>
@@ -61,7 +64,9 @@
               {% if site.github_username %}
                 <li>
                   <a href="https://github.com/{{ site.github_username }}">
-                    <svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#github' | relative_url }}"></use></svg>
+                    <svg class="svg-icon">
+                      <use xlink:href="{{ '/assets/minima-social-icons.svg#github' | relative_url }}"></use>
+                    </svg>
                     <span class="username">{{ site.github_username }}</span>
                   </a>
                 </li>
@@ -76,30 +81,159 @@
       </div>
     </footer>
 
-    <!-- === 현지 시간 기준 Day/Night 테마 적용 스크립트 === -->
+    <!-- ===== 테마 스위처 UI (우측 하단 고정) ===== -->
+    <div class="theme-switcher" style="
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #e5e7eb;
+      border-radius: 999px;
+      font-size: 12px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      z-index: 999;
+      backdrop-filter: blur(6px);
+    ">
+      <label style="display:flex;align-items:center;gap:4px;">
+        Mode
+        <select id="theme-mode-select" style="
+          border-radius: 999px;
+          border: 1px solid #4b5563;
+          background: #020617;
+          color: #e5e7eb;
+          font-size: 12px;
+          padding: 2px 6px;
+        ">
+          <option value="auto">Auto</option>
+          <option value="day">Day</option>
+          <option value="night">Night</option>
+        </select>
+      </label>
+      <label style="display:flex;align-items:center;gap:4px;">
+        TZ
+        <select id="theme-tz-select" style="
+          border-radius: 999px;
+          border: 1px solid #4b5563;
+          background: #020617;
+          color: #e5e7eb;
+          font-size: 12px;
+          padding: 2px 6px;
+        ">
+          <option value="browser">Browser</option>
+          <option value="kst">Korea (UTC+9)</option>
+          <option value="london">London (UTC+0)</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- === 시간 + 수동 전환 + localStorage 기반 Day/Night 테마 스크립트 === -->
     <script>
       (function () {
-        var now   = new Date();
-        var hour  = now.getHours();
-        var isDay = (hour >= 7 && hour < 19);
+        var STORAGE_KEY_MODE = 'themeMode';
+        var STORAGE_KEY_TZ   = 'themeTimezone';
 
-        function applyTheme() {
+        var modeSelect = null;
+        var tzSelect   = null;
+
+        function loadMode() {
+          try {
+            var saved = localStorage.getItem(STORAGE_KEY_MODE);
+            if (saved === 'day' || saved === 'night' || saved === 'auto') {
+              return saved;
+            }
+          } catch (e) {}
+          return 'auto';
+        }
+
+        function loadTimezone() {
+          try {
+            var saved = localStorage.getItem(STORAGE_KEY_TZ);
+            if (saved === 'browser' || saved === 'kst' || saved === 'london') {
+              return saved;
+            }
+          } catch (e) {}
+          return 'browser';
+        }
+
+        function getHourByTimezone(tz) {
+          var now = new Date();
+          if (tz === 'browser') {
+            return now.getHours();
+          }
+          var utcHour = now.getUTCHours();
+          if (tz === 'kst') {
+            return (utcHour + 9 + 24) % 24;   // UTC+9
+          }
+          if (tz === 'london') {
+            return (utcHour + 0 + 24) % 24;   // UTC+0 (DST 미반영 단순버전)
+          }
+          return now.getHours();
+        }
+
+        function setBodyTheme(isDay) {
           var body = document.body;
           if (!body) return;
-
+          body.classList.remove('theme-day', 'theme-night');
           if (isDay) {
             body.classList.add('theme-day');
-            body.classList.remove('theme-night');
           } else {
             body.classList.add('theme-night');
-            body.classList.remove('theme-day');
           }
         }
 
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', applyTheme);
-        } else {
+        function applyTheme() {
+          var mode = loadMode();
+          var tz   = loadTimezone();
+
+          if (mode === 'day') {
+            setBodyTheme(true);
+          } else if (mode === 'night') {
+            setBodyTheme(false);
+          } else { // auto
+            var hour  = getHourByTimezone(tz);
+            var isDay = (hour >= 7 && hour < 19);
+            setBodyTheme(isDay);
+          }
+
+          if (modeSelect) modeSelect.value = mode;
+          if (tzSelect) tzSelect.value = tz;
+        }
+
+        function initThemeUI() {
+          modeSelect = document.getElementById('theme-mode-select');
+          tzSelect   = document.getElementById('theme-tz-select');
+
+          if (modeSelect) {
+            modeSelect.addEventListener('change', function (e) {
+              try {
+                localStorage.setItem(STORAGE_KEY_MODE, e.target.value);
+              } catch (err) {}
+              applyTheme();
+            });
+          }
+
+          if (tzSelect) {
+            tzSelect.addEventListener('change', function (e) {
+              try {
+                localStorage.setItem(STORAGE_KEY_TZ, e.target.value);
+              } catch (err) {}
+              applyTheme();
+            });
+          }
+        }
+
+        function boot() {
+          initThemeUI();
           applyTheme();
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', boot);
+        } else {
+          boot();
         }
       })();
     </script>
