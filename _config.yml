@@ -6,8 +6,7 @@ email: "minun001@sch.ac.kr"
 
 description: >-
   M.S. Candidate in Future Convergence Technology at SCHU.
-  Research areas: Autonomous Driving (TGCA), Smart Grid & Energy AI,
-  AI-based Speaker Diarization, and Data-driven Mobility Safety.
+  Research areas: Foundation Models, VLA, Autonomous Driving, Generative AI, Time Series Forecasting
 
 url: "https://minun001.github.io"
 baseurl: ""   # GitHub Pages root URL이므로 빈 값 유지
@@ -15,6 +14,8 @@ baseurl: ""   # GitHub Pages root URL이므로 빈 값 유지
 # Social links (필요 없는 것은 비워두기)
 twitter_username: ""
 github_username: minun001
+linkedin_url: "https://www.linkedin.com/in/hyunsik-min-9ba072346/"
+scholar_url: "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
 
 # ============================================================
 # Theme & Plugins
@@ -36,6 +37,9 @@ author:
   name: "Hyunsik Min"
   affiliation: "Future Convergence Technology, SCHU"
   email: "minun001@sch.ac.kr"
+  github: "https://github.com/minun001"
+  linkedin: "https://www.linkedin.com/in/hyunsik-min-9ba072346/"
+  scholar: "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
 
 # ============================================================
 # Navigation (원하면 layout 커스터마이징해 메뉴 추가 가능)
