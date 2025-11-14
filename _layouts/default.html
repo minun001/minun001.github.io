@@ -176,7 +176,7 @@
           return now.getHours();
         }
 
-        // JS에서 body.class만 변경 (CSS는 body.theme-day / body.theme-night 사용)
+        // ✅ 여기서 body.classList를 직접 조작
         function setBodyTheme(isDay) {
           var body = document.body;
           if (!body) return;
@@ -205,7 +205,7 @@
           }
 
           if (modeSelect) modeSelect.value = mode;
-          if (tzSelect) tzSelect.value = tz;
+          if (tzSelect)   tzSelect.value   = tz;
         }
 
         function initThemeUI() {
@@ -236,6 +236,7 @@
           applyTheme();
         }
 
+        // DOM이 다 만들어진 후에 실행되도록 보장
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', boot);
         } else {
@@ -243,6 +244,7 @@
         }
       })();
     </script>
+
 
   </body>
 </html>
