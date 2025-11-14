@@ -8,8 +8,9 @@ permalink: /about/
 <p align="center">
   <img src="/assets/img/KakaoTalk_20250110_182313239.jpg"
        alt="Hyunsik Min"
-       style="width:100%; max-width:900px; border-radius:10px; margin-bottom:1.5rem;">
+       style="width:100%; max-height:450px; object-fit:cover; border-radius:12px; margin-bottom:2rem;">
 </p>
+
 
 
 I am passionate about exploring how artificial intelligence can generate real societal impact in the fields of energy, mobility, and safety. Since my undergraduate years, I have conducted research on topics such as smart grid optimization through solar power, front-vehicle trajectory prediction for autonomous driving, and AI-based traffic accident ruling prediction. These efforts have led to three first-author SCI(E) publications—one during my undergraduate studies and two more in the first semester of my Master’s program.
