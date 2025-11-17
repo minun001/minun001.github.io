@@ -456,18 +456,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <div class="hs-about-wrapper">
 
-  <!-- 상단 큰 이미지 + 오버레이 + 텍스트 포함된 히어로 카드 -->
+  <!-- 상단 큰 이미지 -->
   <section class="hs-about-hero">
-    <div class="hs-about-hero-inner">
-      <img src="/assets/img/KakaoTalk_20250110_182313239.jpg"
-           alt="Hyunsik Min">
-
-      <!-- 오버레이 텍스트 -->
-      <div class="hs-about-hero-overlay">
-        <h1>Hyunsik Min</h1>
-        <p>M.S. Candidate · AI for Mobility, Energy & Safety</p>
-      </div>
-    </div>
+    <img src="/assets/img/KakaoTalk_20250110_182313239.jpg"
+         alt="Hyunsik Min">
   </section>
 
   <!-- 상단 프로필 하이라이트 -->
@@ -488,7 +480,6 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </div>
   </section>
-
 
   <div class="hs-main-layout">
     <!-- 사이드바 네비 -->
