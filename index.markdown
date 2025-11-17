@@ -445,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <!-- 프로필 영역 -->
   <section class="hs-hero">
     <div class="hs-hero-avatar">
-      <img src="/assets/img/KakaoTalk_20250110_182313239.jpg" alt="Hyunsik Min">
+      <img src="/assets/img/avatar.png" alt="Hyunsik Min">
     </div>
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
     <div class="hs-hero-subtitle">AI for Energy · Mobility · Safety</div>
