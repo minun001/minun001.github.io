@@ -1,6 +1,5 @@
 ---
 ---
-
 <!DOCTYPE html>
 <html lang="{{ page.lang | default: site.lang | default: 'en' }}">
   <head>
@@ -286,9 +285,13 @@
             body.theme-night .site-header,
             body.theme-night .site-header *,
             body.theme-night .site-title,
-            body.theme-night .site-title a,
-            body.theme-night .site-nav .page-link {
+            body.theme-night .site-title a {
               color: #f9fafb !important;
+            }
+
+            /* ☑︎ 메뉴 텍스트는 항상 진한 색으로 다시 오버라이드 (모바일 드롭다운 포함) */
+            body.theme-night .site-nav .page-link {
+              color: #111111 !important;
             }
 
             body.theme-night .site-header a {
