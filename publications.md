@@ -108,6 +108,64 @@ permalink: /publications/
   }
 }
 
+/* ====== 필터 바 (검색 + 태그) ====== */
+.hs-filter-bar {
+  margin: 1rem 0 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.9rem;
+  align-items: center;
+}
+
+#pub-search {
+  flex: 1;
+  min-width: 210px;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  font-size: 0.88rem;
+  outline: none;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+#pub-search:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3);
+}
+
+.hs-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.hs-filter-tags button {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.32rem 0.7rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #4b5563;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.hs-filter-tags button:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.hs-filter-tags button.active {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.35);
+}
+
 /* ====== 메인 레이아웃 (사이드바 + 본문) ====== */
 .hs-main-layout {
   display: flex;
@@ -366,6 +424,27 @@ permalink: /publications/
   margin-right: 0.25rem;
 }
 
+/* 타입별 칩 색상 (원하면 점진적으로 교체) */
+.hs-chip-journal {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+}
+
+.hs-chip-conference {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.hs-chip-domestic {
+  background: rgba(107, 114, 128, 0.16);
+  color: #374151;
+}
+
+.hs-chip-legal {
+  background: rgba(139, 92, 246, 0.16);
+  color: #6d28d9;
+}
+
 /* 이미지 공통 스타일 */
 .hs-pub-figure {
   text-align: center;
@@ -483,6 +562,40 @@ document.addEventListener("DOMContentLoaded", function () {
     openSection(firstId);
     sections[0].classList.add("is-visible");
   }
+
+  /* ====== Publications 검색 + 태그 필터 ====== */
+  const searchInput = document.getElementById("pub-search");
+  const tagButtons = document.querySelectorAll(".hs-filter-tags button");
+  const pubItems = document.querySelectorAll(".hs-pub-item");
+
+  if (searchInput && tagButtons.length && pubItems.length) {
+    let activeTag = "all";
+
+    function applyFilter() {
+      const q = searchInput.value.toLowerCase().trim();
+
+      pubItems.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        const tags = (item.dataset.tags || "").toLowerCase();
+
+        const matchText = !q || text.includes(q);
+        const matchTag = activeTag === "all" || tags.includes(activeTag);
+
+        item.style.display = (matchText && matchTag) ? "" : "none";
+      });
+    }
+
+    searchInput.addEventListener("input", applyFilter);
+
+    tagButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        tagButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeTag = btn.dataset.filter || "all";
+        applyFilter();
+      });
+    });
+  }
 });
 </script>
 
@@ -520,6 +633,22 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </div>
     </div>
+
+    <!-- 🔍 필터 바 -->
+    <div class="hs-filter-bar">
+      <input
+        type="text"
+        id="pub-search"
+        placeholder="Search title, venue, or keyword…">
+      <div class="hs-filter-tags">
+        <button type="button" class="active" data-filter="all">All</button>
+        <button type="button" data-filter="energy">Energy</button>
+        <button type="button" data-filter="mobility">Mobility</button>
+        <button type="button" data-filter="legal">Legal AI</button>
+        <button type="button" data-filter="urban">Urban / Noise</button>
+        <button type="button" data-filter="medical">Medical</button>
+      </div>
+    </div>
   </section>
 
   <div class="hs-main-layout">
@@ -548,10 +677,10 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="legal, llm, mobility">
               <h3>2. TRACS-LLM: LLM-based traffic accident criminal sentencing prediction focusing on imprisonment, probation, and fines</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">LLM · Legal AI</span>
+                <span class="hs-chip hs-chip-legal">LLM · Legal AI</span>
                 <em>Hyunsik Min</em>, Byeongjoon Noh<br>
                 <strong>Artificial Intelligence and Law</strong>, 1–22 (2025).
               </div>
@@ -569,10 +698,10 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="energy, time-series">
               <h3>1. SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">Energy · Time series</span>
+                <span class="hs-chip hs-chip-journal">Energy · Time series</span>
                 <em>Hyunsik Min</em>, Byeongjoon Noh<br>
                 <strong>Applied Energy</strong>, 391, 125848 (2025).
               </div>
@@ -609,10 +738,10 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="energy, deep-learning">
               <h3>SolarFlux predictor: a novel deep learning approach for photovoltaic power forecasting in South Korea</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">Energy · Deep learning</span>
+                <span class="hs-chip hs-chip-journal">Energy · Deep learning</span>
                 <em>Hyunsik Min</em>, S. Hong, J. Song, B. Son, B. Noh, J. Moon<br>
                 <strong>Electronics</strong>, 13(11), 2071 (2024).
               </div>
@@ -646,10 +775,10 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="autonomous-driving, mobility">
               <h3>Temporal Graph Cross Attention 기반 전방 차량 궤적 예측</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">Autonomous driving · TGCA</span>
+                <span class="hs-chip hs-chip-conference">Autonomous driving · TGCA</span>
                 H. Min, B. Noh<br>
                 대한교통학회 제93회 학술발표회 (2025).
               </div>
@@ -669,10 +798,10 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="legal, nlp, mobility">
               <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">NLP · Legal analytics</span>
+                <span class="hs-chip hs-chip-domestic">NLP · Legal analytics</span>
                 <em>Hyunsik Min</em>, J. Yun, B. Noh<br>
                 <strong>Journal of Korean Society of Transportation</strong>, 42(4), 385–397 (2024).
               </div>
@@ -684,10 +813,10 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="urban, audio">
               <h3>도시 환경 내 교통소음 인식 및 분류를 위한 모델 개발</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">Urban noise</span>
+                <span class="hs-chip hs-chip-domestic">Urban noise</span>
                 민현식, 노병준, 우지영<br>
                 한국컴퓨터정보학회 학술발표논문집, 32(2), 49–52 (2024).
               </div>
@@ -698,10 +827,10 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="legal, llm, traffic-law">
               <h3>LLM기반 교통사고 판결예측 시스템</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">LLM · Traffic law</span>
+                <span class="hs-chip hs-chip-legal">LLM · Traffic law</span>
                 민현식, 노병준<br>
                 한국ITS학회 학술대회, 811–816 (2024).
               </div>
@@ -712,10 +841,10 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="legal, nlp, traffic-law">
               <h3>자연어처리 기반의 도로교통사고 판결예측 시스템</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">NLP · Traffic law</span>
+                <span class="hs-chip hs-chip-domestic">NLP · Traffic law</span>
                 민현식, 윤준영, 노병준<br>
                 한국ITS학회 학술대회, 275–279 (2024).
               </div>
@@ -726,10 +855,10 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <div class="hs-pub-item">
+            <div class="hs-pub-item" data-tags="medical, imaging">
               <h3>Mask R-CNN 모델을 활용한 파노라마 방사선 이미지 내 치아 분할 및 식별 방법</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip">Medical imaging</span>
+                <span class="hs-chip hs-chip-domestic">Medical imaging</span>
                 민현식, 노병준<br>
                 한국통신학회 인공지능 학술대회 (in Korean).
               </div>

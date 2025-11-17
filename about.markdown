@@ -36,7 +36,7 @@ permalink: /about/
 
 /* 상단 큰 이미지 */
 .hs-about-hero {
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.2rem;
 }
 
 .hs-about-hero img {
@@ -45,6 +45,75 @@ permalink: /about/
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+}
+
+/* 상단 프로필 하이라이트 카드 */
+.hs-about-highlight {
+  margin-bottom: 1.8rem;
+  padding: 0.95rem 1.1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: radial-gradient(circle at top left, #f5f7ff, #ffffff);
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  align-items: center;
+}
+
+.hs-about-highlight-main {
+  flex: 1;
+  min-width: 240px;
+}
+
+.hs-about-highlight-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.hs-about-name {
+  font-size: 1.15rem;
+  font-weight: 650;
+  color: #111827;
+}
+
+.hs-about-role {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.hs-about-meta {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 0.4rem;
+}
+
+.hs-about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+}
+
+/* 태그 색 변형 */
+.hs-chip-primary {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
+}
+
+.hs-chip-soft {
+  background: rgba(148, 163, 184, 0.16);
+  color: #374151;
+}
+
+/* 모바일 하이라이트 정렬 */
+@media (max-width: 600px) {
+  .hs-about-highlight {
+    padding: 0.85rem 0.95rem;
+  }
 }
 
 /* ====== 메인 레이아웃 (사이드바 + 본문) ====== */
@@ -391,6 +460,25 @@ document.addEventListener("DOMContentLoaded", function () {
   <section class="hs-about-hero">
     <img src="/assets/img/KakaoTalk_20250110_182313239.jpg"
          alt="Hyunsik Min">
+  </section>
+
+  <!-- 상단 프로필 하이라이트 -->
+  <section class="hs-about-highlight">
+    <div class="hs-about-highlight-main">
+      <div class="hs-about-highlight-title">
+        <span class="hs-about-name">Hyunsik Min</span>
+        <span class="hs-about-role">M.S. Candidate in Future Convergence Technology</span>
+      </div>
+      <div class="hs-about-meta">
+        Smart Autonomous &amp; Infrastructure Lab (SAIL), Soonchunhyang University · Asan, Korea
+      </div>
+      <div class="hs-about-tags">
+        <span class="hs-chip hs-chip-primary">Autonomous driving</span>
+        <span class="hs-chip hs-chip-primary">Mobility &amp; safety AI</span>
+        <span class="hs-chip hs-chip-soft">Energy forecasting</span>
+        <span class="hs-chip hs-chip-soft">Legal AI &amp; NLP</span>
+      </div>
+    </div>
   </section>
 
   <div class="hs-main-layout">
