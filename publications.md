@@ -13,6 +13,12 @@ permalink: /publications/
   display: none !important;
 }
 
+/* ====== Night 모드 전용: 인트로 텍스트 밝게 ====== */
+body.theme-night .hs-pub-intro h1,
+body.theme-night .hs-pub-intro p {
+  color: #e5e7eb; /* 거의 흰색에 가까운 밝은 회색 */
+}
+
 /* ====== 전체 레이아웃 / 기본 스타일 ====== */
 .hs-pub-wrapper {
   max-width: 1040px;

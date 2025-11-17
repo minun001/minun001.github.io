@@ -16,6 +16,20 @@ permalink: /
   display: none !important;
 }
 
+/* ====== Night 모드 전용: 히어로 텍스트 밝게 ====== */
+body.theme-night .hs-hero-title,
+body.theme-night .hs-hero-subtitle,
+body.theme-night .hs-hero-intro {
+  color: #e5e7eb; /* 거의 흰색에 가까운 밝은 회색 */
+}
+
+/* 필요하면 사이드바 타이틀도 조금 더 밝게 */
+/*
+body.theme-night .hs-sidebar-title {
+  color: #e5e7eb;
+}
+*/
+
 /* ====== 전체 레이아웃 / 기본 스타일 ====== */
 .hs-page-wrapper {
   max-width: 1040px;
