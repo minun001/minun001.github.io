@@ -259,6 +259,11 @@ permalink: /news/
   border: 1px solid #eee;
   background: #ffffff;
   margin-bottom: 0.7rem;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    background 0.18s ease;
 }
 
 .hs-news-item h3 {
@@ -278,6 +283,14 @@ permalink: /news/
 
 .hs-news-item:last-child {
   margin-bottom: 0;
+}
+
+/* 뉴스 아이템 hover 효과 */
+.hs-news-item:hover {
+  background: #f9fafb;
+  border-color: rgba(148, 163, 184, 0.6);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+  transform: translateY(-1px);
 }
 
 /* 작은 태그 느낌 */
@@ -450,8 +463,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <h3>Applied Energy — Paper Accepted (First Author)</h3>
               <div class="hs-news-meta">
                 <span class="hs-news-chip">Journal</span>
-                <strong>Journal:</strong> <em>Applied Energy</em> (IF = 11.0, Top 10%)
-              </div>
+                <strong>Journal:</strong> <em>Applied Energy</em> (IF = 11.0, Top 10%)</div>
               <p><strong>Title:</strong> <em>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</em></p>
               <p>
                 This work proposes a scalable deep learning framework for PV power forecasting and adaptive management
@@ -463,8 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <h3>Artificial Intelligence and Law — Paper Accepted (First Author)</h3>
               <div class="hs-news-meta">
                 <span class="hs-news-chip">Journal</span>
-                <strong>Journal:</strong> <em>Artificial Intelligence and Law</em> (IF = 3.1, Top 10%)
-              </div>
+                <strong>Journal:</strong> <em>Artificial Intelligence and Law</em> (IF = 3.1, Top 10%)</div>
               <p><strong>Title:</strong> <em>TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines</em></p>
               <p>
                 We develop an LLM-based framework for predicting criminal sentencing outcomes in traffic accident cases,

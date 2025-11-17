@@ -40,7 +40,7 @@ permalink: /
 /* 상단 프로필 영역 */
 .hs-hero {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.7rem;
 }
 
 /* 아바타 컨테이너: 그라디언트 링 + 살짝 튀어나오는 느낌 */
@@ -55,11 +55,12 @@ permalink: /
 }
 
 .hs-hero-avatar img {
-  max-width: 220px;
+  max-width: 210px;
   border-radius: 50%;
   display: block;
   background: #ffffff;
   padding: 3px;
+  object-fit: cover;
 }
 
 /* hover 시 살짝 떠오르게 */
@@ -70,13 +71,20 @@ permalink: /
 
 .hs-hero-title {
   margin-top: 0.75rem;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 
 .hs-hero-subtitle {
   font-size: 0.95rem;
-  color: #666;
+  color: #555;
+  margin-top: 0.15rem;
+}
+
+.hs-hero-intro {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  color: #6b7280;
 }
 
 /* ====== 콘텐츠 레이아웃 (사이드바 + 본문) ====== */
@@ -198,7 +206,8 @@ permalink: /
     opacity 0.25s ease,
     transform 0.25s ease,
     box-shadow 0.25s ease,
-    border-color 0.25s ease;
+    border-color 0.25s ease,
+    background 0.2s ease;
 }
 
 /* 뷰포트에 들어왔을 때 */
@@ -422,10 +431,13 @@ document.addEventListener("DOMContentLoaded", function () {
   <!-- 프로필 영역 -->
   <section class="hs-hero">
     <div class="hs-hero-avatar">
-      <img src="/assets/img/avatar.png" alt="Hyunsik Min">
+      <img src="/assets/img/KakaoTalk_20250110_182313239.jpg" alt="Hyunsik Min">
     </div>
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
     <div class="hs-hero-subtitle">AI for Energy · Mobility · Safety</div>
+    <div class="hs-hero-intro">
+      Researching how AI, foundation models, and graph-based learning can build safer and smarter cities.
+    </div>
   </section>
 
   <div class="hs-main-layout">
