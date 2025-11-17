@@ -5,7 +5,7 @@ permalink: /
 ---
 
 <style>
-/* ====== Minima 기본 제목/Posts/RS S 숨기기 ====== */
+/* ====== Minima 기본 제목/Posts/RSS 숨기기 ====== */
 .home .post-list,
 .home .rss-subscribe,
 .home .page-heading,
@@ -20,6 +20,21 @@ permalink: /
 .hs-page-wrapper {
   max-width: 1040px;
   margin: 0 auto;
+  position: relative;
+  z-index: 0;
+}
+
+/* 배경용 그라디언트 글로우 */
+.hs-page-wrapper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 60%),
+    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.16), transparent 55%);
+  opacity: 0.95;
 }
 
 /* 상단 프로필 영역 */
@@ -28,10 +43,29 @@ permalink: /
   margin-bottom: 1.5rem;
 }
 
-.hs-hero img {
+/* 아바타 컨테이너: 그라디언트 링 + 살짝 튀어나오는 느낌 */
+.hs-hero-avatar {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.28);
+  transform: translateY(0);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hs-hero-avatar img {
   max-width: 220px;
   border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: block;
+  background: #ffffff;
+  padding: 3px;
+}
+
+/* hover 시 살짝 떠오르게 */
+.hs-hero-avatar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.34);
 }
 
 .hs-hero-title {
@@ -66,6 +100,19 @@ permalink: /
   letter-spacing: 0.06em;
   color: #999;
   margin-bottom: 0.5rem;
+  position: relative;
+}
+
+/* 사이드바 제목 아래 그라디언트 라인 */
+.hs-sidebar-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 28px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb, #10b981);
 }
 
 /* 사이드바 탭(버튼) – 배경과 잘 섞이는 유리 느낌 */
@@ -100,11 +147,13 @@ permalink: /
   transform: translateX(1px);
 }
 
+/* 활성 탭: 더 강한 그라디언트/글로우 */
 .hs-sidenav button.hs-sidenav-active {
-  background: #1f2933;
+  background: radial-gradient(circle at top left, #2563eb, #111827);
   color: #fff;
-  border-color: #1f2933;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.4);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.45);
+  transform: translateX(2px);
 }
 
 /* 모바일일 때 사이드바를 위로 올리고 가로형 탭처럼 */
@@ -134,6 +183,7 @@ permalink: /
   flex: 1;
 }
 
+/* 기본: 살짝 아래 + 투명(스크롤 인 애니메이션용) */
 .hs-section {
   margin-bottom: 1rem;
   border-radius: 16px;
@@ -141,6 +191,27 @@ permalink: /
   background: #fff;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
   overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* 뷰포트에 들어왔을 때 */
+.hs-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 활성 섹션: 살짝 더 떠오르고, 테두리 강조 */
+.hs-section.active {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.28);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
 }
 
 /* 헤더(클릭 영역) */
@@ -152,6 +223,25 @@ permalink: /
   cursor: pointer;
   background: linear-gradient(to right, #fafafa, #fdfdfd);
   border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+/* 활성 섹션 왼쪽 컬러 라인 */
+.hs-section-header::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(to bottom, #2563eb, #10b981);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.hs-section.active .hs-section-header::before {
+  opacity: 1;
 }
 
 .hs-section-title {
@@ -298,10 +388,31 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 페이지 로드 시 첫 섹션 자동 오픈
+  // 스크롤 인 애니메이션: IntersectionObserver
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  } else {
+    // 구형 브라우저용 fallback
+    sections.forEach((section) => section.classList.add("is-visible"));
+  }
+
+  // 페이지 로드 시 첫 섹션 자동 오픈 + 즉시 visible 처리
   if (sections.length > 0) {
     const firstId = sections[0].getAttribute("id");
     openSection(firstId);
+    sections[0].classList.add("is-visible");
   }
 });
 </script>
@@ -310,7 +421,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <!-- 프로필 영역 -->
   <section class="hs-hero">
-    <img src="/assets/img/avatar.png" alt="Hyunsik Min">
+    <div class="hs-hero-avatar">
+      <img src="/assets/img/avatar.png" alt="Hyunsik Min">
+    </div>
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
     <div class="hs-hero-subtitle">AI for Energy · Mobility · Safety</div>
   </section>
