@@ -13,40 +13,6 @@ permalink: /news/
   display: none !important;
 }
 
-/* ====== Night 모드 전용 텍스트/카드 밝기 보정 ====== */
-body.theme-night .hs-news-intro h1,
-body.theme-night .hs-news-intro p {
-  color: #e5e7eb; /* 제목/설명 글씨 밝게 */
-}
-
-body.theme-night .hs-news-sidebar-title,
-body.theme-night .hs-news-year-title,
-body.theme-night .hs-news-year-tag {
-  color: #e5e7eb;
-}
-
-body.theme-night .hs-news-item h3,
-body.theme-night .hs-news-item p,
-body.theme-night .hs-news-item .hs-news-meta {
-  color: #e5e7eb;
-}
-
-body.theme-night .hs-news-chip {
-  background: rgba(148, 163, 184, 0.35);
-  color: #e5e7eb;
-}
-
-body.theme-night .hs-news-item {
-  background: rgba(15, 23, 42, 0.9); /* 어두운 카드 배경 */
-  border-color: rgba(148, 163, 184, 0.6);
-}
-
-body.theme-night .hs-news-item:hover {
-  background: rgba(15, 23, 42, 1);
-  border-color: rgba(248, 250, 252, 0.8);
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.9);
-}
-
 /* ====== 전체 레이아웃 / 기본 스타일 ====== */
 .hs-news-wrapper {
   max-width: 1040px;
@@ -319,7 +285,7 @@ body.theme-night .hs-news-item:hover {
   margin-bottom: 0;
 }
 
-/* 뉴스 아이템 hover 효과 (day 기본) */
+/* 뉴스 아이템 hover 효과 */
 .hs-news-item:hover {
   background: #f9fafb;
   border-color: rgba(148, 163, 184, 0.6);
@@ -350,6 +316,12 @@ body.theme-night .hs-news-item:hover {
   .hs-news-item {
     padding: 0.7rem 0.75rem 0.75rem;
   }
+}
+
+/* ====== Night theme readability for year header ====== */
+body.theme-night .hs-news-year-title,
+body.theme-night .hs-news-year-tag {
+  color: #111827 !important;
 }
 </style>
 
