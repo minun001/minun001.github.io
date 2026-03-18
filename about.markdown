@@ -42,9 +42,9 @@ permalink: /about/
 
 .hs-about-hero img {
   width: 100%;
-  max-height: 470px;
+  max-height: 560px;
   object-fit: cover;
-  object-position: center 38%;
+  object-position: center 68%;
   border-radius: 28px;
   box-shadow: 0 20px 48px rgba(15, 23, 42, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.55);
@@ -565,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <!-- ?곷떒 ???대?吏 -->
   <section class="hs-about-hero">
-    <img src="/assets/img/KakaoTalk_20250110_182313239.jpg"
+    <img src="/assets/img/KakaoTalk_20260318_150626.jpg"
          alt="Hyunsik Min"
          loading="eager">
   </section>
