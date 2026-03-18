@@ -692,7 +692,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
               <div class="hs-pub-figure">
                 <img src="/assets/img/TRACM_LLM_framework.png"
-                     alt="TRACS-LLM Framework">
+                     alt="TRACS-LLM Framework"
+                     loading="lazy">
               </div>
 
               <p class="hs-pub-desc">
@@ -711,9 +712,11 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="hs-pub-figure">
                 <img src="/assets/img/SolarNexus_framework.png"
                      alt="SolarNexus Framework"
+                     loading="lazy"
                      style="margin-bottom:1rem;">
                 <img src="/assets/img/SolarNexus_TCN.png"
-                     alt="SolarNexus TCN-based Forecaster">
+                     alt="SolarNexus TCN-based Forecaster"
+                     loading="lazy">
               </div>
 
               <p class="hs-pub-desc">
@@ -747,7 +750,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
               <div class="hs-pub-figure">
                 <img src="/assets/img/SolarFlux_framework.png"
-                     alt="SolarFlux Predictor Framework">
+                     alt="SolarFlux Predictor Framework"
+                     loading="lazy">
               </div>
 
               <p class="hs-pub-desc">
@@ -782,9 +786,11 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="hs-pub-figure">
                 <img src="/assets/img/TGCA_framework.png"
                      alt="Temporal Graph Cross Attention Framework"
+                     loading="lazy"
                      style="margin-bottom:1rem;">
                 <img src="/assets/img/TGCA_model.png"
-                     alt="TGCA Model Architecture">
+                     alt="TGCA Model Architecture"
+                     loading="lazy">
               </div>
 
               <p class="hs-pub-desc">

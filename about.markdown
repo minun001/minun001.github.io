@@ -98,6 +98,15 @@ permalink: /about/
   font-size: 0.78rem;
 }
 
+.hs-about-summary {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 0.92rem;
+  color: #374151;
+  line-height: 1.65;
+}
+
 /* ?쒓렇 ??蹂??*/
 .hs-chip-primary {
   background: rgba(37, 99, 235, 0.12);
@@ -459,7 +468,8 @@ document.addEventListener("DOMContentLoaded", function () {
   <!-- ?곷떒 ???대?吏 -->
   <section class="hs-about-hero">
     <img src="/assets/img/KakaoTalk_20250110_182313239.jpg"
-         alt="Hyunsik Min">
+         alt="Hyunsik Min"
+         loading="eager">
   </section>
 
   <!-- ?곷떒 ?꾨줈???섏씠?쇱씠??-->
@@ -477,6 +487,9 @@ document.addEventListener("DOMContentLoaded", function () {
         <span class="hs-chip hs-chip-primary">Mobility &amp; safety AI</span>
         <span class="hs-chip hs-chip-soft">Energy forecasting</span>
         <span class="hs-chip hs-chip-soft">Legal AI &amp; NLP</span>
+      </div>
+      <div class="hs-about-summary">
+        I build practical AI systems across mobility, energy, and safety, with a focus on research that can move from papers to deployment.
       </div>
     </div>
   </section>

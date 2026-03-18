@@ -101,6 +101,110 @@ body.theme-night .hs-sidebar-title {
   color: #6b7280;
 }
 
+.hs-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1.2rem auto 0;
+  max-width: 760px;
+}
+
+.hs-stat-card {
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.hs-stat-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.hs-stat-label {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.83rem;
+  color: #6b7280;
+}
+
+.hs-hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.hs-hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.hs-hero-actions a:hover {
+  transform: translateY(-1px);
+}
+
+.hs-action-primary {
+  background: linear-gradient(135deg, #2563eb, #0f172a);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.28);
+}
+
+.hs-action-secondary {
+  background: rgba(255, 255, 255, 0.86);
+  color: #111827;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.hs-feature-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 0 0 1.4rem;
+}
+
+.hs-feature-card {
+  padding: 1rem 1.05rem;
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+}
+
+.hs-feature-kicker {
+  display: inline-flex;
+  margin-bottom: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.hs-feature-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.hs-feature-card p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
 /* ====== 콘텐츠 레이아웃 (사이드바 + 본문) ====== */
 .hs-main-layout {
   display: flex;
@@ -344,6 +448,13 @@ body.theme-night .hs-sidebar-title {
     font-size: 0.98rem;
   }
 }
+
+@media (max-width: 760px) {
+  .hs-hero-stats,
+  .hs-feature-strip {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 
 <script>
@@ -445,13 +556,51 @@ document.addEventListener("DOMContentLoaded", function () {
   <!-- 프로필 영역 -->
   <section class="hs-hero">
     <div class="hs-hero-avatar">
-      <img src="/assets/img/avatar.png" alt="Hyunsik Min">
+      <img src="/assets/img/avatar.png" alt="Hyunsik Min" fetchpriority="high">
     </div>
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
     <div class="hs-hero-subtitle">AI for Energy / Mobility / Safety</div>
     <div class="hs-hero-intro">
       Building AI systems for safer mobility, resilient energy, and smarter cities.
     </div>
+    <div class="hs-hero-stats">
+      <div class="hs-stat-card">
+        <span class="hs-stat-value">3</span>
+        <span class="hs-stat-label">First-author SCI(E) papers</span>
+      </div>
+      <div class="hs-stat-card">
+        <span class="hs-stat-value">2</span>
+        <span class="hs-stat-label">National research programs</span>
+      </div>
+      <div class="hs-stat-card">
+        <span class="hs-stat-value">3</span>
+        <span class="hs-stat-label">Core domains: mobility, energy, safety</span>
+      </div>
+    </div>
+    <div class="hs-hero-actions">
+      <a class="hs-action-primary" href="/publications">View Publications</a>
+      <a class="hs-action-secondary" href="/about">About Me</a>
+      <a class="hs-action-secondary" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
+      <a class="hs-action-secondary" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </section>
+
+  <section class="hs-feature-strip">
+    <article class="hs-feature-card">
+      <span class="hs-feature-kicker">Research</span>
+      <h3>Mobility AI</h3>
+      <p>Trajectory prediction, anticipatory driving, and trustworthy decision support for future transportation systems.</p>
+    </article>
+    <article class="hs-feature-card">
+      <span class="hs-feature-kicker">Energy</span>
+      <h3>Smart-Grid Forecasting</h3>
+      <p>PV forecasting and adaptive energy management for resilient, data-driven grid operations.</p>
+    </article>
+    <article class="hs-feature-card">
+      <span class="hs-feature-kicker">Impact</span>
+      <h3>Applied AI for Society</h3>
+      <p>Research aimed at real deployment in safer cities, public infrastructure, and legal-safety systems.</p>
+    </article>
   </section>
 
   <div class="hs-main-layout">
