@@ -663,8 +663,8 @@ document.addEventListener("DOMContentLoaded", function () {
                   <li>2 in the first semester of the M.S. program</li>
                 </ul>
               </li>
-              <li>Contributing to <strong>national research projects</strong>, including NRF CRC and BK21</li>
-              <li>Focused on <strong>mobility, energy, and safety AI</strong> with real-world impact</li>
+              <li>Active in <strong>NRF CRC</strong> and <strong>BK21</strong> research programs</li>
+              <li>Working across <strong>forecasting</strong>, <strong>mobility intelligence</strong>, and <strong>AI-based decision support</strong></li>
             </ul>
           </div>
         </div>
@@ -682,19 +682,19 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
             <p>
-              I study how AI can create practical value in energy, mobility, and safety.
+              My research connects machine learning with transportation systems, energy operations, and socially grounded AI applications.
             </p>
-            <p>My work has focused on:</p>
+            <p>Representative topics include:</p>
             <ul>
               <li>Solar power forecasting and smart-grid optimization</li>
               <li>Trajectory prediction for anticipatory autonomous driving</li>
               <li>Legal AI for traffic accident judgment prediction</li>
             </ul>
             <p>
-              These efforts have led to <strong>three first-author SCI(E) publications</strong>, including one during my undergraduate studies.
+              This work has produced <strong>three first-author SCI(E) publications</strong>, including one completed during my undergraduate studies.
             </p>
             <p>
-              As a master's student, I am extending this work through national research projects and system-oriented AI for real urban challenges.
+              I am now extending it through collaborative projects and system-oriented research for urban-scale deployment.
             </p>
           </div>
         </div>
@@ -711,7 +711,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
-            <p>I am interested in grounding modern AI in real-world mobility and energy systems.</p>
+            <p>I am interested in turning modern AI methods into robust tools for complex physical and social systems.</p>
             <ul>
               <li><strong>Foundation Models &amp; VLA</strong><br>
                 Foundation models and vision-language-action systems for embodied and multimodal decision-making.
@@ -748,20 +748,20 @@ document.addEventListener("DOMContentLoaded", function () {
             <ul>
               <li>Spatio-temporal modeling of front vehicles in natural traffic scenes</li>
               <li>TGCA-based modeling for maneuver intent inference</li>
-              <li>Focus on anticipatory driving beyond reactive control</li>
+              <li>Designed for earlier and more reliable driving decisions</li>
             </ul>
 
             <h3>AI-based Speaker Diarization for CRC Data</h3>
             <ul>
               <li>Speaker diarization and classification for child-parent conversational datasets</li>
               <li>Language models, acoustic embeddings, and diarization pipelines</li>
-              <li>Support for reliable educational and clinical interaction analysis</li>
+              <li>Built to support structured educational and clinical analysis</li>
             </ul>
 
             <h3>Smart Grid &amp; Energy AI</h3>
             <ul>
               <li>Solar PV-based smart grid optimization and energy management</li>
-              <li>Robust, data-driven decision-making for future energy systems</li>
+              <li>Forecasting and control strategies for resilient energy operations</li>
             </ul>
           </div>
         </div>
@@ -778,10 +778,10 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
-            <p>Across my work, I aim to:</p>
+            <p>Long term, I want to:</p>
             <ul>
-              <li>Turn <strong>advanced AI models</strong> into <strong>deployable systems</strong> for mobility and energy</li>
-              <li>Build AI that improves real-world safety, efficiency, and quality of life</li>
+              <li>Turn <strong>advanced AI models</strong> into <strong>deployable systems</strong> for infrastructure and mobility</li>
+              <li>Contribute research that improves safety, efficiency, and public value in practice</li>
             </ul>
           </div>
         </div>

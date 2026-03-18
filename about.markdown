@@ -489,7 +489,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <span class="hs-chip hs-chip-soft">Legal AI &amp; NLP</span>
       </div>
       <div class="hs-about-summary">
-        I build <strong>practical AI systems</strong> across <strong>mobility, energy, and safety</strong>, with a focus on research that can move <strong>from papers to deployment</strong>.
+        My work spans <strong>transportation AI</strong>, <strong>energy forecasting</strong>, and <strong>decision-support systems</strong>, with an emphasis on research that remains useful beyond the lab.
       </div>
     </div>
   </section>

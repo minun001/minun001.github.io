@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <section class="hs-news-intro">
     <h1>News &amp; Updates</h1>
-    <p>Selected milestones across <strong>publications</strong>, <strong>research</strong>, <strong>awards</strong>, and academic activities.</p>
+    <p>A short timeline of <strong>milestones</strong>, including papers, awards, collaborations, and academic progress.</p>
   </section>
 
   <div class="hs-news-main-layout">
@@ -471,7 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong>Journal:</strong> <em>Applied Energy</em> (IF = 11.0, Top 10%)</div>
               <p><strong>Title:</strong> <em>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</em></p>
               <p>
-                This work presents a scalable framework for PV forecasting and adaptive energy management.
+                The paper introduces a scalable framework for photovoltaic forecasting and adaptive energy management.
               </p>
             </div>
 
@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong>Journal:</strong> <em>Artificial Intelligence and Law</em> (IF = 3.1, Top 10%)</div>
               <p><strong>Title:</strong> <em>TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines</em></p>
               <p>
-                We develop an LLM-based framework for predicting sentencing outcomes in traffic accident cases.
+                The study proposes an LLM-based framework for predicting sentencing outcomes in traffic accident cases.
               </p>
             </div>
 
@@ -492,7 +492,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Web</span>
               </div>
               <p>
-                Built a Jekyll + GitHub Pages site to consolidate my research profile, publications, and news.
+                Launched this site to organize my academic profile, selected papers, and recent updates in one place.
               </p>
             </div>
 
@@ -503,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong>Program:</strong> NRF CRC
               </div>
               <p>
-                Continued work on an AI-based <strong>speaker diarization and analysis pipeline</strong> for child-parent CRC data.
+                Continued developing a <strong>speaker diarization and analysis pipeline</strong> for child-parent CRC data.
               </p>
             </div>
 
@@ -541,7 +541,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Publication</span>
               </div>
               <p>
-                Completed my first SCI(E) first-author paper as an undergraduate researcher.
+                Published my first SCI(E) first-author paper during my undergraduate studies.
               </p>
             </div>
 
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Milestone</span>
               </div>
               <p>
-                Completed my undergraduate thesis on data-driven intelligent mobility and transitioned to the M.S. program.
+                Completed my undergraduate thesis on intelligent mobility and moved into the M.S. program.
               </p>
             </div>
 
@@ -577,7 +577,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Lab</span>
               </div>
               <p>
-                SAIL became my main research base for autonomous driving, mobility AI, and urban safety.
+                Joined SAIL as my main research base for autonomous driving and urban AI research.
               </p>
             </div>
 
