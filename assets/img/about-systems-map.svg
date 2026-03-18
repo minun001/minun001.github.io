@@ -1,0 +1,10 @@
+<svg width="880" height="540" viewBox="0 0 880 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="880" height="540" rx="32" fill="url(#bg)"/>
+  <rect x="76" y="92" width="240" height="136" rx="26" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.16"/>
+  <text x="108" y="146" fill="#F8FAFC" font-family="Manrope, Segoe UI, sans-serif" font-size="28" font-weight="800">Systems Research</text>
+  <text x="108" y="180" fill="#BFDBFE" font-family="Manrope, Segoe UI, sans-serif" font-size="16">AI that moves from models to usable tools</text>
+  <path d="M216 346C270 306 322 280 392 278C455 276 525 320 598 314C666 308 726 254 782 188" stroke="url(#path)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="210" cy="352" r="50" fill="#2563EB"/><circle cx="430" cy="280" r="62" fill="#0F172A"/><circle cx="630" cy="312" r="54" fill="#10B981"/><circle cx="770" cy="176" r="42" fill="#38BDF8"/>
+  <g fill="#EFF6FF" font-family="Manrope, Segoe UI, sans-serif"><text x="170" y="359" font-size="19" font-weight="700">Deploy</text><text x="392" y="288" font-size="20" font-weight="800">Model</text><text x="596" y="318" font-size="19" font-weight="700">Operate</text><text x="744" y="182" font-size="17" font-weight="700">Impact</text></g>
+  <defs><linearGradient id="bg" x1="40" y1="30" x2="808" y2="500" gradientUnits="userSpaceOnUse"><stop stop-color="#0F172A"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient><linearGradient id="path" x1="216" y1="346" x2="782" y2="188" gradientUnits="userSpaceOnUse"><stop stop-color="#93C5FD"/><stop offset="1" stop-color="#86EFAC"/></linearGradient></defs>
+</svg>

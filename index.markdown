@@ -53,8 +53,50 @@ body.theme-night .hs-sidebar-title {
 
 /* 상단 프로필 영역 */
 .hs-hero {
-  text-align: center;
-  margin-bottom: 1.7rem;
+  margin-bottom: 1.8rem;
+}
+
+.hs-hero-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 1.4rem;
+  align-items: stretch;
+}
+
+.hs-hero-copy,
+.hs-hero-visual-panel {
+  border-radius: 28px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.1);
+}
+
+.hs-hero-copy {
+  padding: 1.55rem 1.5rem 1.35rem;
+}
+
+.hs-hero-copy-top {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.hs-hero-copy-main {
+  text-align: left;
+}
+
+.hs-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.32rem 0.68rem;
+  border-radius: 999px;
+  background: rgba(29, 78, 216, 0.09);
+  color: #1d4ed8;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 /* 아바타 컨테이너: 그라디언트 링 + 살짝 튀어나오는 느낌 */
@@ -69,7 +111,8 @@ body.theme-night .hs-sidebar-title {
 }
 
 .hs-hero-avatar img {
-  max-width: 210px;
+  width: 116px;
+  height: 116px;
   border-radius: 50%;
   display: block;
   background: #ffffff;
@@ -84,7 +127,7 @@ body.theme-night .hs-sidebar-title {
 }
 
 .hs-hero-title {
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
   font-size: 1.25rem;
   font-weight: 600;
 }
@@ -105,8 +148,7 @@ body.theme-night .hs-sidebar-title {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
-  margin: 1.2rem auto 0;
-  max-width: 760px;
+  margin: 1.15rem 0 0;
 }
 
 .hs-stat-card {
@@ -172,7 +214,97 @@ body.theme-night .hs-sidebar-title {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.9rem;
-  margin: 0 0 1.4rem;
+  margin: 0 0 1.5rem;
+}
+
+.hs-hero-visual-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    linear-gradient(160deg, rgba(15, 23, 42, 0.96), rgba(29, 78, 216, 0.94));
+  color: #e5eefc;
+}
+
+.hs-hero-visual-panel::before {
+  content: "";
+  position: absolute;
+  inset: auto -10% -18% auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.3), transparent 70%);
+}
+
+.hs-hero-visual-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.hs-hero-visual-kicker {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(229, 238, 252, 0.72);
+}
+
+.hs-hero-visual-panel h2 {
+  margin: 0.55rem 0 0.55rem;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  color: #ffffff;
+}
+
+.hs-hero-visual-panel p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(229, 238, 252, 0.88);
+}
+
+.hs-hero-visual-art {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.hs-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.hs-focus-card {
+  padding: 0.85rem 0.9rem;
+  border-radius: 18px;
+  background: var(--color-card-strong);
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
+}
+
+.hs-focus-label {
+  display: inline-flex;
+  margin-bottom: 0.38rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1d4ed8;
+}
+
+.hs-focus-card p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #3f4d63;
 }
 
 .hs-feature-card {
@@ -283,6 +415,16 @@ body.theme-night .hs-sidebar-title {
 }
 
 /* 모바일일 때 사이드바를 위로 올리고 가로형 탭처럼 */
+@media (max-width: 980px) {
+  .hs-hero-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .hs-focus-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 800px) {
   .hs-main-layout {
     flex-direction: column;
@@ -450,8 +592,22 @@ body.theme-night .hs-sidebar-title {
 }
 
 @media (max-width: 760px) {
+  .hs-hero-copy {
+    padding: 1.2rem 1rem 1.05rem;
+  }
+
+  .hs-hero-copy-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hs-hero-visual-panel {
+    padding: 1rem;
+  }
+
   .hs-hero-stats,
-  .hs-feature-strip {
+  .hs-feature-strip,
+  .hs-focus-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -555,33 +711,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <!-- 프로필 영역 -->
   <section class="hs-hero">
-    <div class="hs-hero-avatar">
-      <img src="/assets/img/avatar.png" alt="Hyunsik Min" fetchpriority="high">
-    </div>
-    <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
-    <div class="hs-hero-subtitle">AI for Energy / Mobility / Safety</div>
-    <div class="hs-hero-intro">
-      Building <strong>AI systems</strong> for <strong>safer mobility</strong>, <strong>resilient energy</strong>, and <strong>smarter cities</strong>.
-    </div>
-    <div class="hs-hero-stats">
-      <div class="hs-stat-card">
-        <span class="hs-stat-value">3</span>
-        <span class="hs-stat-label">First-author SCI(E) papers</span>
+    <div class="hs-hero-shell">
+      <div class="hs-hero-copy">
+        <div class="hs-hero-eyebrow">Research Portfolio</div>
+        <div class="hs-hero-copy-top">
+          <div class="hs-hero-avatar">
+            <img src="/assets/img/avatar.png" alt="Hyunsik Min" fetchpriority="high">
+          </div>
+          <div class="hs-hero-copy-main">
+            <div class="hs-hero-title">Hyunsik Min</div>
+            <div class="hs-hero-subtitle">M.S. Candidate, Republic of Korea</div>
+            <div class="hs-hero-intro">
+              Building <strong>AI systems</strong> for <strong>safer mobility</strong>, <strong>resilient energy</strong>, and <strong>smarter cities</strong>.
+            </div>
+          </div>
+        </div>
+        <div class="hs-hero-stats">
+          <div class="hs-stat-card">
+            <span class="hs-stat-value">3</span>
+            <span class="hs-stat-label">First-author SCI(E) papers</span>
+          </div>
+          <div class="hs-stat-card">
+            <span class="hs-stat-value">2</span>
+            <span class="hs-stat-label">National research programs</span>
+          </div>
+          <div class="hs-stat-card">
+            <span class="hs-stat-value">3</span>
+            <span class="hs-stat-label">Core domains: mobility, energy, safety</span>
+          </div>
+        </div>
+        <div class="hs-hero-actions">
+          <a class="hs-action-primary" href="/publications">View Publications</a>
+          <a class="hs-action-secondary" href="/about">About Me</a>
+          <a class="hs-action-secondary" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
+          <a class="hs-action-secondary" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
       </div>
-      <div class="hs-stat-card">
-        <span class="hs-stat-value">2</span>
-        <span class="hs-stat-label">National research programs</span>
-      </div>
-      <div class="hs-stat-card">
-        <span class="hs-stat-value">3</span>
-        <span class="hs-stat-label">Core domains: mobility, energy, safety</span>
+      <div class="hs-hero-visual-panel">
+        <div class="hs-hero-visual-copy">
+          <div class="hs-hero-visual-kicker">Current Themes</div>
+          <h2>Connected AI for infrastructure, decision-making, and public systems</h2>
+          <p>Research spanning trajectory prediction, photovoltaic forecasting, and AI-supported safety analysis, presented as one coherent systems portfolio.</p>
+        </div>
+        <img class="hs-hero-visual-art" src="/assets/img/research-constellation.svg" alt="Abstract illustration connecting mobility, energy, and safety research areas." loading="eager">
       </div>
     </div>
-    <div class="hs-hero-actions">
-      <a class="hs-action-primary" href="/publications">View Publications</a>
-      <a class="hs-action-secondary" href="/about">About Me</a>
-      <a class="hs-action-secondary" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
-      <a class="hs-action-secondary" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
+    <div class="hs-focus-grid">
+      <article class="hs-focus-card">
+        <span class="hs-focus-label">Mobility</span>
+        <p>Trajectory prediction and anticipatory modeling for trustworthy autonomous driving.</p>
+      </article>
+      <article class="hs-focus-card">
+        <span class="hs-focus-label">Energy</span>
+        <p>Solar forecasting and adaptive control for resilient grid-scale decision support.</p>
+      </article>
+      <article class="hs-focus-card">
+        <span class="hs-focus-label">Safety</span>
+        <p>Legal AI and structured interaction analysis for risk-aware public applications.</p>
+      </article>
     </div>
   </section>
 
@@ -599,7 +786,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <article class="hs-feature-card">
       <span class="hs-feature-kicker">Impact</span>
       <h3>Applied AI for Society</h3>
-      <p>Research aimed at real deployment in safer cities, public infrastructure, and legal-safety systems.</p>
+      <p>Research framed for deployment in urban infrastructure, legal-safety systems, and public services.</p>
     </article>
   </section>
 

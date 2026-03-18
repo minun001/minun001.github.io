@@ -38,6 +38,59 @@ permalink: /news/
   margin-bottom: 1.5rem;
 }
 
+.hs-news-intro-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.7fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.hs-news-intro-main,
+.hs-news-intro-panel {
+  border-radius: 24px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08);
+}
+
+.hs-news-intro-main {
+  padding: 1.2rem 1.25rem 1rem;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.hs-news-intro-panel {
+  padding: 1rem;
+  background: linear-gradient(155deg, rgba(17, 24, 39, 0.96), rgba(22, 101, 52, 0.9));
+  color: #dcfce7;
+}
+
+.hs-news-intro-panel h2 {
+  margin: 0.3rem 0 0.45rem;
+  color: #ffffff;
+  font-size: 1.35rem;
+}
+
+.hs-news-intro-panel p {
+  margin: 0;
+  color: rgba(220, 252, 231, 0.84);
+  font-size: 0.9rem;
+}
+
+.hs-news-intro-panel img {
+  width: 100%;
+  margin-top: 0.9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hs-news-intro-kicker {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(220, 252, 231, 0.7);
+}
+
 .hs-news-intro h1 {
   margin-bottom: 0.3rem;
 }
@@ -125,6 +178,12 @@ permalink: /news/
 }
 
 /* 모바일일 때 사이드바를 위로 올리고 가로형 탭처럼 */
+@media (max-width: 920px) {
+  .hs-news-intro-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 800px) {
   .hs-news-main-layout {
     flex-direction: column;
@@ -422,8 +481,18 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="hs-news-wrapper">
 
   <section class="hs-news-intro">
-    <h1>News &amp; Updates</h1>
-    <p>A short timeline of <strong>milestones</strong>, including papers, awards, collaborations, and academic progress.</p>
+    <div class="hs-news-intro-shell">
+      <div class="hs-news-intro-main">
+        <h1>News &amp; Updates</h1>
+        <p>A short timeline of <strong>milestones</strong>, including papers, awards, collaborations, and academic progress.</p>
+      </div>
+      <aside class="hs-news-intro-panel">
+        <div class="hs-news-intro-kicker">Timeline</div>
+        <h2>Recent progress, recognitions, and research movement</h2>
+        <p>This page captures the pace of the portfolio, from paper acceptances to awards and lab-based project activity.</p>
+        <img src="/assets/img/news-timeline.svg" alt="Abstract timeline illustration for news and milestones." loading="lazy">
+      </aside>
+    </div>
   </section>
 
   <div class="hs-news-main-layout">

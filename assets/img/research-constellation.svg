@@ -1,0 +1,12 @@
+<svg width="960" height="620" viewBox="0 0 960 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="620" rx="36" fill="url(#bg)"/>
+  <path d="M148 472C223 406 279 358 378 332C468 308 542 320 637 270C715 230 793 164 844 114" stroke="url(#line)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M136 204C215 248 302 277 398 265C509 251 579 174 683 162C756 154 821 179 875 224" stroke="#94A3B8" stroke-opacity="0.6" stroke-width="6" stroke-linecap="round"/>
+  <g><circle cx="186" cy="448" r="58" fill="#2563EB"/><circle cx="406" cy="318" r="72" fill="#0F172A"/><circle cx="676" cy="248" r="68" fill="#10B981"/><circle cx="806" cy="136" r="50" fill="#1D4ED8"/></g>
+  <g fill="#EFF6FF"><text x="150" y="456" font-family="Manrope, Segoe UI, sans-serif" font-size="22" font-weight="700">Mobility</text><text x="360" y="324" font-family="Manrope, Segoe UI, sans-serif" font-size="26" font-weight="800">AI Systems</text><text x="636" y="254" font-family="Manrope, Segoe UI, sans-serif" font-size="22" font-weight="700">Energy</text><text x="769" y="142" font-family="Manrope, Segoe UI, sans-serif" font-size="20" font-weight="700">Safety</text></g>
+  <g opacity="0.7"><circle cx="278" cy="182" r="10" fill="#93C5FD"/><circle cx="528" cy="154" r="10" fill="#BFDBFE"/><circle cx="742" cy="380" r="12" fill="#86EFAC"/><circle cx="592" cy="472" r="14" fill="#60A5FA"/><circle cx="304" cy="492" r="11" fill="#A7F3D0"/></g>
+  <rect x="86" y="86" width="284" height="84" rx="24" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.16"/>
+  <text x="120" y="126" fill="#E2E8F0" font-family="Manrope, Segoe UI, sans-serif" font-size="18" font-weight="700">Connected portfolio view</text>
+  <text x="120" y="152" fill="#94A3B8" font-family="Manrope, Segoe UI, sans-serif" font-size="14">Forecasting, planning, and public-value AI</text>
+  <defs><linearGradient id="bg" x1="60" y1="48" x2="860" y2="592" gradientUnits="userSpaceOnUse"><stop stop-color="#0F172A"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient><linearGradient id="line" x1="148" y1="472" x2="844" y2="114" gradientUnits="userSpaceOnUse"><stop stop-color="#93C5FD"/><stop offset="0.5" stop-color="#E2E8F0"/><stop offset="1" stop-color="#86EFAC"/></linearGradient></defs>
+</svg>

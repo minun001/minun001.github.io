@@ -23,6 +23,7 @@
         --color-soft: #6b7a90;
         --color-border: rgba(16, 32, 51, 0.09);
         --color-card: rgba(255, 255, 255, 0.88);
+        --color-card-strong: rgba(247, 249, 252, 0.96);
         --color-accent: #1d4ed8;
         --color-accent-strong: #0f172a;
       }
@@ -36,6 +37,10 @@
         color: var(--color-body);
         line-height: 1.7;
         letter-spacing: -0.01em;
+        background:
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 32%),
+          radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.08), transparent 28%),
+          linear-gradient(180deg, #f8fbff 0%, #f5f7fb 48%, #ffffff 100%);
       }
 
       body,
@@ -78,8 +83,9 @@
 
       .site-header {
         border-bottom-color: var(--color-border);
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
       }
 
       .site-title,
@@ -99,6 +105,12 @@
 
       .page-content {
         padding-top: 2.25rem;
+        padding-bottom: 3rem;
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--color-border);
+        background: rgba(255, 255, 255, 0.7);
       }
 
       .hs-hero-title,

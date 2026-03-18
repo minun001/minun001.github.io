@@ -50,15 +50,15 @@ permalink: /about/
 /* ?곷떒 ?꾨줈???섏씠?쇱씠??移대뱶 */
 .hs-about-highlight {
   margin-bottom: 1.8rem;
-  padding: 0.95rem 1.1rem;
-  border-radius: 16px;
+  padding: 1.05rem 1.15rem;
+  border-radius: 24px;
   border: 1px solid rgba(15, 23, 42, 0.08);
-  background: radial-gradient(circle at top left, #f5f7ff, #ffffff);
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1.4rem;
-  align-items: center;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(244, 247, 252, 0.92));
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.1);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.75fr);
+  gap: 1rem 1.4rem;
+  align-items: stretch;
 }
 
 .hs-about-highlight-main {
@@ -107,6 +107,91 @@ permalink: /about/
   line-height: 1.65;
 }
 
+.hs-about-visual {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 20px;
+  padding: 1rem;
+  background: linear-gradient(155deg, rgba(15, 23, 42, 0.96), rgba(29, 78, 216, 0.9));
+  color: #dbeafe;
+  overflow: hidden;
+  position: relative;
+}
+
+.hs-about-visual::before {
+  content: "";
+  position: absolute;
+  right: -32px;
+  bottom: -42px;
+  width: 170px;
+  height: 170px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.34), transparent 68%);
+}
+
+.hs-about-visual-copy,
+.hs-about-visual-stats {
+  position: relative;
+  z-index: 1;
+}
+
+.hs-about-visual-kicker {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(219, 234, 254, 0.72);
+}
+
+.hs-about-visual h2 {
+  margin: 0.5rem 0 0.45rem;
+  color: #fff;
+  font-size: 1.45rem;
+}
+
+.hs-about-visual p {
+  margin: 0;
+  color: rgba(219, 234, 254, 0.86);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.hs-about-visual img {
+  width: 100%;
+  margin: 0.9rem 0;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hs-about-visual-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.hs-about-visual-stat {
+  padding: 0.7rem 0.75rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hs-about-visual-stat strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.hs-about-visual-stat span {
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: rgba(219, 234, 254, 0.76);
+}
+
 /* ?쒓렇 ??蹂??*/
 .hs-chip-primary {
   background: rgba(37, 99, 235, 0.12);
@@ -119,9 +204,19 @@ permalink: /about/
 }
 
 /* 紐⑤컮???섏씠?쇱씠???뺣젹 */
+@media (max-width: 900px) {
+  .hs-about-highlight {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 600px) {
   .hs-about-highlight {
     padding: 0.85rem 0.95rem;
+  }
+
+  .hs-about-visual-stats {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -490,6 +585,19 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
       <div class="hs-about-summary">
         My work spans <strong>transportation AI</strong>, <strong>energy forecasting</strong>, and <strong>decision-support systems</strong>, with an emphasis on research that remains useful beyond the lab.
+      </div>
+    </div>
+    <div class="hs-about-visual">
+      <div class="hs-about-visual-copy">
+        <div class="hs-about-visual-kicker">Profile</div>
+        <h2>Research shaped around systems that people can actually use</h2>
+        <p>From autonomous driving to energy operations, the goal is to make advanced models readable, reliable, and deployable.</p>
+      </div>
+      <img src="/assets/img/about-systems-map.svg" alt="Abstract systems map representing mobility, energy, and AI decision support." loading="lazy">
+      <div class="hs-about-visual-stats">
+        <div class="hs-about-visual-stat"><strong>3</strong><span>First-author SCI(E) papers</span></div>
+        <div class="hs-about-visual-stat"><strong>2</strong><span>National research programs</span></div>
+        <div class="hs-about-visual-stat"><strong>2025</strong><span>M.S. research expansion</span></div>
       </div>
     </div>
   </section>

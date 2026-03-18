@@ -5,7 +5,7 @@ permalink: /publications/
 ---
 
 <style>
-/* ====== Minima 기본 제목/Posts/RSS 숨기기 ====== */
+/* ====== Minima 疫꿸퀡????뺛걠/Posts/RSS ??ｋ┛疫?====== */
 .page .post-list,
 .page .rss-subscribe,
 .page .page-heading,
@@ -13,13 +13,13 @@ permalink: /publications/
   display: none !important;
 }
 
-/* ====== Night 모드 전용: 인트로 텍스트 밝게 ====== */
+/* ====== Night 筌뤴뫀諭??袁⑹뒠: ?紐낅뱜嚥???용뮞??獄쏆빓苡?====== */
 body.theme-night .hs-pub-intro h1,
 body.theme-night .hs-pub-intro p {
-  color: #e5e7eb; /* 거의 흰색에 가까운 밝은 회색 */
+  color: #e5e7eb; /* 椰꾧퀣???怨쀪퉳??揶쎛繹먮슣??獄쏆빘? ???퉳 */
 }
 
-/* ====== 전체 레이아웃 / 기본 스타일 ====== */
+/* ====== ?袁⑷퍥 ??됱뵠?袁⑹뜍 / 疫꿸퀡???????====== */
 .hs-pub-wrapper {
   max-width: 1040px;
   margin: 0 auto;
@@ -27,7 +27,7 @@ body.theme-night .hs-pub-intro p {
   z-index: 0;
 }
 
-/* 배경용 그라디언트 글로우 (홈/뉴스/어바웃과 톤 맞춤) */
+/* 獄쏄퀗瑗??域밸챶??遺용섧??疫꼲嚥≪뮇??(????곷뮞/??而?猿됰궢 ??筌띿쉸?? */
 .hs-pub-wrapper::before {
   content: "";
   position: fixed;
@@ -44,6 +44,59 @@ body.theme-night .hs-pub-intro p {
   margin-bottom: 1.5rem;
 }
 
+.hs-pub-intro-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.hs-pub-intro-main,
+.hs-pub-intro-art {
+  border-radius: 24px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08);
+}
+
+.hs-pub-intro-main {
+  padding: 1.2rem 1.25rem 1rem;
+}
+
+.hs-pub-intro-art {
+  padding: 1rem;
+  background: linear-gradient(155deg, rgba(15, 23, 42, 0.96), rgba(14, 116, 144, 0.92));
+  color: #d7f3ff;
+}
+
+.hs-pub-intro-art h2 {
+  margin: 0.25rem 0 0.4rem;
+  color: #fff;
+  font-size: 1.35rem;
+}
+
+.hs-pub-intro-art p {
+  margin: 0;
+  color: rgba(215, 243, 255, 0.84);
+  font-size: 0.9rem;
+}
+
+.hs-pub-intro-art img {
+  width: 100%;
+  margin-top: 0.9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hs-pub-intro-kicker {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(215, 243, 255, 0.68);
+}
+
 .hs-pub-intro h1 {
   margin-bottom: 0.3rem;
 }
@@ -53,7 +106,7 @@ body.theme-night .hs-pub-intro p {
   font-size: 0.97rem;
 }
 
-/* 상단 프로필 하이라이트 카드 */
+/* ?怨룸뼊 ?袁⑥쨮????륁뵠??깆뵠??燁삳?諭?*/
 .hs-pub-highlight {
   margin-top: 0.8rem;
   padding: 0.85rem 1rem;
@@ -103,7 +156,13 @@ body.theme-night .hs-pub-intro p {
   text-decoration: underline;
 }
 
-/* 모바일에서 정렬 보정 */
+/* 筌뤴뫀而??깅퓠???類ｌ졊 癰귣똻??*/
+@media (max-width: 920px) {
+  .hs-pub-intro-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 600px) {
   .hs-pub-highlight {
     padding: 0.8rem 0.85rem;
@@ -114,7 +173,7 @@ body.theme-night .hs-pub-intro p {
   }
 }
 
-/* ====== 필터 바 (검색 + 태그) ====== */
+/* ====== ?袁り숲 獄?(野꺜??+ ??볥젃) ====== */
 .hs-filter-bar {
   margin: 1rem 0 1.2rem;
   display: flex;
@@ -172,13 +231,13 @@ body.theme-night .hs-pub-intro p {
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.35);
 }
 
-/* ====== 메인 레이아웃 (사이드바 + 본문) ====== */
+/* ====== 筌롫뗄????됱뵠?袁⑹뜍 (?????뺤뺍 + 癰귣챶揆) ====== */
 .hs-main-layout {
   display: flex;
   gap: 1.5rem;
 }
 
-/* ====== 사이드바 네비 (섹션 탭) ====== */
+/* ====== ?????뺤뺍 ??삵돩 (?諭???? ====== */
 .hs-sidebar {
   flex: 0 0 220px;
   position: sticky;
@@ -196,7 +255,7 @@ body.theme-night .hs-pub-intro p {
   position: relative;
 }
 
-/* 사이드바 제목 아래 그라디언트 라인 */
+/* ?????뺤뺍 ??뺛걠 ?袁⑥삋 域밸챶??遺용섧????깆뵥 */
 .hs-sidebar-title::after {
   content: "";
   position: absolute;
@@ -208,7 +267,7 @@ body.theme-night .hs-pub-intro p {
   background: linear-gradient(90deg, #2563eb, #10b981);
 }
 
-/* 유리 느낌 버튼 (홈/뉴스/어바웃과 톤 맞춤) */
+/* ?醫듼봺 ?癒?덱 甕곌쑵??(????곷뮞/??而?猿됰궢 ??筌띿쉸?? */
 .hs-sidenav {
   display: flex;
   flex-direction: column;
@@ -240,7 +299,7 @@ body.theme-night .hs-pub-intro p {
   transform: translateX(1px);
 }
 
-/* 활성 탭: 더 강한 그라디언트/글로우 */
+/* ??뽮쉐 ?? ??揶쏅벤釉?域밸챶??遺용섧??疫꼲嚥≪뮇??*/
 .hs-sidenav button.hs-sidenav-active {
   background: radial-gradient(circle at top left, #2563eb, #111827);
   color: #fff;
@@ -249,7 +308,7 @@ body.theme-night .hs-pub-intro p {
   transform: translateX(2px);
 }
 
-/* 모바일일 때 사이드바를 위로 올리고 가로형 탭처럼 */
+/* 筌뤴뫀而??깆뵬 ???????뺤뺍???袁⑥쨮 ???곫?揶쎛嚥≪뮉????荑??*/
 @media (max-width: 800px) {
   .hs-main-layout {
     flex-direction: column;
@@ -271,12 +330,12 @@ body.theme-night .hs-pub-intro p {
   }
 }
 
-/* ====== 섹션(아코디언 카드) 스타일 ====== */
+/* ====== ?諭???袁⑺맜?遺용섧 燁삳?諭? ?????====== */
 .hs-main-content {
   flex: 1;
 }
 
-/* 기본: 살짝 아래 + 투명(스크롤 인 애니메이션용) */
+/* 疫꿸퀡?? ??곸? ?袁⑥삋 + ??梨???쎄쾿嚥????醫딅빍筌롫뗄???륁뒠) */
 .hs-section {
   margin-bottom: 1rem;
   border-radius: 16px;
@@ -294,20 +353,20 @@ body.theme-night .hs-pub-intro p {
     border-color 0.25s ease;
 }
 
-/* 뷰포트에 들어왔을 때 */
+/* ?됯퀬猷?紐꾨퓠 ??쇰선?遺우뱽 ??*/
 .hs-section.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* 활성 섹션: 살짝 더 떠오르고, 테두리 강조 */
+/* ??뽮쉐 ?諭?? ??곸? ???醫롮궎?쒕떯?? ???あ??揶쏅벡??*/
 .hs-section.active {
   transform: translateY(-2px);
   border-color: rgba(37, 99, 235, 0.28);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
 }
 
-/* 헤더(클릭 영역) */
+/* ??삳쐭(?????怨몃열) */
 .hs-section-header {
   display: flex;
   align-items: center;
@@ -319,7 +378,7 @@ body.theme-night .hs-pub-intro p {
   position: relative;
 }
 
-/* 활성 섹션 왼쪽 컬러 라인 */
+/* ??뽮쉐 ?諭????긱걹 ?뚎됱쑎 ??깆뵥 */
 .hs-section-header::before {
   content: "";
   position: absolute;
@@ -347,7 +406,7 @@ body.theme-night .hs-pub-intro p {
   color: #888;
 }
 
-/* 아이콘 (열림/닫힘 표시) */
+/* ?袁⑹뵠??(???????삋 ??뽯뻻) */
 .hs-section-icon {
   margin-left: 0.75rem;
   font-size: 1rem;
@@ -359,7 +418,7 @@ body.theme-night .hs-pub-intro p {
   transform: rotate(90deg);
 }
 
-/* 내용(애니메이션 영역) */
+/* ??곸뒠(?醫딅빍筌롫뗄????怨몃열) */
 .hs-section-body-wrap {
   overflow: hidden;
   max-height: 0;
@@ -390,7 +449,7 @@ body.theme-night .hs-pub-intro p {
   margin-bottom: 0.3rem;
 }
 
-/* 개별 논문 카드 느낌 */
+/* 揶쏆뮆????겆?燁삳?諭??癒?덱 */
 .hs-pub-item {
   margin-bottom: 1.1rem;
   padding-bottom: 1rem;
@@ -418,7 +477,7 @@ body.theme-night .hs-pub-intro p {
   font-size: 0.93rem;
 }
 
-/* 작은 태그/칩 */
+/* ?臾? ??볥젃/燁?*/
 .hs-chip {
   display: inline-flex;
   align-items: center;
@@ -430,7 +489,7 @@ body.theme-night .hs-pub-intro p {
   margin-right: 0.25rem;
 }
 
-/* 타입별 칩 색상 (원하면 점진적으로 교체) */
+/* ????낇?燁???깃맒 (?癒곕릭筌??癒?춭?怨몄몵嚥??대Ŋ猿? */
 .hs-chip-journal {
   background: rgba(37, 99, 235, 0.12);
   color: #1d4ed8;
@@ -451,7 +510,7 @@ body.theme-night .hs-pub-intro p {
   color: #6d28d9;
 }
 
-/* 이미지 공통 스타일 */
+/* ???筌왖 ?⑤벏???????*/
 .hs-pub-figure {
   text-align: center;
   margin: 0.75rem 0 0.9rem;
@@ -463,7 +522,7 @@ body.theme-night .hs-pub-intro p {
   border-radius: 10px;
 }
 
-/* 모바일 폰트/패딩 약간 줄이기 */
+/* 筌뤴뫀而???怨좊뱜/??ㅻ뎃 ??꾩퍢 餓κ쑴?졿묾?*/
 @media (max-width: 600px) {
   .hs-section-header {
     padding: 0.75rem 0.85rem;
@@ -512,7 +571,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // 헤더 클릭: 토글 + 하나만 열리도록
+  // ??삳쐭 ???? ?醫? + ??롪돌筌?????袁⑥쨯
   sections.forEach(section => {
     const header = section.querySelector(".hs-section-header");
     const bodyWrap = section.querySelector(".hs-section-body-wrap");
@@ -534,7 +593,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 사이드바 버튼 클릭
+  // ?????뺤뺍 甕곌쑵??????
   sideNavButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.target;
@@ -542,7 +601,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 스크롤 인 애니메이션: IntersectionObserver
+  // ??쎄쾿嚥????醫딅빍筌롫뗄??? IntersectionObserver
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -558,18 +617,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     sections.forEach((section) => observer.observe(section));
   } else {
-    // 구형 브라우저용 fallback
+    // ?닌뗭굨 ?됰슢??怨???fallback
     sections.forEach((section) => section.classList.add("is-visible"));
   }
 
-  // 페이지 로드 시 첫 섹션 자동 오픈 (2025 섹션) + 즉시 visible 처리
+  // ??륁뵠筌왖 嚥≪뮆諭???筌??諭???癒?짗 ??쎈탞 (2025 ?諭?? + 筌앸맩??visible 筌ｌ꼶??
   if (sections.length > 0) {
     const firstId = sections[0].getAttribute("id");
     openSection(firstId);
     sections[0].classList.add("is-visible");
   }
 
-  /* ====== Publications 검색 + 태그 필터 ====== */
+  /* ====== Publications 野꺜??+ ??볥젃 ?袁り숲 ====== */
   const searchInput = document.getElementById("pub-search");
   const tagButtons = document.querySelectorAll(".hs-filter-tags button");
   const pubItems = document.querySelectorAll(".hs-pub-item");
@@ -608,12 +667,14 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="hs-pub-wrapper">
 
   <section class="hs-pub-intro">
-    <h1>Publications</h1>
-    <p>
-      A selected list of <strong>first-author publications</strong>, grouped by stage and research direction.
-    </p>
+    <div class="hs-pub-intro-shell">
+      <div class="hs-pub-intro-main">
+        <h1>Publications</h1>
+        <p>
+          A selected list of <strong>first-author publications</strong>, grouped by stage and research direction.
+        </p>
 
-    <!-- 🔹 상단 Profiles 하이라이트 -->
+    <!-- ?逾??怨룸뼊 Profiles ??륁뵠??깆뵠??-->
     <div class="hs-pub-highlight">
       <div class="hs-pub-highlight-main">
         <div class="hs-pub-highlight-title">
@@ -638,8 +699,15 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </div>
     </div>
+      </div>
+      <aside class="hs-pub-intro-art">
+        <div class="hs-pub-intro-kicker">Research Archive</div>
+        <h2>From representative papers to applied project frameworks</h2>
+        <p>The publication list highlights how individual studies connect to a broader portfolio across mobility, energy, legal AI, and urban systems.</p>
+        <img src="/assets/img/publications-archive.svg" alt="Abstract archive illustration for research publications." loading="lazy">
+      </aside>
+    </div>
 
-    <!-- 🔍 필터 바 -->
     <div class="hs-filter-bar">
       <input
         type="text"
@@ -657,7 +725,7 @@ document.addEventListener("DOMContentLoaded", function () {
   </section>
 
   <div class="hs-main-layout">
-    <!-- 사이드바 네비 -->
+    <!-- ?????뺤뺍 ??삵돩 -->
     <aside class="hs-sidebar">
       <div class="hs-sidebar-title">Sections</div>
       <div class="hs-sidenav">
@@ -667,10 +735,10 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </aside>
 
-    <!-- 메인 콘텐츠 (아코디언 섹션들) -->
+    <!-- 筌롫뗄???꾩꼹?쀯㎘?(?袁⑺맜?遺용섧 ?諭??? -->
     <main class="hs-main-content">
 
-      <!-- 2025 — Master’s Research -->
+      <!-- 2025 ??Master???Research -->
       <section id="pub-2025" class="hs-section">
         <div class="hs-section-header">
           <div>
@@ -728,7 +796,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </section>
 
-      <!-- 2024 — Undergraduate SCI(E) -->
+      <!-- 2024 ??Undergraduate SCI(E) -->
       <section id="pub-2024-scie" class="hs-section">
         <div class="hs-section-header">
           <div>
@@ -763,7 +831,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </section>
 
-      <!-- 2024–2025 — Domestic Journals & Conferences -->
+      <!-- 2024??025 ??Domestic Journals & Conferences -->
       <section id="pub-2024-domestic" class="hs-section">
         <div class="hs-section-header">
           <div>
