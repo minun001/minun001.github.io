@@ -53,14 +53,15 @@ permalink: /news/
 }
 
 .hs-news-intro-main {
-  padding: 1.2rem 1.25rem 1rem;
-  background: rgba(255, 255, 255, 0.9);
+  padding: 1.3rem 1.35rem 1.08rem;
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .hs-news-intro-panel {
-  padding: 1rem;
+  padding: 1.08rem;
   background: linear-gradient(155deg, rgba(17, 24, 39, 0.96), rgba(22, 101, 52, 0.9));
   color: #dcfce7;
+  box-shadow: 0 22px 44px rgba(20, 83, 45, 0.18);
 }
 
 .hs-news-intro-panel h2 {

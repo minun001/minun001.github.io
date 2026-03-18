@@ -60,13 +60,14 @@ body.theme-night .hs-pub-intro p {
 }
 
 .hs-pub-intro-main {
-  padding: 1.2rem 1.25rem 1rem;
+  padding: 1.3rem 1.35rem 1.1rem;
 }
 
 .hs-pub-intro-art {
-  padding: 1rem;
+  padding: 1.08rem;
   background: linear-gradient(155deg, rgba(15, 23, 42, 0.96), rgba(14, 116, 144, 0.92));
   color: #d7f3ff;
+  box-shadow: 0 22px 44px rgba(8, 47, 73, 0.22);
 }
 
 .hs-pub-intro-art h2 {

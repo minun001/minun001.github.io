@@ -36,28 +36,31 @@ permalink: /about/
 
 /* ?곷떒 ???대?吏 */
 .hs-about-hero {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.35rem;
+  position: relative;
 }
 
 .hs-about-hero img {
   width: 100%;
-  max-height: 450px;
+  max-height: 470px;
   object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  object-position: center 38%;
+  border-radius: 28px;
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.55);
 }
 
 /* ?곷떒 ?꾨줈???섏씠?쇱씠??移대뱶 */
 .hs-about-highlight {
-  margin-bottom: 1.8rem;
-  padding: 1.05rem 1.15rem;
-  border-radius: 24px;
+  margin-bottom: 1.95rem;
+  padding: 1.15rem 1.2rem;
+  border-radius: 28px;
   border: 1px solid rgba(15, 23, 42, 0.08);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(244, 247, 252, 0.92));
-  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(244, 247, 252, 0.94));
+  box-shadow: 0 22px 54px rgba(15, 23, 42, 0.1);
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.75fr);
-  gap: 1rem 1.4rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.8fr);
+  gap: 1.15rem 1.45rem;
   align-items: stretch;
 }
 
