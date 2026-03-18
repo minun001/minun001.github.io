@@ -610,7 +610,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <section class="hs-pub-intro">
     <h1>Publications</h1>
     <p>
-      Selected <strong>first-author publications</strong> with representative figures from key projects.
+      Selected <strong>first-author publications</strong> with representative figures from <strong>key projects</strong>.
     </p>
 
     <!-- 🔹 상단 Profiles 하이라이트 -->

@@ -561,7 +561,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
     <div class="hs-hero-subtitle">AI for Energy / Mobility / Safety</div>
     <div class="hs-hero-intro">
-      Building AI systems for safer mobility, resilient energy, and smarter cities.
+      Building <strong>AI systems</strong> for <strong>safer mobility</strong>, <strong>resilient energy</strong>, and <strong>smarter cities</strong>.
     </div>
     <div class="hs-hero-stats">
       <div class="hs-stat-card">

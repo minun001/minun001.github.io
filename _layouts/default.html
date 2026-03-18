@@ -10,7 +10,204 @@
           content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
     <meta property="og:image" content="{{ page.image | default: site.logo | absolute_url }}">
     <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+    <style>
+      :root {
+        --font-body: "Manrope", "Segoe UI", system-ui, sans-serif;
+        --font-display: "Newsreader", Georgia, serif;
+        --color-ink: #102033;
+        --color-body: #415166;
+        --color-soft: #6b7a90;
+        --color-border: rgba(16, 32, 51, 0.09);
+        --color-card: rgba(255, 255, 255, 0.88);
+        --color-accent: #1d4ed8;
+        --color-accent-strong: #0f172a;
+      }
+
+      html {
+        font-size: 16px;
+      }
+
+      body {
+        font-family: var(--font-body);
+        color: var(--color-body);
+        line-height: 1.7;
+        letter-spacing: -0.01em;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      .site-title,
+      .post-title,
+      .hs-hero-title,
+      .hs-section-title,
+      .hs-news-year-title,
+      .hs-pub-intro h1,
+      .hs-news-intro h1,
+      .hs-about-name,
+      .hs-pub-item h3,
+      .hs-feature-card h3 {
+        font-family: var(--font-display) !important;
+        color: var(--color-ink);
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+      }
+
+      .wrapper,
+      .hs-page-wrapper,
+      .hs-about-wrapper,
+      .hs-pub-wrapper,
+      .hs-news-wrapper {
+        max-width: 1120px;
+      }
+
+      .site-header {
+        border-bottom-color: var(--color-border);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+      }
+
+      .site-title,
+      .site-title:visited {
+        font-size: 1.65rem;
+        font-weight: 700;
+        color: var(--color-ink);
+      }
+
+      .site-nav .page-link {
+        font-family: var(--font-body);
+        font-size: 0.92rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        color: var(--color-ink);
+      }
+
+      .page-content {
+        padding-top: 2.25rem;
+      }
+
+      .hs-hero-title,
+      .hs-about-name,
+      .hs-pub-intro h1,
+      .hs-news-intro h1 {
+        font-size: clamp(2.1rem, 4.4vw, 3.5rem) !important;
+      }
+
+      .hs-section-title,
+      .hs-news-year-title {
+        font-size: 1.35rem !important;
+        font-weight: 700 !important;
+      }
+
+      .hs-hero-subtitle,
+      .hs-about-role,
+      .hs-section-tag,
+      .hs-news-year-tag,
+      .hs-pub-meta,
+      .hs-news-meta,
+      .hs-sidebar-title,
+      .hs-news-sidebar-title,
+      .hs-pub-highlight-label {
+        font-family: var(--font-body) !important;
+        color: var(--color-soft) !important;
+      }
+
+      .hs-hero-subtitle {
+        font-size: 1rem !important;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .hs-hero-intro,
+      .hs-news-intro p,
+      .hs-pub-intro p,
+      .hs-about-summary,
+      .hs-section-body,
+      .hs-news-year-body,
+      .hs-pub-desc,
+      .footer-col-3 p,
+      .contact-list,
+      .social-media-list {
+        font-family: var(--font-body) !important;
+        font-size: 1rem !important;
+        line-height: 1.72 !important;
+      }
+
+      .hs-hero-intro,
+      .hs-news-intro p,
+      .hs-pub-intro p,
+      .hs-about-summary {
+        color: var(--color-body) !important;
+      }
+
+      .hs-section,
+      .hs-news-section,
+      .hs-feature-card,
+      .hs-stat-card,
+      .hs-about-highlight,
+      .hs-pub-highlight {
+        border-color: var(--color-border) !important;
+        background: var(--color-card) !important;
+        box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08) !important;
+      }
+
+      .hs-section-header,
+      .hs-news-year-header {
+        padding: 1.05rem 1.15rem 1rem 1.15rem !important;
+        background: linear-gradient(to right, rgba(255,255,255,0.92), rgba(248,250,252,0.92)) !important;
+      }
+
+      .hs-section-body,
+      .hs-news-year-body {
+        padding: 1.15rem 1.2rem 1.25rem !important;
+      }
+
+      .hs-chip,
+      .hs-filter-tags button,
+      .hs-sidenav button,
+      .hs-news-sidenav button {
+        font-family: var(--font-body) !important;
+        font-size: 0.84rem !important;
+        font-weight: 700 !important;
+      }
+
+      strong,
+      b {
+        color: var(--color-ink);
+        font-weight: 800;
+      }
+
+      a {
+        color: var(--color-accent);
+      }
+
+      a:hover {
+        color: var(--color-accent-strong);
+      }
+
+      .theme-switcher {
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
+      }
+
+      @media (max-width: 720px) {
+        .site-title,
+        .site-title:visited {
+          font-size: 1.35rem;
+        }
+
+        .hs-section-title,
+        .hs-news-year-title {
+          font-size: 1.18rem !important;
+        }
+      }
+    </style>
   </head>
 
   <body>

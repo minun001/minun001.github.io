@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <section class="hs-news-intro">
     <h1>News &amp; Updates</h1>
-    <p>Selected milestones across publications, research, awards, and academic activities.</p>
+    <p>Selected milestones across <strong>publications</strong>, <strong>research</strong>, <strong>awards</strong>, and academic activities.</p>
   </section>
 
   <div class="hs-news-main-layout">
