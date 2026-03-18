@@ -1,19 +1,19 @@
-# ============================================================
+﻿# ============================================================
 # Site Information
 # ============================================================
 title: "Hyunsik Min"
 email: "minun001@sch.ac.kr"
 
 description: >-
-  M.S. candidate building AI for mobility, energy, and safety.
+  AI researcher building deployable systems for autonomous driving, energy forecasting, and safety-aware AI.
 
 lang: en
 
 
 url: "https://minun001.github.io"
-baseurl: ""   # GitHub Pages root URL이므로 빈 값 유지
+baseurl: ""   # GitHub Pages root URL?대?濡?鍮?媛??좎?
 
-# Social links (필요 없는 것은 비워두기)
+# Social links (?꾩슂 ?녿뒗 寃껋? 鍮꾩썙?먭린)
 twitter_username: ""
 github_username: minun001
 linkedin_url: "https://www.linkedin.com/in/hyunsik-min-9ba072346/"
@@ -49,7 +49,7 @@ author:
   email: "minun001@sch.ac.kr"
 
 # ============================================================
-# Navigation (원하면 layout 커스터마이징해 메뉴 추가 가능)
+# Navigation (?먰븯硫?layout 而ㅼ뒪?곕쭏?댁쭠??硫붾돱 異붽? 媛??
 # ============================================================
 nav:
   - name: "About"
@@ -67,3 +67,4 @@ exclude:
   - Gemfile.lock
   - node_modules/
   - vendor/
+

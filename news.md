@@ -1,11 +1,11 @@
----
+﻿---
 layout: page
 title: "News"
 permalink: /news/
 ---
 
 <style>
-/* ====== Minima 기본 제목/Posts/RSS 숨기기 ====== */
+/* ====== Minima 湲곕낯 ?쒕ぉ/Posts/RSS ?④린湲?====== */
 .page .post-list,
 .page .rss-subscribe,
 .page .page-heading,
@@ -13,7 +13,7 @@ permalink: /news/
   display: none !important;
 }
 
-/* ====== 전체 레이아웃 / 기본 스타일 ====== */
+/* ====== ?꾩껜 ?덉씠?꾩썐 / 湲곕낯 ?ㅽ???====== */
 .hs-news-wrapper {
   max-width: 1040px;
   margin: 0 auto;
@@ -21,7 +21,7 @@ permalink: /news/
   z-index: 0;
 }
 
-/* 배경용 그라디언트 글로우 (홈과 톤 맞춤) */
+/* 諛곌꼍??洹몃씪?붿뼵??湲濡쒖슦 (?덇낵 ??留욎땄) */
 .hs-news-wrapper::before {
   content: "";
   position: fixed;
@@ -101,13 +101,13 @@ permalink: /news/
   font-size: 0.97rem;
 }
 
-/* ====== 메인 레이아웃 (사이드바 + 본문) ====== */
+/* ====== 硫붿씤 ?덉씠?꾩썐 (?ъ씠?쒕컮 + 蹂몃Ц) ====== */
 .hs-news-main-layout {
   display: flex;
   gap: 1.5rem;
 }
 
-/* ====== 사이드바 네비 (연도 탭) ====== */
+/* ====== ?ъ씠?쒕컮 ?ㅻ퉬 (?곕룄 ?? ====== */
 .hs-news-sidebar {
   flex: 0 0 180px;
   position: sticky;
@@ -125,7 +125,7 @@ permalink: /news/
   position: relative;
 }
 
-/* 사이드바 제목 아래 그라디언트 라인 */
+/* ?ъ씠?쒕컮 ?쒕ぉ ?꾨옒 洹몃씪?붿뼵???쇱씤 */
 .hs-news-sidebar-title::after {
   content: "";
   position: absolute;
@@ -137,7 +137,7 @@ permalink: /news/
   background: linear-gradient(90deg, #2563eb, #10b981);
 }
 
-/* 유리 느낌 버튼 (홈과 톤 맞춤) */
+/* ?좊━ ?먮굦 踰꾪듉 (?덇낵 ??留욎땄) */
 .hs-news-sidenav {
   display: flex;
   flex-direction: column;
@@ -169,7 +169,7 @@ permalink: /news/
   transform: translateX(1px);
 }
 
-/* 활성 탭: 더 강한 그라디언트/글로우 */
+/* ?쒖꽦 ?? ??媛뺥븳 洹몃씪?붿뼵??湲濡쒖슦 */
 .hs-news-sidenav button.hs-news-sidenav-active {
   background: radial-gradient(circle at top left, #2563eb, #111827);
   color: #fff;
@@ -178,7 +178,7 @@ permalink: /news/
   transform: translateX(2px);
 }
 
-/* 모바일일 때 사이드바를 위로 올리고 가로형 탭처럼 */
+/* 紐⑤컮?쇱씪 ???ъ씠?쒕컮瑜??꾨줈 ?щ━怨?媛濡쒗삎 ??쿂??*/
 @media (max-width: 920px) {
   .hs-news-intro-shell {
     grid-template-columns: 1fr;
@@ -206,12 +206,12 @@ permalink: /news/
   }
 }
 
-/* ====== 연도 섹션(아코디언 카드) ====== */
+/* ====== ?곕룄 ?뱀뀡(?꾩퐫?붿뼵 移대뱶) ====== */
 .hs-news-main-content {
   flex: 1;
 }
 
-/* 기본: 살짝 아래 + 투명(스크롤 인 애니메이션용) */
+/* 湲곕낯: ?댁쭩 ?꾨옒 + ?щ챸(?ㅽ겕濡????좊땲硫붿씠?섏슜) */
 .hs-news-section {
   margin-bottom: 1rem;
   border-radius: 16px;
@@ -229,20 +229,20 @@ permalink: /news/
     border-color 0.25s ease;
 }
 
-/* 뷰포트에 들어왔을 때 */
+/* 酉고룷?몄뿉 ?ㅼ뼱?붿쓣 ??*/
 .hs-news-section.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* 활성 섹션: 살짝 더 떠오르고, 테두리 강조 */
+/* ?쒖꽦 ?뱀뀡: ?댁쭩 ???좎삤瑜닿퀬, ?뚮몢由?媛뺤“ */
 .hs-news-section.active {
   transform: translateY(-2px);
   border-color: rgba(37, 99, 235, 0.28);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
 }
 
-/* 헤더(클릭 영역) */
+/* ?ㅻ뜑(?대┃ ?곸뿭) */
 .hs-news-year-header {
   display: flex;
   align-items: center;
@@ -254,7 +254,7 @@ permalink: /news/
   position: relative;
 }
 
-/* 활성 섹션 왼쪽 컬러 라인 */
+/* ?쒖꽦 ?뱀뀡 ?쇱そ 而щ윭 ?쇱씤 */
 .hs-news-year-header::before {
   content: "";
   position: absolute;
@@ -282,7 +282,7 @@ permalink: /news/
   color: #888;
 }
 
-/* 아이콘 (열림/닫힘 표시) */
+/* ?꾩씠肄?(?대┝/?ロ옒 ?쒖떆) */
 .hs-news-year-icon {
   margin-left: 0.75rem;
   font-size: 1rem;
@@ -294,7 +294,7 @@ permalink: /news/
   transform: rotate(90deg);
 }
 
-/* 내용(애니메이션 영역) */
+/* ?댁슜(?좊땲硫붿씠???곸뿭) */
 .hs-news-year-body-wrap {
   overflow: hidden;
   max-height: 0;
@@ -312,7 +312,7 @@ permalink: /news/
   color: #333;
 }
 
-/* 개별 뉴스 아이템 카드 느낌 */
+/* 媛쒕퀎 ?댁뒪 ?꾩씠??移대뱶 ?먮굦 */
 .hs-news-item {
   padding: 0.75rem 0.8rem 0.8rem;
   border-radius: 12px;
@@ -345,7 +345,7 @@ permalink: /news/
   margin-bottom: 0;
 }
 
-/* 뉴스 아이템 hover 효과 */
+/* ?댁뒪 ?꾩씠??hover ?④낵 */
 .hs-news-item:hover {
   background: #f9fafb;
   border-color: rgba(148, 163, 184, 0.6);
@@ -353,7 +353,7 @@ permalink: /news/
   transform: translateY(-1px);
 }
 
-/* 작은 태그 느낌 */
+/* ?묒? ?쒓렇 ?먮굦 */
 .hs-news-chip {
   display: inline-flex;
   align-items: center;
@@ -365,7 +365,7 @@ permalink: /news/
   margin-right: 0.25rem;
 }
 
-/* 모바일에서 패딩/폰트 약간 조정 */
+/* 紐⑤컮?쇱뿉???⑤뵫/?고듃 ?쎄컙 議곗젙 */
 @media (max-width: 600px) {
   .hs-news-year-header {
     padding: 0.75rem 0.85rem;
@@ -383,6 +383,9 @@ body.theme-night .hs-news-year-title,
 body.theme-night .hs-news-year-tag {
   color: #111827 !important;
 }
+<style>
+.hs-news-wrapper{max-width:1120px!important}.hs-news-wrapper::before{background:radial-gradient(circle at top left,rgba(59,130,246,.12),transparent 28%),radial-gradient(circle at bottom right,rgba(34,197,94,.12),transparent 24%)!important}.hs-news-intro-main,.hs-news-intro-panel,.hs-news-item,.hs-news-section{background:var(--bg-card)!important;border-color:var(--border-soft)!important;box-shadow:var(--shadow-soft)!important}.hs-news-intro-main{padding:1.45rem!important}.hs-news-intro h1{font-size:clamp(2.4rem,4.4vw,3.8rem)!important}.hs-news-intro p,.hs-news-item p,.hs-news-meta{color:var(--text-body)!important}.hs-news-intro-panel{background:linear-gradient(160deg,rgba(10,20,34,.95),rgba(22,101,52,.92))!important}.hs-news-intro-panel h2{color:#fff!important;font-size:1.6rem!important}.hs-news-intro-panel p,.hs-news-intro-kicker{color:rgba(220,252,231,.82)!important}.hs-news-sidenav button{background:rgba(255,255,255,.36)!important;color:var(--text-title)!important;border-color:var(--border-soft)!important}.hs-news-sidenav button.hs-news-sidenav-active{background:linear-gradient(135deg,var(--accent),#2563eb)!important;color:#fff!important}.hs-news-section{border-radius:26px!important}.hs-news-year-header{background:linear-gradient(90deg,rgba(255,255,255,.62),rgba(255,255,255,.12))!important}.hs-news-item{border-radius:22px!important;padding:1rem!important;transition:transform .18s ease,box-shadow .18s ease!important}.hs-news-item:hover{transform:translateY(-3px);box-shadow:0 20px 46px rgba(15,23,42,.14)!important}.hs-news-item h3,.hs-news-year-title{color:var(--text-title)!important}.hs-news-item::before{content:"";display:block;width:60px;height:3px;margin-bottom:.8rem;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+</style>
 </style>
 
 <script>
@@ -420,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // 헤더 클릭: 한 번에 하나만 열리도록
+  // ?ㅻ뜑 ?대┃: ??踰덉뿉 ?섎굹留??대━?꾨줉
   yearSections.forEach(section => {
     const header = section.querySelector(".hs-news-year-header");
     const bodyWrap = section.querySelector(".hs-news-year-body-wrap");
@@ -442,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 사이드바 버튼 클릭
+  // ?ъ씠?쒕컮 踰꾪듉 ?대┃
   sideNavButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.target;
@@ -450,7 +453,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 스크롤 인 애니메이션: IntersectionObserver
+  // ?ㅽ겕濡????좊땲硫붿씠?? IntersectionObserver
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -466,11 +469,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     yearSections.forEach((section) => observer.observe(section));
   } else {
-    // 구형 브라우저용 fallback
+    // 援ы삎 釉뚮씪?곗???fallback
     yearSections.forEach((section) => section.classList.add("is-visible"));
   }
 
-  // 첫 연도 자동 오픈 (예: 첫 번째 섹션)
+  // 泥??곕룄 ?먮룞 ?ㅽ뵂 (?? 泥?踰덉㎏ ?뱀뀡)
   if (yearSections.length > 0) {
     const firstId = yearSections[0].getAttribute("id");
     openYear(firstId);
@@ -482,23 +485,22 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="hs-news-wrapper">
 
   <section class="hs-news-intro">
-    <div class="hs-news-intro-shell">
-      <div class="hs-news-intro-main">
-        <h1>News &amp; Updates</h1>
-        <p>A short timeline of <strong>milestones</strong>, including papers, awards, collaborations, and academic progress.</p>
-      </div>
-      <aside class="hs-news-intro-panel">
-        <div class="hs-news-intro-kicker">Timeline</div>
-        <h2>Recent progress, recognitions, and research movement</h2>
-        <p>This page captures the pace of the portfolio, from paper acceptances to awards and lab-based project activity.</p>
-        <img src="/assets/img/news-timeline.svg" alt="Abstract timeline illustration for news and milestones." loading="lazy">
-      </aside>
+  <div class="hs-news-intro-shell">
+    <div class="hs-news-intro-main">
+      <h1>News</h1>
+      <p>A running timeline of <strong>publications</strong>, <strong>awards</strong>, <strong>research programs</strong>, and portfolio milestones that define the current arc of my work.</p>
     </div>
-  </section>
+    <aside class="hs-news-intro-panel">
+      <div class="hs-news-intro-kicker">Milestones</div>
+      <h2>What is moving right now</h2>
+      <p>Recent updates center on journal publications, BK21 and CRC research activity, and the steady expansion of a systems-focused AI portfolio.</p>
+      <img src="/assets/img/news-timeline.svg" alt="Abstract timeline illustration for research milestones." loading="lazy">
+    </aside>
+  </div>
+</section>
+<div class="hs-news-main-layout">
 
-  <div class="hs-news-main-layout">
-
-    <!-- 사이드바 연도 네비 -->
+    <!-- ?ъ씠?쒕컮 ?곕룄 ?ㅻ퉬 -->
     <aside class="hs-news-sidebar">
       <div class="hs-news-sidebar-title">Years</div>
       <div class="hs-news-sidenav">
@@ -508,7 +510,7 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </aside>
 
-    <!-- 본문: 연도별 아코디언 -->
+    <!-- 蹂몃Ц: ?곕룄蹂??꾩퐫?붿뼵 -->
     <main class="hs-news-main-content">
 
       <!-- 2025 -->
@@ -658,3 +660,4 @@ document.addEventListener("DOMContentLoaded", function () {
     </main>
   </div>
 </div>
+

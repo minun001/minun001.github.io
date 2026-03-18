@@ -1,11 +1,11 @@
----
+﻿---
 layout: page
 title: "Publications"
 permalink: /publications/
 ---
 
 <style>
-/* ====== Minima 疫꿸퀡????뺛걠/Posts/RSS ??ｋ┛疫?====== */
+/* ====== Minima ?リ옇?????類쏄콬/Posts/RSS ??節뗢뵛??====== */
 .page .post-list,
 .page .rss-subscribe,
 .page .page-heading,
@@ -13,13 +13,13 @@ permalink: /publications/
   display: none !important;
 }
 
-/* ====== Night 筌뤴뫀諭??袁⑹뒠: ?紐낅뱜嚥???용뮞??獄쏆빓苡?====== */
+/* ====== Night 嶺뚮ㅄ維獄??熬곣뫗?? ?筌뤿굝諭쒎슖????⑸츩???꾩룇鍮볢떋?====== */
 body.theme-night .hs-pub-intro h1,
 body.theme-night .hs-pub-intro p {
-  color: #e5e7eb; /* 椰꾧퀣???怨쀪퉳??揶쎛繹먮슣??獄쏆빘? ???퉳 */
+  color: #e5e7eb; /* 濾곌쑨?????⑥ろ돰???띠럾?濚밸Ŧ????꾩룇鍮? ?????*/
 }
 
-/* ====== ?袁⑷퍥 ??됱뵠?袁⑹뜍 / 疫꿸퀡???????====== */
+/* ====== ?熬곣뫕?????깅턄?熬곣뫗??/ ?リ옇????????====== */
 .hs-pub-wrapper {
   max-width: 1040px;
   margin: 0 auto;
@@ -27,7 +27,7 @@ body.theme-night .hs-pub-intro p {
   z-index: 0;
 }
 
-/* 獄쏄퀗瑗??域밸챶??遺용섧??疫꼲嚥≪뮇??(????곷뮞/??而?猿됰궢 ??筌띿쉸?? */
+/* ?꾩룄?쀧몭???잙갭梨???븐슜????リ섣??β돦裕??(????怨룸츩/??????용맧沅???嶺뚮씮??? */
 .hs-pub-wrapper::before {
   content: "";
   position: fixed;
@@ -107,7 +107,7 @@ body.theme-night .hs-pub-intro p {
   font-size: 0.97rem;
 }
 
-/* ?怨룸뼊 ?袁⑥쨮????륁뵠??깆뵠??燁삳?諭?*/
+/* ??⑤８堉??熬곣뫁夷????瑜곷턄??源녿턄???곸궠?獄?*/
 .hs-pub-highlight {
   margin-top: 0.8rem;
   padding: 0.85rem 1rem;
@@ -157,7 +157,7 @@ body.theme-night .hs-pub-intro p {
   text-decoration: underline;
 }
 
-/* 筌뤴뫀而??깅퓠???類ｌ졊 癰귣똻??*/
+/* 嶺뚮ㅄ維???源낇뱺???筌먲퐣議??곌랜???*/
 @media (max-width: 920px) {
   .hs-pub-intro-shell {
     grid-template-columns: 1fr;
@@ -174,7 +174,7 @@ body.theme-night .hs-pub-intro p {
   }
 }
 
-/* ====== ?袁り숲 獄?(野꺜??+ ??볥젃) ====== */
+/* ====== ?熬곥굤????(?롪틵???+ ??蹂μ쟽) ====== */
 .hs-filter-bar {
   margin: 1rem 0 1.2rem;
   display: flex;
@@ -232,13 +232,13 @@ body.theme-night .hs-pub-intro p {
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.35);
 }
 
-/* ====== 筌롫뗄????됱뵠?袁⑹뜍 (?????뺤뺍 + 癰귣챶揆) ====== */
+/* ====== 嶺뚮∥??????깅턄?熬곣뫗??(?????類ㅻ틡 + ?곌랜梨뜻룇) ====== */
 .hs-main-layout {
   display: flex;
   gap: 1.5rem;
 }
 
-/* ====== ?????뺤뺍 ??삵돩 (?諭???? ====== */
+/* ====== ?????類ㅻ틡 ???듬룴 (?獄????? ====== */
 .hs-sidebar {
   flex: 0 0 220px;
   position: sticky;
@@ -256,7 +256,7 @@ body.theme-night .hs-pub-intro p {
   position: relative;
 }
 
-/* ?????뺤뺍 ??뺛걠 ?袁⑥삋 域밸챶??遺용섧????깆뵥 */
+/* ?????類ㅻ틡 ??類쏄콬 ?熬곣뫁???잙갭梨???븐슜?????源녿데 */
 .hs-sidebar-title::after {
   content: "";
   position: absolute;
@@ -268,7 +268,7 @@ body.theme-night .hs-pub-intro p {
   background: linear-gradient(90deg, #2563eb, #10b981);
 }
 
-/* ?醫듼봺 ?癒?덱 甕곌쑵??(????곷뮞/??而?猿됰궢 ??筌띿쉸?? */
+/* ??ル벣遊???????뺢퀗???(????怨룸츩/??????용맧沅???嶺뚮씮??? */
 .hs-sidenav {
   display: flex;
   flex-direction: column;
@@ -300,7 +300,7 @@ body.theme-night .hs-pub-intro p {
   transform: translateX(1px);
 }
 
-/* ??뽮쉐 ?? ??揶쏅벤釉?域밸챶??遺용섧??疫꼲嚥≪뮇??*/
+/* ??戮?뎽 ?? ???띠룆踰ㅹ뇡??잙갭梨???븐슜????リ섣??β돦裕??*/
 .hs-sidenav button.hs-sidenav-active {
   background: radial-gradient(circle at top left, #2563eb, #111827);
   color: #fff;
@@ -309,7 +309,7 @@ body.theme-night .hs-pub-intro p {
   transform: translateX(2px);
 }
 
-/* 筌뤴뫀而??깆뵬 ???????뺤뺍???袁⑥쨮 ???곫?揶쎛嚥≪뮉????荑??*/
+/* 嶺뚮ㅄ維???源녿뎄 ???????類ㅻ틡???熬곣뫁夷????怨ヂ??띠럾??β돦裕???????*/
 @media (max-width: 800px) {
   .hs-main-layout {
     flex-direction: column;
@@ -331,12 +331,12 @@ body.theme-night .hs-pub-intro p {
   }
 }
 
-/* ====== ?諭???袁⑺맜?遺용섧 燁삳?諭? ?????====== */
+/* ====== ?獄????熬곣뫚留??븐슜???곸궠?獄? ?????====== */
 .hs-main-content {
   flex: 1;
 }
 
-/* 疫꿸퀡?? ??곸? ?袁⑥삋 + ??梨???쎄쾿嚥????醫딅빍筌롫뗄???륁뒠) */
+/* ?リ옇??? ??怨? ?熬곣뫁??+ ??筌????꾩씩??????ル봾鍮띸춯濡ル뾼???瑜곷뮔) */
 .hs-section {
   margin-bottom: 1rem;
   border-radius: 16px;
@@ -354,20 +354,20 @@ body.theme-night .hs-pub-intro p {
     border-color 0.25s ease;
 }
 
-/* ?됯퀬猷?紐꾨퓠 ??쇰선?遺우뱽 ??*/
+/* ???х뙴?筌뤾쑬?????곗꽑??븐슦諭???*/
 .hs-section.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ??뽮쉐 ?諭?? ??곸? ???醫롮궎?쒕떯?? ???あ??揶쏅벡??*/
+/* ??戮?뎽 ?獄??? ??怨? ????ル‘沅??뺣뼬?? ???????띠룆踰??*/
 .hs-section.active {
   transform: translateY(-2px);
   border-color: rgba(37, 99, 235, 0.28);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
 }
 
-/* ??삳쐭(?????怨몃열) */
+/* ???녹맠(???????⑤챶?? */
 .hs-section-header {
   display: flex;
   align-items: center;
@@ -379,7 +379,7 @@ body.theme-night .hs-pub-intro p {
   position: relative;
 }
 
-/* ??뽮쉐 ?諭????긱걹 ?뚎됱쑎 ??깆뵥 */
+/* ??戮?뎽 ?獄?????湲깃국 ??롫맩????源녿데 */
 .hs-section-header::before {
   content: "";
   position: absolute;
@@ -407,7 +407,7 @@ body.theme-night .hs-pub-intro p {
   color: #888;
 }
 
-/* ?袁⑹뵠??(???????삋 ??뽯뻻) */
+/* ?熬곣뫗逾??(????????????戮?뻣) */
 .hs-section-icon {
   margin-left: 0.75rem;
   font-size: 1rem;
@@ -419,7 +419,7 @@ body.theme-night .hs-pub-intro p {
   transform: rotate(90deg);
 }
 
-/* ??곸뒠(?醫딅빍筌롫뗄????怨몃열) */
+/* ??怨몃뮔(??ル봾鍮띸춯濡ル뾼?????⑤챶?? */
 .hs-section-body-wrap {
   overflow: hidden;
   max-height: 0;
@@ -450,7 +450,7 @@ body.theme-night .hs-pub-intro p {
   margin-bottom: 0.3rem;
 }
 
-/* 揶쏆뮆????겆?燁삳?諭??癒?덱 */
+/* ?띠룇裕????寃??곸궠?獄??????*/
 .hs-pub-item {
   margin-bottom: 1.1rem;
   padding-bottom: 1rem;
@@ -478,7 +478,7 @@ body.theme-night .hs-pub-intro p {
   font-size: 0.93rem;
 }
 
-/* ?臾? ??볥젃/燁?*/
+/* ??? ??蹂μ쟽/??*/
 .hs-chip {
   display: inline-flex;
   align-items: center;
@@ -490,7 +490,7 @@ body.theme-night .hs-pub-intro p {
   margin-right: 0.25rem;
 }
 
-/* ????낇?燁???깃맒 (?癒곕릭筌??癒?춭?怨몄몵嚥??대Ŋ猿? */
+/* ?????눫?????源껊쭜 (??믨퀡由?춯????異??⑤챷紐드슖???흮?? */
 .hs-chip-journal {
   background: rgba(37, 99, 235, 0.12);
   color: #1d4ed8;
@@ -511,7 +511,7 @@ body.theme-night .hs-pub-intro p {
   color: #6d28d9;
 }
 
-/* ???筌왖 ?⑤벏???????*/
+/* ????嶺뚯솘? ??ㅻ쾹???????*/
 .hs-pub-figure {
   text-align: center;
   margin: 0.75rem 0 0.9rem;
@@ -523,7 +523,7 @@ body.theme-night .hs-pub-intro p {
   border-radius: 10px;
 }
 
-/* 筌뤴뫀而???怨좊뱜/??ㅻ뎃 ??꾩퍢 餓κ쑴?졿묾?*/
+/* 嶺뚮ㅄ維?????⑥쥓諭????삳럠 ??袁⑺뜟 繞벿븐뫒?議용Ь?*/
 @media (max-width: 600px) {
   .hs-section-header {
     padding: 0.75rem 0.85rem;
@@ -535,6 +535,9 @@ body.theme-night .hs-pub-intro p {
     font-size: 0.98rem;
   }
 }
+<style>
+.hs-pub-wrapper{max-width:1120px!important}.hs-pub-wrapper::before{background:radial-gradient(circle at top left,rgba(59,130,246,.14),transparent 30%),radial-gradient(circle at bottom right,rgba(20,184,166,.12),transparent 28%)!important}.hs-pub-intro-shell{grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr)!important;gap:1rem!important}.hs-pub-intro-main,.hs-pub-intro-art,.hs-pub-highlight,.hs-pub-item,.hs-section{background:var(--bg-card)!important;border-color:var(--border-soft)!important;box-shadow:var(--shadow-soft)!important}.hs-pub-intro-main{padding:1.45rem!important}.hs-pub-intro h1{font-size:clamp(2.4rem,4.4vw,3.8rem)!important}.hs-pub-intro p,.hs-pub-desc,.hs-pub-meta{color:var(--text-body)!important}.hs-pub-intro-art{background:linear-gradient(160deg,rgba(12,19,33,.95),rgba(14,116,144,.9))!important}.hs-pub-intro-art h2{color:#fff!important;font-size:1.6rem!important}.hs-pub-intro-art p,.hs-pub-intro-kicker{color:rgba(219,234,254,.82)!important}.hs-pub-highlight{padding:1rem 1.05rem!important;border-radius:22px!important}.hs-pub-highlight-links{gap:.7rem 1.6rem!important}.hs-filter-bar{position:sticky;top:82px;z-index:15;padding:1rem;border-radius:24px;background:var(--bg-card-strong)!important;border:1px solid var(--border-soft);box-shadow:var(--shadow-soft);backdrop-filter:blur(16px)}.hs-filter-bar input{background:rgba(255,255,255,.34)!important;color:var(--text-title)!important;border-color:var(--border-soft)!important}.hs-filter-tags button,.hs-sidenav button{background:rgba(255,255,255,.35)!important;color:var(--text-title)!important;border-color:var(--border-soft)!important}.hs-filter-tags button.active,.hs-sidenav button.hs-sidenav-active{background:linear-gradient(135deg,var(--accent),#2563eb)!important;color:#fff!important}.hs-pub-item{padding:1.1rem!important;border-radius:24px!important;transition:transform .18s ease,box-shadow .18s ease!important}.hs-pub-item:hover{transform:translateY(-3px);box-shadow:0 22px 50px rgba(15,23,42,.14)!important}.hs-pub-item h3,.hs-section-title{color:var(--text-title)!important}.hs-pub-item::before{content:"";display:block;width:64px;height:3px;margin-bottom:.85rem;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}.hs-pub-figure img{border-radius:18px!important}body.theme-night .hs-filter-bar input::placeholder{color:var(--text-soft)}@media (max-width:920px){.hs-pub-intro-shell{grid-template-columns:1fr!important}}
+</style>
 </style>
 
 <script>
@@ -572,7 +575,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // ??삳쐭 ???? ?醫? + ??롪돌筌?????袁⑥쨯
+  // ???녹맠 ????? ??? + ??濡る룎嶺??????熬곣뫁夷?
   sections.forEach(section => {
     const header = section.querySelector(".hs-section-header");
     const bodyWrap = section.querySelector(".hs-section-body-wrap");
@@ -594,7 +597,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // ?????뺤뺍 甕곌쑵??????
+  // ?????類ㅻ틡 ?뺢퀗????????
   sideNavButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.target;
@@ -602,7 +605,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // ??쎄쾿嚥????醫딅빍筌롫뗄??? IntersectionObserver
+  // ???꾩씩??????ル봾鍮띸춯濡ル뾼??? IntersectionObserver
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -618,18 +621,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     sections.forEach((section) => observer.observe(section));
   } else {
-    // ?닌뗭굨 ?됰슢??怨???fallback
+    // ??뚮뿭援???곗뒧??????fallback
     sections.forEach((section) => section.classList.add("is-visible"));
   }
 
-  // ??륁뵠筌왖 嚥≪뮆諭???筌??諭???癒?짗 ??쎈탞 (2025 ?諭?? + 筌앸맩??visible 筌ｌ꼶??
+  // ??瑜곷턄嶺뚯솘? ?β돦裕녻キ???嶺??獄??????吏????덊깯 (2025 ?獄??? + 嶺뚯빖留??visible 嶺뚳퐣瑗??
   if (sections.length > 0) {
     const firstId = sections[0].getAttribute("id");
     openSection(firstId);
     sections[0].classList.add("is-visible");
   }
 
-  /* ====== Publications 野꺜??+ ??볥젃 ?袁り숲 ====== */
+  /* ====== Publications ?롪틵???+ ??蹂μ쟽 ?熬곥굤??====== */
   const searchInput = document.getElementById("pub-search");
   const tagButtons = document.querySelectorAll(".hs-filter-tags button");
   const pubItems = document.querySelectorAll(".hs-pub-item");
@@ -668,65 +671,46 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="hs-pub-wrapper">
 
   <section class="hs-pub-intro">
-    <div class="hs-pub-intro-shell">
-      <div class="hs-pub-intro-main">
-        <h1>Publications</h1>
-        <p>
-          A selected list of <strong>first-author publications</strong>, grouped by stage and research direction.
-        </p>
-
-    <!-- ?逾??怨룸뼊 Profiles ??륁뵠??깆뵠??-->
-    <div class="hs-pub-highlight">
-      <div class="hs-pub-highlight-main">
-        <div class="hs-pub-highlight-title">
-          <span class="hs-chip">Scholar &amp; network</span>
-          <span class="hs-pub-highlight-label">Profiles</span>
-        </div>
-        <div class="hs-pub-highlight-links">
-          <div>
-            <strong>Google Scholar</strong><br>
-            <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
-               target="_blank" rel="noopener">
-              scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en
-            </a>
+  <div class="hs-pub-intro-shell">
+    <div class="hs-pub-intro-main">
+      <h1>Publications</h1>
+      <p>A concise archive of <strong>first-author papers</strong> and selected conference work across <strong>autonomous driving</strong>, <strong>energy systems</strong>, <strong>legal AI</strong>, and <strong>urban sensing</strong>.</p>
+      <div class="hs-pub-highlight">
+        <div class="hs-pub-highlight-main">
+          <div class="hs-pub-highlight-title">
+            <span class="hs-chip">Scholar &amp; network</span>
+            <span class="hs-pub-highlight-label">Profile links</span>
           </div>
-          <div>
-            <strong>LinkedIn</strong><br>
-            <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/"
-               target="_blank" rel="noopener">
-              linkedin.com/in/hyunsik-min-9ba072346
-            </a>
+          <div class="hs-pub-highlight-links">
+            <div><strong>Google Scholar</strong><br><a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en</a></div>
+            <div><strong>LinkedIn</strong><br><a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">linkedin.com/in/hyunsik-min-9ba072346</a></div>
+            <div><strong>Focus</strong><br>Predictive AI for mobility, energy, and public systems</div>
           </div>
         </div>
       </div>
     </div>
-      </div>
-      <aside class="hs-pub-intro-art">
-        <div class="hs-pub-intro-kicker">Research Archive</div>
-        <h2>From representative papers to applied project frameworks</h2>
-        <p>The publication list highlights how individual studies connect to a broader portfolio across mobility, energy, legal AI, and urban systems.</p>
-        <img src="/assets/img/publications-archive.svg" alt="Abstract archive illustration for research publications." loading="lazy">
-      </aside>
-    </div>
+    <aside class="hs-pub-intro-art">
+      <div class="hs-pub-intro-kicker">Research Archive</div>
+      <h2>From journal publications to system-level research themes</h2>
+      <p>The list below is organized to show how individual papers connect to one broader portfolio rather than isolated projects.</p>
+      <img src="/assets/img/publications-archive.svg" alt="Abstract archive illustration for research publications." loading="lazy">
+    </aside>
+  </div>
 
-    <div class="hs-filter-bar">
-      <input
-        type="text"
-        id="pub-search"
-        placeholder="Search title, venue, or keyword">
-      <div class="hs-filter-tags">
-        <button type="button" class="active" data-filter="all">All</button>
-        <button type="button" data-filter="energy">Energy</button>
-        <button type="button" data-filter="mobility">Mobility</button>
-        <button type="button" data-filter="legal">Legal AI</button>
-        <button type="button" data-filter="urban">Urban / Noise</button>
-        <button type="button" data-filter="medical">Medical</button>
-      </div>
+  <div class="hs-filter-bar">
+    <input type="text" id="pub-search" placeholder="Search title, venue, or keyword">
+    <div class="hs-filter-tags">
+      <button type="button" class="active" data-filter="all">All</button>
+      <button type="button" data-filter="energy">Energy</button>
+      <button type="button" data-filter="mobility">Mobility</button>
+      <button type="button" data-filter="legal">Legal AI</button>
+      <button type="button" data-filter="urban">Urban / Noise</button>
+      <button type="button" data-filter="medical">Medical</button>
     </div>
-  </section>
-
-  <div class="hs-main-layout">
-    <!-- ?????뺤뺍 ??삵돩 -->
+  </div>
+</section>
+<div class="hs-main-layout">
+    <!-- ?????類ㅻ틡 ???듬룴 -->
     <aside class="hs-sidebar">
       <div class="hs-sidebar-title">Sections</div>
       <div class="hs-sidenav">
@@ -736,7 +720,7 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </aside>
 
-    <!-- 筌롫뗄???꾩꼹?쀯㎘?(?袁⑺맜?遺용섧 ?諭??? -->
+    <!-- 嶺뚮∥????袁⑷섰???럹?(?熬곣뫚留??븐슜???獄???? -->
     <main class="hs-main-content">
 
       <!-- 2025 ??Master???Research -->
@@ -939,3 +923,4 @@ document.addEventListener("DOMContentLoaded", function () {
     </main>
   </div>
 </div>
+
