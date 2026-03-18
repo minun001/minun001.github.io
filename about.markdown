@@ -1,11 +1,11 @@
----
+﻿---
 layout: page
 title: "About"
 permalink: /about/
 ---
 
 <style>
-/* ====== Minima 기본 제목/Posts 숨기기 ====== */
+/* ====== Minima 湲곕낯 ?쒕ぉ/Posts ?④린湲?====== */
 .page .post-list,
 .page .rss-subscribe,
 .page .page-heading,
@@ -13,7 +13,7 @@ permalink: /about/
   display: none !important;
 }
 
-/* ====== 전체 레이아웃 / 기본 스타일 ====== */
+/* ====== ?꾩껜 ?덉씠?꾩썐 / 湲곕낯 ?ㅽ???====== */
 .hs-about-wrapper {
   max-width: 1040px;
   margin: 0 auto;
@@ -21,7 +21,7 @@ permalink: /about/
   z-index: 0;
 }
 
-/* 배경용 그라디언트 글로우 (홈/뉴스와 톤 맞춤) */
+/* 諛곌꼍??洹몃씪?붿뼵??湲濡쒖슦 (???댁뒪? ??留욎땄) */
 .hs-about-wrapper::before {
   content: "";
   position: fixed;
@@ -34,7 +34,7 @@ permalink: /about/
   opacity: 0.95;
 }
 
-/* 상단 큰 이미지 */
+/* ?곷떒 ???대?吏 */
 .hs-about-hero {
   margin-bottom: 1.2rem;
 }
@@ -47,7 +47,7 @@ permalink: /about/
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
 }
 
-/* 상단 프로필 하이라이트 카드 */
+/* ?곷떒 ?꾨줈???섏씠?쇱씠??移대뱶 */
 .hs-about-highlight {
   margin-bottom: 1.8rem;
   padding: 0.95rem 1.1rem;
@@ -98,7 +98,7 @@ permalink: /about/
   font-size: 0.78rem;
 }
 
-/* 태그 색 변형 */
+/* ?쒓렇 ??蹂??*/
 .hs-chip-primary {
   background: rgba(37, 99, 235, 0.12);
   color: #1d4ed8;
@@ -109,20 +109,20 @@ permalink: /about/
   color: #374151;
 }
 
-/* 모바일 하이라이트 정렬 */
+/* 紐⑤컮???섏씠?쇱씠???뺣젹 */
 @media (max-width: 600px) {
   .hs-about-highlight {
     padding: 0.85rem 0.95rem;
   }
 }
 
-/* ====== 메인 레이아웃 (사이드바 + 본문) ====== */
+/* ====== 硫붿씤 ?덉씠?꾩썐 (?ъ씠?쒕컮 + 蹂몃Ц) ====== */
 .hs-main-layout {
   display: flex;
   gap: 1.5rem;
 }
 
-/* 사이드바 네비 */
+/* ?ъ씠?쒕컮 ?ㅻ퉬 */
 .hs-sidebar {
   flex: 0 0 200px;
   position: sticky;
@@ -140,7 +140,7 @@ permalink: /about/
   position: relative;
 }
 
-/* 사이드바 제목 아래 그라디언트 라인 */
+/* ?ъ씠?쒕컮 ?쒕ぉ ?꾨옒 洹몃씪?붿뼵???쇱씤 */
 .hs-sidebar-title::after {
   content: "";
   position: absolute;
@@ -152,7 +152,7 @@ permalink: /about/
   background: linear-gradient(90deg, #2563eb, #10b981);
 }
 
-/* 유리 느낌 버튼 (홈/뉴스와 톤 맞춤) */
+/* ?좊━ ?먮굦 踰꾪듉 (???댁뒪? ??留욎땄) */
 .hs-sidenav {
   display: flex;
   flex-direction: column;
@@ -184,7 +184,7 @@ permalink: /about/
   transform: translateX(1px);
 }
 
-/* 활성 탭: 더 강한 그라디언트/글로우 */
+/* ?쒖꽦 ?? ??媛뺥븳 洹몃씪?붿뼵??湲濡쒖슦 */
 .hs-sidenav button.hs-sidenav-active {
   background: radial-gradient(circle at top left, #2563eb, #111827);
   color: #fff;
@@ -193,7 +193,7 @@ permalink: /about/
   transform: translateX(2px);
 }
 
-/* 모바일일 때 사이드바를 위로 올리고 가로형 탭처럼 */
+/* 紐⑤컮?쇱씪 ???ъ씠?쒕컮瑜??꾨줈 ?щ━怨?媛濡쒗삎 ??쿂??*/
 @media (max-width: 800px) {
   .hs-main-layout {
     flex-direction: column;
@@ -215,12 +215,12 @@ permalink: /about/
   }
 }
 
-/* ====== 섹션(아코디언 카드) 스타일 ====== */
+/* ====== ?뱀뀡(?꾩퐫?붿뼵 移대뱶) ?ㅽ???====== */
 .hs-main-content {
   flex: 1;
 }
 
-/* 기본: 살짝 아래 + 투명(스크롤 인 애니메이션용) */
+/* 湲곕낯: ?댁쭩 ?꾨옒 + ?щ챸(?ㅽ겕濡????좊땲硫붿씠?섏슜) */
 .hs-section {
   margin-bottom: 1rem;
   border-radius: 16px;
@@ -238,20 +238,20 @@ permalink: /about/
     border-color 0.25s ease;
 }
 
-/* 뷰포트에 들어왔을 때 */
+/* 酉고룷?몄뿉 ?ㅼ뼱?붿쓣 ??*/
 .hs-section.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* 활성 섹션: 살짝 더 떠오르고, 테두리 강조 */
+/* ?쒖꽦 ?뱀뀡: ?댁쭩 ???좎삤瑜닿퀬, ?뚮몢由?媛뺤“ */
 .hs-section.active {
   transform: translateY(-2px);
   border-color: rgba(37, 99, 235, 0.28);
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
 }
 
-/* 헤더(클릭 영역) */
+/* ?ㅻ뜑(?대┃ ?곸뿭) */
 .hs-section-header {
   display: flex;
   align-items: center;
@@ -263,7 +263,7 @@ permalink: /about/
   position: relative;
 }
 
-/* 활성 섹션 왼쪽 컬러 라인 */
+/* ?쒖꽦 ?뱀뀡 ?쇱そ 而щ윭 ?쇱씤 */
 .hs-section-header::before {
   content: "";
   position: absolute;
@@ -291,7 +291,7 @@ permalink: /about/
   color: #888;
 }
 
-/* 아이콘 (열림/닫힘 표시) */
+/* ?꾩씠肄?(?대┝/?ロ옒 ?쒖떆) */
 .hs-section-icon {
   margin-left: 0.75rem;
   font-size: 1rem;
@@ -303,7 +303,7 @@ permalink: /about/
   transform: rotate(90deg);
 }
 
-/* 내용(애니메이션 영역) */
+/* ?댁슜(?좊땲硫붿씠???곸뿭) */
 .hs-section-body-wrap {
   overflow: hidden;
   max-height: 0;
@@ -334,7 +334,7 @@ permalink: /about/
   margin-bottom: 0.3rem;
 }
 
-/* 작은 강조 텍스트 / 태그 */
+/* ?묒? 媛뺤“ ?띿뒪??/ ?쒓렇 */
 .hs-chip {
   display: inline-flex;
   align-items: center;
@@ -346,7 +346,7 @@ permalink: /about/
   margin-right: 0.25rem;
 }
 
-/* 모바일 폰트/패딩 약간 줄이기 */
+/* 紐⑤컮???고듃/?⑤뵫 ?쎄컙 以꾩씠湲?*/
 @media (max-width: 600px) {
   .hs-section-header {
     padding: 0.75rem 0.85rem;
@@ -395,7 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // 헤더 클릭: 토글 + 하나만 열리도록
+  // ?ㅻ뜑 ?대┃: ?좉? + ?섎굹留??대━?꾨줉
   sections.forEach(section => {
     const header = section.querySelector(".hs-section-header");
     const bodyWrap = section.querySelector(".hs-section-body-wrap");
@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 사이드바 버튼 클릭
+  // ?ъ씠?쒕컮 踰꾪듉 ?대┃
   sideNavButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.target;
@@ -425,7 +425,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 스크롤 인 애니메이션: IntersectionObserver
+  // ?ㅽ겕濡????좊땲硫붿씠?? IntersectionObserver
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -441,11 +441,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     sections.forEach((section) => observer.observe(section));
   } else {
-    // 구형 브라우저용 fallback
+    // 援ы삎 釉뚮씪?곗???fallback
     sections.forEach((section) => section.classList.add("is-visible"));
   }
 
-  // 페이지 로드 시 첫 섹션 자동 오픈 (Education) + 즉시 visible 처리
+  // ?섏씠吏 濡쒕뱶 ??泥??뱀뀡 ?먮룞 ?ㅽ뵂 (Education) + 利됱떆 visible 泥섎━
   if (sections.length > 0) {
     const firstId = sections[0].getAttribute("id");
     openSection(firstId);
@@ -456,13 +456,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <div class="hs-about-wrapper">
 
-  <!-- 상단 큰 이미지 -->
+  <!-- ?곷떒 ???대?吏 -->
   <section class="hs-about-hero">
     <img src="/assets/img/KakaoTalk_20250110_182313239.jpg"
          alt="Hyunsik Min">
   </section>
 
-  <!-- 상단 프로필 하이라이트 -->
+  <!-- ?곷떒 ?꾨줈???섏씠?쇱씠??-->
   <section class="hs-about-highlight">
     <div class="hs-about-highlight-main">
       <div class="hs-about-highlight-title">
@@ -470,7 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <span class="hs-about-role">M.S. Candidate in Future Convergence Technology</span>
       </div>
       <div class="hs-about-meta">
-        Smart Autonomous &amp; Infrastructure Lab (SAIL), Soonchunhyang University · Asan, Korea
+        Smart Autonomous &amp; Infrastructure Lab (SAIL), Soonchunhyang University / Asan, Korea
       </div>
       <div class="hs-about-tags">
         <span class="hs-chip hs-chip-primary">Autonomous driving</span>
@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function () {
   </section>
 
   <div class="hs-main-layout">
-    <!-- 사이드바 네비 -->
+    <!-- ?ъ씠?쒕컮 ?ㅻ퉬 -->
     <aside class="hs-sidebar">
       <div class="hs-sidebar-title">Sections</div>
       <div class="hs-sidenav">
@@ -494,7 +494,7 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </aside>
 
-    <!-- 메인 콘텐츠 (아코디언 섹션들) -->
+    <!-- 硫붿씤 肄섑뀗痢?(?꾩퐫?붿뼵 ?뱀뀡?? -->
     <main class="hs-main-content">
 
       <!-- Education -->
@@ -651,3 +651,4 @@ document.addEventListener("DOMContentLoaded", function () {
     </main>
   </div>
 </div>
+

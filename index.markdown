@@ -450,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
     <div class="hs-hero-subtitle">AI for Energy / Mobility / Safety</div>
     <div class="hs-hero-intro">
-      Researching how AI, foundation models, and graph-based learning can build safer and smarter cities.
+      Building AI systems for safer mobility, resilient energy, and smarter cities.
     </div>
   </section>
 
@@ -507,15 +507,15 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
             <ul>
-              <li><strong>M.S. Candidate</strong>, Department of Future Convergence Technology, Soonchunhyang University (SCHU)</li>
+              <li><strong>M.S. Candidate</strong>, Future Convergence Technology, Soonchunhyang University</li>
               <li><strong>3 first-author SCI(E) papers</strong>
                 <ul>
                   <li>1 as an undergraduate student</li>
                   <li>2 in the first semester of the M.S. program</li>
                 </ul>
               </li>
-              <li>Involved in <strong>national research projects (NRF CRC, etc.)</strong>, bridging academic research with real-world urban and transportation challenges</li>
-              <li>Focused on <strong>AI that creates tangible societal value</strong> in energy, mobility, and safety</li>
+              <li>Contributing to <strong>national research projects</strong>, including NRF CRC and BK21</li>
+              <li>Focused on <strong>mobility, energy, and safety AI</strong> with real-world impact</li>
             </ul>
           </div>
         </div>
@@ -533,27 +533,19 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
             <p>
-              My work focuses on how artificial intelligence can create tangible societal value in the domains of energy,
-              mobility, and safety.
+              I study how AI can create practical value in energy, mobility, and safety.
             </p>
-            <p>Since my undergraduate years, I have been actively engaged in lab-based research on topics such as:</p>
+            <p>My work has focused on:</p>
             <ul>
-              <li>Smart grid optimization leveraging solar photovoltaic generation</li>
-              <li>Front-vehicle trajectory prediction for anticipatory autonomous driving</li>
-              <li>AI-based traffic accident ruling prediction using legal and contextual data</li>
+              <li>Solar power forecasting and smart-grid optimization</li>
+              <li>Trajectory prediction for anticipatory autonomous driving</li>
+              <li>Legal AI for traffic accident judgment prediction</li>
             </ul>
             <p>
-              These efforts have led to <strong>three first-author SCI(E) publications</strong>, one during my undergraduate
-              studies and two additional papers in the first semester of my M.S. program.
+              These efforts have led to <strong>three first-author SCI(E) publications</strong>, including one during my undergraduate studies.
             </p>
             <p>
-              Currently, in my second semester as a master's student, I am participating in national research projects,
-              including an <strong>NRF-funded CRC program</strong>, where I aim to connect academic research with practical
-              solutions for real-world urban and transportation challenges.
-            </p>
-            <p>
-              Ultimately, I aspire to become a researcher who helps build <strong>safer, smarter cities</strong> where AI
-              is a reliable foundation for future mobility and infrastructure.
+              As a master's student, I am extending this work through national research projects and system-oriented AI for real urban challenges.
             </p>
           </div>
         </div>
@@ -570,29 +562,22 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
-            <p>
-              I am broadly interested in how modern AI, including foundation models and generative models, can be
-              grounded in real-world systems for energy and mobility.
-            </p>
+            <p>I am interested in grounding modern AI in real-world mobility and energy systems.</p>
             <ul>
               <li><strong>Foundation Models &amp; VLA</strong><br>
-                Applying large-scale foundation models and vision-language-action (VLA) systems to embodied
-                decision-making and complex multi-modal scenarios.
+                Foundation models and vision-language-action systems for embodied and multimodal decision-making.
               </li>
               <li><strong>Autonomous Driving &amp; Anticipatory Planning</strong><br>
-                Front-vehicle maneuver and trajectory prediction (e.g., TGCA-based models) to support proactive,
-                trustworthy autonomous driving beyond rule-based control.
+                Front-vehicle maneuver and trajectory prediction for proactive, trustworthy driving.
               </li>
               <li><strong>Generative AI for Mobility &amp; Safety</strong><br>
-                Scenario generation, risk analysis, and behavior modeling for traffic and urban mobility using
-                generative models.
+                Scenario generation, risk analysis, and behavior modeling for traffic and urban mobility.
               </li>
               <li><strong>Time Series Forecasting for Energy &amp; Mobility</strong><br>
-                Data-driven forecasting for smart grid operation, energy demand, and mobility systems.
+                Data-driven forecasting for smart-grid operation, energy demand, and mobility systems.
               </li>
               <li><strong>AI-based Speaker Diarization &amp; Interaction Analysis</strong><br>
-                Child-parent CRC conversational data, speaker diarization, and interaction understanding to support
-                educational and clinical insights.
+                Speaker diarization and interaction analysis for child-parent CRC conversational data.
               </li>
             </ul>
           </div>
@@ -612,22 +597,22 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="hs-section-body">
             <h3>Front-vehicle Trajectory Prediction for Autonomous Driving</h3>
             <ul>
-              <li>Spatio-temporal modeling of front-side vehicles in natural traffic scenes</li>
-              <li>Temporal Graph Cross Attention (TGCA)-based framework for maneuver intent inference</li>
-              <li>Goal: enable anticipatory driving beyond threshold-based reactive control</li>
+              <li>Spatio-temporal modeling of front vehicles in natural traffic scenes</li>
+              <li>TGCA-based modeling for maneuver intent inference</li>
+              <li>Focus on anticipatory driving beyond reactive control</li>
             </ul>
 
             <h3>AI-based Speaker Diarization for CRC Data</h3>
             <ul>
               <li>Speaker diarization and classification for child-parent conversational datasets</li>
-              <li>Combination of language models, acoustic embeddings, and diarization pipelines</li>
-              <li>Goal: support reliable analysis of educational and clinical interaction data</li>
+              <li>Language models, acoustic embeddings, and diarization pipelines</li>
+              <li>Support for reliable educational and clinical interaction analysis</li>
             </ul>
 
             <h3>Smart Grid &amp; Energy AI</h3>
             <ul>
               <li>Solar PV-based smart grid optimization and energy management</li>
-              <li>Focus on robust, data-driven decision-making for future energy and city-scale systems</li>
+              <li>Robust, data-driven decision-making for future energy systems</li>
             </ul>
           </div>
         </div>
@@ -644,11 +629,10 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
-            <p>Across all of my work, I am interested in:</p>
+            <p>Across my work, I aim to:</p>
             <ul>
-              <li>Turning <strong>advanced AI models</strong> into <strong>deployable systems</strong> in mobility and energy</li>
-              <li>Ensuring that AI not only improves metrics in controlled benchmarks,<br>
-                  but also <strong>makes cities safer, more efficient, and more human-centered</strong> in practice</li>
+              <li>Turn <strong>advanced AI models</strong> into <strong>deployable systems</strong> for mobility and energy</li>
+              <li>Build AI that improves real-world safety, efficiency, and quality of life</li>
             </ul>
           </div>
         </div>

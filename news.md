@@ -460,8 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong>Period:</strong> Dec. 2025 - Feb. 2026
               </div>
               <p>
-                I was selected for the BK21 Overseas Training Program and will conduct research at
-                Kingston University (London, UK), focusing on autonomous driving, mobility AI, and multimodal learning.
+                Selected for the BK21 Overseas Training Program to conduct research at Kingston University in London.
               </p>
             </div>
 
@@ -472,8 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong>Journal:</strong> <em>Applied Energy</em> (IF = 11.0, Top 10%)</div>
               <p><strong>Title:</strong> <em>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</em></p>
               <p>
-                This work proposes a scalable deep learning framework for PV power forecasting and adaptive management
-                in large-scale energy systems.
+                This work presents a scalable framework for PV forecasting and adaptive energy management.
               </p>
             </div>
 
@@ -484,8 +482,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong>Journal:</strong> <em>Artificial Intelligence and Law</em> (IF = 3.1, Top 10%)</div>
               <p><strong>Title:</strong> <em>TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines</em></p>
               <p>
-                We develop an LLM-based framework for predicting criminal sentencing outcomes in traffic accident cases,
-                focusing on imprisonment, probation, and fines.
+                We develop an LLM-based framework for predicting sentencing outcomes in traffic accident cases.
               </p>
             </div>
 
@@ -495,9 +492,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Web</span>
               </div>
               <p>
-                Migrated to a Jekyll + GitHub Pages-based personal site and organized sections for
-                <strong>About</strong>, <strong>Publications</strong>, and <strong>News</strong>, consolidating my research
-                activities and project portfolio.
+                Built a Jekyll + GitHub Pages site to consolidate my research profile, publications, and news.
               </p>
             </div>
 
@@ -508,8 +503,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <strong>Program:</strong> NRF CRC
               </div>
               <p>
-                Continued development of an AI-based <strong>speaker diarization &amp; analysis pipeline</strong> for
-                child-parent CRC data, including multimodal modeling of speech, turn-taking patterns, and interaction quality.
+                Continued work on an AI-based <strong>speaker diarization and analysis pipeline</strong> for child-parent CRC data.
               </p>
             </div>
 
@@ -537,9 +531,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
               <p><strong>Title:</strong> <em>Urban Traffic Noise Recognition and Classification Model Development</em></p>
               <p>
-                My paper on urban traffic noise recognition and classification was selected as a
-                <strong>Best Paper</strong>, focusing on deep-learning-based modeling of traffic noise patterns
-                in real urban environments.
+                My paper on urban traffic noise recognition and classification received the <strong>Best Paper</strong> award.
               </p>
             </div>
 
@@ -549,8 +541,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Publication</span>
               </div>
               <p>
-                Completed my first SCI(E) first-author paper as an undergraduate researcher, laying the foundation
-                for later work in autonomous driving, mobility AI, and urban intelligence.
+                Completed my first SCI(E) first-author paper as an undergraduate researcher.
               </p>
             </div>
 
@@ -560,9 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Milestone</span>
               </div>
               <p>
-                Successfully completed my undergraduate graduation thesis related to data-driven intelligent mobility
-                / smart city applications, and transitioned to the M.S. program in Future Convergence Technology at
-                Soonchunhyang University.
+                Completed my undergraduate thesis on data-driven intelligent mobility and transitioned to the M.S. program.
               </p>
             </div>
 
@@ -588,9 +577,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Lab</span>
               </div>
               <p>
-                The <strong>Smart Autonomous &amp; Infrastructure Lab (SAIL)</strong> was launched in the Department of
-                AI and Big Data at Soonchunhyang University, which has since become my main research base for autonomous
-                driving, mobility AI, and urban safety.
+                SAIL became my main research base for autonomous driving, mobility AI, and urban safety.
               </p>
             </div>
 

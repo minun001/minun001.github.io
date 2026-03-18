@@ -610,8 +610,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <section class="hs-pub-intro">
     <h1>Publications</h1>
     <p>
-      Below is a selected list of my <strong>first-author peer-reviewed publications</strong>.<br>
-      Representative figures are included for key projects.
+      Selected <strong>first-author publications</strong> with representative figures from key projects.
     </p>
 
     <!-- 🔹 상단 Profiles 하이라이트 -->
@@ -697,10 +696,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                A large-language-model-based judgement prediction framework (TRACS-LLM) that focuses on sentencing
-                outcomes in road traffic accident cases, including imprisonment, probation, and fines. The system
-                leverages legal text, structured case attributes, and LLM-based reasoning to provide explainable
-                predictions that can support legal practitioners and traffic safety policy.
+                TRACS-LLM predicts sentencing outcomes in road traffic accident cases using legal text, structured case attributes, and LLM-based reasoning.
               </p>
             </div>
 
@@ -721,10 +717,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                SolarNexus proposes an adaptive deep-learning-based PV power forecasting framework tightly integrated
-                with scalable plant-level management. By combining temporal convolutional networks (TCNs) with
-                operational control logic, it enables robust forecasting under rapidly changing weather conditions
-                and supports data-driven decision-making in smart-grid environments.
+                SolarNexus combines adaptive PV forecasting with scalable plant-level management for smart-grid operations.
               </p>
             </div>
 
@@ -758,10 +751,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                SolarFlux predictor introduces a deep learning model tailored to PV generation forecasting in South
-                Korean environments, capturing regional irradiance patterns, seasonal variability, and sensor
-                characteristics. The study demonstrates the benefits of data-driven PV forecasting for grid stability
-                and renewable energy integration.
+                SolarFlux is a deep learning approach for photovoltaic power forecasting tailored to South Korean conditions.
               </p>
             </div>
 
@@ -798,9 +788,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                A front-vehicle trajectory prediction framework based on Temporal Graph Cross Attention (TGCA),
-                which models spatio-temporal interactions among surrounding vehicles for anticipatory autonomous
-                driving in naturalistic traffic environments.
+                A TGCA-based framework for front-vehicle trajectory prediction in naturalistic driving environments.
               </p>
             </div>
 
@@ -813,9 +801,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                A judgement prediction system that processes textual descriptions of road traffic accidents using
-                NLP techniques, providing case-level outcome predictions for use in transportation safety and
-                legal analytics.
+                An NLP-based system for predicting case-level outcomes from road traffic accident descriptions.
               </p>
             </div>
 
@@ -828,8 +814,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                A model for recognizing and classifying urban traffic noise, aimed at supporting noise mapping and
-                urban environmental monitoring.
+                A model for recognizing and classifying urban traffic noise for environmental monitoring.
               </p>
             </div>
 
@@ -842,8 +827,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                A Korean-language LLM-based system design for traffic accident judgement prediction, focusing on
-                domestic court decision patterns and legal documents.
+                A Korean-language LLM-based design for traffic accident judgment prediction.
               </p>
             </div>
 
@@ -856,8 +840,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                An NLP-based baseline framework for predicting court decisions in road traffic accident cases
-                using structured and unstructured textual information.
+                An NLP-based baseline for predicting court decisions in road traffic accident cases.
               </p>
             </div>
 
@@ -870,8 +853,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
 
               <p class="hs-pub-desc">
-                A method for tooth segmentation and identification in panoramic radiographic images using Mask R-CNN,
-                contributing to automated dental imaging analysis.
+                A Mask R-CNN-based method for tooth segmentation and identification in panoramic radiographs.
               </p>
             </div>
 
