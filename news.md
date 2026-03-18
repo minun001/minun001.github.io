@@ -445,10 +445,10 @@ document.addEventListener("DOMContentLoaded", function () {
       <section id="news-2025" class="hs-news-section">
         <div class="hs-news-year-header">
           <div>
-            <div class="hs-news-year-title">📌 2025</div>
+            <div class="hs-news-year-title">2025</div>
             <div class="hs-news-year-tag">Recent milestones</div>
           </div>
-          <div class="hs-news-year-icon">▶</div>
+          <div class="hs-news-year-icon">&rsaquo;</div>
         </div>
         <div class="hs-news-year-body-wrap">
           <div class="hs-news-year-body">
@@ -457,7 +457,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <h3>BK21 Overseas Training Program @ Kingston University, UK</h3>
               <div class="hs-news-meta">
                 <span class="hs-news-chip">Program</span>
-                <strong>Period:</strong> Dec 2025 – Feb 2026
+                <strong>Period:</strong> Dec. 2025 - Feb. 2026
               </div>
               <p>
                 I was selected for the BK21 Overseas Training Program and will conduct research at
@@ -466,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="hs-news-item">
-              <h3>Applied Energy — Paper Accepted (First Author)</h3>
+              <h3>Applied Energy Paper Accepted (First Author)</h3>
               <div class="hs-news-meta">
                 <span class="hs-news-chip">Journal</span>
                 <strong>Journal:</strong> <em>Applied Energy</em> (IF = 11.0, Top 10%)</div>
@@ -478,7 +478,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="hs-news-item">
-              <h3>Artificial Intelligence and Law — Paper Accepted (First Author)</h3>
+              <h3>Artificial Intelligence and Law Paper Accepted (First Author)</h3>
               <div class="hs-news-meta">
                 <span class="hs-news-chip">Journal</span>
                 <strong>Journal:</strong> <em>Artificial Intelligence and Law</em> (IF = 3.1, Top 10%)</div>
@@ -495,21 +495,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="hs-news-chip">Web</span>
               </div>
               <p>
-                Migrated to a Jekyll + GitHub Pages–based personal site and organized sections for
+                Migrated to a Jekyll + GitHub Pages-based personal site and organized sections for
                 <strong>About</strong>, <strong>Publications</strong>, and <strong>News</strong>, consolidating my research
                 activities and project portfolio.
               </p>
             </div>
 
             <div class="hs-news-item">
-              <h3>CRC Project (NRF) — Ongoing Research</h3>
+              <h3>CRC Project (NRF) Ongoing Research</h3>
               <div class="hs-news-meta">
                 <span class="hs-news-chip">Project</span>
                 <strong>Program:</strong> NRF CRC
               </div>
               <p>
                 Continued development of an AI-based <strong>speaker diarization &amp; analysis pipeline</strong> for
-                child–parent CRC data, including multimodal modeling of speech, turn-taking patterns, and interaction quality.
+                child-parent CRC data, including multimodal modeling of speech, turn-taking patterns, and interaction quality.
               </p>
             </div>
 
@@ -521,21 +521,21 @@ document.addEventListener("DOMContentLoaded", function () {
       <section id="news-2024" class="hs-news-section">
         <div class="hs-news-year-header">
           <div>
-            <div class="hs-news-year-title">📌 2024</div>
+            <div class="hs-news-year-title">2024</div>
             <div class="hs-news-year-tag">Awards &amp; early publications</div>
           </div>
-          <div class="hs-news-year-icon">▶</div>
+          <div class="hs-news-year-icon">&rsaquo;</div>
         </div>
         <div class="hs-news-year-body-wrap">
           <div class="hs-news-year-body">
 
             <div class="hs-news-item">
-              <h3>Best Paper Award — KSCI Summer Conference 2024 (First Author)</h3>
+              <h3>Best Paper Award - KSCI Summer Conference 2024 (First Author)</h3>
               <div class="hs-news-meta">
                 <span class="hs-news-chip">Award</span>
                 <strong>Conference:</strong> 70th Summer Conference of the Korea Computer and Information Science Society
               </div>
-              <p><strong>Title:</strong> <em>도시 환경 내 교통소음 인식 및 분류를 위한 모델 개발</em></p>
+              <p><strong>Title:</strong> <em>Urban Traffic Noise Recognition and Classification Model Development</em></p>
               <p>
                 My paper on urban traffic noise recognition and classification was selected as a
                 <strong>Best Paper</strong>, focusing on deep-learning-based modeling of traffic noise patterns
@@ -574,10 +574,10 @@ document.addEventListener("DOMContentLoaded", function () {
       <section id="news-2023" class="hs-news-section">
         <div class="hs-news-year-header">
           <div>
-            <div class="hs-news-year-title">📌 2023</div>
+            <div class="hs-news-year-title">2023</div>
             <div class="hs-news-year-tag">Lab &amp; research base</div>
           </div>
-          <div class="hs-news-year-icon">▶</div>
+          <div class="hs-news-year-icon">&rsaquo;</div>
         </div>
         <div class="hs-news-year-body-wrap">
           <div class="hs-news-year-body">

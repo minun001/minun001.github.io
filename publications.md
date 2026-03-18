@@ -623,14 +623,14 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
         <div class="hs-pub-highlight-links">
           <div>
-            📚 <strong>Google Scholar</strong><br>
+            <strong>Google Scholar</strong><br>
             <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
                target="_blank" rel="noopener">
               scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en
             </a>
           </div>
           <div>
-            🔗 <strong>LinkedIn</strong><br>
+            <strong>LinkedIn</strong><br>
             <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/"
                target="_blank" rel="noopener">
               linkedin.com/in/hyunsik-min-9ba072346
@@ -645,7 +645,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <input
         type="text"
         id="pub-search"
-        placeholder="Search title, venue, or keyword…">
+        placeholder="Search title, venue, or keyword">
       <div class="hs-filter-tags">
         <button type="button" class="active" data-filter="all">All</button>
         <button type="button" data-filter="energy">Energy</button>
@@ -662,9 +662,9 @@ document.addEventListener("DOMContentLoaded", function () {
     <aside class="hs-sidebar">
       <div class="hs-sidebar-title">Sections</div>
       <div class="hs-sidenav">
-        <button type="button" data-target="pub-2025">2025 — Master’s (SCI(E) &amp; Intl.)</button>
-        <button type="button" data-target="pub-2024-scie">2024 — Undergraduate SCI(E)</button>
-        <button type="button" data-target="pub-2024-domestic">2024–2025 — Domestic</button>
+        <button type="button" data-target="pub-2025">2025 Master's (SCI(E) &amp; Intl.)</button>
+        <button type="button" data-target="pub-2024-scie">2024 Undergraduate SCI(E)</button>
+        <button type="button" data-target="pub-2024-domestic">2024-2025 Domestic</button>
       </div>
     </aside>
 
@@ -675,10 +675,10 @@ document.addEventListener("DOMContentLoaded", function () {
       <section id="pub-2025" class="hs-section">
         <div class="hs-section-header">
           <div>
-            <div class="hs-section-title">🟦 2025 — Master’s Research (SCI(E) &amp; International)</div>
+            <div class="hs-section-title">2025 Master's Research (SCI(E) &amp; International)</div>
             <div class="hs-section-tag">First-author international publications</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -686,9 +686,9 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-pub-item" data-tags="legal, llm, mobility">
               <h3>2. TRACS-LLM: LLM-based traffic accident criminal sentencing prediction focusing on imprisonment, probation, and fines</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip hs-chip-legal">LLM · Legal AI</span>
+                <span class="hs-chip hs-chip-legal">LLM / Legal AI</span>
                 <em>Hyunsik Min</em>, Byeongjoon Noh<br>
-                <strong>Artificial Intelligence and Law</strong>, 1–22 (2025).
+                <strong>Artificial Intelligence and Law</strong>, 1-12 (2025).
               </div>
 
               <div class="hs-pub-figure">
@@ -707,7 +707,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-pub-item" data-tags="energy, time-series">
               <h3>1. SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip hs-chip-journal">Energy · Time series</span>
+                <span class="hs-chip hs-chip-journal">Energy / Time series</span>
                 <em>Hyunsik Min</em>, Byeongjoon Noh<br>
                 <strong>Applied Energy</strong>, 391, 125848 (2025).
               </div>
@@ -736,10 +736,10 @@ document.addEventListener("DOMContentLoaded", function () {
       <section id="pub-2024-scie" class="hs-section">
         <div class="hs-section-header">
           <div>
-            <div class="hs-section-title">🟩 2024 — Undergraduate First-Author SCI(E)</div>
-            <div class="hs-section-tag">PV forecasting · Undergraduate work</div>
+            <div class="hs-section-title">2024 Undergraduate First-Author SCI(E)</div>
+            <div class="hs-section-tag">PV forecasting / Undergraduate work</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -747,7 +747,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-pub-item" data-tags="energy, deep-learning">
               <h3>SolarFlux predictor: a novel deep learning approach for photovoltaic power forecasting in South Korea</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip hs-chip-journal">Energy · Deep learning</span>
+                <span class="hs-chip hs-chip-journal">Energy / Deep learning</span>
                 <em>Hyunsik Min</em>, S. Hong, J. Song, B. Son, B. Noh, J. Moon<br>
                 <strong>Electronics</strong>, 13(11), 2071 (2024).
               </div>
@@ -773,20 +773,20 @@ document.addEventListener("DOMContentLoaded", function () {
       <section id="pub-2024-domestic" class="hs-section">
         <div class="hs-section-header">
           <div>
-            <div class="hs-section-title">🟨 2024–2025 — Domestic Journals &amp; Conferences (First Author, in Korean)</div>
+            <div class="hs-section-title">2024-2025 Domestic Journals &amp; Conferences (First Author, in Korean)</div>
             <div class="hs-section-tag">Domestic journals &amp; conferences</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
 
             <div class="hs-pub-item" data-tags="autonomous-driving, mobility">
-              <h3>Temporal Graph Cross Attention 기반 전방 차량 궤적 예측</h3>
+              <h3>Temporal Graph Cross Attention-based Front-Vehicle Trajectory Prediction</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip hs-chip-conference">Autonomous driving · TGCA</span>
+                <span class="hs-chip hs-chip-conference">Autonomous driving / TGCA</span>
                 H. Min, B. Noh<br>
-                대한교통학회 제93회 학술발표회 (2025).
+                <strong>Korean Society of Transportation Conference</strong> (2025).
               </div>
 
               <div class="hs-pub-figure">
@@ -807,9 +807,9 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-pub-item" data-tags="legal, nlp, mobility">
               <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip hs-chip-domestic">NLP · Legal analytics</span>
+                <span class="hs-chip hs-chip-domestic">NLP / Legal analytics</span>
                 <em>Hyunsik Min</em>, J. Yun, B. Noh<br>
-                <strong>Journal of Korean Society of Transportation</strong>, 42(4), 385–397 (2024).
+                <strong>Journal of Korean Society of Transportation</strong>, 42(4), 385-397 (2024).
               </div>
 
               <p class="hs-pub-desc">
@@ -820,11 +820,11 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="hs-pub-item" data-tags="urban, audio">
-              <h3>도시 환경 내 교통소음 인식 및 분류를 위한 모델 개발</h3>
+              <h3>Urban Traffic Noise Recognition and Classification Model Development</h3>
               <div class="hs-pub-meta">
                 <span class="hs-chip hs-chip-domestic">Urban noise</span>
-                민현식, 노병준, 우지영<br>
-                한국컴퓨터정보학회 학술발표논문집, 32(2), 49–52 (2024).
+                <em>Hyunsik Min</em>, Byeongjoon Noh<br>
+                <strong>Korea Computer and Information Society Conference Proceedings</strong>, 32(2), 49-52 (2024).
               </div>
 
               <p class="hs-pub-desc">
@@ -834,11 +834,11 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="hs-pub-item" data-tags="legal, llm, traffic-law">
-              <h3>LLM기반 교통사고 판결예측 시스템</h3>
+              <h3>LLM-based Traffic Accident Judgment Prediction System</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip hs-chip-legal">LLM · Traffic law</span>
-                민현식, 노병준<br>
-                한국ITS학회 학술대회, 811–816 (2024).
+                <span class="hs-chip hs-chip-legal">LLM / Traffic law</span>
+                <em>Hyunsik Min</em>, Byeongjoon Noh<br>
+                <strong>Korean ITS Conference Proceedings</strong>, 811-816 (2024).
               </div>
 
               <p class="hs-pub-desc">
@@ -848,11 +848,11 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="hs-pub-item" data-tags="legal, nlp, traffic-law">
-              <h3>자연어처리 기반의 도로교통사고 판결예측 시스템</h3>
+              <h3>NLP-based Traffic Accident Judgment Prediction System</h3>
               <div class="hs-pub-meta">
-                <span class="hs-chip hs-chip-domestic">NLP · Traffic law</span>
-                민현식, 윤준영, 노병준<br>
-                한국ITS학회 학술대회, 275–279 (2024).
+                <span class="hs-chip hs-chip-domestic">NLP / Traffic law</span>
+                <em>Hyunsik Min</em>, J. Yun, Byeongjoon Noh<br>
+                <strong>Korean ITS Conference Proceedings</strong>, 275-279 (2024).
               </div>
 
               <p class="hs-pub-desc">
@@ -862,11 +862,11 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="hs-pub-item" data-tags="medical, imaging">
-              <h3>Mask R-CNN 모델을 활용한 파노라마 방사선 이미지 내 치아 분할 및 식별 방법</h3>
+              <h3>Tooth Segmentation and Identification in Panoramic Radiographs Using Mask R-CNN</h3>
               <div class="hs-pub-meta">
                 <span class="hs-chip hs-chip-domestic">Medical imaging</span>
-                민현식, 노병준<br>
-                한국통신학회 인공지능 학술대회 (in Korean).
+                <em>Hyunsik Min</em>, Byeongjoon Noh<br>
+                <strong>Korean Institute of Communications and Information Sciences Conference Proceedings</strong> (in Korean).
               </div>
 
               <p class="hs-pub-desc">

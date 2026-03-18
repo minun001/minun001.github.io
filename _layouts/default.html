@@ -4,17 +4,13 @@
 <html lang="{{ page.lang | default: site.lang | default: 'en' }}">
   <head>
     <meta charset="utf-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+    {% include head.html %}
     <title>{{ page.title | escape }} | {{ site.title | escape }}</title>
     <meta name="description"
           content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
-
-    <!-- main.css 안에 기본 스타일이 있다고 가정 -->
+    <meta property="og:image" content="{{ page.image | default: site.logo | absolute_url }}">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
-    <link rel="shortcut icon" href="{{ "/favicon.ico" | relative_url }}">
   </head>
 
   <body>
@@ -34,9 +30,9 @@
           </label>
 
           <div class="trigger">
-            {% for item in site.pages %}
-              {% if item.title %}
-                <a class="page-link" href="{{ item.url | relative_url }}">{{ item.title | escape }}</a>
+            {% for item in site.nav %}
+              {% if item.name %}
+                <a class="page-link" href="{{ item.link | relative_url }}">{{ item.name | escape }}</a>
               {% endif %}
             {% endfor %}
           </div>

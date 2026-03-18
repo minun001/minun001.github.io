@@ -504,7 +504,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Education</div>
             <div class="hs-section-tag">Academic background</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <li>
                 <strong>M.S. in Future Convergence Technology</strong><br>
                 <strong>Soonchunhyang University</strong>, Asan, Korea<br>
-                <em>Mar. 2025 – Present</em><br>
+                <em>Mar. 2025 - Present</em><br>
                 - Department of Future Convergence Technology<br>
                 - Advisor: <strong>Prof. Byeongjoon Noh</strong>
               </li>
@@ -521,10 +521,10 @@ document.addEventListener("DOMContentLoaded", function () {
               <li>
                 <strong>B.Eng. in AI and Big Data</strong><br>
                 <strong>Soonchunhyang University</strong>, Asan, Korea<br>
-                <em>Mar. 2021 – Feb. 2025</em><br>
+                <em>Mar. 2021 - Feb. 2025</em><br>
                 - Department of AI and Big Data<br>
                 - GPA: <strong>3.88 / 4.5</strong><br>
-                - Thesis: <strong>“Temporal Graph Pattern Attention-based Vehicle Trajectory Prediction System: Toward Real-time Road Driving Information”</strong><br>
+                - Thesis: <strong>Temporal Graph Pattern Attention-based Vehicle Trajectory Prediction System: Toward Real-time Road Driving Information</strong><br>
                 - Advisor: <strong>Prof. Byeongjoon Noh</strong>
               </li>
             </ul>
@@ -540,7 +540,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Honors &amp; Awards</div>
             <div class="hs-section-tag">Recognition</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <li>Grand Prize, <strong>SW Convergence University Ideathon</strong>, Soonchunhyang University, Korea (<em>Jun. 2024</em>)</li>
               <li>Outstanding Paper Award, <strong>The Korea Society of Computer and Information</strong>, Korea (<em>Jul. 2024</em>)</li>
               <li>Excellence Award, <strong>The 1st SW Convergence University Academic Festival</strong>, Soonchunhyang University, Korea (<em>Nov. 2024</em>)</li>
-              <li>Silver Medal, <strong>2024 SCHU AI–SW Festival</strong>, Department of AI and Big Data, Soonchunhyang University, Korea (<em>Nov. 2024</em>)</li>
+              <li>Silver Medal, <strong>2024 SCHU AI-SW Festival</strong>, Department of AI and Big Data, Soonchunhyang University, Korea (<em>Nov. 2024</em>)</li>
               <li>Special Prize, <strong>2024 Soonchunhyang SW Idea Contest</strong>, Soonchunhyang University, Korea (<em>Nov. 2024</em>)</li>
               <li>Grand Prize, <strong>2024 Portfolio (Capstone) Competition</strong>, SW Venture Startup Academy Center, Soonchunhyang University, Korea (<em>Nov. 2024</em>)</li>
             </ul>
@@ -567,28 +567,28 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Research Projects</div>
             <div class="hs-section-tag">Project experience</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
 
             <ul>
               <li>
-                <strong>CRC (Convergence Research Center) – Emotionally Intelligent Childcare Convergence Research</strong><br>
+                <strong>CRC (Convergence Research Center) - Emotionally Intelligent Childcare Convergence Research</strong><br>
                 Ministry of Science and ICT / National Research Foundation of Korea (NRF), Korea<br>
-                <em>Participating Researcher, Sep. 2024 – Present</em>
+                <em>Participating Researcher, Sep. 2024 - Present</em>
               </li>
               <br>
               <li>
                 <strong>2nd DSC Planning Living Lab in 2024</strong><br>
-                Daejeon–Sejong–Chungnam Regional Innovation Platform, Chungnam National University, Korea<br>
-                <em>Project Leader, Aug. 2024 – Nov. 2024</em>
+                Daejeon-Sejong-Chungnam Regional Innovation Platform, Chungnam National University, Korea<br>
+                <em>Project Leader, Aug. 2024 - Nov. 2024</em>
               </li>
               <br>
               <li>
-                <strong>BK21 – AIoT-Energy Convergence Technology Regional Innovation Talent Development</strong><br>
+                <strong>BK21 - AIoT-Energy Convergence Technology Regional Innovation Talent Development</strong><br>
                 Ministry of Education, Korea<br>
-                <em>Participating Researcher, Feb. 2025 – Present</em>
+                <em>Participating Researcher, Feb. 2025 - Present</em>
               </li>
             </ul>
 
@@ -603,7 +603,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Skills</div>
             <div class="hs-section-tag">Tools &amp; stacks</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -631,17 +631,17 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Profiles &amp; Contact</div>
             <div class="hs-section-tag">Get in touch</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
 
             <p><span class="hs-chip">Primary contact</span></p>
             <ul>
-              <li>📧 Email: <a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></li>
-              <li>💻 GitHub: <a href="https://github.com/minun001" target="_blank" rel="noopener">github.com/minun001</a></li>
-              <li>🔗 LinkedIn: <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">linkedin.com/in/hyunsik-min-9ba072346</a></li>
-              <li>📚 Google Scholar: <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">scholar.google.com/citations?user=2AUQlE8AAAAJ</a></li>
+              <li>Email: <a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></li>
+              <li>GitHub: <a href="https://github.com/minun001" target="_blank" rel="noopener">github.com/minun001</a></li>
+              <li>LinkedIn: <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">linkedin.com/in/hyunsik-min-9ba072346</a></li>
+              <li>Google Scholar: <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">scholar.google.com/citations?user=2AUQlE8AAAAJ</a></li>
             </ul>
 
           </div>

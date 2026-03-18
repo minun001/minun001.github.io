@@ -448,7 +448,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <img src="/assets/img/avatar.png" alt="Hyunsik Min">
     </div>
     <div class="hs-hero-title">M.S. Candidate, Republic of Korea</div>
-    <div class="hs-hero-subtitle">AI for Energy · Mobility · Safety</div>
+    <div class="hs-hero-subtitle">AI for Energy / Mobility / Safety</div>
     <div class="hs-hero-intro">
       Researching how AI, foundation models, and graph-based learning can build safer and smarter cities.
     </div>
@@ -476,9 +476,9 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-header">
           <div>
             <div class="hs-section-title">Profiles &amp; Contact</div>
-            <div class="hs-section-tag">Contact · Profiles</div>
+            <div class="hs-section-tag">Contact / Profiles</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -486,10 +486,10 @@ document.addEventListener("DOMContentLoaded", function () {
               <span class="hs-chip">Primary contact</span>
             </p>
             <ul>
-              <li>📧 Email: <a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></li>
-              <li>💻 GitHub: <a href="https://github.com/minun001" target="_blank" rel="noopener">github.com/minun001</a></li>
-              <li>🔗 LinkedIn: <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">linkedin.com/in/hyunsik-min-9ba072346</a></li>
-              <li>📚 Google Scholar: <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">scholar profile</a></li>
+              <li>Email: <a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></li>
+              <li>GitHub: <a href="https://github.com/minun001" target="_blank" rel="noopener">github.com/minun001</a></li>
+              <li>LinkedIn: <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">linkedin.com/in/hyunsik-min-9ba072346</a></li>
+              <li>Google Scholar: <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">scholar profile</a></li>
             </ul>
           </div>
         </div>
@@ -502,20 +502,20 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Snapshot</div>
             <div class="hs-section-tag">At a glance</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
             <ul>
-              <li>🎓 <strong>M.S. Candidate</strong>, Department of Future Convergence Technology, Soonchunhyang University (SCHU)</li>
-              <li>📄 <strong>3× First-author SCI(E) papers</strong>
+              <li><strong>M.S. Candidate</strong>, Department of Future Convergence Technology, Soonchunhyang University (SCHU)</li>
+              <li><strong>3 first-author SCI(E) papers</strong>
                 <ul>
-                  <li>1× as an undergraduate student</li>
-                  <li>2× in the first semester of the M.S. program</li>
+                  <li>1 as an undergraduate student</li>
+                  <li>2 in the first semester of the M.S. program</li>
                 </ul>
               </li>
-              <li>🔬 Involved in <strong>national research projects (NRF CRC, etc.)</strong>, bridging academic research with real-world urban and transportation challenges</li>
-              <li>🌏 Focused on <strong>AI that creates tangible societal value</strong> in energy, mobility, and safety</li>
+              <li>Involved in <strong>national research projects (NRF CRC, etc.)</strong>, bridging academic research with real-world urban and transportation challenges</li>
+              <li>Focused on <strong>AI that creates tangible societal value</strong> in energy, mobility, and safety</li>
             </ul>
           </div>
         </div>
@@ -528,7 +528,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">About</div>
             <div class="hs-section-tag">Background &amp; motivation</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -543,11 +543,11 @@ document.addEventListener("DOMContentLoaded", function () {
               <li>AI-based traffic accident ruling prediction using legal and contextual data</li>
             </ul>
             <p>
-              These efforts have led to <strong>three first-author SCI(E) publications</strong> — one during my undergraduate
+              These efforts have led to <strong>three first-author SCI(E) publications</strong>, one during my undergraduate
               studies and two additional papers in the first semester of my M.S. program.
             </p>
             <p>
-              Currently, in my second semester as a Master’s student, I am participating in national research projects,
+              Currently, in my second semester as a master's student, I am participating in national research projects,
               including an <strong>NRF-funded CRC program</strong>, where I aim to connect academic research with practical
               solutions for real-world urban and transportation challenges.
             </p>
@@ -564,19 +564,19 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="hs-section-header">
           <div>
             <div class="hs-section-title">Research Areas</div>
-            <div class="hs-section-tag">Energy · Mobility · Safety</div>
+            <div class="hs-section-tag">Energy / Mobility / Safety</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
             <p>
-              I am broadly interested in how modern AI — including foundation models and generative models — can be
+              I am broadly interested in how modern AI, including foundation models and generative models, can be
               grounded in real-world systems for energy and mobility.
             </p>
             <ul>
               <li><strong>Foundation Models &amp; VLA</strong><br>
-                Applying large-scale foundation models and vision–language–action (VLA) systems to embodied
+                Applying large-scale foundation models and vision-language-action (VLA) systems to embodied
                 decision-making and complex multi-modal scenarios.
               </li>
               <li><strong>Autonomous Driving &amp; Anticipatory Planning</strong><br>
@@ -591,7 +591,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 Data-driven forecasting for smart grid operation, energy demand, and mobility systems.
               </li>
               <li><strong>AI-based Speaker Diarization &amp; Interaction Analysis</strong><br>
-                Child–parent CRC conversational data, speaker diarization, and interaction understanding to support
+                Child-parent CRC conversational data, speaker diarization, and interaction understanding to support
                 educational and clinical insights.
               </li>
             </ul>
@@ -606,7 +606,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Selected Topics &amp; Projects</div>
             <div class="hs-section-tag">Current &amp; recent work</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">
@@ -619,7 +619,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <h3>AI-based Speaker Diarization for CRC Data</h3>
             <ul>
-              <li>Speaker diarization and classification for child–parent conversational datasets</li>
+              <li>Speaker diarization and classification for child-parent conversational datasets</li>
               <li>Combination of language models, acoustic embeddings, and diarization pipelines</li>
               <li>Goal: support reliable analysis of educational and clinical interaction data</li>
             </ul>
@@ -640,7 +640,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="hs-section-title">Looking Ahead</div>
             <div class="hs-section-tag">Vision</div>
           </div>
-          <div class="hs-section-icon">▶</div>
+          <div class="hs-section-icon">&rsaquo;</div>
         </div>
         <div class="hs-section-body-wrap">
           <div class="hs-section-body">

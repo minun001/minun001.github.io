@@ -5,7 +5,9 @@ title: "Hyunsik Min"
 email: "minun001@sch.ac.kr"
 
 description: >-
-  M.S. Candidate.
+  M.S. candidate researching AI for energy, mobility, and safety.
+
+lang: en
 
 
 url: "https://minun001.github.io"
@@ -14,6 +16,15 @@ baseurl: ""   # GitHub Pages root URL이므로 빈 값 유지
 # Social links (필요 없는 것은 비워두기)
 twitter_username: ""
 github_username: minun001
+linkedin_url: "https://www.linkedin.com/in/hyunsik-min-9ba072346/"
+scholar_url: "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
+logo: "/assets/img/avatar.png"
+social:
+  name: "Hyunsik Min"
+  links:
+    - "https://github.com/minun001"
+    - "https://www.linkedin.com/in/hyunsik-min-9ba072346/"
+    - "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
 
 # ============================================================
 # Theme & Plugins
@@ -21,6 +32,7 @@ github_username: minun001
 theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
 
 # ============================================================
 # Markdown / Layout Settings
