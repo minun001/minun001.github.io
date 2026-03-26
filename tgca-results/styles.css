@@ -1,0 +1,635 @@
+:root {
+  --paper: #f5efe4;
+  --paper-deep: #e7dcc9;
+  --ink: #1f1b18;
+  --muted: #665c53;
+  --line: rgba(63, 51, 39, 0.18);
+  --accent: #8f3b1b;
+  --accent-soft: rgba(143, 59, 27, 0.12);
+  --olive: #5f6a43;
+  --olive-soft: rgba(95, 106, 67, 0.14);
+  --warning: #8d5d1e;
+  --warning-soft: rgba(141, 93, 30, 0.14);
+  --shadow: 0 24px 80px rgba(33, 24, 14, 0.08);
+}
+
+body[data-theme="covla"] {
+  --paper: #f5efe4;
+  --paper-deep: #e7dcc9;
+  --ink: #1f1b18;
+  --muted: #665c53;
+  --line: rgba(63, 51, 39, 0.18);
+  --accent: #8f3b1b;
+  --accent-soft: rgba(143, 59, 27, 0.12);
+  --olive: #5f6a43;
+  --olive-soft: rgba(95, 106, 67, 0.14);
+  --warning: #8d5d1e;
+  --warning-soft: rgba(141, 93, 30, 0.14);
+  --shadow: 0 24px 80px rgba(33, 24, 14, 0.08);
+}
+
+body[data-theme="dashcam"] {
+  --paper: #eef5f3;
+  --paper-deep: #d9e7e2;
+  --ink: #132222;
+  --muted: #496160;
+  --line: rgba(32, 63, 62, 0.18);
+  --accent: #0b6b67;
+  --accent-soft: rgba(11, 107, 103, 0.12);
+  --olive: #355f76;
+  --olive-soft: rgba(53, 95, 118, 0.14);
+  --warning: #8e5e2a;
+  --warning-soft: rgba(142, 94, 42, 0.14);
+  --shadow: 0 24px 80px rgba(11, 38, 45, 0.09);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(143, 59, 27, 0.14), transparent 26%),
+    radial-gradient(circle at right 15%, rgba(95, 106, 67, 0.13), transparent 22%),
+    linear-gradient(180deg, #fbf7ef 0%, var(--paper) 46%, #efe4d4 100%);
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+body[data-theme="dashcam"] {
+  background:
+    radial-gradient(circle at top left, rgba(11, 107, 103, 0.18), transparent 28%),
+    radial-gradient(circle at right 15%, rgba(53, 95, 118, 0.16), transparent 24%),
+    linear-gradient(180deg, #f5fbfa 0%, var(--paper) 48%, #ddeceb 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(110, 92, 72, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(110, 92, 72, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.75), transparent 90%);
+}
+
+body[data-theme="dashcam"]::before {
+  background-image:
+    linear-gradient(rgba(58, 96, 101, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(58, 96, 101, 0.045) 1px, transparent 1px);
+}
+
+.page-shell {
+  width: min(1320px, calc(100vw - 40px));
+  margin: 0 auto;
+  padding: 42px 0 72px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.8fr);
+  gap: 24px;
+  align-items: stretch;
+  margin-bottom: 28px;
+}
+
+.hero-copy,
+.hero-meta,
+.site-note,
+.toc,
+.pending-section,
+.results-block {
+  background: rgba(255, 252, 247, 0.75);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.hero-copy {
+  padding: 30px 32px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4.1rem);
+  line-height: 0.95;
+}
+
+.lede {
+  max-width: 64ch;
+  margin: 18px 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.dataset-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.dataset-button {
+  border: 1px solid rgba(63, 51, 39, 0.12);
+  background: rgba(255, 252, 247, 0.92);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.dataset-button:hover {
+  transform: translateY(-1px);
+  background: rgba(143, 59, 27, 0.1);
+}
+
+.dataset-button.active {
+  background: rgba(143, 59, 27, 0.14);
+  border-color: rgba(143, 59, 27, 0.2);
+  color: var(--accent);
+}
+
+body[data-theme="dashcam"] .dataset-button.active {
+  background: rgba(11, 107, 103, 0.14);
+  border-color: rgba(11, 107, 103, 0.2);
+}
+
+body[data-theme="dashcam"] .hero-copy,
+body[data-theme="dashcam"] .hero-meta,
+body[data-theme="dashcam"] .site-note,
+body[data-theme="dashcam"] .toc,
+body[data-theme="dashcam"] .pending-section,
+body[data-theme="dashcam"] .results-block {
+  background: rgba(248, 254, 253, 0.82);
+}
+
+.hero-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding: 18px;
+}
+
+.stat-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(243, 235, 222, 0.9));
+  border: 1px solid rgba(63, 51, 39, 0.09);
+}
+
+body[data-theme="dashcam"] .stat-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(220, 238, 235, 0.96));
+  border-color: rgba(32, 63, 62, 0.1);
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.stat-card strong {
+  font-size: 1.7rem;
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.site-note {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(200px, 0.8fr) minmax(200px, 0.8fr);
+  gap: 16px;
+  padding: 22px 24px;
+  margin-bottom: 24px;
+}
+
+.data-section {
+  grid-template-columns: 1fr;
+}
+
+.site-note h2 {
+  margin: 0 0 10px;
+  font-size: 2rem;
+}
+
+.site-note p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.note-block {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(247, 240, 229, 0.95);
+  border: 1px solid rgba(63, 51, 39, 0.08);
+}
+
+body[data-theme="dashcam"] .note-block {
+  background: rgba(228, 242, 240, 0.96);
+  border-color: rgba(32, 63, 62, 0.1);
+}
+
+.note-block span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.note-block code {
+  display: block;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 0.9rem;
+}
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px;
+  margin-bottom: 28px;
+}
+
+.toc a {
+  text-decoration: none;
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(143, 59, 27, 0.08);
+  border: 1px solid rgba(143, 59, 27, 0.12);
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.toc a:hover {
+  transform: translateY(-2px);
+  background: rgba(143, 59, 27, 0.14);
+}
+
+.pending-section,
+.results-block {
+  padding: 24px;
+  margin-bottom: 26px;
+}
+
+.leaderboard-section {
+  display: grid;
+  gap: 18px;
+}
+
+.leaderboard-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.leader-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.leader-card {
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(63, 51, 39, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(241, 233, 219, 0.98));
+}
+
+body[data-theme="dashcam"] .leader-card {
+  border-color: rgba(32, 63, 62, 0.11);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(226, 240, 238, 0.98));
+}
+
+.leader-card h3 {
+  margin: 0;
+  font-size: 1.55rem;
+}
+
+.leader-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.leader-link-card {
+  display: block;
+  padding: 18px 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(63, 51, 39, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(241, 233, 219, 0.98));
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.leader-link-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(143, 59, 27, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 236, 223, 1));
+}
+
+body[data-theme="dashcam"] .leader-link-card {
+  border-color: rgba(32, 63, 62, 0.11);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(226, 240, 238, 0.98));
+}
+
+body[data-theme="dashcam"] .leader-link-card:hover {
+  border-color: rgba(11, 107, 103, 0.2);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(231, 244, 242, 1));
+}
+
+.leader-link-card h3 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.leader-link-card p:last-child {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.leaderboard-table-wrap {
+  margin-top: 0;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.pending-grid,
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.pending-card,
+.model-card {
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(63, 51, 39, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(241, 233, 219, 0.96));
+}
+
+body[data-theme="dashcam"] .model-card {
+  border-color: rgba(32, 63, 62, 0.11);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(226, 240, 238, 0.98));
+}
+
+.pending-card {
+  border-color: rgba(141, 93, 30, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.82), rgba(245, 233, 209, 0.96));
+}
+
+.pending-card.running {
+  border-color: rgba(143, 59, 27, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 248, 241, 0.92), rgba(243, 226, 214, 0.98));
+}
+
+body[data-theme="dashcam"] .pending-card {
+  border-color: rgba(11, 107, 103, 0.16);
+  background:
+    linear-gradient(180deg, rgba(243, 252, 251, 0.9), rgba(214, 233, 230, 0.98));
+}
+
+body[data-theme="dashcam"] .pending-card.running {
+  border-color: rgba(11, 107, 103, 0.18);
+  background:
+    linear-gradient(180deg, rgba(245, 253, 252, 0.94), rgba(207, 235, 232, 0.98));
+}
+
+.pending-card h3,
+.model-card h3 {
+  margin: 0;
+  font-size: 1.7rem;
+}
+
+.pending-card p,
+.model-note {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.model-card-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.model-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.model-group {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.model-name {
+  overflow-wrap: anywhere;
+}
+
+.model-badge {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--olive-soft);
+  color: var(--olive);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.model-badge.pending {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.model-badge.running {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.copy-button {
+  border: 1px solid rgba(63, 51, 39, 0.14);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 8px 12px;
+  min-width: 104px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.copy-button:hover {
+  transform: translateY(-1px);
+  background: rgba(143, 59, 27, 0.08);
+}
+
+body[data-theme="dashcam"] .copy-button:hover {
+  background: rgba(11, 107, 103, 0.1);
+}
+
+.copy-button.copied {
+  background: var(--olive-soft);
+  color: var(--olive);
+  border-color: rgba(95, 106, 67, 0.22);
+}
+
+.copy-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 14px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 420px;
+}
+
+thead th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  padding: 0 0 12px;
+  border-bottom: 1px solid rgba(63, 51, 39, 0.14);
+}
+
+tbody td {
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(63, 51, 39, 0.1);
+  font-size: 0.96rem;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.source-meta {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(63, 51, 39, 0.1);
+}
+
+body[data-theme="dashcam"] .source-meta {
+  border-top-color: rgba(32, 63, 62, 0.12);
+}
+
+.source-meta span {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.source-meta code {
+  display: block;
+  word-break: break-word;
+  white-space: normal;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .site-note {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100vw - 22px, 1320px);
+    padding-top: 18px;
+  }
+
+  .hero-copy,
+  .hero-meta,
+  .site-note,
+  .pending-section,
+  .results-block {
+    border-radius: 22px;
+  }
+
+  .hero-copy,
+  .site-note,
+  .pending-section,
+  .results-block {
+    padding: 18px;
+  }
+
+  .toc {
+    padding: 12px;
+  }
+
+  .model-card-header {
+    grid-template-columns: 1fr;
+  }
+
+  .model-actions {
+    align-items: flex-start;
+  }
+}
