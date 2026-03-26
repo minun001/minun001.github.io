@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TGCA-baseline-resullts</title>
+    <meta
+      name="description"
+      content="TGCA-baseline-resullts website with per-second MAE, RMSE, minADE, and minFDE tables."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">TGCA-baseline-resullts</p>
+          <h1>TGCA-baseline-resullts</h1>
+          <p class="lede" id="hero-lede">
+            Dataset-specific experiments organized as individual tables for each model.
+            Metrics are shown per second with MAE, RMSE, minADE, and minFDE.
+          </p>
+          <div class="dataset-switcher" id="dataset-switcher"></div>
+        </div>
+        <div class="hero-meta" id="hero-meta">
+          <div class="stat-card">
+            <span class="stat-label">Status</span>
+            <strong id="status-text">Loading</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Models</span>
+            <strong id="model-count">-</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Pending</span>
+            <strong id="pending-count">-</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Dataset</span>
+            <strong id="dataset-name">-</strong>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="site-note">
+          <div>
+            <h2>Overview</h2>
+            <p id="site-note-text">
+              Loading experiment metadata...
+            </p>
+          </div>
+          <div class="note-block">
+            <span>Requested Root</span>
+            <code id="requested-root">-</code>
+          </div>
+          <div class="note-block">
+            <span>Local Mirror Used</span>
+            <code id="local-root">-</code>
+          </div>
+        </section>
+
+        <section class="site-note data-section">
+          <div>
+            <h2>Data</h2>
+            <p id="data-note-text">
+              Loading dataset description...
+            </p>
+          </div>
+        </section>
+
+        <section class="results-block leaderboard-links">
+          <div class="section-heading">
+            <p class="eyebrow">Leaderboard</p>
+            <h2>Leaderboards</h2>
+            <p class="leaderboard-note">
+              Open the dataset-specific leaderboard pages to compare baseline models and the default TGCA.
+            </p>
+          </div>
+          <div class="leader-grid" id="leaderboard-link-root"></div>
+        </section>
+
+        <nav class="toc" id="toc"></nav>
+
+        <section class="pending-section" id="pending-section" hidden>
+          <div class="section-heading">
+            <p class="eyebrow">Data Check</p>
+            <h2>Pending or Running Results</h2>
+          </div>
+          <div class="pending-grid" id="pending-grid"></div>
+        </section>
+
+        <section class="results-section" id="results-root"></section>
+      </main>
+    </div>
+
+    <template id="model-card-template">
+      <article class="model-card">
+        <div class="model-card-header">
+          <div>
+            <p class="model-group"></p>
+            <h3 class="model-name"></h3>
+          </div>
+          <div class="model-actions">
+            <span class="model-badge"></span>
+            <button class="copy-button" type="button">Copy Table</button>
+          </div>
+        </div>
+        <p class="model-note"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>P</th>
+                <th>MAE</th>
+                <th>RMSE</th>
+                <th>minADE</th>
+                <th>minFDE</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="source-meta">
+          <span>Source</span>
+          <code class="source-path"></code>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>

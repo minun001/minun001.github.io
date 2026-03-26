@@ -1,4 +1,4 @@
-name: Sync TGCA Results Site
+name: Sync TGCA-baseline-resullts
 
 on:
   schedule:
@@ -17,23 +17,23 @@ jobs:
 
       - name: Download latest site snapshot
         run: |
-          mkdir -p tgca-results/data
-          curl -fsSL http://114.71.219.49:8123/index.html -o tgca-results/index.html
-          curl -fsSL http://114.71.219.49:8123/app.js -o tgca-results/app.js
-          curl -fsSL http://114.71.219.49:8123/styles.css -o tgca-results/styles.css
-          curl -fsSL http://114.71.219.49:8123/leaderboard_page.js -o tgca-results/leaderboard_page.js
-          curl -fsSL http://114.71.219.49:8123/leaderboard-covla.html -o tgca-results/leaderboard-covla.html
-          curl -fsSL http://114.71.219.49:8123/leaderboard-dashcam.html -o tgca-results/leaderboard-dashcam.html
-          curl -fsSL http://114.71.219.49:8123/data/results.json -o tgca-results/data/results.json
+          mkdir -p TGCA-baseline-resullts/data
+          curl -fsSL http://114.71.219.49:8123/index.html -o TGCA-baseline-resullts/index.html
+          curl -fsSL http://114.71.219.49:8123/app.js -o TGCA-baseline-resullts/app.js
+          curl -fsSL http://114.71.219.49:8123/styles.css -o TGCA-baseline-resullts/styles.css
+          curl -fsSL http://114.71.219.49:8123/leaderboard_page.js -o TGCA-baseline-resullts/leaderboard_page.js
+          curl -fsSL http://114.71.219.49:8123/leaderboard-covla.html -o TGCA-baseline-resullts/leaderboard-covla.html
+          curl -fsSL http://114.71.219.49:8123/leaderboard-dashcam.html -o TGCA-baseline-resullts/leaderboard-dashcam.html
+          curl -fsSL http://114.71.219.49:8123/data/results.json -o TGCA-baseline-resullts/data/results.json
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- tgca-results; then
-            echo "No tgca-results changes detected."
+          if git diff --quiet -- TGCA-baseline-resullts; then
+            echo "No TGCA-baseline-resullts changes detected."
             exit 0
           fi
-          git add tgca-results
-          git commit -m "Sync TGCA results site"
+          git add TGCA-baseline-resullts
+          git commit -m "Sync TGCA-baseline-resullts"
           git push

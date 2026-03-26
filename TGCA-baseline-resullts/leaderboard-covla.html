@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoVLA Leaderboard | TGCA-baseline-resullts</title>
+    <meta
+      name="description"
+      content="CoVLA leaderboard for TGCA-baseline-resullts."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-dataset-key="covla" data-theme="covla">
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow" id="page-eyebrow">TGCA-baseline-resullts</p>
+          <h1 id="page-title">Loading leaderboard...</h1>
+          <p class="lede" id="page-lede">Preparing dataset leaderboard.</p>
+          <div class="dataset-switcher">
+            <a class="dataset-button active" href="./leaderboard-covla.html">CoVLA</a>
+            <a class="dataset-button" href="./leaderboard-dashcam.html">dashcam</a>
+            <a class="dataset-button" href="./index.html#dataset-covla">Main Results</a>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <div class="stat-card">
+            <span class="stat-label">Dataset</span>
+            <strong id="dataset-name">-</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Updated</span>
+            <strong id="updated-at">-</strong>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="site-note data-section">
+          <div>
+            <h2>Leaderboard Scope</h2>
+            <p id="leaderboard-note">Loading leaderboard summary...</p>
+          </div>
+        </section>
+
+        <section class="site-note data-section">
+          <div>
+            <h2>New Baseline Root</h2>
+            <p><code id="new-results-root">-</code></p>
+          </div>
+        </section>
+
+        <section class="results-block leaderboard-section">
+          <div class="section-heading">
+            <p class="eyebrow">Top Metrics</p>
+            <h2>Best-by-Metric Summary</h2>
+          </div>
+          <div class="leader-grid" id="leader-grid"></div>
+          <div class="table-wrap leaderboard-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Model</th>
+                  <th>Group</th>
+                  <th>Score</th>
+                  <th>MAE</th>
+                  <th>RMSE</th>
+                  <th>minADE</th>
+                  <th>minFDE</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./leaderboard_page.js" defer></script>
+  </body>
+</html>
