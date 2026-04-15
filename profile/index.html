@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile | Hyunsik Min</title>
+  <meta name="description" content="About Hyunsik Min, including research interests, experience, projects, honors, and academic background.">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .about-page{display:grid;gap:1.1rem}
+    .about-name{white-space:nowrap}
+    .about-hero-copy{display:grid;gap:1rem}
+    .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem 1rem;margin-top:.25rem}
+    .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
+    .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
+    .about-jump{display:flex;flex-wrap:wrap;gap:.7rem}
+    .about-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:rgba(255,255,255,.45);box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
+    .about-interest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:.35rem}
+    .about-interest{padding:1rem;border-radius:22px;background:rgba(255,255,255,.48);box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
+    .about-stack{display:grid;gap:.9rem}
+    .about-entry{padding-top:.9rem;border-top:1px solid var(--border-soft)}
+    .about-entry:first-child{padding-top:0;border-top:none}
+    .about-entry h3{margin-bottom:.2rem;font-size:1.08rem}
+    .about-entry p{margin:0}
+    .about-list{margin:0;padding-left:1.1rem}
+    .about-list.two-col{columns:2;column-gap:1.6rem}
+    .about-list.two-col li{break-inside:avoid}
+    .about-list li+li{margin-top:.55rem}
+    .about-project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.2rem}
+    .about-project{padding-top:1rem;border-top:1px solid var(--border-soft)}
+    .about-project h3{margin-bottom:.25rem;font-size:1.08rem}
+    .about-project p{margin:0}
+    .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
+    .photo-card:after{display:none}
+    body.theme-night .about-interest,body.theme-night .about-jump a{background:rgba(255,255,255,.05)}
+    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}.about-list.two-col{columns:1}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-shell">
+      <a class="brand" href="/">Hyunsik Min</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+          <a class="is-active" href="/profile/">Profile</a>
+        <a href="/publications/">Publications</a>
+        <a href="/news/">News</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="site-shell">
+      <div class="about-page">
+        <section class="photo-layout">
+          <div class="panel photo-card">
+            <img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1920" height="2560" loading="eager" fetchpriority="high">
+          </div>
+          <div class="panel identity-card about-hero-copy">
+            <div>
+              <div class="eyebrow">Profile</div>
+              <h1 class="about-name">Hyunsik Min</h1>
+              <div class="hero-subtitle">M.S. Candidate in Future Convergence Technology</div>
+              <p class="hero-intro">I am an M.S. student at Soonchunhyang University and a graduate researcher in the Smart Autonomous &amp; Infrastructure Lab (SAIL), advised by <strong>Byeongjoon Noh</strong>. My work focuses on models that move beyond benchmarks and remain useful in practical settings.</p>
+              <p class="hero-intro">Recent work spans trajectory prediction for autonomous driving, photovoltaic power forecasting, legal AI, and foundation-model research for interpretable and trustworthy decision support.</p>
+            </div>
+            <dl class="about-meta">
+              <div>
+                <dt>Affiliation</dt>
+                <dd>SAIL, Soonchunhyang University</dd>
+              </div>
+              <div>
+                <dt>Email</dt>
+                <dd><a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></dd>
+              </div>
+              <div>
+                <dt>Location</dt>
+                <dd>Asan, Republic of Korea, 31538</dd>
+              </div>
+            </dl>
+            <div class="button-row">
+              <a class="btn-soft" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+              <a class="btn-soft" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
+              <a class="btn-soft" href="https://github.com/minun001" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn-soft" href="https://minun001.github.io/" target="_blank" rel="noopener">Website</a>
+            </div>
+          </div>
+        </section>
+
+        <nav class="about-jump" aria-label="Jump to profile section">
+          <a href="#profile-research">Research</a>
+          <a href="#profile-education">Education</a>
+          <a href="#profile-projects">Projects</a>
+          <a href="#profile-awards">Awards</a>
+          <a href="#profile-stack">Stack</a>
+        </nav>
+
+        <section class="section-grid">
+          <article class="card section-card span-12" id="profile-research">
+            <div class="eyebrow">Research Interests</div>
+            <h2>Research directions across the portfolio</h2>
+            <div class="about-interest-grid">
+              <div class="about-interest">
+                <h3>Foundation Models</h3>
+                <p>General-purpose model research centered on reasoning, adaptation, and practical use in real decision-support settings.</p>
+              </div>
+              <div class="about-interest">
+                <h3>VLA</h3>
+                <p>Vision-language-action systems that connect perception, instruction understanding, and execution in real environments.</p>
+              </div>
+              <div class="about-interest">
+                <h3>Autonomous Driving</h3>
+                <p>Trajectory prediction and driving decision support under interaction, uncertainty, and safety-critical road behavior.</p>
+              </div>
+              <div class="about-interest">
+                <h3>Generative AI</h3>
+                <p>Generative modeling for structured reasoning, content generation, and interactive AI workflows that support research and deployment.</p>
+              </div>
+              <div class="about-interest">
+                <h3>Time Series Forecasting</h3>
+                <p>Forecasting for energy and infrastructure systems where temporal patterns must remain reliable under real operating conditions.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card section-card span-6" id="profile-education">
+            <div class="eyebrow">Education</div>
+            <h2>Academic Background</h2>
+            <div class="about-stack">
+              <div class="about-entry">
+                <h3>M.S. in Future Convergence Technology</h3>
+                <p>Soonchunhyang University, Department of Future Convergence Technology, Asan, Korea</p>
+                <p><em>Mar. 2025 - Present</em></p>
+                <p>Advisor: <strong>Byeongjoon Noh</strong></p>
+                <p class="about-mini-note">GPA: 4.42 / 4.5</p>
+              </div>
+              <div class="about-entry">
+                <h3>B.Eng. in AI and Big Data</h3>
+                <p>Soonchunhyang University, Department of AI and Big Data, Asan, Korea</p>
+                <p><em>Mar. 2021 - Feb. 2025</em></p>
+                <p>Advisor: <strong>Byeongjoon Noh</strong></p>
+                <p class="about-mini-note">Thesis: <strong>Temporal Graph Pattern Attention-based Vehicle Trajectory Prediction System: Toward Real-time Road Driving Information</strong></p>
+                <p class="about-mini-note">GPA: 3.88 / 4.5</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card section-card span-6">
+            <div class="eyebrow">Experience</div>
+            <h2>Research Experience</h2>
+            <div class="about-stack">
+              <div class="about-entry">
+                <h3>Graduate Researcher, Smart Autonomous &amp; Infrastructure Lab</h3>
+                <p><em>Jul. 2023 - Present</em></p>
+                <p>Soonchunhyang University, Department of AI and Big Data</p>
+                <p class="about-mini-note">Current topics include vision-language-action systems, vision-language models, graph-based trajectory prediction, and object segmentation.</p>
+              </div>
+              <div class="about-entry">
+                <h3>Cross-domain research trajectory</h3>
+                <p>My research now connects autonomous driving, energy forecasting, legal AI, and explainable foundation-model research rather than staying within a single isolated topic.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card section-card span-12" id="profile-projects">
+            <div class="eyebrow">Projects & Grants</div>
+            <h2>Research Programs and Grants</h2>
+            <div class="about-project-grid">
+              <article class="about-project">
+                <h3>Emotional and Intelligence Child Care System Convergence Research Center (CRC)</h3>
+                <p><em>Proposal Author &amp; Researcher | Sep. 2024 - Present</em></p>
+                <p>Supported by the National Research Foundation of Korea and the Ministry of Science and ICT, this program anchors speaker diarization and child-parent interaction analysis for emotionally aware care data.</p>
+              </article>
+              <article class="about-project">
+                <h3>2nd DSC Planning Living Lab in 2024</h3>
+                <p><em>Project Leader, Proposal Author &amp; Researcher | Aug. 2024 - Nov. 2024</em></p>
+                <p>Led planning work linked to the Daejeon-Sejong-Chungnam Regional Innovation Platform and Chungnam National University, shaping a field-connected living-lab program for regional innovation.</p>
+              </article>
+              <article class="about-project">
+                <h3>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</h3>
+                <p><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
+                <p>Part of the BK21 graduate research program supported by the Ministry of Education, Korea, connecting AIoT-energy convergence research with talent development and scalable forecasting workflows.</p>
+              </article>
+              <article class="about-project">
+                <h3>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</h3>
+                <p><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
+                <p>Joined the KAIST-led program supported by MSIT and IITP, contributing to metropolitan mobility simulation, prediction, and utilization research for next-generation urban transportation systems.</p>
+              </article>
+              <article class="about-project">
+                <h3>BK21 Overseas Training Program at Kingston University</h3>
+                <p><em>Principal Investigator (PI) &amp; Lead Researcher | Dec. 2025 - Feb. 2026</em></p>
+                <p>Served as the principal investigator and lead researcher for the UK-based overseas training program supported by the Ministry of Education, coordinating the research direction and execution.</p>
+              </article>
+              <article class="about-project">
+                <h3>Integrated coordination technology for AI agent-based multi-domain safety monitoring</h3>
+                <p><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
+                <p>Contributes to integrated coordination methods for AI agent-based safety monitoring across multiple domains, extending the portfolio toward real-world safety operations and agent orchestration.</p>
+              </article>
+            </div>
+          </article>
+
+          <article class="card section-card span-6" id="profile-awards">
+            <div class="eyebrow">Honors</div>
+            <h2>Selected Awards</h2>
+            <ul class="about-list two-col">
+              <li>National Outstanding Scholarship in Science and Engineering, Korea (Dec. 2025)</li>
+              <li>Grand Prize, 2024 Portfolio (Capstone) Competition, Soonchunhyang University SW Venture Startup Academy Center (Nov. 2024)</li>
+              <li>Silver Medal, 2024 SCHU AI-SW Festival, Soonchunhyang University Department of AI and Big Data (Nov. 2024)</li>
+              <li>Special Prize, 2024 Soonchunhyang SW Idea Contest, Soonchunhyang University (Nov. 2024)</li>
+              <li>Excellence Award, The 1st SW Convergence University Academic Festival, Soonchunhyang University (Nov. 2024)</li>
+              <li>Outstanding Paper Award, The Korea Society of Computer and Information (Jul. 2024)</li>
+              <li>Grand Prize, SW Convergence University Ideathon, Soonchunhyang University (Jun. 2024)</li>
+              <li>Grand Prize, 2023 Soonchunhyang SW Idea Contest, Soonchunhyang University, the Information and Communication Planning and Evaluation Agency, and the Ministry of Science and ICT (Dec. 2023)</li>
+              <li>Encouragement Award, The 5th Big Data Analytics and Development Contest, Soonchunhyang University (Dec. 2021)</li>
+            </ul>
+          </article>
+
+          <article class="card section-card span-6" id="profile-stack">
+            <div class="eyebrow">Toolkit</div>
+            <h2>Technical Stack</h2>
+            <div class="two-col">
+              <div>
+                <p><strong>Programming</strong><br>Python, R, Java</p>
+                <p><strong>Modeling</strong><br>PyTorch, TensorFlow, Keras, scikit-learn</p>
+                <p><strong>AI Collaboration</strong><br>Codex, OpenClaw, Slack</p>
+              </div>
+              <div>
+                <p><strong>Analysis</strong><br>NumPy, pandas, Matplotlib, Seaborn</p>
+                <p><strong>Visualization</strong><br>Tableau, NodeXL</p>
+                <p><strong>Workflow</strong><br>Multi-agent collaboration through Codex, OpenClaw, and Slack for iterative problem solving and coordinated execution.</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="site-shell">
+      <p>Research profile covering publications, projects, awards, and collaboration tools.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/site.js"></script>
+</body>
+</html>
