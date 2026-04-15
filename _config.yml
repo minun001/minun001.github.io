@@ -1,6 +1,3 @@
-# ============================================================
-# Site Information
-# ============================================================
 title: "Hyunsik Min"
 email: "minun001@sch.ac.kr"
 
@@ -8,17 +5,15 @@ description: >-
   AI researcher building deployable systems for autonomous driving, energy forecasting, and safety-aware AI.
 
 lang: en
-
-
 url: "https://minun001.github.io"
-baseurl: ""   # GitHub Pages root URL?대?濡?鍮?媛??좎?
+baseurl: ""
 
-# Social links (?꾩슂 ?녿뒗 寃껋? 鍮꾩썙?먭린)
 twitter_username: ""
 github_username: minun001
 linkedin_url: "https://www.linkedin.com/in/hyunsik-min-9ba072346/"
 scholar_url: "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
 logo: "/assets/img/avatar.png"
+
 social:
   name: "Hyunsik Min"
   links:
@@ -26,45 +21,31 @@ social:
     - "https://www.linkedin.com/in/hyunsik-min-9ba072346/"
     - "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en"
 
-# ============================================================
-# Theme & Plugins
-# ============================================================
 theme: minima
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
 
-# ============================================================
-# Markdown / Layout Settings
-# ============================================================
 markdown: kramdown
 highlighter: rouge
 
-# ============================================================
-# Author Information
-# ============================================================
 author:
   name: "Hyunsik Min"
   affiliation: "Future Convergence Technology, SCHU"
   email: "minun001@sch.ac.kr"
 
-# ============================================================
-# Navigation (?먰븯硫?layout 而ㅼ뒪?곕쭏?댁쭠??硫붾돱 異붽? 媛??
-# ============================================================
 nav:
-  - name: "About"
+  - name: "Home"
     link: "/"
+  - name: "About"
+    link: "/about"
   - name: "Publications"
     link: "/publications"
   - name: "News"
     link: "/news"
 
-# ============================================================
-# Exclude from build
-# ============================================================
 exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules/
   - vendor/
-
