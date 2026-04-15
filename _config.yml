@@ -37,7 +37,7 @@ author:
 nav:
   - name: "Home"
     link: "/"
-  - name: "About"
+  - name: "Profile"
     link: "/about"
   - name: "Publications"
     link: "/publications"
