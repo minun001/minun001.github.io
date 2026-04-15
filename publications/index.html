@@ -8,21 +8,24 @@
   <link rel="stylesheet" href="/assets/site.css">
   <style>
     .publications-page{display:grid;gap:1rem}
+    .pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
+    .pub-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:.85rem 1rem;border-radius:8px;background:rgba(255,255,255,.62);box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-title);font-size:.9rem;font-weight:800;text-align:center}
+    .pub-jump a:hover{background:rgba(255,255,255,.9)}
     .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
     .pub-summary-item{padding:1rem 0 .2rem;border-top:1px solid var(--border-soft)}
     .pub-summary-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .pub-summary-item strong{display:block;margin-bottom:.15rem;font-size:1.05rem}
-    .pub-section{display:grid;gap:1rem}
-    .pub-section-head{display:grid;gap:.35rem;padding-top:.25rem}
+    .pub-section{display:grid;gap:1rem;scroll-margin-top:104px}
+    .pub-section-head{display:grid;gap:.35rem;padding:1.15rem 0 0;border-top:1px solid var(--border-soft)}
     .pub-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}
     .pub-item{display:grid;align-content:start;min-width:0}
     .pub-item h3{text-wrap:balance}
     .pub-note{margin:.2rem 0 0;color:var(--text-soft);font-size:.92rem}
     .pub-image{display:flex;justify-content:center;align-items:center;max-width:min(100%,400px);margin:1rem auto 0;padding:.85rem;border-radius:18px;background:rgba(255,255,255,.58);box-shadow:inset 0 0 0 1px var(--border-soft)}
     .pub-image img{width:100%;max-height:220px;height:auto;object-fit:contain}
-    body.theme-night .pub-image{background:rgba(255,255,255,.04)}
-    @media (max-width:980px){.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
+    body.theme-night .pub-image,body.theme-night .pub-jump a{background:rgba(255,255,255,.04)}
+    @media (max-width:980px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:760px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -83,7 +86,14 @@
           </article>
         </section>
 
-        <section class="pub-section">
+        <section class="pub-jump" aria-label="Jump to publication type">
+          <a href="#international-journals">International Journals</a>
+          <a href="#domestic-journals">Domestic Journals</a>
+          <a href="#international-conferences">International Conferences</a>
+          <a href="#domestic-conferences">Domestic Conferences</a>
+        </section>
+
+        <section class="pub-section" id="international-journals">
           <div class="pub-section-head">
             <div class="eyebrow">International Journals</div>
             <h2>Journal papers with the broadest external visibility</h2>
@@ -128,7 +138,7 @@
           </div>
         </section>
 
-        <section class="pub-section">
+        <section class="pub-section" id="domestic-journals">
           <div class="pub-section-head">
             <div class="eyebrow">Domestic Journals</div>
             <h2>Journal work rooted in transportation systems</h2>
@@ -148,7 +158,7 @@
           </div>
         </section>
 
-        <section class="pub-section">
+        <section class="pub-section" id="international-conferences">
           <div class="pub-section-head">
             <div class="eyebrow">International Conferences</div>
             <h2>Conference papers extending the portfolio outward</h2>
@@ -168,7 +178,7 @@
           </div>
         </section>
 
-        <section class="pub-section">
+        <section class="pub-section" id="domestic-conferences">
           <div class="pub-section-head">
             <div class="eyebrow">Domestic Conferences</div>
             <h2>Earlier conference work across sensing, legal AI, and segmentation</h2>
