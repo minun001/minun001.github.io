@@ -38,7 +38,7 @@ nav:
   - name: "Home"
     link: "/"
   - name: "Profile"
-    link: "/about"
+    link: "/profile"
   - name: "Publications"
     link: "/publications"
   - name: "News"
