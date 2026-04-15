@@ -1,1 +1,218 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Publications | Hyunsik Min</title><meta name="description" content="A concise archive of first-author papers and selected conference work across autonomous driving, energy systems, legal AI, and urban sensing."><link rel="stylesheet" href="/assets/site.css"></head><body><header class="site-header"><div class="site-shell"><a class="brand" href="/">Hyunsik Min</a><nav class="nav"><a href="/">Home</a><a href="/about/">Profile</a><a class="is-active" href="/publications/">Publications</a><a href="/news/">News</a></nav></div></header><main class="page"><div class="site-shell"><section class="hero"><div class="panel page-title"><div class="eyebrow">Research Archive</div><h1>Publications</h1><p>A concise archive of <strong>first-author papers</strong> and selected conference work across <strong>autonomous driving</strong>, <strong>energy systems</strong>, <strong>legal AI</strong>, and <strong>urban sensing</strong>.</p><div class="chip-row"><span class="chip">Energy</span><span class="chip">Mobility</span><span class="chip">Legal AI</span><span class="chip">Urban sensing</span></div></div><aside class="panel hero-visual"><div class="eyebrow">Profile links</div><h2 style="margin:.45rem 0;">From journal publications to system-level themes</h2><p>The publication list highlights how individual studies connect to one broader portfolio rather than isolated projects.</p></aside></section><section class="pub-grid"><article class="pub-item"><h3>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</h3><div class="meta">Applied Energy, 391, 125848 (2025) · Hyunsik Min, Byeongjoon Noh</div><p>SolarNexus combines adaptive PV forecasting with scalable plant-level management for smart-grid operations.</p><div class="pub-image"><img src="/assets/img/SolarNexus_framework.png" alt="SolarNexus framework"></div></article><article class="pub-item"><h3>TRACS-LLM: LLM-based traffic accident criminal sentencing prediction focusing on imprisonment, probation, and fines</h3><div class="meta">Artificial Intelligence and Law, 1-12 (2025) · Hyunsik Min, Byeongjoon Noh</div><p>TRACS-LLM predicts sentencing outcomes in road traffic accident cases using legal text, structured case attributes, and LLM-based reasoning.</p><div class="pub-image"><img src="/assets/img/TRACM_LLM_framework.png" alt="TRACS-LLM framework"></div></article><article class="pub-item"><h3>SolarFlux predictor: a novel deep learning approach for photovoltaic power forecasting in South Korea</h3><div class="meta">2025 research line · Energy forecasting</div><p>A forecasting-focused extension of the energy systems portfolio, centered on robust photovoltaic output prediction.</p></article><article class="pub-item"><h3>Temporal Graph Cross Attention-based Front-Vehicle Trajectory Prediction</h3><div class="meta">Undergraduate SCI(E) work · Autonomous driving</div><p>A trajectory prediction system designed for earlier and more reliable driving decisions in natural traffic scenes.</p><div class="pub-image"><img src="/assets/img/TGCA_model.png" alt="TGCA trajectory model"></div></article><article class="pub-item"><h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents</h3><div class="meta">Legal AI · Decision support</div><p>A traffic-accident judgment prediction system focused on text information and structured legal reasoning.</p></article></section></div></main><footer class="footer"><div class="site-shell"><p><a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar profile</a></p></div></footer><div class="theme-switcher"><label>Mode<select id="theme-mode-select"><option value="auto">Auto</option><option value="day">Day</option><option value="night">Night</option></select></label><label>TZ<select id="theme-tz-select"><option value="browser">Browser</option><option value="kst">Korea</option><option value="london">London</option></select></label></div><script src="/assets/site.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publications | Hyunsik Min</title>
+  <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .publications-page{display:grid;gap:1rem}
+    .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
+    .pub-summary-item{padding:1rem 0 .2rem;border-top:1px solid var(--border-soft)}
+    .pub-summary-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .pub-summary-item strong{display:block;margin-bottom:.15rem;font-size:1.05rem}
+    .pub-section{display:grid;gap:1rem}
+    .pub-section-head{display:grid;gap:.35rem;padding-top:.25rem}
+    .pub-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}
+    .pub-item{display:grid;align-content:start;min-width:0}
+    .pub-item h3{text-wrap:balance}
+    .pub-note{margin:.2rem 0 0;color:var(--text-soft);font-size:.92rem}
+    .pub-image{display:flex;justify-content:center;align-items:center;max-width:min(100%,400px);margin:1rem auto 0;padding:.85rem;border-radius:18px;background:rgba(255,255,255,.58);box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .pub-image img{width:100%;max-height:220px;height:auto;object-fit:contain}
+    body.theme-night .pub-image{background:rgba(255,255,255,.04)}
+    @media (max-width:980px){.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:760px){.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-shell">
+      <a class="brand" href="/">Hyunsik Min</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">Profile</a>
+        <a class="is-active" href="/publications/">Publications</a>
+        <a href="/news/">News</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="site-shell">
+      <div class="publications-page">
+        <section class="hero">
+          <div class="panel page-title">
+            <div class="eyebrow">Research Archive</div>
+            <h1>Publications</h1>
+            <p>This archive now follows the CV more closely, separating international journals, domestic journals, and conference papers across <strong>autonomous driving</strong>, <strong>energy systems</strong>, <strong>legal AI</strong>, and <strong>urban sensing</strong>.</p>
+            <div class="chip-row">
+              <span class="chip">International journals</span>
+              <span class="chip">Domestic journals</span>
+              <span class="chip">International conferences</span>
+              <span class="chip">Domestic conferences</span>
+            </div>
+          </div>
+          <aside class="panel hero-visual">
+            <div class="eyebrow">Coverage</div>
+            <h2 style="margin:.45rem 0;">A fuller record from the CV</h2>
+            <p>The page now covers published and conference-track work in a clearer structure, rather than only a few selected highlights.</p>
+          </aside>
+        </section>
+
+        <section class="pub-summary" aria-label="Publication summary">
+          <article class="pub-summary-item">
+            <span>International Journals</span>
+            <strong>4 papers</strong>
+            <div>Including T-ITS, Applied Energy, AI and Law, and Electronics.</div>
+          </article>
+          <article class="pub-summary-item">
+            <span>Domestic Journals</span>
+            <strong>2 papers</strong>
+            <div>Focused on trustworthy driving and traffic-accident judgment prediction.</div>
+          </article>
+          <article class="pub-summary-item">
+            <span>International Conferences</span>
+            <strong>2 papers</strong>
+            <div>ITS World Congress and EurOMA 2026.</div>
+          </article>
+          <article class="pub-summary-item">
+            <span>Domestic Conferences</span>
+            <strong>4 papers</strong>
+            <div>Mobility, legal AI, urban sensing, and medical image segmentation.</div>
+          </article>
+        </section>
+
+        <section class="pub-section">
+          <div class="pub-section-head">
+            <div class="eyebrow">International Journals</div>
+            <h2>Journal papers with the broadest external visibility</h2>
+          </div>
+          <div class="pub-section-grid">
+            <article class="pub-item">
+              <h3>Anticipatory driving maneuver for safety and comfort: Temporal graph cross attention-based front vehicle trajectory prediction</h3>
+              <div class="meta">IEEE Transactions on Intelligent Transportation Systems (2026) | Hyunsik Min, Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh</div>
+              <p>A trajectory prediction framework for front-vehicle behavior with an emphasis on anticipatory motion reasoning, safety, and comfort in autonomous driving.</p>
+              <p class="pub-note">Q1 | Journal Impact Factor 8.4</p>
+              <div class="pub-image">
+                <img src="/assets/img/TGCA_model.png" alt="Trajectory prediction model diagram">
+              </div>
+            </article>
+
+            <article class="pub-item">
+              <h3>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</h3>
+              <div class="meta">Applied Energy, 391, 125848 (2025) | Hyunsik Min, Byeongjoon Noh</div>
+              <p>SolarNexus combines adaptive photovoltaic forecasting with scalable plant-level management for smart-grid operations.</p>
+              <p class="pub-note">Q1 | Journal Impact Factor 11.2 | Citation: 10</p>
+              <div class="pub-image">
+                <img src="/assets/img/SolarNexus_framework.png" alt="SolarNexus framework">
+              </div>
+            </article>
+
+            <article class="pub-item">
+              <h3>TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines</h3>
+              <div class="meta">Artificial Intelligence and Law (2025) | Hyunsik Min, Byeongjoon Noh</div>
+              <p>TRACS-LLM predicts sentencing outcomes in road traffic accident cases using legal text, structured case attributes, and language-model reasoning.</p>
+              <p class="pub-note">Q1 | Journal Impact Factor 3.1</p>
+              <div class="pub-image">
+                <img src="/assets/img/TRACM_LLM_framework.png" alt="TRACS-LLM framework">
+              </div>
+            </article>
+
+            <article class="pub-item">
+              <h3>SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea</h3>
+              <div class="meta">Electronics (2024) | Hyunsik Min, Seokjun Hong, Jeonghoon Song, Byeoungmin Son, Byeongjoon Noh, Jihoon Moon</div>
+              <p>A photovoltaic forecasting study centered on robust national-scale output prediction and operational usefulness.</p>
+              <p class="pub-note">Q2 | Journal Impact Factor 2.6 | Citation: 22</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="pub-section">
+          <div class="pub-section-head">
+            <div class="eyebrow">Domestic Journals</div>
+            <h2>Journal work rooted in transportation systems</h2>
+          </div>
+          <div class="pub-section-grid">
+            <article class="pub-item">
+              <h3>Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving</h3>
+              <div class="meta">The Journal of The Korea Institute of Intelligent Transport Systems (2025) | Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh</div>
+              <p>A domestic journal extension of the trajectory-prediction line with a stronger emphasis on trustworthy autonomous driving behavior.</p>
+            </article>
+
+            <article class="pub-item">
+              <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations</h3>
+              <div class="meta">Korean Society of Transportation (2024) | Hyunsik Min, Junyeong Yun, Byeongjoon Noh</div>
+              <p>A judgment prediction system for road traffic accidents centered on text-based legal and situational information.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="pub-section">
+          <div class="pub-section-head">
+            <div class="eyebrow">International Conferences</div>
+            <h2>Conference papers extending the portfolio outward</h2>
+          </div>
+          <div class="pub-section-grid">
+            <article class="pub-item">
+              <h3>COMFORT-CENTRIC TRAJECTORY PREDICTION FOR AUTONOMOUS DRIVING VIA TEMPORAL GRAPH CROSS ATTENTION</h3>
+              <div class="meta">ITS World Congress 2026 | Gangneung, South Korea | Oct. 19-23, 2026</div>
+              <p>A conference paper extending the trajectory prediction line toward comfort-centric autonomous driving.</p>
+            </article>
+
+            <article class="pub-item">
+              <h3>Theorising Service Routines through Ontological Granularity and Behavioural Sequencing</h3>
+              <div class="meta">EurOMA Annual Conference 2026 | Vienna, Austria | Jun. 27 - Jul. 2, 2026</div>
+              <p>A cross-domain conference paper that broadens the portfolio into operations and behavioral sequencing.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="pub-section">
+          <div class="pub-section-head">
+            <div class="eyebrow">Domestic Conferences</div>
+            <h2>Earlier conference work across sensing, legal AI, and segmentation</h2>
+          </div>
+          <div class="pub-section-grid">
+            <article class="pub-item">
+              <h3>Development of a Model for Traffic Noise Recognition and Classification in Urban Environments</h3>
+              <div class="meta">The Korea Society of Computer and Information Summer Conference 2024 | Jeju Island, Korea</div>
+              <p>An urban sensing study that later connected to award-winning early research output.</p>
+            </article>
+
+            <article class="pub-item">
+              <h3>LLM-based Traffic Accident Sentencing Prediction System</h3>
+              <div class="meta">The 2024 Korea Institute of ITS Fall Conference | Gangneung, Korea</div>
+              <p>A conference-stage version of the legal AI line for traffic accident sentencing prediction.</p>
+            </article>
+
+            <article class="pub-item">
+              <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents</h3>
+              <div class="meta">The 2024 Korea Institute of ITS Spring Conference | Jeju Island, Korea</div>
+              <p>An earlier conference presentation of the traffic-accident judgment prediction system.</p>
+            </article>
+
+            <article class="pub-item">
+              <h3>Tooth segmentation and identification method in panoramic radiographs using Mask R-CNN model</h3>
+              <div class="meta">The 4th Korea Artificial Intelligence Conference | Jeju Island, Korea | Sep. 2023</div>
+              <p>An earlier computer vision project focused on medical image segmentation and identification.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="site-shell">
+      <p><a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar profile</a></p>
+    </div>
+  </footer>
+
+  <div class="theme-switcher">
+    <label>Mode<select id="theme-mode-select"><option value="auto">Auto</option><option value="day">Day</option><option value="night">Night</option></select></label>
+    <label>TZ<select id="theme-tz-select"><option value="browser">Browser</option><option value="kst">Korea</option><option value="london">London</option></select></label>
+  </div>
+  <script src="/assets/site.js"></script>
+</body>
+</html>
