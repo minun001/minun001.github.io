@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/assets/site.css">
   <style>
     .about-page{display:grid;gap:1.1rem}
+    .about-name{white-space:nowrap}
     .about-hero-copy{display:grid;gap:1rem}
     .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem 1rem;margin-top:.25rem}
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
@@ -25,7 +26,7 @@
     .about-list li+li{margin-top:.55rem}
     .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
     body.theme-night .about-interest{background:rgba(255,255,255,.05)}
-    @media (max-width:760px){.about-meta,.about-interest-grid{grid-template-columns:1fr}}
+    @media (max-width:760px){.about-meta,.about-interest-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
   </style>
 </head>
 <body>
@@ -55,7 +56,7 @@
           <div class="panel identity-card about-hero-copy">
             <div>
               <div class="eyebrow">About</div>
-              <h1>Hyunsik Min</h1>
+              <h1 class="about-name">Hyunsik Min</h1>
               <div class="hero-subtitle">M.S. Candidate in Future Convergence Technology</div>
               <p class="hero-intro">I am a master's student at Soonchunhyang University and a research student in the Smart Autonomous &amp; Infrastructure Lab (SAIL), advised by <strong>Byeongjoon Noh</strong>. My work focuses on models that move beyond benchmarks and remain useful in practical settings.</p>
               <p class="hero-intro">Recent work spans trajectory prediction for autonomous driving, photovoltaic power forecasting, legal AI, and emerging foundation-model directions that support interpretable and trustworthy decision-making.</p>
