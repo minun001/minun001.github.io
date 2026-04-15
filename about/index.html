@@ -24,9 +24,13 @@
     .about-entry p{margin:0}
     .about-list{margin:0;padding-left:1.1rem}
     .about-list li+li{margin-top:.55rem}
+    .about-project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.2rem}
+    .about-project{padding-top:1rem;border-top:1px solid var(--border-soft)}
+    .about-project h3{margin-bottom:.25rem;font-size:1.08rem}
+    .about-project p{margin:0}
     .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
     body.theme-night .about-interest{background:rgba(255,255,255,.05)}
-    @media (max-width:760px){.about-meta,.about-interest-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
+    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
   </style>
 </head>
 <body>
@@ -168,14 +172,38 @@
           <article class="card section-card span-12">
             <div class="eyebrow">Projects & Grants</div>
             <h2>Research Programs and Grants</h2>
-            <ul class="about-list">
-              <li><strong>Emotional and Intelligence Child Care System Convergence Research Center (CRC)</strong> - Proposal Author &amp; Researcher, Sep. 2024 - Present. Supported through the National Research Foundation of Korea and the Ministry of Science and ICT.</li>
-              <li><strong>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</strong> - Proposal Author &amp; Researcher, Feb. 2025 - Present. Part of the BK21 graduate research program supported by the Ministry of Education, Korea.</li>
-              <li><strong>2nd DSC Planning Living Lab in 2024</strong> - Project Leader, Proposal Author &amp; Researcher, Aug. 2024 - Nov. 2024. Linked to the Daejeon-Sejong-Chungnam Regional Innovation Platform and Chungnam National University, Korea.</li>
-              <li><strong>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</strong> - Proposal Author &amp; Researcher, Jul. 2024 - Present. Connected to a KAIST-led program supported by MSIT and IITP.</li>
-              <li><strong>BK21 Overseas Training Program at Kingston University</strong> - Principal Investigator (PI) &amp; Lead Researcher, Dec. 2025 - Feb. 2026. Supported by the Ministry of Education, Korea.</li>
-              <li><strong>Integrated coordination technology for AI agent-based multi-domain safety monitoring</strong> - Proposal Author &amp; Researcher, Apr. 2026 - Present. Korea-based multi-domain safety monitoring program.</li>
-            </ul>
+            <div class="about-project-grid">
+              <article class="about-project">
+                <h3>Emotional and Intelligence Child Care System Convergence Research Center (CRC)</h3>
+                <p><em>Proposal Author &amp; Researcher | Sep. 2024 - Present</em></p>
+                <p>Supported by the National Research Foundation of Korea and the Ministry of Science and ICT, this program anchors speaker diarization and child-parent interaction analysis for emotionally aware care data.</p>
+              </article>
+              <article class="about-project">
+                <h3>2nd DSC Planning Living Lab in 2024</h3>
+                <p><em>Project Leader, Proposal Author &amp; Researcher | Aug. 2024 - Nov. 2024</em></p>
+                <p>Led planning work linked to the Daejeon-Sejong-Chungnam Regional Innovation Platform and Chungnam National University, shaping a field-connected living-lab program for regional innovation.</p>
+              </article>
+              <article class="about-project">
+                <h3>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</h3>
+                <p><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
+                <p>Part of the BK21 graduate research program supported by the Ministry of Education, Korea, connecting AIoT-energy convergence research with talent development and scalable forecasting workflows.</p>
+              </article>
+              <article class="about-project">
+                <h3>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</h3>
+                <p><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
+                <p>Joined the KAIST-led program supported by MSIT and IITP, contributing to metropolitan mobility simulation, prediction, and utilization research for next-generation urban transportation systems.</p>
+              </article>
+              <article class="about-project">
+                <h3>BK21 Overseas Training Program at Kingston University</h3>
+                <p><em>Principal Investigator (PI) &amp; Lead Researcher | Dec. 2025 - Feb. 2026</em></p>
+                <p>Served as the principal investigator and lead researcher for the UK-based overseas training program supported by the Ministry of Education, coordinating the research direction and execution.</p>
+              </article>
+              <article class="about-project">
+                <h3>Integrated coordination technology for AI agent-based multi-domain safety monitoring</h3>
+                <p><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
+                <p>Contributes to integrated coordination methods for AI agent-based safety monitoring across multiple domains, extending the portfolio toward real-world safety operations and agent orchestration.</p>
+              </article>
+            </div>
           </article>
 
           <article class="card section-card span-6">
