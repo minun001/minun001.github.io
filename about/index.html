@@ -1,1 +1,234 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>About | Hyunsik Min</title><meta name="description" content="About Hyunsik Min, an AI researcher working across autonomous driving, energy forecasting, and safety-aware AI systems."><link rel="stylesheet" href="/assets/site.css"></head><body><header class="site-header"><div class="site-shell"><a class="brand" href="/">Hyunsik Min</a><nav class="nav"><a href="/">Home</a><a class="is-active" href="/about/">About</a><a href="/publications/">Publications</a><a href="/news/">News</a></nav></div></header><main class="page"><div class="site-shell"><section class="photo-layout"><div class="panel photo-card"><img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min"><div class="photo-note"><div class="eyebrow">Research Identity</div>Building deployable AI systems across autonomous driving, energy forecasting, and safety-aware public applications.</div></div><div class="panel identity-card"><div><div class="eyebrow">About</div><h1>Hyunsik Min</h1><div class="hero-subtitle">AI Researcher | M.S. Candidate in Future Convergence Technology</div><p class="hero-intro">I work at the intersection of <strong>mobility intelligence</strong>, <strong>energy systems</strong>, and <strong>safety-oriented AI</strong>, with a focus on research that can move from papers into practical systems.</p></div><div class="chip-row"><span class="chip">Autonomous driving</span><span class="chip">Energy forecasting</span><span class="chip">Legal AI</span><span class="chip">Speaker diarization</span></div><div class="button-row"><a class="btn-soft" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a><a class="btn-soft" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a><a class="btn-soft" href="https://github.com/minun001" target="_blank" rel="noopener">GitHub</a><a class="btn-soft" href="mailto:minun001@sch.ac.kr">Email</a></div></div></section><section class="mini-grid"><article class="card mini-card"><div class="eyebrow">Current</div><h3>Graduate and national research programs</h3><p>M.S. Candidate at Soonchunhyang University and participating researcher in the <strong>BK21</strong> and <strong>NRF CRC</strong> programs.</p></article><article class="card mini-card"><div class="eyebrow">Output</div><h3>Early publication momentum</h3><p><strong>3 first-author SCI(E) papers</strong> form the current research core, including work in <strong>Applied Energy</strong> and <strong>Artificial Intelligence and Law</strong>.</p></article><article class="card mini-card"><div class="eyebrow">Direction</div><h3>Systems that work in practice</h3><p>The goal is to build AI that remains interpretable, reliable, and useful in operational environments beyond the lab.</p></article></section><section class="section-grid"><article class="card section-card span-12"><div class="eyebrow">Profile Summary</div><h2>Research shaped around infrastructure, decision support, and public value</h2><p>My research connects machine learning with transportation systems, energy operations, and public-facing AI. The recurring theme is translating strong models into systems that can support safer and more effective decisions.</p></article><article class="card section-card span-6"><div class="eyebrow">Education</div><h2>Academic Background</h2><ul><li><strong>M.S. in Future Convergence Technology</strong><br>Soonchunhyang University, Asan, Korea<br><em>Mar. 2025 - Present</em><br>Advisor: <strong>Prof. Byeongjoon Noh</strong></li><li><strong>B.Eng. in AI and Big Data</strong><br>Soonchunhyang University, Asan, Korea<br><em>Mar. 2021 - Feb. 2025</em><br>Undergraduate thesis: <strong>Temporal Graph Pattern Attention-based Vehicle Trajectory Prediction System: Toward Real-time Road Driving Information</strong></li></ul></article><article class="card section-card span-6"><div class="eyebrow">Projects</div><h2>Research Programs</h2><ul><li><strong>CRC - Emotionally Intelligent Childcare Convergence Research</strong><br>Participating Researcher, Sep. 2024 - Present</li><li><strong>BK21 - AIoT-Energy Convergence Technology</strong><br>Participating Researcher, Feb. 2025 - Present</li><li><strong>2nd DSC Planning Living Lab in 2024</strong><br>Project Leader, Aug. 2024 - Nov. 2024</li></ul></article><article class="card section-card span-6"><div class="eyebrow">Honors</div><h2>Awards</h2><ul><li>Outstanding Paper Award, The Korea Society of Computer and Information (Jul. 2024)</li><li>Grand Prize, 2024 Portfolio (Capstone) Competition (Nov. 2024)</li><li>Grand Prize, SW Convergence University Ideathon (Jun. 2024)</li><li>Grand Prize, 2023 Soonchunhyang SW Idea Contest (Dec. 2023)</li></ul></article><article class="card section-card span-6"><div class="eyebrow">Skills</div><h2>Tools</h2><div class="two-col"><div><p><strong>Programming</strong><br>Python, R, Java</p><p><strong>Modeling</strong><br>PyTorch, TensorFlow, Keras, scikit-learn</p></div><div><p><strong>Analysis</strong><br>NumPy, pandas, Matplotlib, Seaborn</p><p><strong>Visualization</strong><br>Tableau, NodeXL</p></div></div></article></section></div></main><footer class="footer"><div class="site-shell"><p>Email: <a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></p></div></footer><div class="theme-switcher"><label>Mode<select id="theme-mode-select"><option value="auto">Auto</option><option value="day">Day</option><option value="night">Night</option></select></label><label>TZ<select id="theme-tz-select"><option value="browser">Browser</option><option value="kst">Korea</option><option value="london">London</option></select></label></div><script src="/assets/site.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About | Hyunsik Min</title>
+  <meta name="description" content="About Hyunsik Min, including research interests, experience, projects, honors, and academic background.">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .about-page{display:grid;gap:1.1rem}
+    .about-hero-copy{display:grid;gap:1rem}
+    .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem 1rem;margin-top:.25rem}
+    .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
+    .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
+    .about-interest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:.35rem}
+    .about-interest{padding:1rem;border-radius:22px;background:rgba(255,255,255,.48);box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
+    .about-stack{display:grid;gap:.9rem}
+    .about-entry{padding-top:.9rem;border-top:1px solid var(--border-soft)}
+    .about-entry:first-child{padding-top:0;border-top:none}
+    .about-entry h3{margin-bottom:.2rem;font-size:1.08rem}
+    .about-entry p{margin:0}
+    .about-list{margin:0;padding-left:1.1rem}
+    .about-list li+li{margin-top:.55rem}
+    .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
+    body.theme-night .about-interest{background:rgba(255,255,255,.05)}
+    @media (max-width:760px){.about-meta,.about-interest-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-shell">
+      <a class="brand" href="/">Hyunsik Min</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a class="is-active" href="/about/">About</a>
+        <a href="/publications/">Publications</a>
+        <a href="/news/">News</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="site-shell">
+      <div class="about-page">
+        <section class="photo-layout">
+          <div class="panel photo-card">
+            <img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1920" height="2560" loading="eager" fetchpriority="high">
+            <div class="photo-note">
+              <div class="eyebrow">Research Identity</div>
+              Building deployable AI systems across autonomous driving, energy forecasting, and language-based decision support.
+            </div>
+          </div>
+          <div class="panel identity-card about-hero-copy">
+            <div>
+              <div class="eyebrow">About</div>
+              <h1>Hyunsik Min</h1>
+              <div class="hero-subtitle">M.S. Candidate in Future Convergence Technology</div>
+              <p class="hero-intro">I am a master's student at Soonchunhyang University and a research student in the Smart Autonomous &amp; Infrastructure Lab (SAIL), advised by <strong>Byeongjoon Noh</strong>. My work focuses on models that move beyond benchmarks and remain useful in practical settings.</p>
+              <p class="hero-intro">Recent work spans trajectory prediction for autonomous driving, photovoltaic power forecasting, legal AI, and emerging foundation-model directions that support interpretable and trustworthy decision-making.</p>
+            </div>
+            <dl class="about-meta">
+              <div>
+                <dt>Affiliation</dt>
+                <dd>SAIL, Soonchunhyang University</dd>
+              </div>
+              <div>
+                <dt>Email</dt>
+                <dd><a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></dd>
+              </div>
+              <div>
+                <dt>Phone</dt>
+                <dd>+82 10-2537-1382</dd>
+              </div>
+              <div>
+                <dt>Location</dt>
+                <dd>Asan, Republic of Korea</dd>
+              </div>
+            </dl>
+            <div class="chip-row">
+              <span class="chip">Autonomous driving</span>
+              <span class="chip">Time-series forecasting</span>
+              <span class="chip">Foundation models</span>
+              <span class="chip">Vision-language-action</span>
+            </div>
+            <div class="button-row">
+              <a class="btn-soft" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+              <a class="btn-soft" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
+              <a class="btn-soft" href="https://github.com/minun001" target="_blank" rel="noopener">GitHub</a>
+              <a class="btn-soft" href="https://minun001.github.io/" target="_blank" rel="noopener">Website</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="mini-grid">
+          <article class="card mini-card">
+            <div class="eyebrow">Current</div>
+            <h3>Graduate researcher at SAIL</h3>
+            <p>Research student at Smart Autonomous &amp; Infrastructure Lab since July 2023, with active work in trajectory prediction, VLM and VLA-adjacent systems, and practical AI deployment.</p>
+          </article>
+          <article class="card mini-card">
+            <div class="eyebrow">Output</div>
+            <h3>International journals, domestic journals, and conferences</h3>
+            <p>The CV now supports a broader publication story, including international journal papers, domestic journal papers, and conference papers across mobility, energy, and legal AI.</p>
+          </article>
+          <article class="card mini-card">
+            <div class="eyebrow">Scope</div>
+            <h3>Projects, grants, and honors</h3>
+            <p>Beyond papers, the record includes proposal authorship, funded research programs, overseas training, and multiple university and society-level awards.</p>
+          </article>
+        </section>
+
+        <section class="section-grid">
+          <article class="card section-card span-12">
+            <div class="eyebrow">Research Interests</div>
+            <h2>What should be visible on the site from the CV</h2>
+            <div class="about-interest-grid">
+              <div class="about-interest">
+                <h3>Foundation Models</h3>
+                <p>Human-centered explainability and trust for systems that can interpret and describe complex decision processes in natural language.</p>
+              </div>
+              <div class="about-interest">
+                <h3>Vision-Language-Action</h3>
+                <p>Models that combine perception, language understanding, and action so intelligent systems can interact more naturally in real environments.</p>
+              </div>
+              <div class="about-interest">
+                <h3>Autonomous Driving</h3>
+                <p>Trajectory prediction and decision-making under vehicle interaction and human behavior, with a focus on safety and social acceptance.</p>
+              </div>
+              <div class="about-interest">
+                <h3>Time-Series Forecasting</h3>
+                <p>Forecasting for urban and energy infrastructure, especially where long-term patterns and causal relationships matter in practice.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card section-card span-6">
+            <div class="eyebrow">Education</div>
+            <h2>Academic Background</h2>
+            <div class="about-stack">
+              <div class="about-entry">
+                <h3>M.S. in Future Convergence Technology</h3>
+                <p>Soonchunhyang University, Asan, Korea</p>
+                <p><em>Mar. 2025 - Present</em></p>
+                <p>Advisor: <strong>Byeongjoon Noh</strong></p>
+                <p class="about-mini-note">GPA: 4.42 / 4.5</p>
+              </div>
+              <div class="about-entry">
+                <h3>B.Eng. in AI and Big Data</h3>
+                <p>Soonchunhyang University, Asan, Korea</p>
+                <p><em>Mar. 2021 - Feb. 2025</em></p>
+                <p>Advisor: <strong>Byeongjoon Noh</strong></p>
+                <p class="about-mini-note">Thesis: <strong>Temporal Graph Pattern Attention-based Vehicle Trajectory Prediction System: Toward Real-time Road Driving Information</strong></p>
+                <p class="about-mini-note">GPA: 3.88 / 4.5</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card section-card span-6">
+            <div class="eyebrow">Experience</div>
+            <h2>Research Experience</h2>
+            <div class="about-stack">
+              <div class="about-entry">
+                <h3>Research Student, Smart Autonomous &amp; Infrastructure Lab</h3>
+                <p><em>Jul. 2023 - Present</em></p>
+                <p>Soonchunhyang University, Department of AI and Big Data</p>
+                <p class="about-mini-note">Current topics include vision-language-action systems, vision-language models, graph-based trajectory prediction, and object segmentation.</p>
+              </div>
+              <div class="about-entry">
+                <h3>Cross-domain portfolio building</h3>
+                <p>The CV shows a research path that now bridges autonomous driving, energy forecasting, legal AI, and explainable foundation-model directions rather than a single isolated topic.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card section-card span-12">
+            <div class="eyebrow">Projects & Grants</div>
+            <h2>Programs that should be surfaced more clearly</h2>
+            <ul class="about-list">
+              <li><strong>Emotional and Intelligence Child Care System Convergence Research Center (CRC)</strong> - Proposal Author &amp; Researcher, Sep. 2024 - Present.</li>
+              <li><strong>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</strong> - Proposal Author &amp; Researcher, Feb. 2025 - Present.</li>
+              <li><strong>2nd DSC Planning Living Lab in 2024</strong> - Project Leader, Proposal Author &amp; Researcher, Aug. 2024 - Nov. 2024.</li>
+              <li><strong>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</strong> - Proposal Author &amp; Researcher, Jul. 2024 - Present.</li>
+              <li><strong>BK21 Overseas Training Program at Kingston University</strong> - Principal Investigator &amp; Lead Researcher, Dec. 2025 - Feb. 2026.</li>
+              <li><strong>Integrated coordination technology for AI agent-based multi-domain safety monitoring</strong> - Proposal Author &amp; Researcher, Apr. 2026 - Present.</li>
+            </ul>
+          </article>
+
+          <article class="card section-card span-6">
+            <div class="eyebrow">Honors</div>
+            <h2>Selected Awards</h2>
+            <ul class="about-list">
+              <li>National Outstanding Scholarship in Science and Engineering, Korea (Dec. 2025)</li>
+              <li>Grand Prize, 2024 Portfolio (Capstone) Competition (Nov. 2024)</li>
+              <li>Silver Medal, 2024 SCHU AI-SW Festival (Nov. 2024)</li>
+              <li>Excellence Award, The 1st SW Convergence University Academic Festival (Nov. 2024)</li>
+              <li>Outstanding Paper Award, The Korea Society of Computer and Information (Jul. 2024)</li>
+              <li>Grand Prize, SW Convergence University Ideathon (Jun. 2024)</li>
+            </ul>
+          </article>
+
+          <article class="card section-card span-6">
+            <div class="eyebrow">Toolkit</div>
+            <h2>Technical Stack</h2>
+            <div class="two-col">
+              <div>
+                <p><strong>Programming</strong><br>Python, R, Java</p>
+                <p><strong>Modeling</strong><br>PyTorch, TensorFlow, Keras, scikit-learn</p>
+              </div>
+              <div>
+                <p><strong>Analysis</strong><br>NumPy, pandas, Matplotlib, Seaborn</p>
+                <p><strong>Visualization</strong><br>Tableau, NodeXL</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="site-shell">
+      <p>Email: <a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></p>
+    </div>
+  </footer>
+
+  <div class="theme-switcher">
+    <label>Mode<select id="theme-mode-select"><option value="auto">Auto</option><option value="day">Day</option><option value="night">Night</option></select></label>
+    <label>TZ<select id="theme-tz-select"><option value="browser">Browser</option><option value="kst">Korea</option><option value="london">London</option></select></label>
+  </div>
+  <script src="/assets/site.js"></script>
+</body>
+</html>
