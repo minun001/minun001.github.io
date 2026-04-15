@@ -8,10 +8,6 @@
   <link rel="stylesheet" href="/assets/site.css">
   <style>
     .news-page{display:grid;gap:1.4rem}
-    .news-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
-    .news-overview-item{padding:1rem 0 .15rem;border-top:1px solid var(--border-soft)}
-    .news-overview-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .news-overview-item strong{display:block;margin-bottom:.2rem;font-size:1.08rem}
     .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:1.25rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
     .news-featured article{padding-right:.6rem}
     .news-featured h3{margin-bottom:.35rem;font-size:1.18rem}
@@ -35,8 +31,8 @@
     .news-badge.program{background:rgba(148,163,184,.18)}
     body.theme-night .news-jump a{background:rgba(255,255,255,.05)}
     body.theme-night .timeline-item:after{box-shadow:0 0 0 6px rgba(96,165,250,.09)}
-    @media (max-width:980px){.news-overview,.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
-    @media (max-width:720px){.news-overview,.news-featured{grid-template-columns:1fr}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
+    @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
+    @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
   </style>
  </head>
 <body>
@@ -66,29 +62,6 @@
             <h2 style="margin:.45rem 0;">What is moving right now</h2>
             <p>The timeline now groups verified journal records, funded projects, overseas training, and upcoming 2026 conference milestones into a clearer yearly flow.</p>
           </aside>
-        </section>
-
-        <section class="news-overview" aria-label="News overview">
-          <article class="news-overview-item">
-            <span>Publication Arc</span>
-            <strong>4 scholarly updates</strong>
-            <div>Journal publications across energy, legal AI, and trajectory prediction.</div>
-          </article>
-          <article class="news-overview-item">
-            <span>Conference Path</span>
-            <strong>6 presentation milestones</strong>
-            <div>Domestic presentations now extending toward 2026 international venues.</div>
-          </article>
-          <article class="news-overview-item">
-            <span>Recognition</span>
-            <strong>6 award moments</strong>
-            <div>Scholarships, paper awards, and university-wide competition results.</div>
-          </article>
-          <article class="news-overview-item">
-            <span>Program Track</span>
-            <strong>6 active programs</strong>
-            <div>Research programs, collaborative projects, and overseas training experiences.</div>
-          </article>
         </section>
 
         <section class="news-featured" aria-label="Featured updates">

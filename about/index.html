@@ -14,6 +14,8 @@
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
+    .about-jump{display:flex;flex-wrap:wrap;gap:.7rem}
+    .about-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:rgba(255,255,255,.45);box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
     .about-interest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:.35rem}
     .about-interest{padding:1rem;border-radius:22px;background:rgba(255,255,255,.48);box-shadow:inset 0 0 0 1px var(--border-soft)}
     .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
@@ -23,6 +25,8 @@
     .about-entry h3{margin-bottom:.2rem;font-size:1.08rem}
     .about-entry p{margin:0}
     .about-list{margin:0;padding-left:1.1rem}
+    .about-list.two-col{columns:2;column-gap:1.6rem}
+    .about-list.two-col li{break-inside:avoid}
     .about-list li+li{margin-top:.55rem}
     .about-project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.2rem}
     .about-project{padding-top:1rem;border-top:1px solid var(--border-soft)}
@@ -30,8 +34,8 @@
     .about-project p{margin:0}
     .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
     .photo-card:after{display:none}
-    body.theme-night .about-interest{background:rgba(255,255,255,.05)}
-    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
+    body.theme-night .about-interest,body.theme-night .about-jump a{background:rgba(255,255,255,.05)}
+    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}.about-list.two-col{columns:1}}
   </style>
 </head>
 <body>
@@ -85,6 +89,14 @@
           </div>
         </section>
 
+        <nav class="about-jump" aria-label="Jump to profile section">
+          <a href="#profile-research">Research</a>
+          <a href="#profile-education">Education</a>
+          <a href="#profile-projects">Projects</a>
+          <a href="#profile-awards">Awards</a>
+          <a href="#profile-stack">Stack</a>
+        </nav>
+
         <section class="mini-grid">
           <article class="card mini-card">
             <div class="eyebrow">Current</div>
@@ -104,7 +116,7 @@
         </section>
 
         <section class="section-grid">
-          <article class="card section-card span-12">
+          <article class="card section-card span-12" id="profile-research">
             <div class="eyebrow">Research Interests</div>
             <h2>Research directions across the portfolio</h2>
             <div class="about-interest-grid">
@@ -127,7 +139,7 @@
             </div>
           </article>
 
-          <article class="card section-card span-6">
+          <article class="card section-card span-6" id="profile-education">
             <div class="eyebrow">Education</div>
             <h2>Academic Background</h2>
             <div class="about-stack">
@@ -166,7 +178,7 @@
             </div>
           </article>
 
-          <article class="card section-card span-12">
+          <article class="card section-card span-12" id="profile-projects">
             <div class="eyebrow">Projects & Grants</div>
             <h2>Research Programs and Grants</h2>
             <div class="about-project-grid">
@@ -203,10 +215,10 @@
             </div>
           </article>
 
-          <article class="card section-card span-6">
+          <article class="card section-card span-6" id="profile-awards">
             <div class="eyebrow">Honors</div>
             <h2>Selected Awards</h2>
-            <ul class="about-list">
+            <ul class="about-list two-col">
               <li>National Outstanding Scholarship in Science and Engineering, Korea (Dec. 2025)</li>
               <li>Grand Prize, 2024 Portfolio (Capstone) Competition, Soonchunhyang University SW Venture Startup Academy Center (Nov. 2024)</li>
               <li>Silver Medal, 2024 SCHU AI-SW Festival, Soonchunhyang University Department of AI and Big Data (Nov. 2024)</li>
@@ -219,7 +231,7 @@
             </ul>
           </article>
 
-          <article class="card section-card span-6">
+          <article class="card section-card span-6" id="profile-stack">
             <div class="eyebrow">Toolkit</div>
             <h2>Technical Stack</h2>
             <div class="two-col">
