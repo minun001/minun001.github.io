@@ -6,9 +6,12 @@
   <meta name="color-scheme" content="light">
   <title>Publications | Hyunsik Min</title>
   <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417i">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417j">
   <style>
     .publications-page{display:grid;gap:1.5rem}
+    .pub-lead-visual{gap:1rem}
+    .pub-lead-collage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+    .pub-lead-collage img{width:100%;aspect-ratio:1/1.06;object-fit:cover;border-radius:8px;box-shadow:var(--shadow-soft)}
     .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem}
     .pub-summary-item{padding:.9rem 0 .2rem;border-top:1px solid var(--border-soft)}
     .pub-summary-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -22,24 +25,14 @@
     .pub-section{display:grid;gap:1rem;scroll-margin-top:104px}
     .pub-section-head{display:grid;gap:.2rem;padding:1.2rem 0 0;border-top:1px solid var(--border-soft)}
     .pub-section-head h2{margin:0}
-    .pub-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}
-    .pub-item{display:grid;align-content:start;min-width:0}
+    .pub-section-grid{display:grid;grid-template-columns:1fr;gap:0;align-items:start}
+    .pub-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,230px);gap:.45rem 1.05rem;align-content:start;align-items:start;min-width:0;padding:1.25rem 0;border-top:1px solid var(--border-soft);background:transparent;border-radius:0;box-shadow:none;border-inline:none;border-bottom:none}
+    .pub-item:before{grid-column:1/-1;margin-bottom:.15rem}
     .pub-item h3{text-wrap:balance}
-    #international-journals .pub-section-grid{align-items:stretch}
-    #international-journals .pub-item{height:100%;grid-template-rows:auto auto auto auto 1fr auto}
-    #international-journals .pub-actions{margin-top:1rem}
-    #domestic-journals .pub-section-grid{align-items:stretch}
-    #domestic-journals .pub-item{height:100%;display:flex;flex-direction:column}
-    #domestic-journals .pub-actions{margin-top:auto;padding-top:1rem}
-    #international-conferences .pub-section-grid{align-items:stretch}
-    #international-conferences .pub-item{height:100%}
-    #domestic-conferences .pub-section-grid{align-items:stretch}
-    #domestic-conferences .pub-item{height:100%;display:flex;flex-direction:column}
-    #domestic-conferences .pub-actions{margin-top:auto;padding-top:1rem}
     .pub-note{margin:.2rem 0 0;color:var(--text-soft);font-size:.92rem}
     .pub-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.85rem}
     .pub-action{text-align:center}
-    .pub-image{display:flex;justify-content:center;align-items:center;max-width:min(100%,400px);margin:1rem auto 0;padding:.85rem;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .pub-image{grid-column:2;grid-row:2 / span 5;display:flex;justify-content:center;align-items:center;max-width:100%;margin:0;padding:.6rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .pub-image img{width:100%;max-height:220px;height:auto;object-fit:contain}
     .bibtex-modal[hidden]{display:none}
     .bibtex-modal{position:fixed;inset:0;z-index:40}
@@ -55,8 +48,8 @@
     .pub-summary{animation:riseIn .8s ease both}
     .pub-item p{max-width:32rem}
     .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-    @media (max-width:980px){.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
+    @media (max-width:980px){.pub-summary{grid-template-columns:1fr 1fr}}
+    @media (max-width:760px){.pub-lead-collage,.pub-summary{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-item{grid-template-columns:1fr}.pub-image{grid-column:1;grid-row:auto;margin-top:.55rem}}
   </style>
 </head>
 <body class="page-publications">
@@ -81,10 +74,15 @@
             <h1>Publications</h1>
             <p>This archive brings together journal and conference work across autonomous driving, energy forecasting, legal AI, and safety-oriented AI systems.</p>
           </div>
-          <aside class="page-lead-side">
+          <aside class="page-lead-side pub-lead-visual">
             <div class="eyebrow">Coverage</div>
             <strong>Searchable research record</strong>
             <p>Accepted journal work, published papers, conference presentations, and citation actions are organized as one readable archive.</p>
+            <div class="pub-lead-collage" aria-hidden="true">
+              <img src="/assets/img/SolarNexus_framework.png" alt="" loading="lazy">
+              <img src="/assets/img/TRACM_LLM_framework.png" alt="" loading="lazy">
+              <img src="/assets/img/electronics-13-02071-g002-550.jpg" alt="" loading="lazy">
+            </div>
           </aside>
         </section>
 
@@ -355,7 +353,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417i"></script>
+  <script src="/assets/site.js?v=20260417j"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var modal = document.getElementById('bibtex-modal');

@@ -361,9 +361,21 @@ body.page-profile .about-project {
 }
 
 body.page-profile .card {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 0.6rem 1.2rem;
   border-inline: none;
   border-bottom: none;
   padding-inline: 0;
+}
+
+body.page-profile .section-card > .eyebrow,
+body.page-profile .section-card > h2 {
+  grid-column: 1;
+}
+
+body.page-profile .section-card > *:not(.eyebrow):not(h2) {
+  grid-column: 2;
 }
 
 body.page-profile .about-interest,
@@ -714,6 +726,16 @@ body.theme-night .photo-note {
   .signal-grid,
   .two-col {
     grid-template-columns: 1fr;
+  }
+
+  body.page-profile .card {
+    grid-template-columns: 1fr;
+  }
+
+  body.page-profile .section-card > *,
+  body.page-profile .section-card > .eyebrow,
+  body.page-profile .section-card > h2 {
+    grid-column: 1;
   }
 
   body.page-home .page:before,
