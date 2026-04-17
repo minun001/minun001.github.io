@@ -6,32 +6,35 @@
   <meta name="color-scheme" content="light">
   <title>Hyunsik Min</title>
   <meta name="description" content="Hyunsik Min is an M.S. student in the Smart Autonomous &amp; Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417d">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417e">
   <style>
     .home-refresh{display:grid;gap:2.2rem;color:var(--text-body)}
-    .home-intro{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(360px,.84fr);gap:1.6rem;align-items:end}
-    .home-intro-copy{padding:0 0 .35rem;min-width:0;animation:riseIn .6s ease both}
-    .home-intro-kicker{display:inline-flex;align-items:center;gap:.5rem;color:var(--text-soft);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .home-intro-kicker::before{content:"";width:.52rem;height:.52rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
-    .home-intro-title{margin:1rem 0 .5rem;font-size:clamp(2.9rem,6vw,5.4rem);line-height:.91;white-space:nowrap}
-    .home-intro-subtitle{margin:0 0 1rem;color:var(--text-soft);font-size:.95rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .home-intro-copy p{max-width:38rem;margin:0 0 1rem}
-    .home-intro-copy p:last-of-type{margin-bottom:0}
-    .home-intro-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.15rem}
-    .home-intro-links a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:.78rem 1.05rem;border-radius:8px;font-weight:800;transition:transform .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease}
-    .home-intro-links a:hover{transform:translateY(-1px)}
-    .home-intro-primary{background:var(--text-title);color:#fff;box-shadow:0 16px 28px rgba(15,23,42,.14)}
-    .home-intro-secondary{background:rgba(255,255,255,.56);color:var(--text-title);box-shadow:inset 0 0 0 1px var(--border-soft)}
-    .home-intro-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem 1rem;margin:1.55rem 0 0}
-    .home-intro-meta div{padding-top:.85rem;border-top:1px solid var(--border-soft)}
-    .home-intro-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .home-intro-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
-    .home-intro-figure{padding:0;border:none;box-shadow:none;background:transparent;overflow:hidden;animation:riseIn .8s ease both}
-    .home-intro-photo-shell{aspect-ratio:4/5;overflow:hidden;border-radius:12px;background:#dbe4ef}
-    .home-intro-photo{width:100%;height:100%;object-fit:cover;object-position:center 18%}
-    .home-intro-caption{padding:1rem 0 0;border-top:1px solid var(--border-soft);margin-top:1rem}
-    .home-intro-caption strong{display:block;margin-bottom:.25rem;font-size:1rem}
-    .home-intro-caption p{margin:0;font-size:.92rem;color:var(--text-soft)}
+    .home-poster{position:relative;display:grid;align-items:end;min-height:min(74svh,760px);margin-inline:calc(50% - 50vw);overflow:hidden;animation:riseIn .65s ease both}
+    .home-poster-media,.home-poster-media img{position:absolute;inset:0;width:100%;height:100%}
+    .home-poster-media img{object-fit:cover;object-position:center 18%}
+    .home-poster:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,15,28,.82) 0%,rgba(8,15,28,.52) 42%,rgba(8,15,28,.16) 74%,rgba(8,15,28,.08) 100%)}
+    .home-poster:after{content:"";position:absolute;inset:auto 0 0;height:34%;background:linear-gradient(180deg,rgba(8,15,28,0) 0%,rgba(8,15,28,.36) 100%)}
+    .home-poster-shell{position:relative;z-index:2;width:min(1180px,calc(100% - 2rem));margin:0 auto;padding:3.75rem 0 2rem}
+    .home-poster-copy{max-width:40rem;color:#f8fbff}
+    .home-poster-kicker{display:inline-flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.78);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .home-poster-kicker::before{content:"";width:.52rem;height:.52rem;border-radius:999px;background:#8ab4ff}
+    .home-poster-title{margin:1rem 0 .55rem;color:#fff;font-size:clamp(3rem,6.6vw,6rem);line-height:.89}
+    .home-poster-subtitle{margin:0 0 1rem;color:rgba(255,255,255,.76);font-size:.98rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .home-poster-copy p{max-width:36rem;margin:0 0 1rem;color:rgba(248,251,255,.88)}
+    .home-poster-actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.25rem}
+    .home-poster-actions .home-intro-primary{background:#fff;color:#112033;box-shadow:none}
+    .home-poster-actions .home-intro-secondary{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+    .home-poster-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;margin-top:1.75rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.18)}
+    .home-poster-meta div{display:grid;gap:.2rem}
+    .home-poster-meta dt{margin:0;color:rgba(255,255,255,.62);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .home-poster-meta dd{margin:0;color:#fff;font-size:.98rem;font-weight:700}
+    .home-signal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;padding-top:.3rem}
+    .home-signal{padding-top:1rem;border-top:1px solid var(--border-soft)}
+    .home-signal span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .home-signal strong{display:block;margin-bottom:.25rem;font-size:1.15rem}
+    .home-interest-rail{display:grid;gap:.8rem;padding:1.2rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
+    .home-interest-list{display:flex;flex-wrap:wrap;gap:.85rem 1.2rem}
+    .home-interest-list span{color:var(--text-title);font-weight:700}
     .home-section{display:grid;gap:.8rem}
     .home-section h2{font-size:2rem;text-wrap:balance}
     .home-section p{max-width:52rem;margin:0}
@@ -57,10 +60,10 @@
     .home-plain-panel h3{margin-bottom:.35rem;font-size:1.2rem;text-wrap:balance}
     .home-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
     .home-links a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.72rem .98rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800}
-    @media (max-width:1040px){.home-intro,.home-dual{grid-template-columns:1fr}.home-intro-copy{padding-top:0}.home-intro-figure{max-width:620px}}
-    @media (max-width:960px){.home-spotlight-grid{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.home-intro-meta,.home-facts,.home-spotlight-grid{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
-    @media (max-width:640px){.home-intro-title{font-size:clamp(2.05rem,11vw,3rem)}.home-intro-links a,.home-links a{width:100%}.home-intro-meta,.home-facts,.home-spotlight-grid{grid-template-columns:1fr}.home-intro-figure{padding:.8rem}.home-intro-photo-shell{aspect-ratio:4/5}}
+    @media (max-width:1040px){.home-dual{grid-template-columns:1fr}}
+    @media (max-width:960px){.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:760px){.home-poster{min-height:640px}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
+    @media (max-width:640px){.home-poster-shell{padding:3rem 0 1.4rem}.home-poster-title{font-size:clamp(2.4rem,12vw,3.7rem)}.home-poster-actions a,.home-poster-actions button,.home-links a{width:100%}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -79,61 +82,69 @@
   <main class="page">
     <div class="site-shell">
       <div class="home-refresh">
-        <section class="home-intro">
-          <div class="home-intro-copy">
-            <div class="home-intro-kicker">Profile</div>
-            <h1 class="home-intro-title">Hyunsik Min</h1>
-            <p class="home-intro-subtitle">M.S. Student in Future Convergence Technology at Soonchunhyang University</p>
-            <p>I am an M.S. student in the Smart Autonomous &amp; Infrastructure Lab (SAIL) at Soonchunhyang University, advised by Byeongjoon Noh. My work focuses on practical AI systems built for real use rather than isolated benchmarks.</p>
-            <p>Recent research centers on VLA, trajectory prediction, energy forecasting, legal AI, and safety monitoring.</p>
-            <div class="home-intro-links">
-              <a class="home-intro-primary" href="/publications/">Selected Publications</a>
-              <a class="home-intro-secondary" href="/profile/">Full Profile</a>
-              <a class="home-intro-secondary" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
-            </div>
-            <dl class="home-intro-meta">
-              <div>
-                <dt>Affiliation</dt>
-                <dd>SAIL, Soonchunhyang University</dd>
-              </div>
-              <div>
-                <dt>Email</dt>
-                <dd><a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></dd>
-              </div>
-              <div>
-                <dt>Research</dt>
-                <dd>VLA, Safety Monitoring, Legal AI</dd>
-              </div>
-              <div>
-                <dt>Location</dt>
-                <dd>Asan, Republic of Korea</dd>
-              </div>
-            </dl>
+        <section class="home-poster">
+          <div class="home-poster-media">
+            <img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Portrait of Hyunsik Min" width="1920" height="2560" loading="eager" fetchpriority="high">
           </div>
-          <aside class="panel home-intro-figure">
-            <div class="home-intro-photo-shell">
-              <img class="home-intro-photo" src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Portrait of Hyunsik Min" width="1920" height="2560" loading="eager" fetchpriority="high">
+          <div class="home-poster-shell">
+            <div class="home-poster-copy">
+              <div class="home-poster-kicker">Profile</div>
+              <h1 class="home-poster-title">Hyunsik Min</h1>
+              <p class="home-poster-subtitle">M.S. Student in Future Convergence Technology at Soonchunhyang University</p>
+              <p>I build practical AI systems for mobility, energy, and decision support, with current work centered on VLA, trajectory prediction, legal AI, and safety monitoring.</p>
+              <div class="home-poster-actions">
+                <a class="home-intro-primary" href="/publications/">Selected Publications</a>
+                <a class="home-intro-secondary" href="/profile/">Full Profile</a>
+                <a class="home-intro-secondary" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
+                <button class="home-intro-secondary" type="button" data-copy-email="minun001@sch.ac.kr" data-copy-label="Copy Email">Copy Email</button>
+              </div>
+              <dl class="home-poster-meta">
+                <div>
+                  <dt>Affiliation</dt>
+                  <dd>SAIL, Soonchunhyang University</dd>
+                </div>
+                <div>
+                  <dt>Current Focus</dt>
+                  <dd>VLA and Safety Monitoring</dd>
+                </div>
+                <div>
+                  <dt>Location</dt>
+                  <dd>Asan, Republic of Korea</dd>
+                </div>
+              </dl>
             </div>
-            <div class="home-intro-caption">
-              <strong>Research Interests</strong>
-              <p>Foundation Models, VLA, Autonomous Driving, Generative AI, and Time Series Forecasting.</p>
-            </div>
-          </aside>
+          </div>
         </section>
 
         <section class="home-section">
-          <div class="eyebrow">Current Work</div>
-          <div class="home-facts">
-            <div class="home-fact">
-              <span class="home-fact-label">Embodied AI</span>
-              <strong>VLA</strong>
-              <div>Developing vision-language-action research directions that connect perception, reasoning, and action for practical autonomous systems.</div>
-            </div>
-            <div class="home-fact">
-              <span class="home-fact-label">Systems</span>
-              <strong>Safety monitoring</strong>
-              <div>Building deployable monitoring workflows that support risk-aware operation, multi-agent collaboration, and reliable decision support in real environments.</div>
-            </div>
+          <div class="eyebrow">At a Glance</div>
+          <div class="home-signal-grid">
+            <article class="home-signal">
+              <span>Current Work</span>
+              <strong>VLA and Safety Monitoring</strong>
+              <div>Developing vision-language-action research and deployable monitoring workflows for real operational settings.</div>
+            </article>
+            <article class="home-signal">
+              <span>Latest Journal Line</span>
+              <strong>IEEE T-ITS trajectory prediction</strong>
+              <div>Front-vehicle trajectory prediction is now part of an accepted international journal record in intelligent transportation.</div>
+            </article>
+            <article class="home-signal">
+              <span>Upcoming Presentation</span>
+              <strong>ITS World Congress 2026</strong>
+              <div>The mobility line is scheduled for presentation in Gangneung, extending the work to a broader transportation audience.</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="home-interest-rail">
+          <div class="eyebrow">Research Interests</div>
+          <div class="home-interest-list">
+            <span>Foundation Models</span>
+            <span>VLA</span>
+            <span>Autonomous Driving</span>
+            <span>Generative AI</span>
+            <span>Time Series Forecasting</span>
           </div>
         </section>
 
@@ -212,6 +223,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417c"></script>
+  <script src="/assets/site.js?v=20260417e"></script>
 </body>
 </html>
