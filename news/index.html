@@ -7,13 +7,14 @@
   <meta name="description" content="A running timeline of publications, awards, research projects, and portfolio milestones.">
   <link rel="stylesheet" href="/assets/site.css">
   <style>
-    .news-page{display:grid;gap:1.4rem}
-    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:1.25rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
-    .news-featured article{padding-right:.6rem}
+    .news-page{display:grid;gap:1.2rem}
+    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:1.1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
+    .news-featured article{padding-right:1rem;border-right:1px solid var(--border-soft)}
+    .news-featured article:last-child{padding-right:0;border-right:none}
     .news-featured h3{margin-bottom:.35rem;font-size:1.18rem}
     .news-featured p{margin:0}
     .news-jump{display:flex;flex-wrap:wrap;gap:.65rem}
-    .news-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:rgba(255,255,255,.45);box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
+    .news-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
     .news-year{display:grid;grid-template-columns:120px minmax(0,1fr);gap:1.4rem;align-items:start;scroll-margin-top:104px}
     .news-year-head{position:sticky;top:96px;padding-top:.4rem}
     .news-year-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -24,15 +25,15 @@
     .timeline-item:after{content:"";position:absolute;left:-1.28rem;top:1.45rem;width:.72rem;height:.72rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 6px rgba(29,78,216,.08)}
     .news-meta-row{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;margin-bottom:.7rem}
     .news-date{color:var(--text-soft);font-size:.92rem}
-    .news-badge{display:inline-flex;align-items:center;min-height:28px;padding:.3rem .62rem;border-radius:999px;color:var(--text-title);font-size:.78rem;font-weight:800}
+    .news-badge{display:inline-flex;align-items:center;min-height:28px;padding:.3rem .62rem;border-radius:8px;color:var(--text-title);font-size:.78rem;font-weight:800}
     .news-badge.conference{background:rgba(29,78,216,.1)}
     .news-badge.journal{background:rgba(16,185,129,.12)}
     .news-badge.award{background:rgba(245,158,11,.16)}
     .news-badge.project{background:rgba(148,163,184,.18)}
     body.theme-night .news-jump a{background:rgba(255,255,255,.05)}
     body.theme-night .timeline-item:after{box-shadow:0 0 0 6px rgba(96,165,250,.09)}
-    @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
-    @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
+    @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
+    @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
   </style>
  </head>
 <body>
@@ -55,12 +56,12 @@
           <div class="panel page-title">
             <div class="eyebrow">Milestones</div>
             <h1>News</h1>
-            <p>A running timeline of <strong>publications</strong>, <strong>awards</strong>, <strong>research projects</strong>, and portfolio milestones that define the current arc of my work.</p>
+            <p>A running timeline of publications, awards, projects, and portfolio milestones that define the current arc of my work.</p>
           </div>
           <aside class="panel hero-visual">
             <div class="eyebrow">Current momentum</div>
-            <h2 style="margin:.45rem 0;">What is moving right now</h2>
-            <p>The timeline now groups verified journal records, funded projects, overseas training, and upcoming 2026 conference milestones into a clearer yearly flow.</p>
+            <h2 style="margin:.45rem 0;">Current snapshot</h2>
+            <p>The timeline groups journal records, funded projects, overseas training, and upcoming 2026 conference milestones in one yearly flow.</p>
           </aside>
         </section>
 
@@ -111,7 +112,7 @@
             <article class="timeline-item">
               <h3>AI Agent-based Multi-domain Safety Monitoring Project</h3>
               <div class="news-meta-row"><span class="news-date">Apr. 2026 - Present</span><span class="news-badge project">Project</span></div>
-              <p>Contributing coordination methods for AI agent-based safety monitoring in safety-critical, multi-domain operational settings.</p>
+              <p>Contributing coordination methods for AI agent-based safety monitoring in multi-domain operational settings.</p>
             </article>
           </div>
         </section>
@@ -164,7 +165,7 @@
             <article class="timeline-item">
               <h3>BK21 AIoT-Energy Project</h3>
               <div class="news-meta-row"><span class="news-date">Feb. 2025 - Present</span><span class="news-badge project">Project</span></div>
-              <p>Contributing to the BK21 AIoT-energy project on regional innovation talent development, with work centered on scalable forecasting and energy-system research.</p>
+              <p>Contributing to the BK21 AIoT-energy project with work centered on scalable forecasting and energy-system research.</p>
             </article>
           </div>
         </section>

@@ -16,8 +16,8 @@
     .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
     .about-jump{display:flex;flex-wrap:wrap;gap:.7rem}
     .about-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:rgba(255,255,255,.45);box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
-    .about-interest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:.35rem}
-    .about-interest{padding:1rem;border-radius:22px;background:rgba(255,255,255,.48);box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .about-interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:.35rem}
+    .about-interest{padding:1rem;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
     .about-stack{display:grid;gap:.9rem}
     .about-entry{padding-top:.9rem;border-top:1px solid var(--border-soft)}
@@ -28,13 +28,13 @@
     .about-list.two-col{columns:2;column-gap:1.6rem}
     .about-list.two-col li{break-inside:avoid}
     .about-list li+li{margin-top:.55rem}
-    .about-project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.2rem}
-    .about-project{padding-top:1rem;border-top:1px solid var(--border-soft)}
+    .about-project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem 1.2rem}
+    .about-project{padding:1rem;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);border-top:none}
     .about-project h3{margin-bottom:.25rem;font-size:1.08rem}
     .about-project p{margin:0}
     .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
     .photo-card:after{display:none}
-    body.theme-night .about-interest,body.theme-night .about-jump a{background:rgba(255,255,255,.05)}
+    body.theme-night .about-interest,body.theme-night .about-jump a,body.theme-night .about-project{background:rgba(255,255,255,.05)}
     @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}.about-list.two-col{columns:1}}
   </style>
 </head>
@@ -63,8 +63,8 @@
               <div class="eyebrow">Profile</div>
               <h1 class="about-name">Hyunsik Min</h1>
               <div class="hero-subtitle">M.S. Candidate in Future Convergence Technology</div>
-              <p class="hero-intro">I am an M.S. student at Soonchunhyang University and a graduate researcher in the Smart Autonomous &amp; Infrastructure Lab (SAIL), advised by <strong>Byeongjoon Noh</strong>. My work focuses on models that move beyond benchmarks and remain useful in practical settings.</p>
-              <p class="hero-intro">Recent work spans trajectory prediction for autonomous driving, photovoltaic power forecasting, legal AI, and foundation-model research for interpretable and trustworthy decision support.</p>
+              <p class="hero-intro">I am an M.S. student at Soonchunhyang University and a graduate researcher in the Smart Autonomous &amp; Infrastructure Lab (SAIL), advised by <strong>Byeongjoon Noh</strong>.</p>
+              <p class="hero-intro">My recent work spans trajectory prediction, photovoltaic forecasting, legal AI, and foundation-model research for interpretable decision support.</p>
             </div>
             <dl class="about-meta">
               <div>
@@ -155,11 +155,11 @@
                 <h3>Graduate Researcher, Smart Autonomous &amp; Infrastructure Lab</h3>
                 <p><em>Jul. 2023 - Present</em></p>
                 <p>Soonchunhyang University, Department of AI and Big Data</p>
-                <p class="about-mini-note">Current topics include vision-language-action systems, vision-language models, graph-based trajectory prediction, and object segmentation.</p>
+                <p class="about-mini-note">Current topics include vision-language-action systems, graph-based trajectory prediction, safety monitoring, and segmentation workflows.</p>
               </div>
               <div class="about-entry">
                 <h3>Cross-domain research trajectory</h3>
-                <p>My research now connects autonomous driving, energy forecasting, legal AI, and explainable foundation-model research rather than staying within a single isolated topic.</p>
+                <p>My work now connects autonomous driving, energy forecasting, legal AI, and explainable foundation-model research within one practical research arc.</p>
               </div>
             </div>
           </article>
@@ -196,7 +196,7 @@
               <article class="about-project">
                 <h3>Integrated coordination technology for AI agent-based multi-domain safety monitoring</h3>
                 <p><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
-                <p>This project develops integrated coordination methods for AI agent-based safety monitoring across multiple domains and real-world safety operations.</p>
+                <p>This project develops integrated coordination methods for AI agent-based safety monitoring across multiple domains and real-world operations.</p>
               </article>
             </div>
           </article>
