@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>News | Hyunsik Min</title>
   <meta name="description" content="A running timeline of publications, awards, research projects, and portfolio milestones.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417e">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417f">
   <style>
     .news-page{display:grid;gap:1.5rem}
     .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;padding:1.35rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .8s ease both}
@@ -14,6 +14,9 @@
     .news-featured article:last-child{padding-right:0;border-right:none}
     .news-featured h3{margin-bottom:.35rem;font-size:1.28rem}
     .news-featured p{margin:0}
+    .news-filter{display:flex;flex-wrap:wrap;gap:.65rem;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
+    .news-filter button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:.65rem .9rem;border:none;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-title);font-weight:800;cursor:pointer}
+    .news-filter button.is-active{background:var(--text-title);color:#fff;box-shadow:none}
     .news-jump{display:flex;flex-wrap:wrap;gap:.65rem}
     .news-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
     .news-year{display:grid;grid-template-columns:120px minmax(0,1fr);gap:1.4rem;align-items:start;scroll-margin-top:104px}
@@ -32,6 +35,7 @@
     .news-badge.award{background:rgba(245,158,11,.16)}
     .news-badge.project{background:rgba(148,163,184,.18)}
     .page-title,.hero-visual{animation:riseIn .6s ease both}
+    .news-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
     @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
     @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
   </style>
@@ -51,7 +55,7 @@
 
   <main class="page">
     <div class="site-shell">
-      <div class="news-page">
+      <div class="news-page" data-news-root>
         <section class="hero">
           <div class="panel page-title">
             <div class="eyebrow">Milestones</div>
@@ -83,6 +87,14 @@
           </article>
         </section>
 
+        <section class="news-filter" aria-label="Filter news by type">
+          <button type="button" class="is-active" data-news-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-news-filter="journal" aria-pressed="false">Journals</button>
+          <button type="button" data-news-filter="conference" aria-pressed="false">Conferences</button>
+          <button type="button" data-news-filter="project" aria-pressed="false">Projects</button>
+          <button type="button" data-news-filter="award" aria-pressed="false">Awards</button>
+        </section>
+
         <nav class="news-jump" aria-label="Jump to year">
           <a href="#news-2026">2026</a>
           <a href="#news-2025">2025</a>
@@ -91,25 +103,25 @@
           <a href="#news-2021">2021</a>
         </nav>
 
-        <section class="news-year" id="news-2026">
+        <section class="news-year" id="news-2026" data-news-year>
           <div class="news-year-head">
             <span>Year</span>
             <h2>2026</h2>
           </div>
           <div class="news-timeline">
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="conference">
               <h3>ITS World Congress 2026 Scheduled Presentation</h3>
               <div class="news-meta-row"><span class="news-date">Oct. 19-23, 2026</span><span class="news-badge conference">Conference</span></div>
               <p><em>COMFORT-CENTRIC TRAJECTORY PREDICTION FOR AUTONOMOUS DRIVING VIA TEMPORAL GRAPH CROSS ATTENTION</em> is scheduled for presentation at ITS World Congress 2026 in Gangneung, South Korea.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="conference">
               <h3>EurOMA 2026 Scheduled Presentation</h3>
               <div class="news-meta-row"><span class="news-date">Jun. 27 - Jul. 2, 2026</span><span class="news-badge conference">Conference</span></div>
               <p><em>Theorising Service Routines through Ontological Granularity and Behavioural Sequencing</em> is scheduled for presentation at the 2026 EurOMA Annual Conference in Vienna, Austria.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="project">
               <h3>AI Agent-based Multi-domain Safety Monitoring Project</h3>
               <div class="news-meta-row"><span class="news-date">Apr. 2026 - Present</span><span class="news-badge project">Project</span></div>
               <p>Contributing coordination methods for AI agent-based safety monitoring in multi-domain operational settings.</p>
@@ -117,13 +129,13 @@
           </div>
         </section>
 
-        <section class="news-year" id="news-2025">
+        <section class="news-year" id="news-2025" data-news-year>
           <div class="news-year-head">
             <span>Year</span>
             <h2>2025</h2>
           </div>
           <div class="news-timeline">
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="journal">
               <h3>IEEE T-ITS Acceptance for Trajectory Prediction Paper</h3>
               <div class="news-meta-row"><span class="news-date">2025</span><span class="news-badge journal">Journal</span></div>
               <p><em>Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction</em> was accepted by <strong>IEEE Transactions on Intelligent Transportation Systems</strong>.</p>
@@ -132,19 +144,19 @@
               </div>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>National Outstanding Scholarship in Science and Engineering</h3>
               <div class="news-meta-row"><span class="news-date">Dec. 2025</span><span class="news-badge award">Award</span></div>
               <p>Selected for the national outstanding scholarship in science and engineering in Korea.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="project">
               <h3>BK21 Overseas Training Project at Kingston University</h3>
               <div class="news-meta-row"><span class="news-date">Dec. 2025 - Feb. 2026</span><span class="news-badge project">Project</span></div>
               <p>Served as principal investigator and lead researcher in the BK21 overseas training project at Kingston University, supported by the Ministry of Education, Korea.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="journal">
               <h3>Applied Energy Journal Publication on SolarNexus</h3>
               <div class="news-meta-row"><span class="news-date">Aug. 2025</span><span class="news-badge journal">Journal</span></div>
               <p><em>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</em> was published in <strong>Applied Energy</strong>, Volume 391, Article 125848.</p>
@@ -153,7 +165,7 @@
               </div>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="journal">
               <h3>Artificial Intelligence and Law Online Publication of TRACS-LLM</h3>
               <div class="news-meta-row"><span class="news-date">Jul. 23, 2025</span><span class="news-badge journal">Journal</span></div>
               <p><em>TRACS-LLM: LLM-based traffic accident criminal sentencing prediction focusing on imprisonment, probation, and fines</em> was first published online in <strong>Artificial Intelligence and Law</strong> on July 23, 2025.</p>
@@ -162,7 +174,7 @@
               </div>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="project">
               <h3>BK21 AIoT-Energy Project</h3>
               <div class="news-meta-row"><span class="news-date">Feb. 2025 - Present</span><span class="news-badge project">Project</span></div>
               <p>Contributing to the BK21 AIoT-energy project with work centered on scalable forecasting and energy-system research.</p>
@@ -170,55 +182,55 @@
           </div>
         </section>
 
-        <section class="news-year" id="news-2024">
+        <section class="news-year" id="news-2024" data-news-year>
           <div class="news-year-head">
             <span>Year</span>
             <h2>2024</h2>
           </div>
           <div class="news-timeline">
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>SCHU Portfolio and AI-SW Festival Awards</h3>
               <div class="news-meta-row"><span class="news-date">Nov. 2024</span><span class="news-badge award">Award</span></div>
               <p>Received the 2024 Portfolio Competition Grand Prize, SCHU AI-SW Festival Silver Medal, SW Idea Contest Special Prize, and Excellence Award at the SW Convergence University Academic Festival.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="project">
               <h3>CRC Child Care Interaction Analysis Project</h3>
               <div class="news-meta-row"><span class="news-date">Sep. 2024 - Present</span><span class="news-badge project">Project</span></div>
               <p>Contributing speaker diarization and interaction-analysis workflows for child-parent data within the CRC child care research project.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="project">
               <h3>DSC Planning Living Lab Project</h3>
               <div class="news-meta-row"><span class="news-date">Aug. 2024 - Nov. 2024</span><span class="news-badge project">Project</span></div>
               <p>Led planning, proposal, and research work for the 2024 DSC Planning Living Lab project linked to the DSC Regional Innovation Platform and Chungnam National University.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="conference">
               <h3>KSCI Summer Conference Presentation on Urban Traffic Noise</h3>
               <div class="news-meta-row"><span class="news-date">Jul. 2024</span><span class="news-badge conference">Conference</span></div>
               <p>Presented <em>Development of a Model for Traffic Noise Recognition and Classification in Urban Environments</em> at the Korea Society of Computer and Information Summer Conference in Jeju.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>Outstanding Paper Award at KSCI Summer Conference</h3>
               <div class="news-meta-row"><span class="news-date">Jul. 2024</span><span class="news-badge award">Award</span></div>
               <p>The urban traffic noise study received the Outstanding Paper Award from the Korea Society of Computer and Information.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="project">
               <h3>Metropolitan Mobility Simulation and Prediction Project</h3>
               <div class="news-meta-row"><span class="news-date">Jul. 2024 - Present</span><span class="news-badge project">Project</span></div>
               <p>Contributing to a KAIST-led project on next-generation mobility simulation, prediction, and utilization for metropolitan transportation systems.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>SW Convergence University Ideathon Award</h3>
               <div class="news-meta-row"><span class="news-date">Jun. 2024</span><span class="news-badge award">Award</span></div>
               <p>Received the grand prize at the SW Convergence University Ideathon.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="journal">
               <h3>Electronics Journal Publication on SolarFlux Predictor</h3>
               <div class="news-meta-row"><span class="news-date">May 27, 2024</span><span class="news-badge journal">Journal</span></div>
               <p><em>SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea</em> was first published online in <strong>Electronics</strong> on May 27, 2024, later appearing as Volume 13, Issue 11, Article 2071.</p>
@@ -227,13 +239,13 @@
               </div>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="conference">
               <h3>Korea ITS Fall Conference Presentation on Traffic Sentencing Prediction</h3>
               <div class="news-meta-row"><span class="news-date">Apr. 2024</span><span class="news-badge conference">Conference</span></div>
               <p>Presented <em>LLM-based Traffic Accident Sentencing Prediction System</em> at the 2024 Korea Institute of ITS Fall Conference in Gangneung.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="conference">
               <h3>Korea ITS Spring Conference Presentation on Road Traffic Judgment Prediction</h3>
               <div class="news-meta-row"><span class="news-date">Apr. 2024</span><span class="news-badge conference">Conference</span></div>
               <p>Presented <em>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents</em> at the 2024 Korea Institute of ITS Spring Conference in Jeju.</p>
@@ -241,19 +253,19 @@
           </div>
         </section>
 
-        <section class="news-year" id="news-2023">
+        <section class="news-year" id="news-2023" data-news-year>
           <div class="news-year-head">
             <span>Year</span>
             <h2>2023</h2>
           </div>
           <div class="news-timeline">
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>2023 SW Idea Contest Award</h3>
               <div class="news-meta-row"><span class="news-date">Dec. 2023</span><span class="news-badge award">Award</span></div>
               <p>Received the grand prize at the 2023 Soonchunhyang SW Idea Contest supported by the Information and Communication Planning and Evaluation Agency and the Ministry of Science and ICT.</p>
             </article>
 
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="conference">
               <h3>Korea Artificial Intelligence Conference Presentation on Tooth Segmentation</h3>
               <div class="news-meta-row"><span class="news-date">Sep. 2023</span><span class="news-badge conference">Conference</span></div>
               <p>Presented <em>Tooth segmentation and identification method in panoramic radiographs using Mask R-CNN model</em> at the 4th Korea Artificial Intelligence Conference in Jeju.</p>
@@ -261,19 +273,21 @@
           </div>
         </section>
 
-        <section class="news-year" id="news-2021">
+        <section class="news-year" id="news-2021" data-news-year>
           <div class="news-year-head">
             <span>Year</span>
             <h2>2021</h2>
           </div>
           <div class="news-timeline">
-            <article class="timeline-item">
+            <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>Big Data Analytics and Development Contest Recognition</h3>
               <div class="news-meta-row"><span class="news-date">Dec. 2021</span><span class="news-badge award">Award</span></div>
               <p>Received the Encouragement Award at the 5th Big Data Analytics and Development Contest.</p>
             </article>
           </div>
         </section>
+
+        <p class="news-empty" data-news-empty hidden>No timeline item matched that filter.</p>
       </div>
     </div>
   </main>
@@ -284,6 +298,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417e"></script>
+  <script src="/assets/site.js?v=20260417f"></script>
 </body>
 </html>

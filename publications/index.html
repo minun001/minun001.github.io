@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Publications | Hyunsik Min</title>
   <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417e">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417f">
   <style>
     .publications-page{display:grid;gap:1.5rem}
     .pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.85rem}
@@ -16,6 +16,12 @@
     .pub-summary-item{padding:.9rem 0 .2rem;border-top:1px solid var(--border-soft)}
     .pub-summary-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .pub-summary-item strong{display:block;margin-bottom:.15rem;font-size:1.8rem;line-height:1}
+    .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .9s ease both}
+    .pub-search{display:flex;align-items:center;gap:.75rem;min-height:50px;padding:0 .95rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
+    .pub-search span{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+    .pub-search input{width:100%;border:none;background:transparent;color:var(--text-title);font:600 .98rem/1.4 var(--font-body)}
+    .pub-search input:focus{outline:none}
+    .pub-tool-meta{display:flex;align-items:center;gap:.7rem;justify-content:flex-end;color:var(--text-soft);font-size:.9rem}
     .pub-section{display:grid;gap:1rem;scroll-margin-top:104px}
     .pub-section-head{display:grid;gap:.2rem;padding:1.2rem 0 0;border-top:1px solid var(--border-soft)}
     .pub-section-head h2{margin:0}
@@ -52,8 +58,9 @@
     .page-title,.hero-visual{animation:riseIn .6s ease both}
     .pub-summary{animation:riseIn .8s ease both}
     .pub-item p{max-width:32rem}
+    .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
     @media (max-width:980px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
+    @media (max-width:760px){.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -71,7 +78,7 @@
 
   <main class="page">
     <div class="site-shell">
-      <div class="publications-page">
+      <div class="publications-page" data-publications-root>
         <section class="hero">
           <div class="panel page-title">
             <div class="eyebrow">Research Archive</div>
@@ -108,6 +115,17 @@
           </article>
         </section>
 
+        <section class="pub-tools" aria-label="Publication tools">
+          <label class="pub-search">
+            <span>Search</span>
+            <input type="search" placeholder="Find papers by topic, title, or venue" data-publication-search>
+          </label>
+          <div class="pub-tool-meta">
+            <strong data-publication-count>13 total records</strong>
+            <button class="btn-soft" type="button" data-publication-reset hidden>Reset</button>
+          </div>
+        </section>
+
         <section class="pub-jump" aria-label="Jump to publication type">
           <a href="#international-journals">International Journals</a>
           <a href="#domestic-journals">Domestic Journals</a>
@@ -115,12 +133,12 @@
           <a href="#domestic-conferences">Domestic Conferences</a>
         </section>
 
-        <section class="pub-section" id="international-journals">
+        <section class="pub-section" id="international-journals" data-publication-section>
           <div class="pub-section-head">
             <h2>International Journals</h2>
           </div>
           <div class="pub-section-grid">
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="international journal ieee transactions on intelligent transportation systems accepted trajectory prediction front vehicle temporal graph cross attention anticipatory driving hyunsik min">
               <h3>Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction</h3>
               <div class="meta">IEEE Transactions on Intelligent Transportation Systems | Accepted paper</div>
               <p>An accepted IEEE T-ITS paper on temporal graph cross attention for front-vehicle trajectory prediction, with an emphasis on safety, comfort, and anticipatory driving support.</p>
@@ -132,7 +150,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="international journal applied energy solarnexus photovoltaic forecasting scalable management hyunsik min byeongjoon noh">
               <h3>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</h3>
               <div class="meta">Applied Energy, 391, 125848 (2025) | Hyunsik Min, Byeongjoon Noh</div>
               <p>SolarNexus combines adaptive photovoltaic forecasting with scalable plant-level management for smart-grid operations.</p>
@@ -146,7 +164,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="international journal artificial intelligence and law tracs-llm traffic accident sentencing legal ai hyunsik min byeongjoon noh">
               <h3>TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines</h3>
               <div class="meta">Artificial Intelligence and Law | First published online Jul. 23, 2025 | Hyunsik Min, Byeongjoon Noh</div>
               <p>TRACS-LLM predicts sentencing outcomes in road traffic accident cases using legal text, structured case attributes, and language-model reasoning.</p>
@@ -160,7 +178,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="international journal electronics solarflux predictor photovoltaic power forecasting south korea hyunsik min">
               <h3>SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea</h3>
               <div class="meta">Electronics, 13(11), 2071 (2024) | Hyunsik Min, Seokjun Hong, Jeonghoon Song, Byeoungmin Son, Byeongjoon Noh, Jihoon Moon</div>
               <p>A photovoltaic forecasting study centered on robust national-scale output prediction and operational usefulness.</p>
@@ -176,12 +194,12 @@
           </div>
         </section>
 
-        <section class="pub-section" id="domestic-journals">
+        <section class="pub-section" id="domestic-journals" data-publication-section>
           <div class="pub-section-head">
             <h2>Domestic Journals</h2>
           </div>
           <div class="pub-section-grid">
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="domestic journal korea intelligent transport systems anticipating front-side vehicles maneuvers trustworthy autonomous driving trajectory prediction kits hyunsik min">
               <h3>Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving</h3>
               <div class="meta">The Journal of The Korea Institute of Intelligent Transport Systems, 24(6), 121-133 (2025) | Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh</div>
               <p>This paper presents a TGCA-based framework for front-side vehicle trajectory prediction and anticipatory driving.</p>
@@ -192,7 +210,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="domestic journal korean society of transportation natural language processing judgement prediction road traffic accidents legal ai hyunsik min">
               <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations</h3>
               <div class="meta">Korean Society of Transportation (2024) | Hyunsik Min, Junyeong Yun, Byeongjoon Noh</div>
               <p>A judgment prediction system for road traffic accidents centered on text-based legal and situational information.</p>
@@ -204,18 +222,18 @@
           </div>
         </section>
 
-        <section class="pub-section" id="international-conferences">
+        <section class="pub-section" id="international-conferences" data-publication-section>
           <div class="pub-section-head">
             <h2>International Conferences</h2>
           </div>
           <div class="pub-section-grid">
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="international conference its world congress 2026 comfort centric trajectory prediction autonomous driving temporal graph cross attention hyunsik min">
               <h3>COMFORT-CENTRIC TRAJECTORY PREDICTION FOR AUTONOMOUS DRIVING VIA TEMPORAL GRAPH CROSS ATTENTION</h3>
               <div class="meta">ITS World Congress 2026 | Hyunsik Min, Byeongjoon Noh | Gangneung, South Korea | Oct. 19-23, 2026</div>
               <p>A scheduled conference presentation on comfort-centric trajectory prediction for automated driving.</p>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="international conference euroma 2026 theorising service routines ontological granularity behavioural sequencing hyunsik min">
               <h3>Theorising Service Routines through Ontological Granularity and Behavioural Sequencing</h3>
               <div class="meta">European Operations Management Association, The 2026 EurOMA Annual Conference | Hyunsik Min, Youngseok Thomas Choi, Changwon Park, Habin Lee, Byeongjoon Noh | Vienna, Austria | Jun. 27 - Jul. 2, 2026</div>
               <p>A scheduled conference paper that extends the portfolio into operations management and behavioral sequencing.</p>
@@ -223,12 +241,12 @@
           </div>
         </section>
 
-        <section class="pub-section" id="domestic-conferences">
+        <section class="pub-section" id="domestic-conferences" data-publication-section>
           <div class="pub-section-head">
             <h2>Domestic Conferences</h2>
           </div>
           <div class="pub-section-grid">
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="domestic conference temporal graph cross attention front-side vehicle trajectory prediction hyunsik min">
               <h3>Temporal Graph Cross Attention-Based Front-Side Vehicle Trajectory Prediction</h3>
               <div class="meta">Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh | 2025</div>
               <p>This TGCA-based study models front-side vehicle interactions as a spatiotemporal graph and uses cross-frame attention to refine maneuver-intent and trajectory estimates for anticipatory driving decisions.</p>
@@ -237,7 +255,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="domestic conference traffic noise recognition classification urban environments hyunsik min">
               <h3>Development of a Model for Traffic Noise Recognition and Classification in Urban Environments</h3>
               <div class="meta">The Korea Society of Computer and Information Summer Conference 2024 | Hyunsik Min, Byeongjoon Noh, Jiyoung Woo | Jeju Island, Korea | Jul. 2024</div>
               <p>An urban sensing conference study on recognizing and classifying traffic noise patterns in complex city environments.</p>
@@ -246,7 +264,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="domestic conference llm traffic accident sentencing prediction system legal ai hyunsik min">
               <h3>LLM-based Traffic Accident Sentencing Prediction System</h3>
               <div class="meta">The Korean Society of Intelligent Transport Systems, The 2024 Korea Institute of ITS Fall Conference | Hyunsik Min, Byeong Joon Noh | Gangneung, Korea | Apr. 2024</div>
               <p>A legal AI conference paper on predicting traffic accident sentencing outcomes from case descriptions and decision-related textual cues.</p>
@@ -255,7 +273,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="domestic conference natural language processing judgement prediction system road traffic accidents hyunsik min">
               <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents</h3>
               <div class="meta">The Korean Society of Intelligent Transport Systems, The 2024 Korea Institute of ITS Spring Conference | Hyunsik Min, Junyeong Yun, Byeong Joon Noh | Jeju Island, Korea | Apr. 2024</div>
               <p>An earlier conference presentation on predicting road-traffic judgment outcomes from text descriptions of accident situations.</p>
@@ -264,7 +282,7 @@
               </div>
             </article>
 
-            <article class="pub-item">
+            <article class="pub-item" data-publication-item data-search="domestic conference tooth segmentation identification panoramic radiographs mask r-cnn medical image segmentation hyunsik min">
               <h3>Tooth segmentation and identification method in panoramic radiographs using Mask R-CNN model</h3>
               <div class="meta">The Korean Institute of Communications and Information Sciences, The 4th Korea Artificial Intelligence Conference | Hyunsik Min, ByeongJoon Noh | Jeju Island, Korea | Sep. 2023</div>
               <p>An earlier computer vision study on tooth segmentation and identification in panoramic radiographs using a Mask R-CNN-based pipeline.</p>
@@ -274,6 +292,8 @@
             </article>
           </div>
         </section>
+
+        <p class="pub-empty" data-publication-empty hidden>No publication matched that search yet.</p>
 
         <div class="bibtex-modal" id="bibtex-modal" hidden>
           <div class="bibtex-backdrop" data-bibtex-close></div>
@@ -339,7 +359,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417e"></script>
+  <script src="/assets/site.js?v=20260417f"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var modal = document.getElementById('bibtex-modal');
