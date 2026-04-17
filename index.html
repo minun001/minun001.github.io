@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Hyunsik Min</title>
   <meta name="description" content="Hyunsik Min is an M.S. student in the Smart Autonomous &amp; Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417g">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417h">
   <style>
     .home-refresh{display:grid;gap:2.2rem;color:var(--text-body)}
     .home-poster{position:relative;display:grid;align-items:end;min-height:min(74svh,760px);margin-inline:calc(50% - 50vw);overflow:hidden;animation:riseIn .65s ease both}
@@ -21,9 +21,19 @@
     .home-poster-title{margin:1rem 0 .55rem;color:#fff;font-size:clamp(3rem,6.6vw,6rem);line-height:.89}
     .home-poster-subtitle{margin:0 0 1rem;color:rgba(255,255,255,.76);font-size:.98rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-poster-copy p{max-width:36rem;margin:0 0 1rem;color:rgba(248,251,255,.88)}
-    .home-poster-actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.25rem}
-    .home-poster-actions .home-intro-primary{background:#fff;color:#112033;box-shadow:none}
-    .home-poster-actions .home-intro-secondary{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+    .home-poster-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;max-width:34rem;margin-top:1.35rem}
+    .hero-action{position:relative;display:grid;gap:.28rem;align-content:center;min-height:78px;padding:.92rem 1rem .88rem;border:none;border-radius:8px;text-align:left;cursor:pointer;overflow:hidden;transition:transform .22s ease,background .22s ease,box-shadow .22s ease}
+    .hero-action:before{content:"";position:absolute;left:1rem;top:0;width:2rem;height:2px;background:linear-gradient(90deg,#ffffff,#bcd3ff)}
+    .hero-action span{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .hero-action strong{font-size:1rem;line-height:1.1}
+    .hero-action-primary{background:rgba(255,255,255,.96);color:#112033;box-shadow:0 14px 28px rgba(10,20,32,.16)}
+    .hero-action-primary span{color:rgba(17,32,51,.56)}
+    .hero-action-primary strong{color:#112033}
+    .hero-action-primary:before{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+    .hero-action-secondary{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);backdrop-filter:blur(8px)}
+    .hero-action-secondary span{color:rgba(255,255,255,.62)}
+    .hero-action-secondary strong{color:#fff}
+    .hero-action:hover{transform:translateY(-2px)}
     .home-poster-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;margin-top:1.75rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.18)}
     .home-poster-meta div{display:grid;gap:.2rem}
     .home-poster-meta dt{margin:0;color:rgba(255,255,255,.62);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -65,7 +75,7 @@
     @media (max-width:1040px){.home-dual{grid-template-columns:1fr}}
     @media (max-width:960px){.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}}
     @media (max-width:760px){.home-poster{min-height:640px}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
-    @media (max-width:640px){.home-poster-shell{padding:3rem 0 1.4rem}.home-poster-title{font-size:clamp(2.4rem,12vw,3.7rem)}.home-poster-actions a,.home-poster-actions button,.home-links a{width:100%}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr}}
+    @media (max-width:640px){.home-poster-shell{padding:3rem 0 1.4rem}.home-poster-title{font-size:clamp(2.4rem,12vw,3.7rem)}.home-poster-actions,.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr}.home-links a{width:100%}}
   </style>
 </head>
 <body>
@@ -94,11 +104,23 @@
               <h1 class="home-poster-title">Hyunsik Min</h1>
               <p class="home-poster-subtitle">M.S. Student in Future Convergence Technology at Soonchunhyang University</p>
               <p>I build practical AI systems for mobility, energy, and decision support, with current work centered on VLA, trajectory prediction, legal AI, and safety monitoring.</p>
-              <div class="home-poster-actions">
-                <a class="home-intro-primary" href="/publications/">Selected Publications</a>
-                <a class="home-intro-secondary" href="/profile/">Full Profile</a>
-                <a class="home-intro-secondary" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
-                <button class="home-intro-secondary" type="button" data-copy-email="minun001@sch.ac.kr" data-copy-label="Copy Email">Copy Email</button>
+              <div class="home-poster-actions" role="navigation" aria-label="Quick actions">
+                <a class="hero-action hero-action-primary" href="/publications/">
+                  <span>Archive</span>
+                  <strong>Selected Publications</strong>
+                </a>
+                <a class="hero-action hero-action-secondary" href="/profile/">
+                  <span>Profile</span>
+                  <strong>Research Background</strong>
+                </a>
+                <a class="hero-action hero-action-secondary" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">
+                  <span>Scholar</span>
+                  <strong>Open Citations</strong>
+                </a>
+                <button class="hero-action hero-action-secondary" type="button" data-copy-email="minun001@sch.ac.kr" data-copy-label="Copy Email">
+                  <span>Contact</span>
+                  <strong data-copy-text>Copy Email</strong>
+                </button>
               </div>
               <dl class="home-poster-meta">
                 <div>
@@ -233,6 +255,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417g"></script>
+  <script src="/assets/site.js?v=20260417h"></script>
 </body>
 </html>

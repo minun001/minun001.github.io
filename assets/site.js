@@ -11,18 +11,22 @@
 
       button.addEventListener('click', async function () {
         var email = button.getAttribute('data-copy-email');
-        var original = button.getAttribute('data-copy-label') || button.textContent;
+        var labelTarget = button.querySelector('[data-copy-text]');
+        var original = button.getAttribute('data-copy-label') || (labelTarget ? labelTarget.textContent : button.textContent);
         if (!email) return;
 
         try {
           await navigator.clipboard.writeText(email);
-          button.textContent = 'Email Copied';
+          if (labelTarget) labelTarget.textContent = 'Email Copied';
+          else button.textContent = 'Email Copied';
         } catch (error) {
-          button.textContent = 'Copy Failed';
+          if (labelTarget) labelTarget.textContent = 'Copy Failed';
+          else button.textContent = 'Copy Failed';
         }
 
         window.setTimeout(function () {
-          button.textContent = original;
+          if (labelTarget) labelTarget.textContent = original;
+          else button.textContent = original;
         }, 1600);
       });
     });
