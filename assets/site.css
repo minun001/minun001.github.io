@@ -381,9 +381,14 @@ body.page-profile .card {
   display: grid;
   grid-template-columns: 170px minmax(0, 1fr);
   gap: 0.6rem 1.2rem;
+  align-content: start;
   border-inline: none;
   border-bottom: none;
   padding-inline: 0;
+}
+
+body.page-profile .section-grid {
+  align-items: start;
 }
 
 body.page-profile .section-card > .eyebrow,
