@@ -5,6 +5,7 @@
   <head>
     <meta charset="utf-8">
     {% include head.html %}
+    <meta name="color-scheme" content="light">
     <title>{{ page.title | escape }} | {{ site.title | escape }}</title>
     <meta name="description" content="{{ page.description | default: site.description | strip_html | normalize_whitespace | escape }}">
     <meta property="og:image" content="{{ page.image | default: site.logo | absolute_url }}">
@@ -12,12 +13,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+    <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}?v=20260417c">
     <style>
-      :root{--font-body:"Manrope","Segoe UI",system-ui,sans-serif;--font-display:"Newsreader",Georgia,serif;--bg-page:#f3f6fa;--bg-surface:rgba(255,255,255,.94);--bg-card:#ffffff;--bg-card-strong:#ffffff;--text-title:#112033;--text-body:#46576b;--text-soft:#708198;--border-soft:rgba(17,32,51,.1);--shadow-soft:0 10px 28px rgba(15,23,42,.06);--accent:#1d4ed8;--accent-2:#0f766e;--accent-glow:rgba(29,78,216,.12)}
-      html{font-size:16px;scroll-behavior:smooth}body{margin:0;font-family:var(--font-body);color:var(--text-body);background:linear-gradient(180deg,#f9fbfd 0%,var(--bg-page) 100%);line-height:1.72;letter-spacing:0;transition:background .25s ease,color .25s ease}
-      body.theme-night{--bg-page:#0a111d;--bg-surface:rgba(11,18,32,.78);--bg-card:rgba(14,22,37,.88);--bg-card-strong:rgba(18,27,44,.96);--text-title:#f4f7fb;--text-body:#d6deea;--text-soft:#93a5bd;--border-soft:rgba(148,163,184,.16);--shadow-soft:0 26px 54px rgba(2,8,23,.42);--accent:#8ab4ff;--accent-2:#5eead4;--accent-glow:rgba(96,165,250,.16)}
-      body.theme-night{background:linear-gradient(180deg,#08101c 0%,#0b1220 40%,#0a1321 100%)}
+      :root{color-scheme:light;--font-body:"Manrope","Segoe UI",system-ui,sans-serif;--font-display:"Newsreader",Georgia,serif;--bg-page:#f3f6fa;--bg-surface:rgba(255,255,255,.94);--bg-card:#ffffff;--bg-card-strong:#ffffff;--text-title:#112033;--text-body:#46576b;--text-soft:#708198;--border-soft:rgba(17,32,51,.1);--shadow-soft:0 10px 28px rgba(15,23,42,.06);--accent:#1d4ed8;--accent-2:#0f766e;--accent-glow:rgba(29,78,216,.12)}
+      html{font-size:16px;scroll-behavior:smooth;color-scheme:light}body{margin:0;font-family:var(--font-body);color:var(--text-body);background:linear-gradient(180deg,#f9fbfd 0%,var(--bg-page) 100%);line-height:1.72;letter-spacing:0;transition:background .25s ease,color .25s ease}
+      body.theme-night{--bg-page:#f3f6fa;--bg-surface:rgba(255,255,255,.94);--bg-card:#ffffff;--bg-card-strong:#ffffff;--text-title:#112033;--text-body:#46576b;--text-soft:#708198;--border-soft:rgba(17,32,51,.1);--shadow-soft:0 10px 28px rgba(15,23,42,.06);--accent:#1d4ed8;--accent-2:#0f766e;--accent-glow:rgba(29,78,216,.12)}
+      body.theme-night{background:linear-gradient(180deg,#f9fbfd 0%,var(--bg-page) 100%)}
       body,button,input,select,textarea{font-family:var(--font-body)}h1,h2,h3,h4,.site-title{font-family:var(--font-display);color:var(--text-title);letter-spacing:-.028em;line-height:1.08}p,li,input,select,textarea,button{color:var(--text-body)}strong,b{color:var(--text-title);font-weight:800}a{color:var(--accent);text-decoration:none}a:hover{color:var(--text-title)}::selection{background:var(--accent-glow);color:var(--text-title)}
       .wrapper,.hs-page-wrapper,.hs-about-wrapper,.hs-pub-wrapper,.hs-news-wrapper{max-width:1180px}.site-header{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border-soft);background:var(--bg-surface);box-shadow:0 1px 0 rgba(17,32,51,.03)}.site-title,.site-title:visited{font-size:1.6rem;font-weight:700;color:var(--text-title)}
       .site-nav .page-link{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:.45rem .82rem;border-radius:8px;font-size:.92rem;font-weight:700;color:var(--text-title);transition:background .18s ease,box-shadow .18s ease}.site-nav .page-link:hover{background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}

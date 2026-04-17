@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
   <title>Publications | Hyunsik Min</title>
   <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
-  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417c">
   <style>
     .publications-page{display:grid;gap:1.2rem}
     .pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
@@ -48,10 +49,6 @@
     .bibtex-code{margin:0;padding:1rem;overflow:auto;border-radius:8px;background:rgba(248,250,252,.96);color:#102033;box-shadow:inset 0 0 0 1px rgba(17,32,51,.12);font:500 .9rem/1.55 "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;white-space:pre-wrap;word-break:break-word}
     .bibtex-dialog-actions{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:flex-end}
     .bibtex-copy-state{margin:0;color:var(--text-title);font-size:.88rem}
-    body.theme-night .pub-image,body.theme-night .pub-jump a,body.theme-night .pub-action,body.theme-night .bibtex-close{background:rgba(255,255,255,.04)}
-    body.theme-night .bibtex-dialog{background:rgba(10,17,29,.96);box-shadow:0 30px 90px rgba(2,8,23,.46), inset 0 0 0 1px rgba(148,163,184,.16)}
-    body.theme-night .bibtex-code{background:rgba(5,10,20,.92);color:#f4f7fb;box-shadow:inset 0 0 0 1px rgba(148,163,184,.18)}
-    body.theme-night .bibtex-copy-state{color:#d6deea}
     @media (max-width:980px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
     @media (max-width:760px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
   </style>
@@ -339,7 +336,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js"></script>
+  <script src="/assets/site.js?v=20260417c"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var modal = document.getElementById('bibtex-modal');

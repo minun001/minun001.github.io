@@ -3,9 +3,10 @@
   <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
   <title>News | Hyunsik Min</title>
   <meta name="description" content="A running timeline of publications, awards, research projects, and portfolio milestones.">
-  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417c">
   <style>
     .news-page{display:grid;gap:1.2rem}
     .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:1.1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
@@ -30,8 +31,6 @@
     .news-badge.journal{background:rgba(16,185,129,.12)}
     .news-badge.award{background:rgba(245,158,11,.16)}
     .news-badge.project{background:rgba(148,163,184,.18)}
-    body.theme-night .news-jump a{background:rgba(255,255,255,.05)}
-    body.theme-night .timeline-item:after{box-shadow:0 0 0 6px rgba(96,165,250,.09)}
     @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
     @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
   </style>
@@ -284,6 +283,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js"></script>
+  <script src="/assets/site.js?v=20260417c"></script>
 </body>
 </html>
