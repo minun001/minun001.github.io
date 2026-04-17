@@ -27,14 +27,15 @@
     #profile-education .about-entry h3,
     #profile-experience .about-entry h3{display:flex;align-items:flex-start;min-height:3.15rem}
     .about-list{margin:0;padding-left:1.1rem}
-    .about-list.two-col{columns:2;column-gap:1.6rem}
-    .about-list.two-col li{break-inside:avoid}
     .about-list li+li{margin-top:.55rem}
+    .profile-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem 1.2rem;align-items:start}
     .about-project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem 1.2rem}
     .about-project{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);border-top:none;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
     .about-project h3{margin-bottom:.25rem;font-size:1.08rem}
     .about-project p{margin:0}
     .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
+    #profile-awards .profile-detail-grid,
+    #profile-stack .profile-detail-grid{padding-top:.1rem}
     #profile-awards .about-list{list-style:none;padding-left:0}
     #profile-awards .about-list li{position:relative;padding-left:1rem}
     #profile-awards .about-list li:before{content:"";position:absolute;left:0;top:.78em;width:.38rem;height:.38rem;border-radius:999px;background:var(--accent-2)}
@@ -43,7 +44,7 @@
     .photo-card:after{display:none}
     .identity-card{border:none;box-shadow:none;background:transparent;padding:0}
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
-    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}.about-list.two-col{columns:1}}
+    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
   </style>
 </head>
 <body class="page-profile">
@@ -214,23 +215,27 @@
           <article class="card section-card span-6" id="profile-awards">
             <div class="eyebrow">Honors</div>
             <h2>Selected Awards</h2>
-            <ul class="about-list two-col">
-              <li>National Outstanding Scholarship in Science and Engineering, Korea (Dec. 2025)</li>
-              <li>Grand Prize, 2024 Portfolio (Capstone) Competition, Soonchunhyang University SW Venture Startup Academy Center (Nov. 2024)</li>
-              <li>Silver Medal, 2024 SCHU AI-SW Festival, Soonchunhyang University Department of AI and Big Data (Nov. 2024)</li>
-              <li>Special Prize, 2024 Soonchunhyang SW Idea Contest, Soonchunhyang University (Nov. 2024)</li>
-              <li>Excellence Award, The 1st SW Convergence University Academic Festival, Soonchunhyang University (Nov. 2024)</li>
-              <li>Outstanding Paper Award, The Korea Society of Computer and Information (Jul. 2024)</li>
-              <li>Grand Prize, SW Convergence University Ideathon, Soonchunhyang University (Jun. 2024)</li>
-              <li>Grand Prize, 2023 Soonchunhyang SW Idea Contest, Soonchunhyang University, the Information and Communication Planning and Evaluation Agency, and the Ministry of Science and ICT (Dec. 2023)</li>
-              <li>Encouragement Award, The 5th Big Data Analytics and Development Contest, Soonchunhyang University (Dec. 2021)</li>
-            </ul>
+            <div class="profile-detail-grid">
+              <ul class="about-list">
+                <li>National Outstanding Scholarship in Science and Engineering, Korea (Dec. 2025)</li>
+                <li>Grand Prize, 2024 Portfolio (Capstone) Competition, Soonchunhyang University SW Venture Startup Academy Center (Nov. 2024)</li>
+                <li>Silver Medal, 2024 SCHU AI-SW Festival, Soonchunhyang University Department of AI and Big Data (Nov. 2024)</li>
+                <li>Special Prize, 2024 Soonchunhyang SW Idea Contest, Soonchunhyang University (Nov. 2024)</li>
+                <li>Excellence Award, The 1st SW Convergence University Academic Festival, Soonchunhyang University (Nov. 2024)</li>
+              </ul>
+              <ul class="about-list">
+                <li>Outstanding Paper Award, The Korea Society of Computer and Information (Jul. 2024)</li>
+                <li>Grand Prize, SW Convergence University Ideathon, Soonchunhyang University (Jun. 2024)</li>
+                <li>Grand Prize, 2023 Soonchunhyang SW Idea Contest, Soonchunhyang University, the Information and Communication Planning and Evaluation Agency, and the Ministry of Science and ICT (Dec. 2023)</li>
+                <li>Encouragement Award, The 5th Big Data Analytics and Development Contest, Soonchunhyang University (Dec. 2021)</li>
+              </ul>
+            </div>
           </article>
 
           <article class="card section-card span-6" id="profile-stack">
             <div class="eyebrow">Toolkit</div>
             <h2>Technical Stack</h2>
-            <div class="two-col">
+            <div class="profile-detail-grid">
               <div>
                 <p><strong>Programming</strong><br>Python, R, Java</p>
                 <p><strong>Modeling</strong><br>PyTorch, TensorFlow, Keras, scikit-learn</p>
