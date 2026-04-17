@@ -1,4 +1,13 @@
 (function(){
+  function announce(message) {
+    var region = document.getElementById('site-live-region');
+    if (!region) return;
+    region.textContent = '';
+    window.setTimeout(function () {
+      region.textContent = message;
+    }, 20);
+  }
+
   function applyTheme() {
     document.body.classList.add('theme-day');
     document.body.classList.remove('theme-night');
@@ -19,9 +28,11 @@
           await navigator.clipboard.writeText(email);
           if (labelTarget) labelTarget.textContent = 'Email Copied';
           else button.textContent = 'Email Copied';
+          announce('Email address copied.');
         } catch (error) {
           if (labelTarget) labelTarget.textContent = 'Copy Failed';
           else button.textContent = 'Copy Failed';
+          announce('Copy failed.');
         }
 
         window.setTimeout(function () {
@@ -64,10 +75,12 @@
     var empty = root.querySelector('[data-publication-empty]');
     var items = Array.prototype.slice.call(root.querySelectorAll('[data-publication-item]'));
     var sections = Array.prototype.slice.call(root.querySelectorAll('[data-publication-section]'));
+    var params = new URLSearchParams(window.location.search);
     if (!input || !count || !items.length) return;
 
-    function update() {
-      var query = input.value.trim().toLowerCase();
+    function update(shouldSync) {
+      var rawValue = input.value.trim();
+      var query = rawValue.toLowerCase();
       var visibleCount = 0;
 
       items.forEach(function (item) {
@@ -90,18 +103,29 @@
       count.textContent = query ? visibleCount + ' matching records' : items.length + ' total records';
       if (reset) reset.hidden = !query;
       if (empty) empty.hidden = visibleCount !== 0;
+      if (shouldSync !== false) {
+        if (rawValue) params.set('q', rawValue);
+        else params.delete('q');
+        var nextQuery = params.toString();
+        var nextUrl = window.location.pathname + (nextQuery ? '?' + nextQuery : '') + window.location.hash;
+        window.history.replaceState({}, '', nextUrl);
+      }
+      announce(query ? visibleCount + ' publication records shown.' : 'Showing all publication records.');
     }
 
-    input.addEventListener('input', update);
+    input.addEventListener('input', function () {
+      update(true);
+    });
     if (reset) {
       reset.addEventListener('click', function () {
         input.value = '';
-        update();
+        update(true);
         input.focus();
       });
     }
 
-    update();
+    if (params.get('q')) input.value = params.get('q');
+    update(false);
   }
 
   function bindNewsFilter() {
@@ -112,9 +136,10 @@
     var items = Array.prototype.slice.call(root.querySelectorAll('[data-news-item]'));
     var years = Array.prototype.slice.call(root.querySelectorAll('[data-news-year]'));
     var empty = root.querySelector('[data-news-empty]');
+    var params = new URLSearchParams(window.location.search);
     if (!buttons.length || !items.length) return;
 
-    function setFilter(nextKind) {
+    function setFilter(nextKind, shouldSync) {
       var visibleCount = 0;
 
       buttons.forEach(function (button) {
@@ -141,15 +166,23 @@
       });
 
       if (empty) empty.hidden = visibleCount !== 0;
+      if (shouldSync !== false) {
+        if (nextKind && nextKind !== 'all') params.set('news', nextKind);
+        else params.delete('news');
+        var nextQuery = params.toString();
+        var nextUrl = window.location.pathname + (nextQuery ? '?' + nextQuery : '') + window.location.hash;
+        window.history.replaceState({}, '', nextUrl);
+      }
+      announce((nextKind === 'all' ? 'All' : nextKind) + ' news filter applied.');
     }
 
     buttons.forEach(function (button) {
       button.addEventListener('click', function () {
-        setFilter(button.getAttribute('data-news-filter') || 'all');
+        setFilter(button.getAttribute('data-news-filter') || 'all', true);
       });
     });
 
-    setFilter('all');
+    setFilter(params.get('news') || 'all', false);
   }
 
   function bindSectionIndex() {

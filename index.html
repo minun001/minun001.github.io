@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Hyunsik Min</title>
   <meta name="description" content="Hyunsik Min is an M.S. student in the Smart Autonomous &amp; Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417j">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
   <style>
     .home-refresh{display:grid;gap:2.2rem;color:var(--text-body)}
     .home-poster{position:relative;display:grid;align-items:end;min-height:min(74svh,760px);margin-inline:calc(50% - 50vw);overflow:hidden;animation:riseIn .65s ease both}
@@ -83,6 +83,7 @@
   </style>
 </head>
 <body class="page-home">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <div class="site-shell">
       <a class="brand" href="/">Hyunsik Min</a>
@@ -95,7 +96,7 @@
     </div>
   </header>
 
-  <main class="page">
+  <main class="page" id="main-content">
     <div class="site-shell">
       <div class="home-refresh">
         <section class="home-poster">
@@ -264,6 +265,17 @@
             </div>
           </div>
         </section>
+
+        <nav class="chapter-nav" aria-label="Continue through site chapters">
+          <a class="chapter-link" href="/profile/">
+            <span>Next Chapter</span>
+            <strong>Profile</strong>
+          </a>
+          <a class="chapter-link" href="/publications/">
+            <span>Research Archive</span>
+            <strong>Publications</strong>
+          </a>
+        </nav>
       </div>
     </div>
   </main>
@@ -271,9 +283,10 @@
   <footer class="footer">
     <div class="site-shell">
       <p>M.S. student at SAIL developing practical AI systems for mobility, energy, and safety-oriented applications.</p>
+      <p class="sr-only" aria-live="polite" id="site-live-region"></p>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417j"></script>
+  <script src="/assets/site.js?v=20260417k"></script>
 </body>
 </html>

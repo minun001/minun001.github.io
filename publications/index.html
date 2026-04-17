@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Publications | Hyunsik Min</title>
   <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417j">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
   <style>
     .publications-page{display:grid;gap:1.5rem}
     .pub-lead-visual{gap:1rem}
@@ -53,6 +53,7 @@
   </style>
 </head>
 <body class="page-publications">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <div class="site-shell">
       <a class="brand" href="/">Hyunsik Min</a>
@@ -65,7 +66,7 @@
     </div>
   </header>
 
-  <main class="page">
+  <main class="page" id="main-content">
     <div class="site-shell">
       <div class="publications-page" data-publications-root>
         <section class="page-lead">
@@ -289,6 +290,17 @@
 
         <p class="pub-empty" data-publication-empty hidden>No publication matched that search yet.</p>
 
+        <nav class="chapter-nav" aria-label="Continue through site chapters">
+          <a class="chapter-link" href="/profile/">
+            <span>Previous Chapter</span>
+            <strong>Profile</strong>
+          </a>
+          <a class="chapter-link" href="/news/">
+            <span>Next Chapter</span>
+            <strong>News</strong>
+          </a>
+        </nav>
+
         <div class="bibtex-modal" id="bibtex-modal" hidden>
           <div class="bibtex-backdrop" data-bibtex-close></div>
           <div class="bibtex-dialog" role="dialog" aria-modal="true" aria-labelledby="bibtex-title">
@@ -350,10 +362,11 @@
   <footer class="footer">
     <div class="site-shell">
       <p><a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar profile</a></p>
+      <p class="sr-only" aria-live="polite" id="site-live-region"></p>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417j"></script>
+  <script src="/assets/site.js?v=20260417k"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var modal = document.getElementById('bibtex-modal');

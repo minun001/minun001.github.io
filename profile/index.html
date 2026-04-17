@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Profile | Hyunsik Min</title>
   <meta name="description" content="About Hyunsik Min, including research interests, experience, projects, honors, and academic background.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417j">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
   <style>
     .about-page{display:grid;gap:1.6rem}
     .about-name{white-space:nowrap}
@@ -42,6 +42,7 @@
   </style>
 </head>
 <body class="page-profile">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <div class="site-shell">
       <a class="brand" href="/">Hyunsik Min</a>
@@ -54,7 +55,7 @@
     </div>
   </header>
 
-  <main class="page">
+  <main class="page" id="main-content">
     <div class="site-shell">
       <div class="about-page">
         <section class="photo-layout">
@@ -238,6 +239,17 @@
             </div>
           </article>
         </section>
+
+        <nav class="chapter-nav" aria-label="Continue through site chapters">
+          <a class="chapter-link" href="/">
+            <span>Previous Chapter</span>
+            <strong>Home</strong>
+          </a>
+          <a class="chapter-link" href="/publications/">
+            <span>Next Chapter</span>
+            <strong>Publications</strong>
+          </a>
+        </nav>
       </div>
     </div>
   </main>
@@ -245,9 +257,10 @@
   <footer class="footer">
     <div class="site-shell">
       <p>Research profile covering publications, projects, awards, and collaboration tools.</p>
+      <p class="sr-only" aria-live="polite" id="site-live-region"></p>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417j"></script>
+  <script src="/assets/site.js?v=20260417k"></script>
 </body>
 </html>

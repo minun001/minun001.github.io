@@ -73,6 +73,23 @@ a:hover {
   color: var(--text-title);
 }
 
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 90;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  background: var(--text-title);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
 a:focus-visible,
 button:focus-visible,
 select:focus-visible {
@@ -678,6 +695,47 @@ body.theme-night .photo-note {
   padding: 1.2rem 0 1.8rem;
 }
 
+.chapter-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.chapter-link {
+  display: grid;
+  gap: 0.2rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--border-soft);
+}
+
+.chapter-link span {
+  color: var(--text-soft);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.chapter-link strong {
+  font-size: 1.08rem;
+  line-height: 1.15;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .top-fab {
   position: fixed;
   right: 1.15rem;
@@ -717,6 +775,20 @@ body.theme-night .photo-note {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
 @media (max-width: 980px) {
   .hero,
   .page-lead,
@@ -725,6 +797,10 @@ body.theme-night .photo-note {
   .mini-grid,
   .signal-grid,
   .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-nav {
     grid-template-columns: 1fr;
   }
 

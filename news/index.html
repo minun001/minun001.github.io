@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>News | Hyunsik Min</title>
   <meta name="description" content="A running timeline of publications, awards, research projects, and portfolio milestones.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417j">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
   <style>
     .news-page{display:grid;gap:1.5rem}
     .news-featured{counter-reset:featured}
@@ -40,6 +40,7 @@
   </style>
  </head>
 <body class="page-news">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <div class="site-shell">
       <a class="brand" href="/">Hyunsik Min</a>
@@ -52,7 +53,7 @@
     </div>
   </header>
 
-  <main class="page">
+  <main class="page" id="main-content">
     <div class="site-shell">
       <div class="news-page" data-news-root>
         <section class="page-lead">
@@ -287,6 +288,17 @@
         </section>
 
         <p class="news-empty" data-news-empty hidden>No timeline item matched that filter.</p>
+
+        <nav class="chapter-nav" aria-label="Continue through site chapters">
+          <a class="chapter-link" href="/publications/">
+            <span>Previous Chapter</span>
+            <strong>Publications</strong>
+          </a>
+          <a class="chapter-link" href="/">
+            <span>Back to Start</span>
+            <strong>Home</strong>
+          </a>
+        </nav>
       </div>
     </div>
   </main>
@@ -294,9 +306,10 @@
   <footer class="footer">
     <div class="site-shell">
       <p>Recent updates from publications, awards, and research projects.</p>
+      <p class="sr-only" aria-live="polite" id="site-live-region"></p>
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417j"></script>
+  <script src="/assets/site.js?v=20260417k"></script>
 </body>
 </html>
