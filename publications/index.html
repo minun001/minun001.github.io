@@ -6,12 +6,9 @@
   <meta name="color-scheme" content="light">
   <title>Publications | Hyunsik Min</title>
   <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417f">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417g">
   <style>
     .publications-page{display:grid;gap:1.5rem}
-    .pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.85rem}
-    .pub-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:.85rem 1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-title);font-size:.9rem;font-weight:800;text-align:center}
-    .pub-jump a:hover{background:rgba(255,255,255,.9)}
     .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem}
     .pub-summary-item{padding:.9rem 0 .2rem;border-top:1px solid var(--border-soft)}
     .pub-summary-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -55,12 +52,12 @@
     .bibtex-code{margin:0;padding:1rem;overflow:auto;border-radius:8px;background:rgba(248,250,252,.96);color:#102033;box-shadow:inset 0 0 0 1px rgba(17,32,51,.12);font:500 .9rem/1.55 "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;white-space:pre-wrap;word-break:break-word}
     .bibtex-dialog-actions{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:flex-end}
     .bibtex-copy-state{margin:0;color:var(--text-title);font-size:.88rem}
-    .page-title,.hero-visual{animation:riseIn .6s ease both}
+    .page-lead{animation:riseIn .6s ease both}
     .pub-summary{animation:riseIn .8s ease both}
     .pub-item p{max-width:32rem}
     .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-    @media (max-width:980px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
+    @media (max-width:980px){.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:760px){.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -79,16 +76,16 @@
   <main class="page">
     <div class="site-shell">
       <div class="publications-page" data-publications-root>
-        <section class="hero">
-          <div class="panel page-title">
+        <section class="page-lead">
+          <div class="page-lead-copy">
             <div class="eyebrow">Research Archive</div>
             <h1>Publications</h1>
             <p>This archive brings together journal and conference work across autonomous driving, energy forecasting, legal AI, and safety-oriented AI systems.</p>
           </div>
-          <aside class="panel hero-visual">
+          <aside class="page-lead-side">
             <div class="eyebrow">Coverage</div>
-            <h2 style="margin:.45rem 0;">A clearer research record</h2>
-            <p>Accepted and published papers, conference presentations, and citation links are organized here in one place.</p>
+            <strong>Searchable research record</strong>
+            <p>Accepted journal work, published papers, conference presentations, and citation actions are organized as one readable archive.</p>
           </aside>
         </section>
 
@@ -126,7 +123,7 @@
           </div>
         </section>
 
-        <section class="pub-jump" aria-label="Jump to publication type">
+        <section class="pub-jump page-index" aria-label="Jump to publication type">
           <a href="#international-journals">International Journals</a>
           <a href="#domestic-journals">Domestic Journals</a>
           <a href="#international-conferences">International Conferences</a>
@@ -359,7 +356,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417f"></script>
+  <script src="/assets/site.js?v=20260417g"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var modal = document.getElementById('bibtex-modal');

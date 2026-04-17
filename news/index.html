@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>News | Hyunsik Min</title>
   <meta name="description" content="A running timeline of publications, awards, research projects, and portfolio milestones.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417f">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417g">
   <style>
     .news-page{display:grid;gap:1.5rem}
     .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;padding:1.35rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .8s ease both}
@@ -17,8 +17,6 @@
     .news-filter{display:flex;flex-wrap:wrap;gap:.65rem;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
     .news-filter button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:.65rem .9rem;border:none;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-title);font-weight:800;cursor:pointer}
     .news-filter button.is-active{background:var(--text-title);color:#fff;box-shadow:none}
-    .news-jump{display:flex;flex-wrap:wrap;gap:.65rem}
-    .news-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
     .news-year{display:grid;grid-template-columns:120px minmax(0,1fr);gap:1.4rem;align-items:start;scroll-margin-top:104px}
     .news-year-head{position:sticky;top:96px;padding-top:.4rem}
     .news-year-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -34,7 +32,7 @@
     .news-badge.journal{background:rgba(16,185,129,.12)}
     .news-badge.award{background:rgba(245,158,11,.16)}
     .news-badge.project{background:rgba(148,163,184,.18)}
-    .page-title,.hero-visual{animation:riseIn .6s ease both}
+    .page-lead{animation:riseIn .6s ease both}
     .news-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
     @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
     @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
@@ -56,16 +54,16 @@
   <main class="page">
     <div class="site-shell">
       <div class="news-page" data-news-root>
-        <section class="hero">
-          <div class="panel page-title">
+        <section class="page-lead">
+          <div class="page-lead-copy">
             <div class="eyebrow">Milestones</div>
             <h1>News</h1>
             <p>A running timeline of publications, awards, projects, and portfolio milestones that define the current arc of my work.</p>
           </div>
-          <aside class="panel hero-visual">
+          <aside class="page-lead-side">
             <div class="eyebrow">Current momentum</div>
-            <h2 style="margin:.45rem 0;">Current snapshot</h2>
-            <p>The timeline groups journal records, funded projects, overseas training, and upcoming 2026 conference milestones in one yearly flow.</p>
+            <strong>Live research timeline</strong>
+            <p>The timeline follows journal records, funded projects, awards, and conference activity as one continuous research story.</p>
           </aside>
         </section>
 
@@ -95,7 +93,7 @@
           <button type="button" data-news-filter="award" aria-pressed="false">Awards</button>
         </section>
 
-        <nav class="news-jump" aria-label="Jump to year">
+        <nav class="news-jump page-index" aria-label="Jump to year">
           <a href="#news-2026">2026</a>
           <a href="#news-2025">2025</a>
           <a href="#news-2024">2024</a>
@@ -298,6 +296,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417f"></script>
+  <script src="/assets/site.js?v=20260417g"></script>
 </body>
 </html>

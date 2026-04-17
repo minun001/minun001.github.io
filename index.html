@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Hyunsik Min</title>
   <meta name="description" content="Hyunsik Min is an M.S. student in the Smart Autonomous &amp; Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417f">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417g">
   <style>
     .home-refresh{display:grid;gap:2.2rem;color:var(--text-body)}
     .home-poster{position:relative;display:grid;align-items:end;min-height:min(74svh,760px);margin-inline:calc(50% - 50vw);overflow:hidden;animation:riseIn .65s ease both}
@@ -38,6 +38,7 @@
     .home-section{display:grid;gap:.8rem}
     .home-section h2{font-size:2rem;text-wrap:balance}
     .home-section p{max-width:52rem;margin:0}
+    .home-section,.home-interest-rail,.home-spotlight,.home-dual{scroll-margin-top:138px}
     .home-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.35rem;padding-bottom:0;border-bottom:none}
     .home-fact{padding:1rem 0 0;border-top:1px solid var(--border-soft)}
     .home-fact-label{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -60,6 +61,7 @@
     .home-plain-panel h3{margin-bottom:.35rem;font-size:1.2rem;text-wrap:balance}
     .home-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
     .home-links a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.72rem .98rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800}
+    .home-index{margin-top:-.25rem}
     @media (max-width:1040px){.home-dual{grid-template-columns:1fr}}
     @media (max-width:960px){.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}}
     @media (max-width:760px){.home-poster{min-height:640px}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
@@ -116,7 +118,15 @@
           </div>
         </section>
 
-        <section class="home-section">
+        <nav class="page-index home-index" aria-label="Jump to home section">
+          <a href="#home-at-a-glance">At a Glance</a>
+          <a href="#home-interests">Research Interests</a>
+          <a href="#home-overview">Overview</a>
+          <a href="#home-highlights">Highlights</a>
+          <a href="#home-current-tracks">Current Tracks</a>
+        </nav>
+
+        <section class="home-section" id="home-at-a-glance">
           <div class="eyebrow">At a Glance</div>
           <div class="home-signal-grid">
             <article class="home-signal">
@@ -137,7 +147,7 @@
           </div>
         </section>
 
-        <section class="home-interest-rail">
+        <section class="home-interest-rail" id="home-interests">
           <div class="eyebrow">Research Interests</div>
           <div class="home-interest-list">
             <span>Foundation Models</span>
@@ -148,7 +158,7 @@
           </div>
         </section>
 
-        <section class="home-section">
+        <section class="home-section" id="home-overview">
           <div class="eyebrow">Overview</div>
           <h2>Practical AI across mobility, energy, and decision support</h2>
           <p>I focus on models that stay useful outside controlled benchmarks, from road-behavior prediction to energy forecasting and language-based decision support.</p>
@@ -168,7 +178,7 @@
           </div>
         </section>
 
-        <section class="home-spotlight">
+        <section class="home-spotlight" id="home-highlights">
           <div class="home-section">
             <div class="eyebrow">Selected Highlights</div>
             <h2>Publication and research snapshot</h2>
@@ -192,7 +202,7 @@
           </div>
         </section>
 
-        <section class="home-dual">
+        <section class="home-dual" id="home-current-tracks">
           <div class="home-plain-panel">
             <div class="eyebrow">Research Themes</div>
             <h3>What this work is trying to do</h3>
@@ -223,6 +233,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417f"></script>
+  <script src="/assets/site.js?v=20260417g"></script>
 </body>
 </html>
