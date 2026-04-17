@@ -6,18 +6,18 @@
   <meta name="color-scheme" content="light">
   <title>Publications | Hyunsik Min</title>
   <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417c">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417d">
   <style>
-    .publications-page{display:grid;gap:1.2rem}
-    .pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
-    .pub-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:.85rem 1rem;border-radius:8px;background:rgba(255,255,255,.62);box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-title);font-size:.9rem;font-weight:800;text-align:center}
+    .publications-page{display:grid;gap:1.5rem}
+    .pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.85rem}
+    .pub-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:.85rem 1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-title);font-size:.9rem;font-weight:800;text-align:center}
     .pub-jump a:hover{background:rgba(255,255,255,.9)}
-    .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
+    .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem}
     .pub-summary-item{padding:.9rem 0 .2rem;border-top:1px solid var(--border-soft)}
     .pub-summary-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .pub-summary-item strong{display:block;margin-bottom:.15rem;font-size:1.05rem}
+    .pub-summary-item strong{display:block;margin-bottom:.15rem;font-size:1.8rem;line-height:1}
     .pub-section{display:grid;gap:1rem;scroll-margin-top:104px}
-    .pub-section-head{display:grid;gap:.2rem;padding:1rem 0 0;border-top:1px solid var(--border-soft)}
+    .pub-section-head{display:grid;gap:.2rem;padding:1.2rem 0 0;border-top:1px solid var(--border-soft)}
     .pub-section-head h2{margin:0}
     .pub-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}
     .pub-item{display:grid;align-content:start;min-width:0}
@@ -49,6 +49,9 @@
     .bibtex-code{margin:0;padding:1rem;overflow:auto;border-radius:8px;background:rgba(248,250,252,.96);color:#102033;box-shadow:inset 0 0 0 1px rgba(17,32,51,.12);font:500 .9rem/1.55 "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;white-space:pre-wrap;word-break:break-word}
     .bibtex-dialog-actions{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:flex-end}
     .bibtex-copy-state{margin:0;color:var(--text-title);font-size:.88rem}
+    .page-title,.hero-visual{animation:riseIn .6s ease both}
+    .pub-summary{animation:riseIn .8s ease both}
+    .pub-item p{max-width:32rem}
     @media (max-width:980px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr 1fr}}
     @media (max-width:760px){.pub-jump,.pub-summary,.pub-section-grid{grid-template-columns:1fr}}
   </style>

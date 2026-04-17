@@ -6,54 +6,54 @@
   <meta name="color-scheme" content="light">
   <title>Hyunsik Min</title>
   <meta name="description" content="Hyunsik Min is an M.S. student in the Smart Autonomous &amp; Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417c">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417d">
   <style>
-    .home-refresh{display:grid;gap:1.6rem;color:var(--text-body)}
-    .home-intro{display:grid;grid-template-columns:minmax(0,1.22fr) minmax(320px,.78fr);gap:1.1rem;align-items:start}
-    .home-intro-copy{padding-top:.7rem;min-width:0}
+    .home-refresh{display:grid;gap:2.2rem;color:var(--text-body)}
+    .home-intro{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(360px,.84fr);gap:1.6rem;align-items:end}
+    .home-intro-copy{padding:0 0 .35rem;min-width:0;animation:riseIn .6s ease both}
     .home-intro-kicker{display:inline-flex;align-items:center;gap:.5rem;color:var(--text-soft);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-intro-kicker::before{content:"";width:.52rem;height:.52rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
-    .home-intro-title{margin:.9rem 0 .45rem;font-size:clamp(2.5rem,5.6vw,5.1rem);line-height:.93;white-space:nowrap}
+    .home-intro-title{margin:1rem 0 .5rem;font-size:clamp(2.9rem,6vw,5.4rem);line-height:.91;white-space:nowrap}
     .home-intro-subtitle{margin:0 0 1rem;color:var(--text-soft);font-size:.95rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .home-intro-copy p{max-width:40rem;margin:0 0 1rem}
+    .home-intro-copy p{max-width:38rem;margin:0 0 1rem}
     .home-intro-copy p:last-of-type{margin-bottom:0}
     .home-intro-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.15rem}
     .home-intro-links a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:.78rem 1.05rem;border-radius:8px;font-weight:800;transition:transform .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease}
     .home-intro-links a:hover{transform:translateY(-1px)}
     .home-intro-primary{background:var(--text-title);color:#fff;box-shadow:0 16px 28px rgba(15,23,42,.14)}
     .home-intro-secondary{background:rgba(255,255,255,.56);color:var(--text-title);box-shadow:inset 0 0 0 1px var(--border-soft)}
-    .home-intro-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem 1rem;margin:1.35rem 0 0}
+    .home-intro-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem 1rem;margin:1.55rem 0 0}
     .home-intro-meta div{padding-top:.85rem;border-top:1px solid var(--border-soft)}
     .home-intro-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-intro-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
-    .home-intro-figure{padding:1rem;border-radius:8px;background:var(--bg-card-strong)}
-    .home-intro-photo-shell{aspect-ratio:3/4;overflow:hidden;border-radius:8px;background:#dbe4ef}
+    .home-intro-figure{padding:0;border:none;box-shadow:none;background:transparent;overflow:hidden;animation:riseIn .8s ease both}
+    .home-intro-photo-shell{aspect-ratio:4/5;overflow:hidden;border-radius:12px;background:#dbe4ef}
     .home-intro-photo{width:100%;height:100%;object-fit:cover;object-position:center 18%}
-    .home-intro-caption{padding:.95rem .05rem .1rem}
+    .home-intro-caption{padding:1rem 0 0;border-top:1px solid var(--border-soft);margin-top:1rem}
     .home-intro-caption strong{display:block;margin-bottom:.25rem;font-size:1rem}
     .home-intro-caption p{margin:0;font-size:.92rem;color:var(--text-soft)}
-    .home-section{display:grid;gap:.65rem}
+    .home-section{display:grid;gap:.8rem}
     .home-section h2{font-size:2rem;text-wrap:balance}
     .home-section p{max-width:52rem;margin:0}
-    .home-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem;padding-bottom:.35rem;border-bottom:1px solid var(--border-soft)}
-    .home-fact{padding-bottom:.35rem}
+    .home-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.35rem;padding-bottom:0;border-bottom:none}
+    .home-fact{padding:1rem 0 0;border-top:1px solid var(--border-soft)}
     .home-fact-label{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-fact strong{display:block;margin-bottom:.2rem;font-size:1.05rem}
-    .home-columns{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1rem}
+    .home-columns{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1.15rem}
     .home-block{grid-column:span 4;padding-top:.35rem}
     .home-block h3{margin-bottom:.35rem;font-size:1.22rem}
     .home-block p,.home-block li{max-width:30rem;font-size:.95rem}
     .home-list{margin:0;padding-left:1.05rem}
     .home-list li+li{margin-top:.45rem}
-    .home-spotlight{padding:1.35rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
-    .home-spotlight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem 1.1rem}
-    .home-spotlight-item{padding-top:.9rem;border-top:1px solid var(--border-soft)}
+    .home-spotlight{padding:1.55rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .95s ease both}
+    .home-spotlight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}
+    .home-spotlight-item{padding:1rem .9rem 0 0;border-top:1px solid var(--border-soft)}
     .home-spotlight-label{display:inline-flex;align-items:center;gap:.4rem;margin-bottom:.55rem;color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-spotlight-label::before{content:"";width:.5rem;height:.5rem;border-radius:999px;background:var(--accent)}
     .home-spotlight-item h3{margin-bottom:.35rem;font-size:1.22rem}
     .home-spotlight-item p{margin:0}
-    .home-dual{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.86fr);gap:1.1rem;align-items:start}
-    .home-plain-panel{padding:1.2rem 0;border-top:1px solid var(--border-soft)}
+    .home-dual{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.86fr);gap:1.3rem;align-items:start;animation:riseIn 1.05s ease both}
+    .home-plain-panel{padding:1.35rem 0 0;border-top:1px solid var(--border-soft)}
     .home-plain-panel h3{margin-bottom:.35rem;font-size:1.2rem;text-wrap:balance}
     .home-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
     .home-links a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.72rem .98rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800}

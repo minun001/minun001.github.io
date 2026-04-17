@@ -6,21 +6,21 @@
   <meta name="color-scheme" content="light">
   <title>News | Hyunsik Min</title>
   <meta name="description" content="A running timeline of publications, awards, research projects, and portfolio milestones.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417c">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417d">
   <style>
-    .news-page{display:grid;gap:1.2rem}
-    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:1.1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
-    .news-featured article{padding-right:1rem;border-right:1px solid var(--border-soft)}
+    .news-page{display:grid;gap:1.5rem}
+    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;padding:1.35rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .8s ease both}
+    .news-featured article{padding-right:1.2rem;border-right:1px solid var(--border-soft)}
     .news-featured article:last-child{padding-right:0;border-right:none}
-    .news-featured h3{margin-bottom:.35rem;font-size:1.18rem}
+    .news-featured h3{margin-bottom:.35rem;font-size:1.28rem}
     .news-featured p{margin:0}
     .news-jump{display:flex;flex-wrap:wrap;gap:.65rem}
     .news-jump a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.7rem .95rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;color:var(--text-title)}
     .news-year{display:grid;grid-template-columns:120px minmax(0,1fr);gap:1.4rem;align-items:start;scroll-margin-top:104px}
     .news-year-head{position:sticky;top:96px;padding-top:.4rem}
     .news-year-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .news-year-head h2{margin-top:.2rem;font-size:2.1rem}
-    .news-timeline{position:relative;display:grid;gap:1rem;padding-left:1.3rem}
+    .news-year-head h2{margin-top:.2rem;font-size:2.35rem}
+    .news-timeline{position:relative;display:grid;gap:1.15rem;padding-left:1.3rem}
     .news-timeline:before{content:"";position:absolute;left:.38rem;top:.35rem;bottom:.35rem;width:1px;background:linear-gradient(180deg,rgba(29,78,216,.35),rgba(15,118,110,.12))}
     .timeline-item{position:relative}
     .timeline-item:after{content:"";position:absolute;left:-1.28rem;top:1.45rem;width:.72rem;height:.72rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 6px rgba(29,78,216,.08)}
@@ -31,6 +31,7 @@
     .news-badge.journal{background:rgba(16,185,129,.12)}
     .news-badge.award{background:rgba(245,158,11,.16)}
     .news-badge.project{background:rgba(148,163,184,.18)}
+    .page-title,.hero-visual{animation:riseIn .6s ease both}
     @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
     @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
   </style>
