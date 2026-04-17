@@ -39,6 +39,13 @@
     .pub-action{text-align:center}
     .pub-image{grid-column:2;grid-row:2 / span 5;display:flex;justify-content:center;align-items:center;max-width:100%;margin:0;padding:.6rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .pub-image img{width:100%;max-height:220px;height:auto;object-fit:contain}
+    .pub-item-text .pub-summary-copy{max-width:38rem}
+    .pub-marker{grid-column:2;grid-row:2 / span 4;display:grid;gap:.7rem;align-content:space-between;min-height:190px;padding:1rem;border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f2f7f9 100%);box-shadow:inset 0 0 0 1px rgba(23,49,78,.12)}
+    .pub-marker-head{display:grid;gap:.28rem}
+    .pub-marker-label{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:.34rem .58rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .pub-marker-title{margin:0;color:var(--text-title);font-size:1.02rem;line-height:1.25}
+    .pub-marker-copy{margin:0;color:var(--text-soft);font-size:.88rem;line-height:1.45}
+    .pub-marker-year{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:.32rem .54rem;border-radius:999px;background:rgba(190,112,56,.12);color:#8e4f1f;font-size:.8rem;font-weight:800}
     .bibtex-modal[hidden]{display:none}
     .bibtex-modal{position:fixed;inset:0;z-index:40}
     .bibtex-backdrop{position:absolute;inset:0;background:rgba(11,16,30,.62)}
@@ -53,7 +60,7 @@
     .pub-summary{animation:riseIn .8s ease both}
     .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
     @media (max-width:980px){.pub-summary{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.pub-lead-collage,.pub-summary{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-item{grid-template-columns:1fr}.pub-image{grid-column:1;grid-row:auto;margin-top:.55rem}}
+    @media (max-width:760px){.pub-lead-collage,.pub-summary{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.55rem}.pub-marker{min-height:auto}}
   </style>
 </head>
 <body class="page-publications">
@@ -214,7 +221,7 @@
             <h2>Domestic Journals</h2>
           </div>
           <div class="pub-section-grid">
-            <article class="pub-item" data-publication-item data-search="domestic journal korea intelligent transport systems anticipating front-side vehicles maneuvers trustworthy autonomous driving trajectory prediction kits hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="domestic journal korea intelligent transport systems anticipating front-side vehicles maneuvers trustworthy autonomous driving trajectory prediction kits hyunsik min">
               <h3>Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The Journal of The Korea Institute of Intelligent Transport Systems</span></div>
@@ -223,13 +230,21 @@
               </div>
               <p class="pub-summary-copy">This paper develops a TGCA-based front-side vehicle prediction framework for trustworthy autonomous driving and anticipatory maneuver understanding.</p>
               <p class="pub-note">DOI: 10.12815/kits.2025.24.6.121</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Journal Paper</span>
+                  <p class="pub-marker-title">Autonomous Driving</p>
+                  <p class="pub-marker-copy">Text-first presentation for publication records without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2025</span>
+              </aside>
               <div class="pub-actions">
                 <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:hqOjcs7Dif8C" target="_blank" rel="noopener">Google Scholar</a>
                 <button class="pub-action" type="button" data-bibtex-target="bibtex-tgca-domestic-2025">Cite</button>
               </div>
             </article>
 
-            <article class="pub-item" data-publication-item data-search="domestic journal korean society of transportation natural language processing judgement prediction road traffic accidents legal ai hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="domestic journal korean society of transportation natural language processing judgement prediction road traffic accidents legal ai hyunsik min">
               <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">Journal of Korean Society of Transportation</span></div>
@@ -237,6 +252,14 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Volume 42, Issue 4 | Pages 385-397 | 2024</span></div>
               </div>
               <p class="pub-summary-copy">This paper presents a judgment-prediction system for road-traffic accidents using textual descriptions of accident situations and legal context.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Journal Paper</span>
+                  <p class="pub-marker-title">Legal AI</p>
+                  <p class="pub-marker-copy">Text-first presentation for publication records without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2024</span>
+              </aside>
               <div class="pub-actions">
                 <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:WF5omc3nYNoC" target="_blank" rel="noopener">Google Scholar</a>
                 <button class="pub-action" type="button" data-bibtex-target="bibtex-nlp-road-2024">Cite</button>
@@ -250,7 +273,7 @@
             <h2>International Conferences</h2>
           </div>
           <div class="pub-section-grid">
-            <article class="pub-item" data-publication-item data-search="international conference its world congress 2026 comfort centric trajectory prediction autonomous driving temporal graph cross attention hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="international conference its world congress 2026 comfort centric trajectory prediction autonomous driving temporal graph cross attention hyunsik min">
               <h3>Comfort-Centric Trajectory Prediction for Autonomous Driving via Temporal Graph Cross Attention</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">ITS World Congress 2026</span></div>
@@ -258,9 +281,17 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Gangneung, South Korea | Oct. 19-23, 2026</span></div>
               </div>
               <p class="pub-summary-copy">This scheduled conference paper extends the trajectory-prediction line toward comfort-aware autonomous-driving support through temporal graph cross attention.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Conference Paper</span>
+                  <p class="pub-marker-title">Autonomous Driving</p>
+                  <p class="pub-marker-copy">Text-first presentation for scheduled conference papers without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2026</span>
+              </aside>
             </article>
 
-            <article class="pub-item" data-publication-item data-search="international conference euroma 2026 theorising service routines ontological granularity behavioural sequencing hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="international conference euroma 2026 theorising service routines ontological granularity behavioural sequencing hyunsik min">
               <h3>Theorising Service Routines through Ontological Granularity and Behavioural Sequencing</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">European Operations Management Association, The 2026 EurOMA Annual Conference</span></div>
@@ -268,6 +299,14 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Vienna, Austria | Jun. 27-Jul. 2, 2026</span></div>
               </div>
               <p class="pub-summary-copy">This scheduled conference paper broadens the portfolio into operations management through a study of service routines, ontological granularity, and behavioral sequencing.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Conference Paper</span>
+                  <p class="pub-marker-title">Operations Research</p>
+                  <p class="pub-marker-copy">Text-first presentation for scheduled conference papers without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2026</span>
+              </aside>
             </article>
           </div>
         </section>
@@ -277,7 +316,7 @@
             <h2>Domestic Conferences</h2>
           </div>
           <div class="pub-section-grid">
-            <article class="pub-item" data-publication-item data-search="domestic conference temporal graph cross attention front-side vehicle trajectory prediction hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference temporal graph cross attention front-side vehicle trajectory prediction hyunsik min">
               <h3>Temporal Graph Cross Attention-Based Front-Side Vehicle Trajectory Prediction</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 93rd Conference of Korean Society of Transportation</span></div>
@@ -285,12 +324,20 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">2025</span></div>
               </div>
               <p class="pub-summary-copy">This conference paper models front-side vehicle interactions as a spatiotemporal graph and uses cross-frame attention to improve maneuver-intent and trajectory estimation.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Conference Paper</span>
+                  <p class="pub-marker-title">Autonomous Driving</p>
+                  <p class="pub-marker-copy">Text-first presentation for publication records without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2025</span>
+              </aside>
               <div class="pub-actions">
                 <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:roLk4NBRz8UC" target="_blank" rel="noopener">Google Scholar</a>
               </div>
             </article>
 
-            <article class="pub-item" data-publication-item data-search="domestic conference traffic noise recognition classification urban environments hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference traffic noise recognition classification urban environments hyunsik min">
               <h3>Development of a Model for Traffic Noise Recognition and Classification in Urban Environments</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The Korea Society of Computer and Information Summer Conference 2024</span></div>
@@ -298,12 +345,20 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Jeju Island, Korea | Jul. 2024</span></div>
               </div>
               <p class="pub-summary-copy">This conference paper studies traffic-noise recognition and classification for urban environments with a focus on robust sound-pattern discrimination.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Conference Paper</span>
+                  <p class="pub-marker-title">Urban Sensing</p>
+                  <p class="pub-marker-copy">Text-first presentation for publication records without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2024</span>
+              </aside>
               <div class="pub-actions">
                 <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:Y0pCki6q_DkC" target="_blank" rel="noopener">Google Scholar</a>
               </div>
             </article>
 
-            <article class="pub-item" data-publication-item data-search="domestic conference llm traffic accident sentencing prediction system legal ai hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference llm traffic accident sentencing prediction system legal ai hyunsik min">
               <h3>LLM-based Traffic Accident Sentencing Prediction System</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 2024 Korea Institute of ITS Fall Conference</span></div>
@@ -311,12 +366,20 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Gangneung, Korea | Apr. 2024</span></div>
               </div>
               <p class="pub-summary-copy">This conference paper explores LLM-based prediction of traffic-accident sentencing outcomes from case descriptions and decision-related legal cues.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Conference Paper</span>
+                  <p class="pub-marker-title">Legal AI</p>
+                  <p class="pub-marker-copy">Text-first presentation for publication records without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2024</span>
+              </aside>
               <div class="pub-actions">
                 <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:W7OEmFMy1HYC" target="_blank" rel="noopener">Google Scholar</a>
               </div>
             </article>
 
-            <article class="pub-item" data-publication-item data-search="domestic conference natural language processing judgement prediction system road traffic accidents hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference natural language processing judgement prediction system road traffic accidents hyunsik min">
               <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 2024 Korea Institute of ITS Spring Conference</span></div>
@@ -324,12 +387,20 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Jeju Island, Korea | Apr. 2024</span></div>
               </div>
               <p class="pub-summary-copy">This conference paper presents an earlier judgment-prediction approach for road-traffic accidents based on textual descriptions of accident situations.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Conference Paper</span>
+                  <p class="pub-marker-title">Legal AI</p>
+                  <p class="pub-marker-copy">Text-first presentation for publication records without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2024</span>
+              </aside>
               <div class="pub-actions">
                 <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:2osOgNQ5qMEC" target="_blank" rel="noopener">Google Scholar</a>
               </div>
             </article>
 
-            <article class="pub-item" data-publication-item data-search="domestic conference tooth segmentation identification panoramic radiographs mask r-cnn medical image segmentation hyunsik min">
+            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference tooth segmentation identification panoramic radiographs mask r-cnn medical image segmentation hyunsik min">
               <h3>Tooth Segmentation and Identification Method in Panoramic Radiographs Using Mask R-CNN</h3>
               <div class="pub-meta">
                 <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 4th Korea Artificial Intelligence Conference</span></div>
@@ -337,6 +408,14 @@
                 <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Jeju Island, Korea | Sep. 2023</span></div>
               </div>
               <p class="pub-summary-copy">This conference paper presents a Mask R-CNN-based pipeline for tooth segmentation and identification in panoramic radiographic images.</p>
+              <aside class="pub-marker" aria-hidden="true">
+                <div class="pub-marker-head">
+                  <span class="pub-marker-label">Conference Paper</span>
+                  <p class="pub-marker-title">Medical Imaging</p>
+                  <p class="pub-marker-copy">Text-first presentation for publication records without a figure asset.</p>
+                </div>
+                <span class="pub-marker-year">2023</span>
+              </aside>
               <div class="pub-actions">
                 <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:9yKSN-GCB0IC" target="_blank" rel="noopener">Google Scholar</a>
               </div>
