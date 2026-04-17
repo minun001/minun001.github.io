@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light">
   <title>Hyunsik Min</title>
   <meta name="description" content="Hyunsik Min is an M.S. student in the Smart Autonomous &amp; Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417h">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417i">
   <style>
     .home-refresh{display:grid;gap:2.2rem;color:var(--text-body)}
     .home-poster{position:relative;display:grid;align-items:end;min-height:min(74svh,760px);margin-inline:calc(50% - 50vw);overflow:hidden;animation:riseIn .65s ease both}
@@ -71,14 +71,18 @@
     .home-plain-panel h3{margin-bottom:.35rem;font-size:1.2rem;text-wrap:balance}
     .home-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
     .home-links a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.72rem .98rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800}
+    .home-bulletin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:1rem 0 1.1rem;border-bottom:1px solid var(--border-soft)}
+    .home-bulletin a{display:grid;gap:.18rem;padding-top:.8rem;border-top:1px solid var(--border-soft);color:var(--text-body)}
+    .home-bulletin span{color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .home-bulletin strong{font-size:1.02rem;line-height:1.18}
     .home-index{margin-top:-.25rem}
     @media (max-width:1040px){.home-dual{grid-template-columns:1fr}}
     @media (max-width:960px){.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.home-poster{min-height:640px}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
-    @media (max-width:640px){.home-poster-shell{padding:3rem 0 1.4rem}.home-poster-title{font-size:clamp(2.4rem,12vw,3.7rem)}.home-poster-actions,.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr}.home-links a{width:100%}}
+    @media (max-width:760px){.home-poster{min-height:640px}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid,.home-bulletin{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
+    @media (max-width:640px){.home-poster-shell{padding:3rem 0 1.4rem}.home-poster-title{font-size:clamp(2.4rem,12vw,3.7rem)}.home-poster-actions,.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid,.home-bulletin{grid-template-columns:1fr}.home-links a{width:100%}}
   </style>
 </head>
-<body>
+<body class="page-home">
   <header class="site-header">
     <div class="site-shell">
       <a class="brand" href="/">Hyunsik Min</a>
@@ -138,6 +142,21 @@
               </dl>
             </div>
           </div>
+        </section>
+
+        <section class="home-bulletin" aria-label="Current bulletin">
+          <a href="/publications/#international-journals">
+            <span>Latest Journal</span>
+            <strong>IEEE T-ITS trajectory prediction line</strong>
+          </a>
+          <a href="/news/#news-2026">
+            <span>Current Project</span>
+            <strong>AI agent-based multi-domain safety monitoring</strong>
+          </a>
+          <a href="/publications/#international-conferences">
+            <span>Upcoming Presentation</span>
+            <strong>ITS World Congress 2026 in Gangneung</strong>
+          </a>
         </section>
 
         <nav class="page-index home-index" aria-label="Jump to home section">
@@ -255,6 +274,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417h"></script>
+  <script src="/assets/site.js?v=20260417i"></script>
 </body>
 </html>
