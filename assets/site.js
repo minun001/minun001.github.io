@@ -78,14 +78,27 @@
     var params = new URLSearchParams(window.location.search);
     if (!input || !count || !items.length) return;
 
+    function normalizeSearchText(value) {
+      return (value || '')
+        .toLowerCase()
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^\p{L}\p{N}]+/gu, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
     function update(shouldSync) {
       var rawValue = input.value.trim();
-      var query = rawValue.toLowerCase();
+      var query = normalizeSearchText(rawValue);
+      var queryTokens = query ? query.split(' ') : [];
       var visibleCount = 0;
 
       items.forEach(function (item) {
-        var haystack = (item.getAttribute('data-search') || item.textContent || '').toLowerCase();
-        var matches = !query || haystack.indexOf(query) !== -1;
+        var haystack = normalizeSearchText(item.getAttribute('data-search') || item.textContent || '');
+        var matches = !queryTokens.length || queryTokens.every(function (token) {
+          return haystack.indexOf(token) !== -1;
+        });
         item.hidden = !matches;
         if (matches) visibleCount += 1;
       });
