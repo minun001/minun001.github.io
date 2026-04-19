@@ -4,6 +4,7 @@ import html
 import json
 import os
 import re
+import unicodedata
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -70,6 +71,12 @@ def clean_html_text(value: str) -> str:
 
 def load_overrides() -> dict[str, Any]:
     return json.loads(OVERRIDES_PATH.read_text(encoding="utf-8"))
+
+
+def load_json_if_exists(path: Path) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def parse_metrics(profile_html: str) -> dict[str, dict[str, int]]:
@@ -311,6 +318,62 @@ def build_search_terms(record: dict[str, Any]) -> str:
     return " ".join(value for value in values if value).strip()
 
 
+def normalize_dedupe_text(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value or "")
+    normalized = "".join(char for char in normalized if not unicodedata.combining(char))
+    normalized = re.sub(r"[^0-9a-zA-Z가-힣]+", " ", normalized.lower())
+    return " ".join(normalized.split())
+
+
+def record_dedupe_key(record: dict[str, Any]) -> tuple[str, str, str]:
+    return (
+        record.get("category", ""),
+        normalize_dedupe_text(record.get("title", "")),
+        normalize_dedupe_text(record.get("venue", "")),
+    )
+
+
+def prefer_record(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
+    left_score = (
+        (1 if left.get("source") == "manual" else 0),
+        (1 if left.get("image") else 0),
+        left.get("citation_count", 0),
+    )
+    right_score = (
+        (1 if right.get("source") == "manual" else 0),
+        (1 if right.get("image") else 0),
+        right.get("citation_count", 0),
+    )
+    return left if left_score >= right_score else right
+
+
+def dedupe_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_id: dict[str, dict[str, Any]] = {}
+    by_signature: dict[tuple[str, str, str], dict[str, Any]] = {}
+
+    for record in records:
+        record_id = record.get("id", "")
+        if record_id in by_id:
+            by_id[record_id] = prefer_record(by_id[record_id], record)
+            continue
+
+        signature = record_dedupe_key(record)
+        if signature in by_signature:
+            chosen = prefer_record(by_signature[signature], record)
+            if chosen is not by_signature[signature]:
+                old_id = by_signature[signature].get("id", "")
+                if old_id:
+                    by_id.pop(old_id, None)
+            by_signature[signature] = chosen
+            by_id[chosen.get("id", "")] = chosen
+            continue
+
+        by_id[record_id] = record
+        by_signature[signature] = record
+
+    return list(by_id.values())
+
+
 def build_scholar_record(
     row: dict[str, Any],
     detail_map: dict[str, str],
@@ -452,6 +515,21 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+def payload_without_refresh_stamp(payload: dict[str, Any]) -> dict[str, Any]:
+    stripped = json.loads(json.dumps(payload))
+    stripped.pop("checked_at", None)
+    stripped.pop("checked_at_display", None)
+    return stripped
+
+
+def write_publications_payload_if_changed(payload: dict[str, Any]) -> bool:
+    current_payload = load_json_if_exists(PUBLICATIONS_OUTPUT_PATH)
+    if current_payload and payload_without_refresh_stamp(current_payload) == payload_without_refresh_stamp(payload):
+        return False
+    write_json(PUBLICATIONS_OUTPUT_PATH, payload)
+    return True
+
+
 def main() -> None:
     overrides = load_overrides()
     try:
@@ -471,14 +549,17 @@ def main() -> None:
         for manual_record in overrides.get("manual_records", []):
             records.append(build_manual_record(manual_record))
 
+        records = dedupe_records(records)
+
         metrics_payload = build_metrics_payload(metrics, overrides["profile_name"])
         publications_payload = build_publications_payload(overrides, records)
         write_json(METRICS_OUTPUT_PATH, metrics_payload)
-        write_json(PUBLICATIONS_OUTPUT_PATH, publications_payload)
+        publications_changed = write_publications_payload_if_changed(publications_payload)
         print(
             "Updated Google Scholar data with "
             f"citations={metrics_payload['citations']['all']} "
-            f"and {publications_payload['total_records']} publication records."
+            f"and {publications_payload['total_records']} publication records "
+            f"({'changed' if publications_changed else 'no publication changes'})."
         )
     except (HTTPError, URLError, RuntimeError) as error:
         if os.environ.get("GITHUB_ACTIONS") == "true":
