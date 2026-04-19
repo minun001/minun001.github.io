@@ -684,6 +684,87 @@
     });
   }
 
+  function bindPublicationChipEffects() {
+    if (document.documentElement.hasAttribute('data-chip-effects-bound')) return;
+    document.documentElement.setAttribute('data-chip-effects-bound', 'true');
+
+    function triggerChipBurst(chip) {
+      if (!chip || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var now = Date.now();
+      var lastBurst = Number(chip.getAttribute('data-chip-burst-at') || '0');
+      if (now - lastBurst < 900) return;
+      chip.setAttribute('data-chip-burst-at', String(now));
+
+      var rect = chip.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+
+      var burst = document.createElement('span');
+      burst.className = 'pub-chip-burst';
+      burst.style.left = (rect.left + (rect.width / 2)) + 'px';
+      burst.style.top = (rect.top + (rect.height / 2)) + 'px';
+
+      var palette = ['#ffd166', '#ff7b72', '#72e0a3', '#72b6ff', '#ffffff'];
+      if (chip.classList.contains('pub-journal-chip--top')) {
+        palette = ['#ffd166', '#ff938a', '#ff5f52', '#ffffff'];
+      } else if (chip.classList.contains('pub-journal-chip--quartile')) {
+        palette = ['#dcffe9', '#8ef0b5', '#49c47b', '#ffffff'];
+      } else if (chip.classList.contains('pub-journal-chip--if')) {
+        palette = ['#e3f1ff', '#9ecfff', '#5aa1ff', '#ffffff'];
+      }
+
+      for (var index = 0; index < 12; index += 1) {
+        var spark = document.createElement('span');
+        spark.className = 'pub-chip-spark';
+        var angle = (Math.PI * 2 * index) / 12 + ((Math.random() - 0.5) * 0.32);
+        var distance = 24 + Math.random() * 28;
+        var dx = Math.cos(angle) * distance;
+        var dy = Math.sin(angle) * distance;
+        var size = 5 + Math.random() * 5;
+        var rotate = -24 + Math.random() * 48;
+        spark.style.setProperty('--dx', dx.toFixed(2) + 'px');
+        spark.style.setProperty('--dy', dy.toFixed(2) + 'px');
+        spark.style.setProperty('--spark-size', size.toFixed(2) + 'px');
+        spark.style.setProperty('--spark-rotate', rotate.toFixed(2) + 'deg');
+        spark.style.setProperty('--spark-color', palette[index % palette.length]);
+        spark.style.animationDelay = (Math.random() * 90).toFixed(0) + 'ms';
+        burst.appendChild(spark);
+      }
+
+      document.body.appendChild(burst);
+      window.setTimeout(function () {
+        burst.remove();
+      }, 900);
+    }
+
+    document.addEventListener('pointerover', function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      var chip = target.closest('.pub-journal-chip');
+      if (!chip) return;
+
+      var from = event.relatedTarget;
+      if (from instanceof Element && chip.contains(from)) return;
+      triggerChipBurst(chip);
+    });
+
+    document.addEventListener('focusin', function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      var chip = target.closest('.pub-journal-chip');
+      if (!chip) return;
+      triggerChipBurst(chip);
+    });
+
+    document.addEventListener('click', function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      var chip = target.closest('.pub-journal-chip');
+      if (!chip) return;
+      triggerChipBurst(chip);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     applyTheme();
     bindCopyButtons();
@@ -692,6 +773,7 @@
     bindNewsFilter();
     bindSectionIndex();
     loadPublicationArchive().finally(function () {
+      bindPublicationChipEffects();
       bindPublicationSearch();
     });
   });
