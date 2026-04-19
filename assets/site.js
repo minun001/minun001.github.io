@@ -100,14 +100,63 @@
     value = Math.max(1, Math.min(50, value));
 
     var intensity = 1 - ((value - 1) / 49);
-    var fromLightness = Math.round(88 - (intensity * 26));
-    var toLightness = Math.round(74 - (intensity * 26));
-    var fromSaturation = Math.round(70 + (intensity * 16));
-    var toSaturation = Math.round(72 + (intensity * 18));
+    var fromLightness = Math.round(86 - (intensity * 24));
+    var midLightness = Math.round(72 - (intensity * 22));
+    var toLightness = Math.round(60 - (intensity * 18));
+    var fromSaturation = Math.round(70 + (intensity * 14));
+    var midSaturation = Math.round(76 + (intensity * 14));
+    var toSaturation = Math.round(80 + (intensity * 12));
+    var shadowAlpha = (0.11 + (intensity * 0.16)).toFixed(2);
 
     return (
       '--chip-red-from:hsl(10 ' + fromSaturation + '% ' + fromLightness + '%);' +
-      '--chip-red-to:hsl(3 ' + toSaturation + '% ' + toLightness + '%);'
+      '--chip-red-mid:hsl(6 ' + midSaturation + '% ' + midLightness + '%);' +
+      '--chip-red-to:hsl(2 ' + toSaturation + '% ' + toLightness + '%);' +
+      '--chip-red-shadow:' + shadowAlpha + ';'
+    );
+  }
+
+  function getQuartileBadgeStyle(quartileLabel) {
+    var match = String(quartileLabel || '').match(/q(\d+)/i);
+    var quartile = match ? Number(match[1]) : 4;
+    quartile = Math.max(1, Math.min(4, quartile));
+
+    var intensity = 1 - ((quartile - 1) / 3);
+    var fromLightness = Math.round(82 - (intensity * 20));
+    var midLightness = Math.round(66 - (intensity * 18));
+    var toLightness = Math.round(52 - (intensity * 16));
+    var fromSaturation = Math.round(52 + (intensity * 18));
+    var midSaturation = Math.round(58 + (intensity * 18));
+    var toSaturation = Math.round(62 + (intensity * 16));
+    var shadowAlpha = (0.08 + (intensity * 0.14)).toFixed(2);
+
+    return (
+      '--chip-green-from:hsl(144 ' + fromSaturation + '% ' + fromLightness + '%);' +
+      '--chip-green-mid:hsl(142 ' + midSaturation + '% ' + midLightness + '%);' +
+      '--chip-green-to:hsl(140 ' + toSaturation + '% ' + toLightness + '%);' +
+      '--chip-green-shadow:' + shadowAlpha + ';'
+    );
+  }
+
+  function getImpactFactorBadgeStyle(impactFactor) {
+    var value = Number(impactFactor);
+    if (!Number.isFinite(value)) value = 0;
+    value = Math.max(0, Math.min(15, value));
+
+    var intensity = value / 15;
+    var fromLightness = Math.round(84 - (intensity * 22));
+    var midLightness = Math.round(70 - (intensity * 20));
+    var toLightness = Math.round(58 - (intensity * 18));
+    var fromSaturation = Math.round(62 + (intensity * 18));
+    var midSaturation = Math.round(66 + (intensity * 18));
+    var toSaturation = Math.round(70 + (intensity * 16));
+    var shadowAlpha = (0.08 + (intensity * 0.16)).toFixed(2);
+
+    return (
+      '--chip-blue-from:hsl(207 ' + fromSaturation + '% ' + fromLightness + '%);' +
+      '--chip-blue-mid:hsl(213 ' + midSaturation + '% ' + midLightness + '%);' +
+      '--chip-blue-to:hsl(219 ' + toSaturation + '% ' + toLightness + '%);' +
+      '--chip-blue-shadow:' + shadowAlpha + ';'
     );
   }
 
@@ -126,12 +175,16 @@
     }
     if (metrics.quartile_label) {
       badges.push(
-        '<span class="pub-journal-chip pub-journal-chip--quartile">' + escapeHtml(metrics.quartile_label) + '</span>'
+        '<span class="pub-journal-chip pub-journal-chip--quartile" style="' + escapeAttribute(getQuartileBadgeStyle(metrics.quartile_label)) + '">' +
+          escapeHtml(metrics.quartile_label) +
+        '</span>'
       );
     }
     if (metrics.if_label) {
       badges.push(
-        '<span class="pub-journal-chip pub-journal-chip--if">' + escapeHtml(metrics.if_label) + '</span>'
+        '<span class="pub-journal-chip pub-journal-chip--if" style="' + escapeAttribute(getImpactFactorBadgeStyle(metrics.impact_factor)) + '">' +
+          escapeHtml(metrics.if_label) +
+        '</span>'
       );
     }
     if (!badges.length) return venueName;
