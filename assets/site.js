@@ -94,10 +94,56 @@
     return '<div class="pub-actions">' + actions.join('') + '</div>';
   }
 
+  function getTopPercentBadgeStyle(topPercent) {
+    var value = Number(topPercent);
+    if (!Number.isFinite(value)) value = 25;
+    value = Math.max(1, Math.min(50, value));
+
+    var intensity = 1 - ((value - 1) / 49);
+    var fromLightness = Math.round(88 - (intensity * 26));
+    var toLightness = Math.round(74 - (intensity * 26));
+    var fromSaturation = Math.round(70 + (intensity * 16));
+    var toSaturation = Math.round(72 + (intensity * 18));
+
+    return (
+      '--chip-red-from:hsl(10 ' + fromSaturation + '% ' + fromLightness + '%);' +
+      '--chip-red-to:hsl(3 ' + toSaturation + '% ' + toLightness + '%);'
+    );
+  }
+
+  function renderJournalVenue(item) {
+    var venueName = escapeHtml(item.venue || '');
+    var metrics = item.journal_metrics;
+    if (!metrics || !venueName) return venueName;
+
+    var badges = [];
+    if (metrics.top_label) {
+      badges.push(
+        '<span class="pub-journal-chip pub-journal-chip--top" style="' + escapeAttribute(getTopPercentBadgeStyle(metrics.top_percent)) + '">' +
+          escapeHtml(metrics.top_label) +
+        '</span>'
+      );
+    }
+    if (metrics.if_label) {
+      badges.push(
+        '<span class="pub-journal-chip pub-journal-chip--if">' + escapeHtml(metrics.if_label) + '</span>'
+      );
+    }
+    if (!badges.length) return venueName;
+
+    return (
+      '<span class="pub-journal-line">' +
+        '<span class="pub-journal-name">' + venueName + '</span>' +
+        '<span class="pub-journal-metrics">' + badges.join('') + '</span>' +
+      '</span>'
+    );
+  }
+
   function renderPublicationCard(item) {
     var cardClass = item.image ? 'pub-item' : 'pub-item pub-item-text';
     var searchData = escapeHtml(buildPublicationSearchData(item));
     var doiMarkup = item.doi ? '<p class="pub-note">DOI: ' + escapeHtml(item.doi) + '</p>' : '';
+    var venueLabel = item.category && item.category.indexOf('journals') !== -1 ? 'Journal' : 'Venue';
     var detailsMarkup = item.details
       ? '<div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">' + escapeHtml(item.details) + '</span></div>'
       : '';
@@ -106,7 +152,7 @@
       '<article class="' + cardClass + '" data-publication-item data-search="' + searchData + '">' +
         '<h3>' + escapeHtml(item.title) + '</h3>' +
         '<div class="pub-meta">' +
-          '<div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">' + escapeHtml(item.venue || '') + '</span></div>' +
+          '<div class="pub-meta-row"><span class="pub-meta-label">' + venueLabel + '</span><span class="pub-meta-value">' + renderJournalVenue(item) + '</span></div>' +
           '<div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">' + escapeHtml(item.authors || '') + '</span></div>' +
           detailsMarkup +
         '</div>' +

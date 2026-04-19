@@ -420,6 +420,7 @@ def build_scholar_record(
         "volume": detail_map.get("Volume", ""),
         "issue": detail_map.get("Issue", ""),
         "pages": detail_map.get("Pages", ""),
+        "journal_metrics": dict(override.get("journal_metrics", {})) if override else {},
     }
     record["search_terms"] = build_search_terms(record)
     if "journals" in category:
@@ -449,6 +450,7 @@ def build_manual_record(manual_record: dict[str, Any]) -> dict[str, Any]:
         "volume": manual_record.get("volume", ""),
         "issue": manual_record.get("issue", ""),
         "pages": manual_record.get("pages", ""),
+        "journal_metrics": dict(manual_record.get("journal_metrics", {})),
     }
     if manual_record.get("bibtex"):
         record["bibtex"] = manual_record["bibtex"]

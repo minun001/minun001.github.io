@@ -37,6 +37,12 @@
           "volume": "",
           "issue": "",
           "pages": "",
+          "journal_metrics": {
+            "top_percent": 2,
+            "top_label": "Top 2%",
+            "impact_factor": "8.4",
+            "if_label": "IF 8.4"
+          },
           "search_terms": "Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction IEEE Transactions on Intelligent Transportation Systems Hyunsik Min, Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh This paper presents a temporal graph cross-attention framework for front-vehicle trajectory prediction with an emphasis on anticipatory driving, passenger comfort, and safety support. International Journals autonomous driving trajectory prediction temporal graph cross attention t-its",
           "bibtex": "@article{min2026anticipatory,\n  title={Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction},\n  author={Hyunsik Min, Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh},\n  journal={IEEE Transactions on Intelligent Transportation Systems},\n  year={2026}\n}"
         },
@@ -67,6 +73,12 @@
           "volume": "391",
           "issue": "",
           "pages": "125848",
+          "journal_metrics": {
+            "top_percent": 7,
+            "top_label": "Top 7%",
+            "impact_factor": "11.0",
+            "if_label": "IF 11.0"
+          },
           "search_terms": "SolarNexus: A Deep Learning Framework for Adaptive Photovoltaic Power Generation Forecasting and Scalable Management Applied Energy Hyunsik Min, Byeongjoon Noh This paper introduces an adaptive photovoltaic forecasting framework that connects plant-level prediction accuracy with scalable energy-management workflows. International Journals solar photovoltaic applied energy forecasting management",
           "bibtex": "@article{min2025solarnexus,\n  title={SolarNexus: A Deep Learning Framework for Adaptive Photovoltaic Power Generation Forecasting and Scalable Management},\n  author={Hyunsik Min, Byeongjoon Noh},\n  journal={Applied Energy},\n  volume={391},\n  pages={125848},\n  doi={10.1016/j.apenergy.2025.125848},\n  year={2025}\n}"
         },
@@ -97,6 +109,12 @@
           "volume": "",
           "issue": "",
           "pages": "1-22",
+          "journal_metrics": {
+            "top_percent": 25,
+            "top_label": "Top 25%",
+            "impact_factor": "3.1",
+            "if_label": "IF 3.1"
+          },
           "search_terms": "TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines Artificial Intelligence and Law Hyunsik Min, Byeongjoon Noh This paper studies traffic-accident sentencing prediction by combining legal text, structured case attributes, and language-model reasoning for imprisonment, probation, and fine outcomes. International Journals legal ai traffic accident sentencing llm artificial intelligence and law",
           "bibtex": "@article{min2025tracsllm,\n  title={TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines},\n  author={Hyunsik Min, Byeongjoon Noh},\n  journal={Artificial Intelligence and Law},\n  pages={1-22},\n  doi={10.1007/s10506-025-09472-8},\n  year={2025}\n}"
         },
@@ -126,6 +144,12 @@
           "volume": "13",
           "issue": "11",
           "pages": "2071",
+          "journal_metrics": {
+            "top_percent": 24,
+            "top_label": "Top 24%",
+            "impact_factor": "2.6",
+            "if_label": "IF 2.6"
+          },
           "search_terms": "SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea Electronics Hyunsik Min, Seokjun Hong, Jeonghoon Song, Byeoungmin Son, Byeongjoon Noh, Jihoon Moon This paper proposes a deep-learning approach for photovoltaic power forecasting in South Korea with an emphasis on stable national-scale prediction performance. International Journals solar photovoltaic energy forecasting",
           "bibtex": "@article{min2024solarflux,\n  title={SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea},\n  author={Hyunsik Min, Seokjun Hong, Jeonghoon Song, Byeoungmin Son, Byeongjoon Noh, Jihoon Moon},\n  journal={Electronics},\n  volume={13},\n  number={11},\n  pages={2071},\n  doi={10.3390/electronics13112071},\n  year={2024}\n}"
         }

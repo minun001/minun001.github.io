@@ -19,6 +19,12 @@
       "display_title": "SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea",
       "summary": "This paper proposes a deep-learning approach for photovoltaic power forecasting in South Korea with an emphasis on stable national-scale prediction performance.",
       "details": "Volume 13, Issue 11 | Article 2071 | 2024",
+      "journal_metrics": {
+        "top_percent": 24,
+        "top_label": "Top 24%",
+        "impact_factor": "2.6",
+        "if_label": "IF 2.6"
+      },
       "doi": "10.3390/electronics13112071",
       "image": "/assets/img/electronics-13-02071-g002-550.jpg",
       "image_alt": "SolarFlux Predictor photovoltaic forecasting figure",
@@ -31,6 +37,12 @@
       "display_title": "SolarNexus: A Deep Learning Framework for Adaptive Photovoltaic Power Generation Forecasting and Scalable Management",
       "summary": "This paper introduces an adaptive photovoltaic forecasting framework that connects plant-level prediction accuracy with scalable energy-management workflows.",
       "details": "Volume 391 | Article 125848 | 2025",
+      "journal_metrics": {
+        "top_percent": 7,
+        "top_label": "Top 7%",
+        "impact_factor": "11.0",
+        "if_label": "IF 11.0"
+      },
       "doi": "10.1016/j.apenergy.2025.125848",
       "image": "/assets/img/SolarNexus_framework.png",
       "image_alt": "SolarNexus framework",
@@ -43,6 +55,12 @@
       "display_title": "TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines",
       "summary": "This paper studies traffic-accident sentencing prediction by combining legal text, structured case attributes, and language-model reasoning for imprisonment, probation, and fine outcomes.",
       "details": "First published online Jul. 23, 2025",
+      "journal_metrics": {
+        "top_percent": 25,
+        "top_label": "Top 25%",
+        "impact_factor": "3.1",
+        "if_label": "IF 3.1"
+      },
       "doi": "10.1007/s10506-025-09472-8",
       "image": "/assets/img/TRACM_LLM_framework.png",
       "image_alt": "TRACS-LLM framework",
@@ -56,6 +74,12 @@
       "authors": "Hyunsik Min, Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh",
       "summary": "This paper presents a temporal graph cross-attention framework for front-vehicle trajectory prediction with an emphasis on anticipatory driving, passenger comfort, and safety support.",
       "details": "Accepted paper | 2026",
+      "journal_metrics": {
+        "top_percent": 2,
+        "top_label": "Top 2%",
+        "impact_factor": "8.4",
+        "if_label": "IF 8.4"
+      },
       "image": "/assets/img/fig-model.png",
       "image_alt": "Temporal graph cross attention trajectory prediction model diagram",
       "topic_title": "Autonomous Driving",
