@@ -27,10 +27,21 @@
     .pub-scholar-link{display:inline-flex;align-items:center;width:max-content;font-size:.9rem;font-weight:800}
     .pub-scholar-note{color:var(--text-soft);font-size:.84rem;line-height:1.5}
     .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .9s ease both}
+    .pub-search-wrap{position:relative;display:grid;gap:.7rem}
     .pub-search{display:flex;align-items:center;gap:.75rem;min-height:50px;padding:0 .95rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
     .pub-search span{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
     .pub-search input{width:100%;border:none;background:transparent;color:var(--text-title);font:600 .98rem/1.4 var(--font-body)}
     .pub-search input:focus{outline:none}
+    .pub-search-results{display:grid;gap:.45rem;padding:.8rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
+    .pub-search-results[hidden]{display:none}
+    .pub-search-results-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding-bottom:.2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+    .pub-search-result-list{display:grid;gap:.45rem}
+    .pub-search-result{display:grid;gap:.18rem;padding:.78rem .82rem;border-radius:8px;background:#f7fafb;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:inherit;text-decoration:none;transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
+    .pub-search-result:hover,.pub-search-result:focus-visible{background:#eef6f7;box-shadow:inset 0 0 0 1px rgba(17,32,51,.14);transform:translateY(-1px);outline:none}
+    .pub-search-result-title{color:var(--text-title);font-size:.98rem;font-weight:800;line-height:1.35}
+    .pub-search-result-meta{color:var(--text-soft);font-size:.86rem;line-height:1.45}
+    .pub-search-result-kind{display:inline-flex;align-items:center;width:max-content;padding:.26rem .48rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+    .pub-search-result-empty{padding:.2rem .1rem;color:var(--text-soft);font-size:.92rem;line-height:1.5}
     .pub-tool-meta{display:flex;align-items:center;gap:.7rem;justify-content:flex-end;color:var(--text-soft);font-size:.9rem}
     .pub-section{display:grid;gap:1rem;scroll-margin-top:104px}
     .pub-section-head{display:grid;gap:.2rem;padding:1.2rem 0 0;border-top:1px solid var(--border-soft)}
@@ -148,10 +159,13 @@
         </section>
 
         <section class="pub-tools" aria-label="Publication tools">
-          <label class="pub-search">
-            <span>Search</span>
-            <input type="search" placeholder="Find papers by topic, title, or venue" data-publication-search>
-          </label>
+          <div class="pub-search-wrap">
+            <label class="pub-search">
+              <span>Search</span>
+              <input type="search" placeholder="Find papers by topic, title, or venue" data-publication-search aria-expanded="false" aria-controls="publication-search-results" autocomplete="off">
+            </label>
+            <div class="pub-search-results" id="publication-search-results" data-publication-results hidden></div>
+          </div>
           <div class="pub-tool-meta">
             <strong data-publication-count>13 total records</strong>
             <button class="btn-soft" type="button" data-publication-reset hidden>Reset</button>
@@ -527,7 +541,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260417k"></script>
+  <script src="/assets/site.js?v=20260419a"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var modal = document.getElementById('bibtex-modal');

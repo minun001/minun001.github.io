@@ -70,6 +70,7 @@
     if (!root) return;
 
     var input = root.querySelector('[data-publication-search]');
+    var results = root.querySelector('[data-publication-results]');
     var reset = root.querySelector('[data-publication-reset]');
     var count = root.querySelector('[data-publication-count]');
     var empty = root.querySelector('[data-publication-empty]');
@@ -88,19 +89,156 @@
         .trim();
     }
 
+    function toTokens(value) {
+      return normalizeSearchText(value)
+        .split(' ')
+        .filter(Boolean);
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    var records = items.map(function (item, index) {
+      var titleNode = item.querySelector('h3');
+      var metaValues = Array.prototype.slice.call(item.querySelectorAll('.pub-meta-value'));
+      var summaryNode = item.querySelector('.pub-summary-copy');
+      var primaryLink = item.querySelector('.pub-actions a[href]');
+      var kindLabel = item.closest('[data-publication-section]') && item.closest('[data-publication-section]').querySelector('h2');
+      var title = titleNode ? titleNode.textContent.trim() : 'Publication';
+      var venue = metaValues[0] ? metaValues[0].textContent.trim() : '';
+      var details = metaValues[2] ? metaValues[2].textContent.trim() : '';
+      var summary = summaryNode ? summaryNode.textContent.trim() : '';
+      var kind = kindLabel ? kindLabel.textContent.trim() : 'Publication';
+      var anchorId = item.id || 'publication-record-' + (index + 1);
+
+      item.id = anchorId;
+      if (!item.hasAttribute('tabindex')) item.setAttribute('tabindex', '-1');
+
+      return {
+        item: item,
+        anchorId: anchorId,
+        title: title,
+        venue: venue,
+        details: details,
+        summary: summary,
+        kind: kind,
+        primaryLink: primaryLink ? primaryLink.href : '',
+        titleNorm: normalizeSearchText(title),
+        venueNorm: normalizeSearchText(venue),
+        detailsNorm: normalizeSearchText(details),
+        summaryNorm: normalizeSearchText(summary),
+        searchNorm: normalizeSearchText(item.getAttribute('data-search') || '')
+      };
+    });
+
+    function scoreRecord(record, query, queryTokens) {
+      if (!queryTokens.length) return { score: 0, matchedTokens: 0 };
+
+      var score = 0;
+      var matchedTokens = 0;
+
+      queryTokens.forEach(function (token) {
+        var tokenMatched = false;
+        if (record.titleNorm.indexOf(token) !== -1) {
+          score += 40;
+          tokenMatched = true;
+        } else if (record.venueNorm.indexOf(token) !== -1) {
+          score += 24;
+          tokenMatched = true;
+        } else if (record.summaryNorm.indexOf(token) !== -1) {
+          score += 18;
+          tokenMatched = true;
+        } else if (record.detailsNorm.indexOf(token) !== -1) {
+          score += 14;
+          tokenMatched = true;
+        } else if (record.searchNorm.indexOf(token) !== -1) {
+          score += 12;
+          tokenMatched = true;
+        }
+
+        if (tokenMatched) matchedTokens += 1;
+      });
+
+      if (record.titleNorm.indexOf(query) !== -1) score += 80;
+      if (record.venueNorm.indexOf(query) !== -1) score += 40;
+      if (record.summaryNorm.indexOf(query) !== -1) score += 26;
+      if (record.searchNorm.indexOf(query) !== -1) score += 22;
+      if (record.titleNorm.slice(0, query.length) === query) score += 24;
+      if (matchedTokens === queryTokens.length) score += 36;
+
+      return { score: score, matchedTokens: matchedTokens };
+    }
+
+    function renderResults(matches, query) {
+      if (!results) return;
+
+      if (!query) {
+        results.hidden = true;
+        results.innerHTML = '';
+        input.setAttribute('aria-expanded', 'false');
+        return;
+      }
+
+      input.setAttribute('aria-expanded', 'true');
+
+      if (!matches.length) {
+        results.hidden = false;
+        results.innerHTML =
+          '<div class="pub-search-results-head"><span>Recommended Matches</span><span>0 results</span></div>' +
+          '<div class="pub-search-result-empty">No close match yet. Try a venue, topic, or shorter paper title.</div>';
+        return;
+      }
+
+      var topMatches = matches.slice(0, 6);
+      var listMarkup = topMatches.map(function (entry) {
+        var record = entry.record;
+        var href = record.primaryLink || ('#' + record.anchorId);
+        var targetAttrs = record.primaryLink ? ' target="_blank" rel="noopener"' : '';
+        var metaText = [record.venue, record.details].filter(Boolean).join(' | ');
+        return (
+          '<a class="pub-search-result" href="' + escapeHtml(href) + '"' + targetAttrs + ' data-publication-result="' + escapeHtml(record.anchorId) + '">' +
+            '<span class="pub-search-result-kind">' + escapeHtml(record.kind) + '</span>' +
+            '<span class="pub-search-result-title">' + escapeHtml(record.title) + '</span>' +
+            '<span class="pub-search-result-meta">' + escapeHtml(metaText) + '</span>' +
+          '</a>'
+        );
+      }).join('');
+
+      results.hidden = false;
+      results.innerHTML =
+        '<div class="pub-search-results-head"><span>Recommended Matches</span><span>' + topMatches.length + ' results</span></div>' +
+        '<div class="pub-search-result-list" role="listbox">' + listMarkup + '</div>';
+    }
+
     function update(shouldSync) {
       var rawValue = input.value.trim();
       var query = normalizeSearchText(rawValue);
-      var queryTokens = query ? query.split(' ') : [];
+      var queryTokens = toTokens(rawValue);
       var visibleCount = 0;
+      var matchedRecords = [];
 
-      items.forEach(function (item) {
-        var haystack = normalizeSearchText(item.getAttribute('data-search') || item.textContent || '');
-        var matches = !queryTokens.length || queryTokens.every(function (token) {
-          return haystack.indexOf(token) !== -1;
-        });
-        item.hidden = !matches;
-        if (matches) visibleCount += 1;
+      records.forEach(function (record) {
+        var recordScore = scoreRecord(record, query, queryTokens);
+        var matches = !queryTokens.length || (
+          recordScore.score > 0 && (
+            recordScore.matchedTokens === queryTokens.length ||
+            recordScore.matchedTokens >= Math.max(1, Math.ceil(queryTokens.length / 2)) ||
+            record.titleNorm.indexOf(query) !== -1 ||
+            record.searchNorm.indexOf(query) !== -1
+          )
+        );
+
+        record.item.hidden = !matches;
+        if (matches) {
+          visibleCount += 1;
+          if (queryTokens.length) matchedRecords.push({ record: record, score: recordScore.score });
+        }
       });
 
       sections.forEach(function (section) {
@@ -113,6 +251,12 @@
         section.hidden = !hasVisibleItem;
       });
 
+      matchedRecords.sort(function (left, right) {
+        if (right.score !== left.score) return right.score - left.score;
+        return left.record.title.localeCompare(right.record.title);
+      });
+
+      renderResults(matchedRecords, query);
       count.textContent = query ? visibleCount + ' matching records' : items.length + ' total records';
       if (reset) reset.hidden = !query;
       if (empty) empty.hidden = visibleCount !== 0;
@@ -129,11 +273,37 @@
     input.addEventListener('input', function () {
       update(true);
     });
+    input.addEventListener('keydown', function (event) {
+      if (event.key !== 'Enter' || !results || results.hidden) return;
+      var firstResult = results.querySelector('.pub-search-result');
+      if (!firstResult) return;
+      event.preventDefault();
+      firstResult.click();
+    });
     if (reset) {
       reset.addEventListener('click', function () {
         input.value = '';
         update(true);
         input.focus();
+      });
+    }
+
+    if (results) {
+      results.addEventListener('click', function (event) {
+        var target = event.target;
+        if (!(target instanceof Element)) return;
+        var resultLink = target.closest('.pub-search-result');
+        if (!resultLink) return;
+
+        var recordId = resultLink.getAttribute('data-publication-result');
+        var anchorTarget = recordId ? document.getElementById(recordId) : null;
+        if (!resultLink.getAttribute('target') && anchorTarget) {
+          event.preventDefault();
+          anchorTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.setTimeout(function () {
+            anchorTarget.focus({ preventScroll: true });
+          }, 220);
+        }
       });
     }
 
