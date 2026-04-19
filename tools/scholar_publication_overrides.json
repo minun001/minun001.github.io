@@ -137,15 +137,7 @@
       "keywords": ["urban sensing", "traffic noise", "classification", "conference"]
     },
     "0EnyYjriUFMC": {
-      "category": "domestic-conferences",
-      "display_title": "Natural Language Processing-Based Road Traffic Accident Judgment Prediction System: Using Traffic-Accident Situation Text",
-      "display_venue": "Conference of Korean Society of Transportation",
-      "authors": "Hyunsik Min, Junyeong Yun, Byeongjoon Noh",
-      "summary": "This conference paper studies road-traffic-accident judgment prediction with a focus on textual descriptions of accident situations.",
-      "details": "2024",
-      "topic_title": "Legal AI",
-      "topic_copy": "Legal-text modeling for road-traffic judgment prediction.",
-      "keywords": ["legal ai", "road traffic accidents", "judgment prediction", "conference"]
+      "hidden": true
     },
     "W7OEmFMy1HYC": {
       "category": "domestic-conferences",

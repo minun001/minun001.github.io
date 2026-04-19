@@ -3,7 +3,7 @@
   "source_url": "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en",
   "checked_at": "2026-04-19",
   "checked_at_display": "April 19, 2026",
-  "total_records": 14,
+  "total_records": 13,
   "sections": [
     {
       "key": "international-journals",
@@ -292,7 +292,7 @@
     {
       "key": "domestic-conferences",
       "label": "Domestic Conferences",
-      "count": 6,
+      "count": 5,
       "description": "Scholar-synced conference papers from Korean venues.",
       "items": [
         {
@@ -407,34 +407,6 @@
           "issue": "",
           "pages": "275-279",
           "search_terms": "Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents Conference of The Korea Institute of Intelligent Transport Systems Hyunsik Min, Junyeong Yun, Byeongjoon Noh This conference paper presents an earlier judgment-prediction approach for road-traffic accidents based on textual descriptions of accident situations. Domestic Conferences legal ai road traffic accidents judgment prediction conference"
-        },
-        {
-          "id": "0EnyYjriUFMC",
-          "source": "scholar",
-          "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=2AUQlE8AAAAJ&pagesize=100&citation_for_view=2AUQlE8AAAAJ:0EnyYjriUFMC",
-          "title": "Natural Language Processing-Based Road Traffic Accident Judgment Prediction System: Using Traffic-Accident Situation Text",
-          "venue": "Conference of Korean Society of Transportation",
-          "authors": "Hyunsik Min, Junyeong Yun, Byeongjoon Noh",
-          "details": "2024",
-          "summary": "This conference paper studies road-traffic-accident judgment prediction with a focus on textual descriptions of accident situations.",
-          "category": "domestic-conferences",
-          "topic_title": "Legal AI",
-          "topic_copy": "Legal-text modeling for road-traffic judgment prediction.",
-          "year": 2024,
-          "citation_count": 0,
-          "keywords": [
-            "legal ai",
-            "road traffic accidents",
-            "judgment prediction",
-            "conference"
-          ],
-          "doi": "",
-          "image": "",
-          "image_alt": "",
-          "volume": "",
-          "issue": "",
-          "pages": "",
-          "search_terms": "Natural Language Processing-Based Road Traffic Accident Judgment Prediction System: Using Traffic-Accident Situation Text Conference of Korean Society of Transportation Hyunsik Min, Junyeong Yun, Byeongjoon Noh This conference paper studies road-traffic-accident judgment prediction with a focus on textual descriptions of accident situations. Domestic Conferences legal ai road traffic accidents judgment prediction conference"
         },
         {
           "id": "9yKSN-GCB0IC",
