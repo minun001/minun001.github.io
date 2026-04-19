@@ -337,6 +337,12 @@
     var sections = Array.prototype.slice.call(root.querySelectorAll('[data-publication-section]'));
     var params = new URLSearchParams(window.location.search);
     if (!input || !count || !items.length) return;
+    var publicationKindPriority = {
+      'international journals': 0,
+      'domestic journals': 1,
+      'international conferences': 2,
+      'domestic conferences': 3
+    };
 
     var records = items.map(function (item, index) {
       var titleNode = item.querySelector('h3');
@@ -359,6 +365,9 @@
         venue: venue,
         details: details,
         kind: kind,
+        kindPriority: Object.prototype.hasOwnProperty.call(publicationKindPriority, normalizeSearchText(kind))
+          ? publicationKindPriority[normalizeSearchText(kind)]
+          : 99,
         primaryLink: primaryLink ? primaryLink.href : '',
         titleNorm: normalizeSearchText(title),
         venueNorm: normalizeSearchText(venue),
@@ -479,6 +488,9 @@
 
       matchedRecords.sort(function (left, right) {
         if (right.score !== left.score) return right.score - left.score;
+        if (left.record.kindPriority !== right.record.kindPriority) {
+          return left.record.kindPriority - right.record.kindPriority;
+        }
         return left.record.title.localeCompare(right.record.title);
       });
 
