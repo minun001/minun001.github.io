@@ -141,6 +141,39 @@
     update(false);
   }
 
+  function bindScholarMetrics() {
+    var card = document.querySelector('[data-scholar-card]');
+    if (!card) return;
+
+    var source = card.getAttribute('data-scholar-source');
+    var citationsTarget = card.querySelector('[data-scholar-citations]');
+    var hIndexTarget = card.querySelector('[data-scholar-hindex]');
+    var updatedTarget = card.querySelector('[data-scholar-updated]');
+    if (!source || !citationsTarget || !hIndexTarget || !updatedTarget || !window.fetch) return;
+
+    var cacheKey = new Date().toISOString().slice(0, 10);
+
+    window.fetch(source + '?v=' + encodeURIComponent(cacheKey), { cache: 'no-store' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Failed to load scholar metrics.');
+        return response.json();
+      })
+      .then(function (metrics) {
+        if (metrics && metrics.citations && typeof metrics.citations.all === 'number') {
+          citationsTarget.textContent = String(metrics.citations.all);
+        }
+        if (metrics && metrics.h_index && typeof metrics.h_index.all === 'number') {
+          hIndexTarget.textContent = String(metrics.h_index.all);
+        }
+        if (metrics && metrics.checked_at_display) {
+          updatedTarget.textContent = 'Last checked on ' + metrics.checked_at_display + '.';
+        }
+      })
+      .catch(function () {
+        // Keep the static fallback values when the daily metrics snapshot is unavailable.
+      });
+  }
+
   function bindNewsFilter() {
     var root = document.querySelector('[data-news-root]');
     if (!root) return;
@@ -260,6 +293,7 @@
     bindCopyButtons();
     installTopButton();
     bindPublicationSearch();
+    bindScholarMetrics();
     bindNewsFilter();
     bindSectionIndex();
   });

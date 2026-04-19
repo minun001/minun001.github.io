@@ -1,0 +1,40 @@
+name: Update Google Scholar Metrics
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 15 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scholar-metrics-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Refresh Google Scholar metrics
+        run: python tools/update_scholar_metrics.py
+
+      - name: Commit and push updated snapshot
+        run: |
+          if git diff --quiet; then
+            echo "No metrics changes detected."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/google-scholar-metrics.json
+          git commit -m "Update Google Scholar metrics"
+          git push
