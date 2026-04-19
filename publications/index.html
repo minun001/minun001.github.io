@@ -18,6 +18,10 @@
     .pub-summary-item span{display:block;margin:0;color:var(--text-soft);font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
     .pub-summary-item strong{display:block;margin:0;color:var(--text-title);font-size:2rem;line-height:1.02}
     .pub-summary-item[data-publication-summary] strong{margin-top:auto}
+    .pub-summary-substats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;margin-top:auto}
+    .pub-summary-substat{display:grid;gap:.24rem;padding:.72rem .78rem;border:1px solid rgba(17,32,51,.08);border-radius:8px;background:rgba(255,255,255,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.52)}
+    .pub-summary-substat-label{color:var(--text-soft);font-size:.67rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+    .pub-summary-substat-value{color:var(--text-title);font-size:.94rem;font-weight:800;line-height:1.2}
     .pub-summary-item--metrics{gap:.85rem;background:linear-gradient(180deg,#ffffff 0%,#f2f7fb 100%)}
     .pub-summary-item--metrics:before{background:linear-gradient(90deg,rgba(29,78,216,.9),rgba(14,165,233,.72))}
     .pub-summary-item--metrics p{margin:0}
@@ -138,18 +142,58 @@
           <article class="pub-summary-item" data-publication-summary="international-journals">
             <span>International Journals</span>
             <strong data-publication-summary-count>4 papers</strong>
+            <div class="pub-summary-substats" aria-label="International journal highlights">
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Latest Year</div>
+                <div class="pub-summary-substat-value">2026</div>
+              </div>
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Best IF</div>
+                <div class="pub-summary-substat-value">11.0</div>
+              </div>
+            </div>
           </article>
           <article class="pub-summary-item" data-publication-summary="domestic-journals">
             <span>Domestic Journals</span>
             <strong data-publication-summary-count>2 papers</strong>
+            <div class="pub-summary-substats" aria-label="Domestic journal highlights">
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Latest Year</div>
+                <div class="pub-summary-substat-value">2025</div>
+              </div>
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Core Areas</div>
+                <div class="pub-summary-substat-value">2 domains</div>
+              </div>
+            </div>
           </article>
           <article class="pub-summary-item" data-publication-summary="international-conferences">
             <span>International Conferences</span>
             <strong data-publication-summary-count>2 papers</strong>
+            <div class="pub-summary-substats" aria-label="International conference highlights">
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Scheduled Year</div>
+                <div class="pub-summary-substat-value">2026</div>
+              </div>
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Host Cities</div>
+                <div class="pub-summary-substat-value">2 cities</div>
+              </div>
+            </div>
           </article>
           <article class="pub-summary-item" data-publication-summary="domestic-conferences">
             <span>Domestic Conferences</span>
             <strong data-publication-summary-count>5 papers</strong>
+            <div class="pub-summary-substats" aria-label="Domestic conference highlights">
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Year Span</div>
+                <div class="pub-summary-substat-value">2023-2025</div>
+              </div>
+              <div class="pub-summary-substat">
+                <div class="pub-summary-substat-label">Topic Areas</div>
+                <div class="pub-summary-substat-value">4 themes</div>
+              </div>
+            </div>
           </article>
           <article class="pub-summary-item pub-summary-item--metrics" data-scholar-card data-scholar-source="/assets/data/google-scholar-metrics.json">
             <span>Google Scholar</span>
