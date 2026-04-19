@@ -161,7 +161,6 @@
           '<div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">' + escapeHtml(item.authors || '') + '</span></div>' +
           detailsMarkup +
         '</div>' +
-        '<p class="pub-summary-copy">' + escapeHtml(item.summary || '') + '</p>' +
         doiMarkup +
         renderPublicationMedia(item) +
         renderPublicationActions(item) +
@@ -291,13 +290,11 @@
     var records = items.map(function (item, index) {
       var titleNode = item.querySelector('h3');
       var metaValues = Array.prototype.slice.call(item.querySelectorAll('.pub-meta-value'));
-      var summaryNode = item.querySelector('.pub-summary-copy');
       var primaryLink = item.querySelector('.pub-actions a[href]');
       var kindLabel = item.closest('[data-publication-section]') && item.closest('[data-publication-section]').querySelector('h2');
       var title = titleNode ? titleNode.textContent.trim() : 'Publication';
       var venue = metaValues[0] ? metaValues[0].textContent.trim() : '';
       var details = metaValues[2] ? metaValues[2].textContent.trim() : '';
-      var summary = summaryNode ? summaryNode.textContent.trim() : '';
       var kind = kindLabel ? kindLabel.textContent.trim() : 'Publication';
       var anchorId = item.id || 'publication-record-' + (index + 1);
 
@@ -310,13 +307,11 @@
         title: title,
         venue: venue,
         details: details,
-        summary: summary,
         kind: kind,
         primaryLink: primaryLink ? primaryLink.href : '',
         titleNorm: normalizeSearchText(title),
         venueNorm: normalizeSearchText(venue),
         detailsNorm: normalizeSearchText(details),
-        summaryNorm: normalizeSearchText(summary),
         searchNorm: normalizeSearchText(item.getAttribute('data-search') || '')
       };
     });
@@ -335,9 +330,6 @@
         } else if (record.venueNorm.indexOf(token) !== -1) {
           score += 24;
           tokenMatched = true;
-        } else if (record.summaryNorm.indexOf(token) !== -1) {
-          score += 18;
-          tokenMatched = true;
         } else if (record.detailsNorm.indexOf(token) !== -1) {
           score += 14;
           tokenMatched = true;
@@ -351,7 +343,6 @@
 
       if (record.titleNorm.indexOf(query) !== -1) score += 80;
       if (record.venueNorm.indexOf(query) !== -1) score += 40;
-      if (record.summaryNorm.indexOf(query) !== -1) score += 26;
       if (record.searchNorm.indexOf(query) !== -1) score += 22;
       if (record.titleNorm.slice(0, query.length) === query) score += 24;
       if (matchedTokens === queryTokens.length) score += 36;
