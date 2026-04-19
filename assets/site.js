@@ -181,9 +181,7 @@
       var summaryCard = root.querySelector('[data-publication-summary="' + section.key + '"]');
       if (summaryCard) {
         var countTarget = summaryCard.querySelector('[data-publication-summary-count]');
-        var copyTarget = summaryCard.querySelector('[data-publication-summary-copy]');
         if (countTarget) countTarget.textContent = formatPaperCount(section.count || 0);
-        if (copyTarget && section.description) copyTarget.textContent = section.description;
       }
     });
 
