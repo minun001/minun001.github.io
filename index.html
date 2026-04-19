@@ -34,12 +34,13 @@
     .hero-action-secondary span{color:rgba(255,255,255,.62)}
     .hero-action-secondary strong{color:#fff}
     .hero-action:hover{transform:translateY(-2px)}
-    .home-poster-meta{display:grid;grid-template-columns:minmax(300px,1.55fr) repeat(2,minmax(170px,1fr));gap:.9rem;margin-top:1.75rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.18);align-items:start}
+    .home-poster-meta{display:grid;grid-template-columns:minmax(300px,1.45fr) minmax(238px,1.05fr) minmax(220px,.95fr);gap:.9rem;margin-top:1.75rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.18);align-items:start}
     .home-poster-meta div{display:grid;gap:.2rem}
     .home-poster-meta dt{margin:0;color:rgba(255,255,255,.62);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-poster-meta dd{margin:0;color:#fff;font-size:.98rem;font-weight:700}
     .home-poster-meta .home-poster-meta-affiliation{min-width:0}
     .home-poster-meta .affiliation-inline{white-space:nowrap;font-size:.92rem}
+    .home-poster-meta .home-poster-meta-inline{white-space:nowrap;font-size:.92rem}
     .home-poster-meta .affiliation-inline a{color:inherit;text-decoration:none;box-shadow:inset 0 -1px 0 rgba(255,255,255,.38);transition:box-shadow .18s ease,opacity .18s ease}
     .home-poster-meta .affiliation-inline a:hover,.home-poster-meta .affiliation-inline a:focus-visible{box-shadow:inset 0 -1px 0 rgba(255,255,255,.88);opacity:1;outline:none}
     .home-signal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;padding-top:.3rem}
@@ -81,7 +82,7 @@
     .home-bulletin strong{font-size:1.02rem;line-height:1.18}
     .home-index{margin-top:-.25rem}
     @media (max-width:1040px){.home-dual{grid-template-columns:1fr}}
-    @media (max-width:980px){.home-poster-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.home-poster-meta .home-poster-meta-affiliation{grid-column:1/-1}}
+    @media (max-width:1120px){.home-poster-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.home-poster-meta .home-poster-meta-affiliation{grid-column:1/-1}}
     @media (max-width:960px){.home-spotlight-grid,.home-signal-grid{grid-template-columns:1fr 1fr}}
     @media (max-width:760px){.home-poster{min-height:640px}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid,.home-bulletin{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
     @media (max-width:640px){.home-poster-shell{padding:3rem 0 1.4rem}.home-poster-title{font-size:clamp(2.4rem,12vw,3.7rem)}.home-poster-actions,.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid,.home-bulletin{grid-template-columns:1fr}.home-links a{width:100%}}
@@ -139,11 +140,11 @@
                 </div>
                 <div>
                   <dt>Current Focus</dt>
-                  <dd>VLA and Safety Monitoring</dd>
+                  <dd class="home-poster-meta-inline">VLA and Safety Monitoring</dd>
                 </div>
                 <div>
                   <dt>Location</dt>
-                <dd>Seoul, Republic of Korea</dd>
+                <dd class="home-poster-meta-inline">Seoul, Republic of Korea</dd>
                 </div>
               </dl>
             </div>
