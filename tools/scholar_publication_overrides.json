@@ -1,0 +1,184 @@
+{
+  "profile_name": "Hyunsik Min",
+  "source_url": "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en",
+  "section_order": [
+    "international-journals",
+    "domestic-journals",
+    "international-conferences",
+    "domestic-conferences"
+  ],
+  "section_descriptions": {
+    "international-journals": "Scholar-synced journal papers from international venues.",
+    "domestic-journals": "Scholar-synced journal papers published in Korean venues.",
+    "international-conferences": "Scholar-synced international conference papers plus manually tracked upcoming records.",
+    "domestic-conferences": "Scholar-synced conference papers from Korean venues."
+  },
+  "scholar_overrides": {
+    "u-x6o8ySG0sC": {
+      "category": "international-journals",
+      "display_title": "SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea",
+      "summary": "This paper proposes a deep-learning approach for photovoltaic power forecasting in South Korea with an emphasis on stable national-scale prediction performance.",
+      "details": "Volume 13, Issue 11 | Article 2071 | 2024",
+      "doi": "10.3390/electronics13112071",
+      "image": "/assets/img/electronics-13-02071-g002-550.jpg",
+      "image_alt": "SolarFlux Predictor photovoltaic forecasting figure",
+      "topic_title": "Energy Forecasting",
+      "topic_copy": "Deep-learning forecasting for photovoltaic power generation.",
+      "keywords": ["solar", "photovoltaic", "energy", "forecasting"]
+    },
+    "ufrVoPGSRksC": {
+      "category": "international-journals",
+      "display_title": "SolarNexus: A Deep Learning Framework for Adaptive Photovoltaic Power Generation Forecasting and Scalable Management",
+      "summary": "This paper introduces an adaptive photovoltaic forecasting framework that connects plant-level prediction accuracy with scalable energy-management workflows.",
+      "details": "Volume 391 | Article 125848 | 2025",
+      "doi": "10.1016/j.apenergy.2025.125848",
+      "image": "/assets/img/SolarNexus_framework.png",
+      "image_alt": "SolarNexus framework",
+      "topic_title": "Energy Forecasting",
+      "topic_copy": "Adaptive forecasting and scalable management for photovoltaic systems.",
+      "keywords": ["solar", "photovoltaic", "applied energy", "forecasting", "management"]
+    },
+    "LkGwnXOMwfcC": {
+      "category": "international-journals",
+      "display_title": "TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines",
+      "summary": "This paper studies traffic-accident sentencing prediction by combining legal text, structured case attributes, and language-model reasoning for imprisonment, probation, and fine outcomes.",
+      "details": "First published online Jul. 23, 2025",
+      "doi": "10.1007/s10506-025-09472-8",
+      "image": "/assets/img/TRACM_LLM_framework.png",
+      "image_alt": "TRACS-LLM framework",
+      "topic_title": "Legal AI",
+      "topic_copy": "Language-model reasoning for traffic-accident sentencing outcomes.",
+      "keywords": ["legal ai", "traffic accident", "sentencing", "llm", "artificial intelligence and law"]
+    },
+    "5nxA0vEk-isC": {
+      "category": "international-journals",
+      "display_title": "Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction",
+      "authors": "Hyunsik Min, Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh",
+      "summary": "This paper presents a temporal graph cross-attention framework for front-vehicle trajectory prediction with an emphasis on anticipatory driving, passenger comfort, and safety support.",
+      "details": "Accepted paper | 2026",
+      "image": "/assets/img/fig-model.png",
+      "image_alt": "Temporal graph cross attention trajectory prediction model diagram",
+      "topic_title": "Autonomous Driving",
+      "topic_copy": "Temporal graph cross attention for safer and more comfortable driving support.",
+      "keywords": ["autonomous driving", "trajectory prediction", "temporal graph cross attention", "t-its"]
+    },
+    "UebtZRa9Y70C": {
+      "hidden": true
+    },
+    "hqOjcs7Dif8C": {
+      "category": "domestic-journals",
+      "display_title": "Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving",
+      "authors": "Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh",
+      "summary": "This paper develops a TGCA-based front-side vehicle prediction framework for trustworthy autonomous driving and anticipatory maneuver understanding.",
+      "details": "Volume 24, Issue 6 | Pages 121-133 | 2025",
+      "doi": "10.12815/kits.2025.24.6.121",
+      "topic_title": "Autonomous Driving",
+      "topic_copy": "Trajectory reasoning for safer and more reliable vehicle interaction.",
+      "keywords": ["autonomous driving", "trajectory prediction", "trustworthy driving", "kits"]
+    },
+    "WF5omc3nYNoC": {
+      "category": "domestic-journals",
+      "display_title": "Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations",
+      "authors": "Hyunsik Min, Junyeong Yun, Byeongjoon Noh",
+      "summary": "This paper presents a judgment-prediction system for road-traffic accidents using textual descriptions of accident situations and legal context.",
+      "details": "Volume 42, Issue 4 | Pages 385-397 | 2024",
+      "topic_title": "Legal AI",
+      "topic_copy": "Judgment prediction from accident narratives and legal context.",
+      "keywords": ["legal ai", "road traffic accidents", "judgment prediction", "natural language processing"]
+    },
+    "roLk4NBRz8UC": {
+      "category": "domestic-conferences",
+      "display_title": "Temporal Graph Cross Attention-Based Front-Side Vehicle Trajectory Prediction",
+      "display_venue": "The 93rd Conference of Korean Society of Transportation",
+      "authors": "Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh",
+      "summary": "This conference paper models front-side vehicle interactions as a spatiotemporal graph and uses cross-frame attention to improve maneuver-intent and trajectory estimation.",
+      "details": "2025",
+      "topic_title": "Autonomous Driving",
+      "topic_copy": "Graph-based front-vehicle prediction for anticipatory driving support.",
+      "keywords": ["autonomous driving", "trajectory prediction", "temporal graph cross attention", "conference"]
+    },
+    "Y0pCki6q_DkC": {
+      "category": "domestic-conferences",
+      "display_title": "Development of a Model for Traffic Noise Recognition and Classification in Urban Environments",
+      "display_venue": "Proceedings of the Korea Society of Computer and Information Conference",
+      "authors": "Hyunsik Min, Byeongjoon Noh, Jiyoung Woo",
+      "summary": "This conference paper studies traffic-noise recognition and classification for urban environments with a focus on robust sound-pattern discrimination.",
+      "details": "Volume 32, Issue 2 | Pages 49-52 | 2024",
+      "topic_title": "Urban Sensing",
+      "topic_copy": "Urban sound recognition for road-noise monitoring and classification.",
+      "keywords": ["urban sensing", "traffic noise", "classification", "conference"]
+    },
+    "0EnyYjriUFMC": {
+      "category": "domestic-conferences",
+      "display_title": "Natural Language Processing-Based Road Traffic Accident Judgment Prediction System: Using Traffic-Accident Situation Text",
+      "display_venue": "Conference of Korean Society of Transportation",
+      "authors": "Hyunsik Min, Junyeong Yun, Byeongjoon Noh",
+      "summary": "This conference paper studies road-traffic-accident judgment prediction with a focus on textual descriptions of accident situations.",
+      "details": "2024",
+      "topic_title": "Legal AI",
+      "topic_copy": "Legal-text modeling for road-traffic judgment prediction.",
+      "keywords": ["legal ai", "road traffic accidents", "judgment prediction", "conference"]
+    },
+    "W7OEmFMy1HYC": {
+      "category": "domestic-conferences",
+      "display_title": "LLM-based Traffic Accident Sentencing Prediction System",
+      "display_venue": "Conference of The Korea Institute of Intelligent Transport Systems",
+      "authors": "Hyunsik Min, Byeongjoon Noh",
+      "summary": "This conference paper explores LLM-based prediction of traffic-accident sentencing outcomes from case descriptions and decision-related legal cues.",
+      "details": "Pages 811-816 | 2024",
+      "topic_title": "Legal AI",
+      "topic_copy": "Sentencing prediction with language models for traffic-accident cases.",
+      "keywords": ["legal ai", "traffic accident", "sentencing", "llm", "conference"]
+    },
+    "2osOgNQ5qMEC": {
+      "category": "domestic-conferences",
+      "display_title": "Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents",
+      "display_venue": "Conference of The Korea Institute of Intelligent Transport Systems",
+      "authors": "Hyunsik Min, Junyeong Yun, Byeongjoon Noh",
+      "summary": "This conference paper presents an earlier judgment-prediction approach for road-traffic accidents based on textual descriptions of accident situations.",
+      "details": "Pages 275-279 | 2024",
+      "topic_title": "Legal AI",
+      "topic_copy": "Early legal-text modeling for road-traffic judgment prediction.",
+      "keywords": ["legal ai", "road traffic accidents", "judgment prediction", "conference"]
+    },
+    "9yKSN-GCB0IC": {
+      "category": "domestic-conferences",
+      "display_title": "Tooth Segmentation and Identification Method in Panoramic Radiographs Using Mask R-CNN",
+      "display_venue": "Korea Communications Society AI Conference",
+      "authors": "Hyunsik Min, Byeongjoon Noh",
+      "summary": "This conference paper presents a Mask R-CNN-based pipeline for tooth segmentation and identification in panoramic radiographic images.",
+      "details": "2023",
+      "topic_title": "Medical Imaging",
+      "topic_copy": "Segmentation and identification for panoramic dental imaging.",
+      "keywords": ["medical imaging", "mask r-cnn", "tooth segmentation", "conference"]
+    }
+  },
+  "manual_records": [
+    {
+      "id": "manual-its-world-congress-2026",
+      "category": "international-conferences",
+      "display_title": "Comfort-Centric Trajectory Prediction for Autonomous Driving via Temporal Graph Cross Attention",
+      "display_venue": "ITS World Congress 2026",
+      "authors": "Hyunsik Min, Byeongjoon Noh",
+      "details": "Gangneung, South Korea | Oct. 19-23, 2026",
+      "summary": "This scheduled conference paper extends the trajectory-prediction line toward comfort-aware autonomous-driving support through temporal graph cross attention.",
+      "topic_title": "Autonomous Driving",
+      "topic_copy": "Comfort-aware prediction strategies for future driving systems.",
+      "keywords": ["autonomous driving", "trajectory prediction", "its world congress", "conference"],
+      "year": 2026
+    },
+    {
+      "id": "manual-euroma-2026",
+      "category": "international-conferences",
+      "display_title": "Theorising Service Routines through Ontological Granularity and Behavioural Sequencing",
+      "display_venue": "European Operations Management Association, The 2026 EurOMA Annual Conference",
+      "authors": "Hyunsik Min, Youngseok Thomas Choi, Changwon Park, Habin Lee, Byeongjoon Noh",
+      "details": "Vienna, Austria | Jun. 27-Jul. 2, 2026",
+      "summary": "This scheduled conference paper broadens the portfolio into operations management through a study of service routines, ontological granularity, and behavioral sequencing.",
+      "topic_title": "Operations Research",
+      "topic_copy": "Service-routine structure and sequencing in operations contexts.",
+      "keywords": ["operations management", "service routines", "euroma", "conference"],
+      "year": 2026
+    }
+  ]
+}

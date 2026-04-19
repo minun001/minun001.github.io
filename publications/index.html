@@ -100,7 +100,7 @@
 
   <main class="page" id="main-content">
     <div class="site-shell">
-      <div class="publications-page" data-publications-root>
+      <div class="publications-page" data-publications-root data-publication-source="/assets/data/google-scholar-publications.json">
         <section class="page-lead">
           <div class="page-lead-copy">
             <div class="eyebrow">Research Archive</div>
@@ -120,25 +120,25 @@
         </section>
 
         <section class="pub-summary" aria-label="Publication summary">
-          <article class="pub-summary-item">
+          <article class="pub-summary-item" data-publication-summary="international-journals">
             <span>International Journals</span>
-            <strong>4 papers</strong>
-            <div>Including accepted or published work in IEEE T-ITS, Applied Energy, Artificial Intelligence and Law, and Electronics.</div>
+            <strong data-publication-summary-count>4 papers</strong>
+            <div data-publication-summary-copy>Scholar-synced journal papers from international venues.</div>
           </article>
-          <article class="pub-summary-item">
+          <article class="pub-summary-item" data-publication-summary="domestic-journals">
             <span>Domestic Journals</span>
-            <strong>2 papers</strong>
-            <div>Covering trustworthy driving and traffic-accident judgment prediction.</div>
+            <strong data-publication-summary-count>2 papers</strong>
+            <div data-publication-summary-copy>Scholar-synced journal papers published in Korean venues.</div>
           </article>
-          <article class="pub-summary-item">
+          <article class="pub-summary-item" data-publication-summary="international-conferences">
             <span>International Conferences</span>
-            <strong>2 papers</strong>
-            <div>ITS World Congress and EurOMA 2026.</div>
+            <strong data-publication-summary-count>2 papers</strong>
+            <div data-publication-summary-copy>Scholar-synced international conference papers plus manually tracked upcoming records.</div>
           </article>
-          <article class="pub-summary-item">
+          <article class="pub-summary-item" data-publication-summary="domestic-conferences">
             <span>Domestic Conferences</span>
-            <strong>5 papers</strong>
-            <div>Including trajectory prediction, legal AI, urban sensing, and medical image segmentation.</div>
+            <strong data-publication-summary-count>6 papers</strong>
+            <div data-publication-summary-copy>Scholar-synced conference papers from Korean venues.</div>
           </article>
           <article class="pub-summary-item pub-summary-item--metrics" data-scholar-card data-scholar-source="/assets/data/google-scholar-metrics.json">
             <span>Google Scholar</span>
@@ -167,7 +167,7 @@
             <div class="pub-search-results" id="publication-search-results" data-publication-results hidden></div>
           </div>
           <div class="pub-tool-meta">
-            <strong data-publication-count>13 total records</strong>
+            <strong data-publication-count>14 total records</strong>
             <button class="btn-soft" type="button" data-publication-reset hidden>Reset</button>
           </div>
         </section>
@@ -183,7 +183,7 @@
           <div class="pub-section-head">
             <h2>International Journals</h2>
           </div>
-          <div class="pub-section-grid">
+          <div class="pub-section-grid" data-publication-grid="international-journals">
             <article class="pub-item" data-publication-item data-search="international journal ieee transactions on intelligent transportation systems accepted trajectory prediction front vehicle temporal graph cross attention anticipatory driving hyunsik min">
               <h3>Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction</h3>
               <div class="pub-meta">
@@ -260,7 +260,7 @@
           <div class="pub-section-head">
             <h2>Domestic Journals</h2>
           </div>
-          <div class="pub-section-grid">
+          <div class="pub-section-grid" data-publication-grid="domestic-journals">
             <article class="pub-item pub-item-text" data-publication-item data-search="domestic journal korea intelligent transport systems anticipating front-side vehicles maneuvers trustworthy autonomous driving trajectory prediction kits hyunsik min">
               <h3>Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving</h3>
               <div class="pub-meta">
@@ -312,7 +312,7 @@
           <div class="pub-section-head">
             <h2>International Conferences</h2>
           </div>
-          <div class="pub-section-grid">
+          <div class="pub-section-grid" data-publication-grid="international-conferences">
             <article class="pub-item pub-item-text" data-publication-item data-search="international conference its world congress 2026 comfort centric trajectory prediction autonomous driving temporal graph cross attention hyunsik min">
               <h3>Comfort-Centric Trajectory Prediction for Autonomous Driving via Temporal Graph Cross Attention</h3>
               <div class="pub-meta">
@@ -355,7 +355,7 @@
           <div class="pub-section-head">
             <h2>Domestic Conferences</h2>
           </div>
-          <div class="pub-section-grid">
+          <div class="pub-section-grid" data-publication-grid="domestic-conferences">
             <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference temporal graph cross attention front-side vehicle trajectory prediction hyunsik min">
               <h3>Temporal Graph Cross Attention-Based Front-Side Vehicle Trajectory Prediction</h3>
               <div class="pub-meta">
@@ -541,7 +541,7 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260419a"></script>
+  <script src="/assets/site.js?v=20260419b"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var modal = document.getElementById('bibtex-modal');
@@ -560,12 +560,21 @@
         modal.hidden = false;
       }
 
-      document.querySelectorAll('[data-bibtex-target]').forEach(function (button) {
-        button.addEventListener('click', function () {
-          var source = document.getElementById(button.getAttribute('data-bibtex-target'));
-          if (!source) return;
-          openModal(source.textContent);
-        });
+      document.addEventListener('click', function (event) {
+        var target = event.target;
+        if (!(target instanceof Element)) return;
+        var button = target.closest('[data-bibtex-target],[data-bibtex-content]');
+        if (!button) return;
+
+        var inlineContent = button.getAttribute('data-bibtex-content');
+        if (inlineContent) {
+          openModal(inlineContent);
+          return;
+        }
+
+        var source = document.getElementById(button.getAttribute('data-bibtex-target'));
+        if (!source) return;
+        openModal(source.textContent);
       });
 
       modal.querySelectorAll('[data-bibtex-close]').forEach(function (button) {

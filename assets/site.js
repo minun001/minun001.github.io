@@ -8,6 +8,164 @@
     }, 20);
   }
 
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeAttribute(value) {
+    return escapeHtml(value).replace(/\r?\n/g, '&#10;');
+  }
+
+  function normalizeSearchText(value) {
+    return (value || '')
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function toSearchTokens(value) {
+    return normalizeSearchText(value)
+      .split(' ')
+      .filter(Boolean);
+  }
+
+  function formatPaperCount(count) {
+    return count + ' ' + (count === 1 ? 'paper' : 'papers');
+  }
+
+  function buildPublicationSearchData(item) {
+    return normalizeSearchText(
+      [
+        item.title,
+        item.venue,
+        item.authors,
+        item.summary,
+        item.details,
+        item.category,
+        Array.isArray(item.keywords) ? item.keywords.join(' ') : ''
+      ].join(' ')
+    );
+  }
+
+  function renderPublicationMedia(item) {
+    if (item.image) {
+      return (
+        '<div class="pub-image">' +
+          '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.image_alt || item.title) + '" loading="lazy">' +
+        '</div>'
+      );
+    }
+
+    var markerLabel = item.category && item.category.indexOf('journals') !== -1 ? 'Journal Paper' : 'Conference Paper';
+    var markerYear = item.year ? String(item.year) : '';
+    return (
+      '<aside class="pub-marker" aria-hidden="true">' +
+        '<div class="pub-marker-head">' +
+          '<span class="pub-marker-label">' + escapeHtml(markerLabel) + '</span>' +
+          '<p class="pub-marker-title">' + escapeHtml(item.topic_title || 'Research Paper') + '</p>' +
+          '<p class="pub-marker-copy">' + escapeHtml(item.topic_copy || 'Synchronized from the Google Scholar archive.') + '</p>' +
+        '</div>' +
+        '<span class="pub-marker-year">' + escapeHtml(markerYear) + '</span>' +
+      '</aside>'
+    );
+  }
+
+  function renderPublicationActions(item) {
+    var actions = [];
+    if (item.scholar_url) {
+      actions.push(
+        '<a class="pub-action" href="' + escapeHtml(item.scholar_url) + '" target="_blank" rel="noopener">Google Scholar</a>'
+      );
+    }
+    if (item.bibtex && item.category && item.category.indexOf('journals') !== -1) {
+      actions.push(
+        '<button class="pub-action" type="button" data-bibtex-content="' + escapeAttribute(item.bibtex) + '">Cite</button>'
+      );
+    }
+    if (!actions.length) return '';
+    return '<div class="pub-actions">' + actions.join('') + '</div>';
+  }
+
+  function renderPublicationCard(item) {
+    var cardClass = item.image ? 'pub-item' : 'pub-item pub-item-text';
+    var searchData = escapeHtml(buildPublicationSearchData(item));
+    var doiMarkup = item.doi ? '<p class="pub-note">DOI: ' + escapeHtml(item.doi) + '</p>' : '';
+    var detailsMarkup = item.details
+      ? '<div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">' + escapeHtml(item.details) + '</span></div>'
+      : '';
+
+    return (
+      '<article class="' + cardClass + '" data-publication-item data-search="' + searchData + '">' +
+        '<h3>' + escapeHtml(item.title) + '</h3>' +
+        '<div class="pub-meta">' +
+          '<div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">' + escapeHtml(item.venue || '') + '</span></div>' +
+          '<div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">' + escapeHtml(item.authors || '') + '</span></div>' +
+          detailsMarkup +
+        '</div>' +
+        '<p class="pub-summary-copy">' + escapeHtml(item.summary || '') + '</p>' +
+        doiMarkup +
+        renderPublicationMedia(item) +
+        renderPublicationActions(item) +
+      '</article>'
+    );
+  }
+
+  function renderPublicationArchive(archive) {
+    var root = document.querySelector('[data-publications-root]');
+    if (!root || !archive || !Array.isArray(archive.sections)) return false;
+
+    archive.sections.forEach(function (section) {
+      var grid = root.querySelector('[data-publication-grid="' + section.key + '"]');
+      if (grid) {
+        grid.innerHTML = (section.items || []).map(renderPublicationCard).join('');
+      }
+
+      var summaryCard = root.querySelector('[data-publication-summary="' + section.key + '"]');
+      if (summaryCard) {
+        var countTarget = summaryCard.querySelector('[data-publication-summary-count]');
+        var copyTarget = summaryCard.querySelector('[data-publication-summary-copy]');
+        if (countTarget) countTarget.textContent = formatPaperCount(section.count || 0);
+        if (copyTarget && section.description) copyTarget.textContent = section.description;
+      }
+    });
+
+    var totalCountTarget = root.querySelector('[data-publication-count]');
+    if (totalCountTarget && typeof archive.total_records === 'number') {
+      totalCountTarget.textContent = archive.total_records + ' total records';
+    }
+
+    return true;
+  }
+
+  function loadPublicationArchive() {
+    var root = document.querySelector('[data-publications-root]');
+    if (!root || !window.fetch) return Promise.resolve(false);
+
+    var source = root.getAttribute('data-publication-source');
+    if (!source) return Promise.resolve(false);
+
+    var cacheKey = new Date().toISOString().slice(0, 10);
+    return window.fetch(source + '?v=' + encodeURIComponent(cacheKey), { cache: 'no-store' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('Failed to load publication archive.');
+        return response.json();
+      })
+      .then(function (archive) {
+        return renderPublicationArchive(archive);
+      })
+      .catch(function () {
+        return false;
+      });
+  }
+
   function applyTheme() {
     document.body.classList.add('theme-day');
     document.body.classList.remove('theme-night');
@@ -78,31 +236,6 @@
     var sections = Array.prototype.slice.call(root.querySelectorAll('[data-publication-section]'));
     var params = new URLSearchParams(window.location.search);
     if (!input || !count || !items.length) return;
-
-    function normalizeSearchText(value) {
-      return (value || '')
-        .toLowerCase()
-        .normalize('NFKD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^\p{L}\p{N}]+/gu, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    function toTokens(value) {
-      return normalizeSearchText(value)
-        .split(' ')
-        .filter(Boolean);
-    }
-
-    function escapeHtml(value) {
-      return String(value || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
 
     var records = items.map(function (item, index) {
       var titleNode = item.querySelector('h3');
@@ -219,7 +352,7 @@
     function update(shouldSync) {
       var rawValue = input.value.trim();
       var query = normalizeSearchText(rawValue);
-      var queryTokens = toTokens(rawValue);
+      var queryTokens = toSearchTokens(rawValue);
       var visibleCount = 0;
       var matchedRecords = [];
 
@@ -462,9 +595,11 @@
     applyTheme();
     bindCopyButtons();
     installTopButton();
-    bindPublicationSearch();
     bindScholarMetrics();
     bindNewsFilter();
     bindSectionIndex();
+    loadPublicationArchive().finally(function () {
+      bindPublicationSearch();
+    });
   });
 })();
