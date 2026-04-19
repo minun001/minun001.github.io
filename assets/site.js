@@ -124,6 +124,11 @@
         '</span>'
       );
     }
+    if (metrics.quartile_label) {
+      badges.push(
+        '<span class="pub-journal-chip pub-journal-chip--quartile">' + escapeHtml(metrics.quartile_label) + '</span>'
+      );
+    }
     if (metrics.if_label) {
       badges.push(
         '<span class="pub-journal-chip pub-journal-chip--if">' + escapeHtml(metrics.if_label) + '</span>'

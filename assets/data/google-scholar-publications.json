@@ -40,6 +40,7 @@
           "journal_metrics": {
             "top_percent": 2,
             "top_label": "Top 2%",
+            "quartile_label": "Q1",
             "impact_factor": "8.4",
             "if_label": "IF 8.4"
           },
@@ -76,6 +77,7 @@
           "journal_metrics": {
             "top_percent": 7,
             "top_label": "Top 7%",
+            "quartile_label": "Q1",
             "impact_factor": "11.0",
             "if_label": "IF 11.0"
           },
@@ -112,6 +114,7 @@
           "journal_metrics": {
             "top_percent": 25,
             "top_label": "Top 25%",
+            "quartile_label": "Q1",
             "impact_factor": "3.1",
             "if_label": "IF 3.1"
           },
@@ -147,6 +150,7 @@
           "journal_metrics": {
             "top_percent": 24,
             "top_label": "Top 24%",
+            "quartile_label": "Q2",
             "impact_factor": "2.6",
             "if_label": "IF 2.6"
           },
