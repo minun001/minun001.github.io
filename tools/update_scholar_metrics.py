@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, urljoin, urlparse
 from urllib.request import Request, urlopen
 
@@ -452,31 +454,37 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 
 def main() -> None:
     overrides = load_overrides()
-    profile_html = fetch_html(PROFILE_URL)
-    metrics = parse_metrics(profile_html)
-    rows = parse_profile_rows(profile_html)
+    try:
+        profile_html = fetch_html(PROFILE_URL)
+        metrics = parse_metrics(profile_html)
+        rows = parse_profile_rows(profile_html)
 
-    override_map: dict[str, dict[str, Any]] = overrides.get("scholar_overrides", {})
-    records: list[dict[str, Any]] = []
-    for row in rows:
-        detail_html = fetch_html(row["scholar_url"])
-        detail_map = parse_detail_page(detail_html)
-        record = build_scholar_record(row, detail_map, override_map.get(row["citation_id"]))
-        if record:
-            records.append(record)
+        override_map: dict[str, dict[str, Any]] = overrides.get("scholar_overrides", {})
+        records: list[dict[str, Any]] = []
+        for row in rows:
+            detail_html = fetch_html(row["scholar_url"])
+            detail_map = parse_detail_page(detail_html)
+            record = build_scholar_record(row, detail_map, override_map.get(row["citation_id"]))
+            if record:
+                records.append(record)
 
-    for manual_record in overrides.get("manual_records", []):
-        records.append(build_manual_record(manual_record))
+        for manual_record in overrides.get("manual_records", []):
+            records.append(build_manual_record(manual_record))
 
-    metrics_payload = build_metrics_payload(metrics, overrides["profile_name"])
-    publications_payload = build_publications_payload(overrides, records)
-    write_json(METRICS_OUTPUT_PATH, metrics_payload)
-    write_json(PUBLICATIONS_OUTPUT_PATH, publications_payload)
-    print(
-        "Updated Google Scholar data with "
-        f"citations={metrics_payload['citations']['all']} "
-        f"and {publications_payload['total_records']} publication records."
-    )
+        metrics_payload = build_metrics_payload(metrics, overrides["profile_name"])
+        publications_payload = build_publications_payload(overrides, records)
+        write_json(METRICS_OUTPUT_PATH, metrics_payload)
+        write_json(PUBLICATIONS_OUTPUT_PATH, publications_payload)
+        print(
+            "Updated Google Scholar data with "
+            f"citations={metrics_payload['citations']['all']} "
+            f"and {publications_payload['total_records']} publication records."
+        )
+    except (HTTPError, URLError, RuntimeError) as error:
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            print(f"Skipping Google Scholar refresh in GitHub Actions: {error}")
+            return
+        raise
 
 
 if __name__ == "__main__":
