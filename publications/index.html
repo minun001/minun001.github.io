@@ -12,10 +12,20 @@
     .pub-lead-visual{gap:1rem}
     .pub-lead-collage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
     .pub-lead-collage img{width:100%;aspect-ratio:1/1.06;object-fit:cover;border-radius:8px;box-shadow:var(--shadow-soft)}
-    .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem}
+    .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) minmax(220px,1.12fr);gap:1.2rem;align-items:start}
     .pub-summary-item{padding:.9rem 0 .2rem;border-top:1px solid var(--border-soft)}
     .pub-summary-item span{display:block;margin-bottom:.35rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .pub-summary-item strong{display:block;margin-bottom:.15rem;font-size:1.8rem;line-height:1}
+    .pub-summary-item--metrics{display:grid;gap:.8rem;padding:1rem 1rem .95rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
+    .pub-summary-item--metrics span{margin-bottom:0}
+    .pub-summary-item--metrics strong{margin-bottom:0;font-size:1.28rem;line-height:1.15}
+    .pub-summary-item--metrics p{margin:0}
+    .pub-scholar-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+    .pub-scholar-stat{display:grid;gap:.2rem;padding-top:.7rem;border-top:1px solid var(--border-soft)}
+    .pub-scholar-stat-label{color:var(--text-soft);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .pub-scholar-stat-value{color:var(--text-title);font-size:1.4rem;font-weight:800;line-height:1}
+    .pub-scholar-link{display:inline-flex;align-items:center;width:max-content;font-size:.9rem;font-weight:800}
+    .pub-scholar-note{color:var(--text-soft);font-size:.84rem;line-height:1.5}
     .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .9s ease both}
     .pub-search{display:flex;align-items:center;gap:.75rem;min-height:50px;padding:0 .95rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
     .pub-search span{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
@@ -59,8 +69,8 @@
     .page-lead{animation:riseIn .6s ease both}
     .pub-summary{animation:riseIn .8s ease both}
     .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-    @media (max-width:980px){.pub-summary{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){.pub-lead-collage,.pub-summary{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.55rem}.pub-marker{min-height:auto}}
+    @media (max-width:1120px){.pub-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.pub-summary-item--metrics{grid-column:1/-1}}
+    @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.55rem}.pub-marker{min-height:auto}}
   </style>
 </head>
 <body class="page-publications">
@@ -118,6 +128,22 @@
             <span>Domestic Conferences</span>
             <strong>5 papers</strong>
             <div>Including trajectory prediction, legal AI, urban sensing, and medical image segmentation.</div>
+          </article>
+          <article class="pub-summary-item pub-summary-item--metrics">
+            <span>Google Scholar</span>
+            <strong>Verified citation snapshot</strong>
+            <div class="pub-scholar-stats" aria-label="Google Scholar metrics">
+              <div class="pub-scholar-stat">
+                <div class="pub-scholar-stat-label">Citations</div>
+                <div class="pub-scholar-stat-value">34</div>
+              </div>
+              <div class="pub-scholar-stat">
+                <div class="pub-scholar-stat-label">h-index</div>
+                <div class="pub-scholar-stat-value">2</div>
+              </div>
+            </div>
+            <a class="pub-scholar-link" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Open Google Scholar</a>
+            <p class="pub-scholar-note">Updated from the Google Scholar profile on April 19, 2026.</p>
           </article>
         </section>
 
