@@ -795,7 +795,7 @@
     });
   }
 
-  function bindNewsFilterEffects() {
+  function bindNewsBadgeEffects() {
     if (document.documentElement.hasAttribute('data-news-effects-bound')) return;
     document.documentElement.setAttribute('data-news-effects-bound', 'true');
 
@@ -807,17 +807,23 @@
       return ['#ffffff', '#ffd166', '#8fc0ff', '#8fe8b0'];
     }
 
-    function triggerFilterBurst(button) {
-      if (!button) return;
+    function triggerBadgeBurst(badge) {
+      if (!badge) return;
 
       var now = Date.now();
-      var lastBurst = Number(button.getAttribute('data-filter-burst-at') || '0');
+      var lastBurst = Number(badge.getAttribute('data-badge-burst-at') || '0');
       if (now - lastBurst < 900) return;
-      button.setAttribute('data-filter-burst-at', String(now));
+      badge.setAttribute('data-badge-burst-at', String(now));
 
-      createCelebrationBurst(button.getBoundingClientRect(), getPalette(button.getAttribute('data-news-filter') || 'all'), {
-        className: 'news-filter-burst',
-        sparkClassName: 'news-filter-spark',
+      var kind = 'all';
+      if (badge.classList.contains('journal')) kind = 'journal';
+      else if (badge.classList.contains('conference')) kind = 'conference';
+      else if (badge.classList.contains('project')) kind = 'project';
+      else if (badge.classList.contains('award')) kind = 'award';
+
+      createCelebrationBurst(badge.getBoundingClientRect(), getPalette(kind), {
+        className: 'news-badge-burst',
+        sparkClassName: 'news-badge-spark',
         count: 14,
         minDistance: 26,
         maxDistance: 58,
@@ -828,20 +834,12 @@
     document.addEventListener('pointerover', function (event) {
       var target = event.target;
       if (!(target instanceof Element)) return;
-      var button = target.closest('[data-news-filter]');
-      if (!button) return;
+      var badge = target.closest('.news-badge');
+      if (!badge) return;
 
       var from = event.relatedTarget;
-      if (from instanceof Element && button.contains(from)) return;
-      triggerFilterBurst(button);
-    });
-
-    document.addEventListener('click', function (event) {
-      var target = event.target;
-      if (!(target instanceof Element)) return;
-      var button = target.closest('[data-news-filter]');
-      if (!button) return;
-      triggerFilterBurst(button);
+      if (from instanceof Element && badge.contains(from)) return;
+      triggerBadgeBurst(badge);
     });
   }
 
@@ -850,7 +848,7 @@
     bindCopyButtons();
     installTopButton();
     bindScholarMetrics();
-    bindNewsFilterEffects();
+    bindNewsBadgeEffects();
     bindNewsFilter();
     bindSectionIndex();
     loadPublicationArchive().finally(function () {
