@@ -17,7 +17,15 @@
     .news-featured h3{margin-bottom:.35rem;font-size:1.28rem}
     .news-featured p{margin:0}
     .news-filter{display:flex;flex-wrap:wrap;gap:.65rem;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
-    .news-filter button{font-weight:800}
+    .news-filter button{position:relative;font-weight:800;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+    .news-filter button:hover,.news-filter button:focus-visible{transform:translateY(-1px) scale(1.03);filter:saturate(1.08) brightness(1.03)}
+    .news-filter-burst{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:60}
+    .news-filter-spark{position:absolute;left:0;top:0;width:var(--spark-size,6px);height:var(--spark-size,6px);margin-left:calc(var(--spark-size,6px) / -2);margin-top:calc(var(--spark-size,6px) / -2);border-radius:999px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),var(--spark-color,#fff067) 42%,rgba(255,255,255,0) 76%);box-shadow:0 0 10px var(--spark-color,#fff067);transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.45);opacity:0;animation:newsSparkBurst .74s cubic-bezier(.16,.84,.28,1) forwards}
+    @keyframes newsSparkBurst{
+      0%{opacity:0;transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.3)}
+      20%{opacity:1}
+      100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(calc(var(--spark-rotate,0deg) + 32deg)) scale(1)}
+    }
     .news-year{display:grid;grid-template-columns:120px minmax(0,1fr);gap:1.4rem;align-items:start;scroll-margin-top:104px}
     .news-year-head{position:sticky;top:96px;padding-top:.4rem}
     .news-year-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -310,6 +318,6 @@
     </div>
   </footer>
 
-  <script src="/assets/site.js?v=20260419g"></script>
+  <script src="/assets/site.js?v=20260419h"></script>
 </body>
 </html>

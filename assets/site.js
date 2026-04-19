@@ -684,12 +684,52 @@
     });
   }
 
+  function createCelebrationBurst(rect, palette, options) {
+    if (!rect || !rect.width || !rect.height) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var burst = document.createElement('span');
+    var className = options && options.className ? options.className : 'pub-chip-burst';
+    var sparkClassName = options && options.sparkClassName ? options.sparkClassName : 'pub-chip-spark';
+    var count = options && options.count ? options.count : 12;
+    var minDistance = options && options.minDistance ? options.minDistance : 24;
+    var maxDistance = options && options.maxDistance ? options.maxDistance : 52;
+    var duration = options && options.duration ? options.duration : 900;
+
+    burst.className = className;
+    burst.style.left = (rect.left + (rect.width / 2)) + 'px';
+    burst.style.top = (rect.top + (rect.height / 2)) + 'px';
+
+    for (var index = 0; index < count; index += 1) {
+      var spark = document.createElement('span');
+      spark.className = sparkClassName;
+      var angle = (Math.PI * 2 * index) / count + ((Math.random() - 0.5) * 0.32);
+      var distance = minDistance + Math.random() * (maxDistance - minDistance);
+      var dx = Math.cos(angle) * distance;
+      var dy = Math.sin(angle) * distance;
+      var size = 5 + Math.random() * 5;
+      var rotate = -24 + Math.random() * 48;
+      spark.style.setProperty('--dx', dx.toFixed(2) + 'px');
+      spark.style.setProperty('--dy', dy.toFixed(2) + 'px');
+      spark.style.setProperty('--spark-size', size.toFixed(2) + 'px');
+      spark.style.setProperty('--spark-rotate', rotate.toFixed(2) + 'deg');
+      spark.style.setProperty('--spark-color', palette[index % palette.length]);
+      spark.style.animationDelay = (Math.random() * 90).toFixed(0) + 'ms';
+      burst.appendChild(spark);
+    }
+
+    document.body.appendChild(burst);
+    window.setTimeout(function () {
+      burst.remove();
+    }, duration);
+  }
+
   function bindPublicationChipEffects() {
     if (document.documentElement.hasAttribute('data-chip-effects-bound')) return;
     document.documentElement.setAttribute('data-chip-effects-bound', 'true');
 
     function triggerChipBurst(chip) {
-      if (!chip || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (!chip) return;
 
       var now = Date.now();
       var lastBurst = Number(chip.getAttribute('data-chip-burst-at') || '0');
@@ -697,13 +737,6 @@
       chip.setAttribute('data-chip-burst-at', String(now));
 
       var rect = chip.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-
-      var burst = document.createElement('span');
-      burst.className = 'pub-chip-burst';
-      burst.style.left = (rect.left + (rect.width / 2)) + 'px';
-      burst.style.top = (rect.top + (rect.height / 2)) + 'px';
-
       var palette = ['#ffd166', '#ff7b72', '#72e0a3', '#72b6ff', '#ffffff'];
       if (chip.classList.contains('pub-journal-chip--top')) {
         palette = ['#ffd166', '#ff938a', '#ff5f52', '#ffffff'];
@@ -712,29 +745,14 @@
       } else if (chip.classList.contains('pub-journal-chip--if')) {
         palette = ['#e3f1ff', '#9ecfff', '#5aa1ff', '#ffffff'];
       }
-
-      for (var index = 0; index < 12; index += 1) {
-        var spark = document.createElement('span');
-        spark.className = 'pub-chip-spark';
-        var angle = (Math.PI * 2 * index) / 12 + ((Math.random() - 0.5) * 0.32);
-        var distance = 24 + Math.random() * 28;
-        var dx = Math.cos(angle) * distance;
-        var dy = Math.sin(angle) * distance;
-        var size = 5 + Math.random() * 5;
-        var rotate = -24 + Math.random() * 48;
-        spark.style.setProperty('--dx', dx.toFixed(2) + 'px');
-        spark.style.setProperty('--dy', dy.toFixed(2) + 'px');
-        spark.style.setProperty('--spark-size', size.toFixed(2) + 'px');
-        spark.style.setProperty('--spark-rotate', rotate.toFixed(2) + 'deg');
-        spark.style.setProperty('--spark-color', palette[index % palette.length]);
-        spark.style.animationDelay = (Math.random() * 90).toFixed(0) + 'ms';
-        burst.appendChild(spark);
-      }
-
-      document.body.appendChild(burst);
-      window.setTimeout(function () {
-        burst.remove();
-      }, 900);
+      createCelebrationBurst(rect, palette, {
+        className: 'pub-chip-burst',
+        sparkClassName: 'pub-chip-spark',
+        count: 12,
+        minDistance: 24,
+        maxDistance: 52,
+        duration: 900
+      });
     }
 
     document.addEventListener('pointerover', function (event) {
@@ -765,11 +783,62 @@
     });
   }
 
+  function bindNewsFilterEffects() {
+    if (document.documentElement.hasAttribute('data-news-effects-bound')) return;
+    document.documentElement.setAttribute('data-news-effects-bound', 'true');
+
+    function getPalette(kind) {
+      if (kind === 'journal') return ['#dfffea', '#8fe8b0', '#2bc06d', '#ffffff'];
+      if (kind === 'conference') return ['#e1efff', '#8fc0ff', '#3f83f8', '#ffffff'];
+      if (kind === 'project') return ['#efe7ff', '#bea7ff', '#7c5cff', '#ffffff'];
+      if (kind === 'award') return ['#fff3d6', '#ffd36f', '#f3a81d', '#ffffff'];
+      return ['#ffffff', '#ffd166', '#8fc0ff', '#8fe8b0'];
+    }
+
+    function triggerFilterBurst(button) {
+      if (!button) return;
+
+      var now = Date.now();
+      var lastBurst = Number(button.getAttribute('data-filter-burst-at') || '0');
+      if (now - lastBurst < 900) return;
+      button.setAttribute('data-filter-burst-at', String(now));
+
+      createCelebrationBurst(button.getBoundingClientRect(), getPalette(button.getAttribute('data-news-filter') || 'all'), {
+        className: 'news-filter-burst',
+        sparkClassName: 'news-filter-spark',
+        count: 14,
+        minDistance: 26,
+        maxDistance: 58,
+        duration: 920
+      });
+    }
+
+    document.addEventListener('pointerover', function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      var button = target.closest('[data-news-filter]');
+      if (!button) return;
+
+      var from = event.relatedTarget;
+      if (from instanceof Element && button.contains(from)) return;
+      triggerFilterBurst(button);
+    });
+
+    document.addEventListener('click', function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      var button = target.closest('[data-news-filter]');
+      if (!button) return;
+      triggerFilterBurst(button);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     applyTheme();
     bindCopyButtons();
     installTopButton();
     bindScholarMetrics();
+    bindNewsFilterEffects();
     bindNewsFilter();
     bindSectionIndex();
     loadPublicationArchive().finally(function () {
