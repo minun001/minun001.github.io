@@ -64,11 +64,18 @@
       .replace(/'/g, '&#39;');
   }
 
-  function setIdentity(user) {
+  function getAccessLabel(user, config) {
+    var role = resolveRole(user);
+    if (role) return role;
+    if (isAuthorized(user, config)) return 'Master access';
+    return '-';
+  }
+
+  function setIdentity(user, config) {
     var email = byId('workspace-user-email');
     var role = byId('workspace-user-role');
     if (email) email.textContent = user && user.email ? user.email : '-';
-    if (role) role.textContent = resolveRole(user) || '-';
+    if (role) role.textContent = getAccessLabel(user, config);
   }
 
   function resolveRole(user) {
@@ -121,7 +128,7 @@
 
   function renderMetricCards(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">No private dashboard metrics yet.</div>';
+      return '<div class="workspace-empty">Workspace metrics will appear here once your data is connected.</div>';
     }
 
     return items.map(function (item) {
@@ -137,13 +144,13 @@
 
   function renderLinks(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">No private links yet.</div>';
+      return '<div class="workspace-empty">Saved links will appear here once they are added.</div>';
     }
 
     return items.map(function (item) {
       return (
         '<article class="workspace-card">' +
-          '<h3>' + escapeHtml(item.title || 'Private Link') + '</h3>' +
+          '<h3>' + escapeHtml(item.title || 'Saved Link') + '</h3>' +
           '<p>' + escapeHtml(item.description || '') + '</p>' +
           (item.url ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">' + escapeHtml(item.tag || 'Open link') + '</a>' : '') +
         '</article>'
@@ -160,14 +167,14 @@
 
   function renderNotes(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">No private notes yet.</div>';
+      return '<div class="workspace-empty">Notes will appear here once they are added.</div>';
     }
 
     return items.map(function (item) {
       var stamp = formatDate(item.updated_at || item.inserted_at);
       return (
         '<article class="workspace-card">' +
-          '<h3>' + escapeHtml(item.title || 'Private Note') + '</h3>' +
+          '<h3>' + escapeHtml(item.title || 'Note') + '</h3>' +
           '<p>' + escapeHtml(item.body || '') + '</p>' +
           (stamp ? '<div class="workspace-note-meta">' + escapeHtml(stamp) + '</div>' : '') +
         '</article>'
@@ -456,7 +463,7 @@
     async function applySession(session) {
       var user = session && session.user ? session.user : null;
       if (!user) {
-        setIdentity(null);
+        setIdentity(null, config);
         setShellMode('auth');
         setView('login');
         setConfirmationAction(false);
@@ -465,14 +472,14 @@
       }
 
       if (!isAuthorized(user, config)) {
-        setIdentity(user);
+        setIdentity(user, config);
         setShellMode('auth');
         setView('unauthorized');
         setStatus('This account is signed in but does not have master access.', 'error');
         return;
       }
 
-      setIdentity(user);
+      setIdentity(user, config);
       setShellMode('private');
       setView('dashboard');
       setStatus('Master workspace unlocked.', 'success');
