@@ -3,6 +3,7 @@ window.WORKSPACE_AUTH_CONFIG = {
   supabaseUrl: 'https://brwilcezyrtlpmcokmlo.supabase.co',
   supabaseAnonKey: 'sb_publishable_eEjPLgWLIYFIOf7C4HUgxg_LPcFvPKx',
   requiredRole: 'master',
+  masterEmail: 'master-account@private.local',
   sectionName: 'Workspace',
   tables: {
     dashboard: 'workspace_dashboard_metrics',

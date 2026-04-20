@@ -9,6 +9,10 @@
     return email || 'master-account@private.local';
   }
 
+  function getMasterEmail(config) {
+    return String((config && config.masterEmail) || 'master-account@private.local').trim().toLowerCase();
+  }
+
   function hasSupabaseConfig(config) {
     return Boolean(config && config.supabaseUrl && config.supabaseAnonKey);
   }
@@ -22,6 +26,12 @@
     if (!status) return;
     status.textContent = message || '';
     status.dataset.tone = tone || 'neutral';
+  }
+
+  function setConfirmationAction(visible) {
+    var button = byId('workspace-resend-confirmation');
+    if (!button) return;
+    button.hidden = !visible;
   }
 
   function setView(name) {
@@ -68,7 +78,9 @@
   function isAuthorized(user, config) {
     var requiredRole = String((config && config.requiredRole) || 'master').toLowerCase();
     var role = String(resolveRole(user) || '').toLowerCase();
-    return Boolean(role) && role === requiredRole;
+    var email = user && user.email ? String(user.email).trim().toLowerCase() : '';
+    var masterEmail = getMasterEmail(config);
+    return (Boolean(role) && role === requiredRole) || (Boolean(email) && email === masterEmail);
   }
 
   function setHtml(id, html) {
@@ -79,8 +91,12 @@
 
   function getLoginErrorMessage(error) {
     var message = error && error.message ? String(error.message) : '';
+    var code = error && error.code ? String(error.code) : '';
     if (message === 'Invalid login credentials') {
       return 'Login failed. This usually means the Supabase Auth user does not exist yet or the password does not match.';
+    }
+    if (message === 'Email not confirmed' || code === 'email_not_confirmed') {
+      return 'Login failed because the email address has not been confirmed yet. Check your inbox for the Supabase confirmation email, then try again.';
     }
     return message || 'Unable to sign in.';
   }
@@ -185,6 +201,7 @@
     var config = getConfig();
     var form = byId('workspace-login-form');
     var signOut = byId('workspace-signout');
+    var resendConfirmation = byId('workspace-resend-confirmation');
     var emailInput = byId('workspace-email');
     var passwordInput = byId('workspace-password');
 
@@ -215,6 +232,7 @@
         setIdentity(null);
         setShellMode('auth');
         setView('login');
+        setConfirmationAction(false);
         setStatus('Sign in with your workspace account.', 'neutral');
         return;
       }
@@ -259,10 +277,15 @@
         });
 
         if (result.error) {
+          setConfirmationAction(Boolean(
+            (result.error.message && String(result.error.message) === 'Email not confirmed') ||
+            (result.error.code && String(result.error.code) === 'email_not_confirmed')
+          ));
           setStatus(getLoginErrorMessage(result.error), 'error');
           return;
         }
 
+        setConfirmationAction(false);
         if (passwordInput) passwordInput.value = '';
         setStatus('Signed in successfully.', 'success');
       });
@@ -272,6 +295,24 @@
       signOut.addEventListener('click', async function () {
         await client.auth.signOut();
         setStatus('Signed out.', 'neutral');
+      });
+    }
+
+    if (resendConfirmation) {
+      resendConfirmation.addEventListener('click', async function () {
+        setStatus('Sending a new verification email...', 'neutral');
+
+        var resendResult = await client.auth.resend({
+          type: 'signup',
+          email: getWorkspaceEmail()
+        });
+
+        if (resendResult.error) {
+          setStatus(resendResult.error.message || 'Unable to resend verification email.', 'error');
+          return;
+        }
+
+        setStatus('A new verification email has been sent. Confirm the email, then sign in again.', 'success');
       });
     }
   }

@@ -93,6 +93,7 @@
               </label>
               <div class="workspace-actions">
                 <button class="workspace-button" type="submit">Sign In</button>
+                <button id="workspace-resend-confirmation" class="workspace-button secondary" type="button" hidden>Resend Verification</button>
               </div>
             </form>
           </article>
@@ -123,13 +124,13 @@
           <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
             <div class="eyebrow">Access Restricted</div>
             <h2>Signed In, But Not Authorized</h2>
-            <p>This account authenticated successfully, but it does not have the required <strong>master</strong> role for the workspace.</p>
+            <p>This account authenticated successfully, but it does not match the workspace master access rule yet.</p>
           </article>
 
           <article class="workspace-panel" data-workspace-view="setup" hidden>
             <div class="eyebrow">Setup Required</div>
             <h2>Connect Auth First</h2>
-            <p>The workspace shell is ready, but authentication is not configured yet. Add your public Supabase project URL and anon key to <code>/assets/workspace-config.js</code>, then create a user with the <strong>master</strong> role in Supabase Auth metadata.</p>
+            <p>The workspace shell is ready, but authentication is not configured yet. Add your public Supabase project URL and anon key to <code>/assets/workspace-config.js</code>, then allow the workspace through the master email or role rule in Supabase.</p>
             <div class="workspace-list">
               <div class="workspace-card">
                 <h3>What stays private</h3>
