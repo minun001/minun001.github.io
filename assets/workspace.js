@@ -330,17 +330,31 @@
       return '<div class="workspace-empty">No daily visitor records yet.</div>';
     }
 
-    return items.map(function (item) {
-      return (
-        '<div class="workspace-analytics-row">' +
-          '<div>' +
-            '<strong>' + escapeHtml(formatAnalyticsDate(item.dateKey)) + '</strong>' +
-            '<span>' + escapeHtml(item.hits + ' recorded page hits') + '</span>' +
-          '</div>' +
-          '<div class="workspace-analytics-badge">' + escapeHtml(item.visitors + ' visitors') + '</div>' +
-        '</div>'
-      );
-    }).join('');
+    var maxVisitors = items.reduce(function (maxValue, item) {
+      return Math.max(maxValue, Number(item.visitors || 0));
+    }, 0) || 1;
+
+    return (
+      '<div class="workspace-chart">' +
+        '<div class="workspace-chart-grid">' +
+          items.slice().reverse().map(function (item) {
+            var visitors = Number(item.visitors || 0);
+            var height = Math.max(12, Math.round((visitors / maxVisitors) * 100));
+            return (
+              '<div class="workspace-chart-col">' +
+                '<div class="workspace-chart-bar-wrap">' +
+                  '<div class="workspace-chart-bar" style="height:' + escapeHtml(height + '%') + '" title="' + escapeHtml(item.dateKey + ': ' + visitors + ' visitors') + '">' +
+                    '<span>' + escapeHtml(visitors) + '</span>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="workspace-chart-label">' + escapeHtml(formatAnalyticsDate(item.dateKey)) + '</div>' +
+              '</div>'
+            );
+          }).join('') +
+        '</div>' +
+        '<div class="workspace-chart-note">Unique visitors by day across the recent tracking window.</div>' +
+      '</div>'
+    );
   }
 
   function renderAnalyticsPages(items) {
@@ -348,17 +362,32 @@
       return '<div class="workspace-empty">No top pages yet.</div>';
     }
 
-    return items.map(function (item) {
-      return (
-        '<div class="workspace-analytics-row">' +
-          '<div>' +
-            '<strong>' + escapeHtml(getPathLabel(item.path)) + '</strong>' +
-            '<span>' + escapeHtml(item.path) + '</span>' +
-          '</div>' +
-          '<div class="workspace-analytics-badge">' + escapeHtml(item.hits + ' hits') + '</div>' +
-        '</div>'
-      );
-    }).join('');
+    var maxHits = items.reduce(function (maxValue, item) {
+      return Math.max(maxValue, Number(item.hits || 0));
+    }, 0) || 1;
+
+    return (
+      '<div class="workspace-chart">' +
+        '<div class="workspace-chart-rows">' +
+          items.map(function (item) {
+            var hits = Number(item.hits || 0);
+            var width = Math.max(8, Math.round((hits / maxHits) * 100));
+            return (
+              '<div class="workspace-chart-row">' +
+                '<div class="workspace-chart-row-head">' +
+                  '<strong>' + escapeHtml(getPathLabel(item.path)) + '</strong>' +
+                  '<span>' + escapeHtml(hits + ' hits') + '</span>' +
+                '</div>' +
+                '<div class="workspace-chart-track" aria-hidden="true">' +
+                  '<div class="workspace-chart-fill" style="width:' + escapeHtml(width + '%') + '"></div>' +
+                '</div>' +
+              '</div>'
+            );
+          }).join('') +
+        '</div>' +
+        '<div class="workspace-chart-note">Most-visited public pages in the current dataset.</div>' +
+      '</div>'
+    );
   }
 
   function renderVisitorAnalytics(items) {

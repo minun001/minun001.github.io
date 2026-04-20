@@ -62,6 +62,21 @@
     .workspace-analytics-row strong{display:block;color:var(--text-title);font-size:.96rem}
     .workspace-analytics-row span{display:block;color:var(--text-soft);font-size:.83rem}
     .workspace-analytics-badge{display:inline-flex;align-items:center;justify-content:center;min-width:58px;padding:.28rem .55rem;border-radius:999px;background:rgba(29,78,216,.08);color:var(--text-title);font-size:.78rem;font-weight:800}
+    .workspace-chart{display:grid;gap:.85rem}
+    .workspace-chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(58px,1fr));gap:.75rem;align-items:end;min-height:220px;padding:.75rem .25rem .15rem;border-top:1px solid rgba(17,32,51,.08)}
+    .workspace-chart-col{display:grid;gap:.5rem;justify-items:center}
+    .workspace-chart-bar-wrap{display:flex;align-items:flex-end;justify-content:center;height:160px;width:100%}
+    .workspace-chart-bar{position:relative;display:flex;align-items:flex-start;justify-content:center;width:min(100%,42px);min-height:12px;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,#5b93f5 0%,#1d4ed8 100%);box-shadow:0 12px 18px rgba(29,78,216,.14)}
+    .workspace-chart-bar span{position:absolute;top:-1.45rem;color:var(--text-title);font-size:.76rem;font-weight:800;white-space:nowrap}
+    .workspace-chart-label{color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;text-align:center;line-height:1.25}
+    .workspace-chart-note{color:var(--text-soft);font-size:.82rem;line-height:1.5}
+    .workspace-chart-rows{display:grid;gap:.7rem}
+    .workspace-chart-row{display:grid;gap:.35rem}
+    .workspace-chart-row-head{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem}
+    .workspace-chart-row-head strong{display:block;color:var(--text-title);font-size:.92rem}
+    .workspace-chart-row-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800}
+    .workspace-chart-track{position:relative;height:12px;border-radius:999px;background:rgba(17,32,51,.08);overflow:hidden}
+    .workspace-chart-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#2bb3a8 0%,#0f766e 100%)}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
     @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-grid,.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}}
@@ -146,13 +161,13 @@
                 <div class="workspace-analytics-panel">
                   <h3>Recent Days</h3>
                   <div class="workspace-analytics-list" id="workspace-analytics-days">
-                    <div class="workspace-empty">Daily traffic will appear here.</div>
+                    <div class="workspace-empty">Daily traffic will appear here as a chart.</div>
                   </div>
                 </div>
                 <div class="workspace-analytics-panel">
                   <h3>Top Pages</h3>
                   <div class="workspace-analytics-list" id="workspace-analytics-pages">
-                    <div class="workspace-empty">Top pages will appear here.</div>
+                    <div class="workspace-empty">Top pages will appear here as a chart.</div>
                   </div>
                 </div>
               </div>
