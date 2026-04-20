@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Workspace | Hyunsik Min</title>
+  <meta name="description" content="Private workspace access for Hyunsik Min.">
+  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
+  <style>
+    .workspace-page{display:grid;gap:1.6rem}
+    .workspace-shell{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:1.2rem;align-items:start}
+    .workspace-panel{padding:1.35rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft)}
+    .workspace-panel h2{margin-bottom:.35rem}
+    .workspace-panel p{margin:0}
+    .workspace-status{padding:.85rem 1rem;border-radius:8px;background:#eef4f8;color:var(--text-title);font-weight:700}
+    .workspace-status[data-tone="success"]{background:#e8f7ef;color:#176246}
+    .workspace-status[data-tone="warn"]{background:#fff4df;color:#8a5a1d}
+    .workspace-status[data-tone="error"]{background:#fdebec;color:#a23138}
+    .workspace-form{display:grid;gap:.9rem;margin-top:1rem}
+    .workspace-field{display:grid;gap:.38rem}
+    .workspace-field span{color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .workspace-field input{min-height:46px;padding:0 .9rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;color:var(--text-title);font:600 .98rem/1.4 var(--font-body)}
+    .workspace-field input:focus{outline:none;border-color:rgba(29,78,216,.36);box-shadow:0 0 0 3px rgba(29,78,216,.08)}
+    .workspace-actions{display:flex;flex-wrap:wrap;gap:.7rem}
+    .workspace-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.72rem 1rem;border:none;border-radius:8px;background:#102033;color:#fff;font-size:.94rem;font-weight:800;cursor:pointer}
+    .workspace-button.secondary{background:#fff;color:var(--text-title);box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .workspace-meta{display:grid;gap:.7rem}
+    .workspace-meta-row{display:flex;justify-content:space-between;gap:1rem;padding-top:.8rem;border-top:1px solid var(--border-soft)}
+    .workspace-meta-label{color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .workspace-meta-value{color:var(--text-title);font-weight:700;text-align:right}
+    .workspace-list{display:grid;gap:.8rem;margin-top:1rem}
+    .workspace-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .workspace-card h3{margin-bottom:.28rem;font-size:1.04rem}
+    .workspace-card p{margin:0;color:var(--text-soft)}
+    .workspace-card a{display:inline-flex;margin-top:.75rem;font-weight:800}
+    [data-workspace-view][hidden]{display:none}
+    @media (max-width:900px){.workspace-shell{grid-template-columns:1fr}}
+  </style>
+</head>
+<body class="page-workspace">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <div class="site-shell">
+      <a class="brand" href="/">Hyunsik Min</a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/profile/">Profile</a>
+        <a href="/publications/">Publications</a>
+        <a href="/news/">News</a>
+        <a class="is-active" href="/workspace/">Workspace</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page" id="main-content">
+    <div class="site-shell">
+      <div class="workspace-page">
+        <section class="page-lead">
+          <div class="page-lead-copy">
+            <div class="eyebrow">Private Access</div>
+            <h1>Workspace</h1>
+            <p>This page is reserved for authenticated workspace access. Public visitors can see the sign-in shell, but master-only access requires external authentication.</p>
+          </div>
+        </section>
+
+        <div id="workspace-status" class="workspace-status" data-tone="neutral">Preparing workspace access...</div>
+
+        <section class="workspace-shell">
+          <article class="workspace-panel" data-workspace-view="login" hidden>
+            <div class="eyebrow">Sign In</div>
+            <h2>Master Workspace Login</h2>
+            <p>Use the email account that has the <strong>master</strong> role in your auth provider.</p>
+            <form id="workspace-login-form" class="workspace-form">
+              <label class="workspace-field">
+                <span>Email</span>
+                <input id="workspace-email" type="email" autocomplete="username" placeholder="your-email@example.com" required>
+              </label>
+              <label class="workspace-field">
+                <span>Password</span>
+                <input id="workspace-password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+              </label>
+              <div class="workspace-actions">
+                <button class="workspace-button" type="submit">Sign In</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="workspace-panel" data-workspace-view="dashboard" hidden>
+            <div class="eyebrow">Master Session</div>
+            <h2>Workspace Overview</h2>
+            <p>This is the private workspace shell for the master account. Use it as the starting point for private notes, draft materials, and admin-only links that should be fetched only after authentication.</p>
+            <div class="workspace-list">
+              <div class="workspace-card">
+                <h3>Private Research Desk</h3>
+                <p>Keep draft research notes, unpublished project plans, or internal references behind authenticated data sources.</p>
+              </div>
+              <div class="workspace-card">
+                <h3>Admin Shortcuts</h3>
+                <p>Link private dashboards, planning boards, or storage-backed documents here after auth is fully connected.</p>
+              </div>
+              <div class="workspace-card">
+                <h3>Next Step</h3>
+                <p>Store the actual private content in Supabase tables or storage with row-level access control, not in public HTML.</p>
+                <a href="https://supabase.com/docs/guides/auth" target="_blank" rel="noopener">Open Supabase Auth</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
+            <div class="eyebrow">Access Restricted</div>
+            <h2>Signed In, But Not Authorized</h2>
+            <p>This account authenticated successfully, but it does not have the required <strong>master</strong> role for the workspace.</p>
+          </article>
+
+          <article class="workspace-panel" data-workspace-view="setup" hidden>
+            <div class="eyebrow">Setup Required</div>
+            <h2>Connect Auth First</h2>
+            <p>The workspace shell is ready, but authentication is not configured yet. Add your public Supabase project URL and anon key to <code>/assets/workspace-config.js</code>, then create a user with the <strong>master</strong> role in Supabase Auth metadata.</p>
+            <div class="workspace-list">
+              <div class="workspace-card">
+                <h3>What stays private</h3>
+                <p>Your password is never stored in this repository. Do not commit service-role keys or any backend secret.</p>
+              </div>
+              <div class="workspace-card">
+                <h3>What is public</h3>
+                <p>Supabase URL and anon key are safe for client use. The secure boundary comes from auth rules and row-level security.</p>
+              </div>
+            </div>
+          </article>
+
+          <aside class="workspace-panel">
+            <div class="eyebrow">Session</div>
+            <h2>Access State</h2>
+            <div class="workspace-meta">
+              <div class="workspace-meta-row">
+                <div class="workspace-meta-label">Signed-in Email</div>
+                <div class="workspace-meta-value" id="workspace-user-email">-</div>
+              </div>
+              <div class="workspace-meta-row">
+                <div class="workspace-meta-label">Role</div>
+                <div class="workspace-meta-value" id="workspace-user-role">-</div>
+              </div>
+              <div class="workspace-meta-row">
+                <div class="workspace-meta-label">Guard</div>
+                <div class="workspace-meta-value">master only</div>
+              </div>
+            </div>
+            <div class="workspace-actions" style="margin-top:1rem">
+              <button id="workspace-signout" class="workspace-button secondary" type="button">Sign Out</button>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-shell footer-inner">
+      <div>
+        <strong>Hyunsik Min</strong>
+        <p>Private workspace shell for authenticated access.</p>
+      </div>
+      <p>Public shell, private data only after verified sign-in.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/assets/workspace-config.js"></script>
+  <script src="/assets/workspace.js"></script>
+</body>
+</html>
