@@ -14,10 +14,12 @@
     .workspace-page[data-mode="auth"] .page-lead{display:none}
     .workspace-shell{display:grid;gap:1.2rem;align-items:start}
     .workspace-shell[data-mode="auth"]{grid-template-columns:minmax(0,720px);justify-content:center}
-    .workspace-shell[data-mode="private"]{grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr)}
+    .workspace-shell[data-mode="private"]{grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr)}
     .workspace-panel{padding:1.35rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft)}
     .workspace-panel h2{margin-bottom:.35rem}
     .workspace-panel p{margin:0}
+    .workspace-dashboard-head{display:grid;gap:.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-soft)}
+    .workspace-dashboard-copy{display:grid;gap:.15rem}
     .workspace-status{padding:.85rem 1rem;border-radius:8px;background:#eef4f8;color:var(--text-title);font-weight:700}
     .workspace-status[data-tone="success"]{background:#e8f7ef;color:#176246}
     .workspace-status[data-tone="warn"]{background:#fff4df;color:#8a5a1d}
@@ -35,11 +37,15 @@
     .workspace-meta-label{color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .workspace-meta-value{color:var(--text-title);font-weight:700;text-align:right}
     .workspace-list{display:grid;gap:.8rem;margin-top:1rem}
-    .workspace-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .workspace-card{display:grid;align-content:start;gap:.45rem;height:100%;padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .workspace-card h3{margin-bottom:.28rem;font-size:1.04rem}
     .workspace-card p{margin:0;color:var(--text-soft)}
     .workspace-card a{display:inline-flex;margin-top:.75rem;font-weight:800}
-    .workspace-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+    .workspace-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem;align-items:stretch}
+    .workspace-section{display:grid;align-content:start}
+    .workspace-section-head{display:grid;gap:.2rem}
+    .workspace-section-head .eyebrow{margin:0}
+    .workspace-section-head p{color:var(--text-soft);font-size:.92rem}
     .workspace-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
     .workspace-mini-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .workspace-mini-card span{display:block;margin-bottom:.28rem;color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -47,7 +53,7 @@
     .workspace-mini-card p{margin:0;color:var(--text-soft)}
     .workspace-empty{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-soft)}
     .workspace-note-meta{margin-top:.8rem;color:var(--text-soft);font-size:.8rem;font-weight:700}
-    .workspace-analytics{display:grid;gap:1rem;margin-top:1.25rem;padding-top:1.2rem;border-top:1px solid var(--border-soft)}
+    .workspace-analytics{display:grid;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-soft)}
     .workspace-analytics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
     .workspace-analytics-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .workspace-analytics-card span{display:block;margin-bottom:.3rem;color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -82,9 +88,10 @@
     .workspace-chart-row-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800}
     .workspace-chart-track{position:relative;height:12px;border-radius:999px;background:rgba(17,32,51,.08);overflow:hidden}
     .workspace-chart-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#2bb3a8 0%,#0f766e 100%)}
+    .workspace-shell[data-mode="private"] > aside.workspace-panel{position:sticky;top:96px}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-grid,.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}}
+    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-grid,.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}.workspace-shell[data-mode="private"] > aside.workspace-panel{position:static;top:auto}}
   </style>
 </head>
 <body class="page-workspace">
@@ -134,25 +141,15 @@
           </article>
 
           <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private hidden>
-            <div class="eyebrow">Overview</div>
-            <h2>Private Dashboard</h2>
-            <p>Private notes, links, and traffic in one place.</p>
+            <div class="workspace-dashboard-head">
+              <div class="workspace-dashboard-copy">
+                <div class="eyebrow">Overview</div>
+                <h2>Private Dashboard</h2>
+                <p>Private notes, links, and traffic in one place.</p>
+              </div>
+            </div>
             <div class="workspace-metrics" id="workspace-metrics">
               <div class="workspace-empty">Metrics will appear here.</div>
-            </div>
-            <div class="workspace-grid">
-              <div>
-                <div class="eyebrow" style="margin-top:1.2rem">Quick Links</div>
-                <div class="workspace-list" id="workspace-links">
-                  <div class="workspace-empty">Saved links will appear here.</div>
-                </div>
-              </div>
-              <div>
-                <div class="eyebrow" style="margin-top:1.2rem">Notes</div>
-                <div class="workspace-list" id="workspace-notes">
-                  <div class="workspace-empty">Notes will appear here.</div>
-                </div>
-              </div>
             </div>
             <section class="workspace-analytics" aria-labelledby="workspace-analytics-title">
               <div>
@@ -177,6 +174,26 @@
                 </div>
               </div>
             </section>
+            <div class="workspace-grid">
+              <section class="workspace-section" aria-labelledby="workspace-links-title">
+                <div class="workspace-section-head">
+                  <div class="eyebrow">Quick Links</div>
+                  <p id="workspace-links-title">Private references and working shortcuts.</p>
+                </div>
+                <div class="workspace-list" id="workspace-links">
+                  <div class="workspace-empty">Saved links will appear here.</div>
+                </div>
+              </section>
+              <section class="workspace-section" aria-labelledby="workspace-notes-title">
+                <div class="workspace-section-head">
+                  <div class="eyebrow">Notes</div>
+                  <p id="workspace-notes-title">Pinned reminders and current working notes.</p>
+                </div>
+                <div class="workspace-list" id="workspace-notes">
+                  <div class="workspace-empty">Notes will appear here.</div>
+                </div>
+              </section>
+            </div>
           </article>
 
           <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
