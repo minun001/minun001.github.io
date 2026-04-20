@@ -13,6 +13,10 @@
     return String((config && config.masterEmail) || 'master-account@private.local').trim().toLowerCase();
   }
 
+  function getMasterUserId(config) {
+    return String((config && config.masterUserId) || '').trim().toLowerCase();
+  }
+
   function hasSupabaseConfig(config) {
     return Boolean(config && config.supabaseUrl && config.supabaseAnonKey);
   }
@@ -79,8 +83,10 @@
     var requiredRole = String((config && config.requiredRole) || 'master').toLowerCase();
     var role = String(resolveRole(user) || '').toLowerCase();
     var email = user && user.email ? String(user.email).trim().toLowerCase() : '';
+    var userId = user && user.id ? String(user.id).trim().toLowerCase() : '';
     var masterEmail = getMasterEmail(config);
-    return (Boolean(role) && role === requiredRole) || (Boolean(email) && email === masterEmail);
+    var masterUserId = getMasterUserId(config);
+    return (Boolean(role) && role === requiredRole) || (Boolean(email) && email === masterEmail) || (Boolean(userId) && userId === masterUserId);
   }
 
   function setHtml(id, html) {
