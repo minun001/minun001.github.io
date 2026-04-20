@@ -25,6 +25,15 @@
     });
   }
 
+  function setShellMode(mode) {
+    var shell = document.querySelector('[data-workspace-shell]');
+    var privatePanels = document.querySelectorAll('[data-workspace-private]');
+    if (shell) shell.setAttribute('data-mode', mode === 'private' ? 'private' : 'auth');
+    Array.prototype.forEach.call(privatePanels, function (panel) {
+      panel.hidden = mode !== 'private';
+    });
+  }
+
   function escapeHtml(value) {
     return String(value || '')
       .replace(/&/g, '&amp;')
@@ -164,12 +173,14 @@
     var passwordInput = byId('workspace-password');
 
     if (!hasSupabaseConfig(config)) {
+      setShellMode('auth');
       setView('setup');
       setStatus('Workspace auth is not configured yet.', 'warn');
       return;
     }
 
     if (!window.supabase || !window.supabase.createClient) {
+      setShellMode('auth');
       setView('setup');
       setStatus('Supabase client failed to load.', 'error');
       return;
@@ -186,6 +197,7 @@
       var user = session && session.user ? session.user : null;
       if (!user) {
         setIdentity(null);
+        setShellMode('auth');
         setView('login');
         setStatus('Sign in with your workspace account.', 'neutral');
         return;
@@ -193,12 +205,14 @@
 
       if (!isAuthorized(user, config)) {
         setIdentity(user);
+        setShellMode('auth');
         setView('unauthorized');
         setStatus('This account is signed in but does not have master access.', 'error');
         return;
       }
 
       setIdentity(user);
+      setShellMode('private');
       setView('dashboard');
       setStatus('Master workspace unlocked.', 'success');
       try {
@@ -248,6 +262,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     boot().catch(function (error) {
+      setShellMode('auth');
       setView('setup');
       setStatus(error && error.message ? error.message : 'Workspace failed to load.', 'error');
     });
