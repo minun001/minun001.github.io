@@ -101,6 +101,19 @@
     return message || 'Unable to sign in.';
   }
 
+  function isEmailNotConfirmedError(error) {
+    var message = error && error.message ? String(error.message) : '';
+    var code = error && error.code ? String(error.code) : '';
+    return message === 'Email not confirmed' || code === 'email_not_confirmed';
+  }
+
+  async function resendVerificationEmail(client, email) {
+    return client.auth.resend({
+      type: 'signup',
+      email: email
+    });
+  }
+
   function renderMetricCards(items) {
     if (!items.length) {
       return '<div class="workspace-empty">No private dashboard metrics yet.</div>';
@@ -277,10 +290,18 @@
         });
 
         if (result.error) {
-          setConfirmationAction(Boolean(
-            (result.error.message && String(result.error.message) === 'Email not confirmed') ||
-            (result.error.code && String(result.error.code) === 'email_not_confirmed')
-          ));
+          if (isEmailNotConfirmedError(result.error)) {
+            setConfirmationAction(true);
+            var resendResult = await resendVerificationEmail(client, email);
+            if (resendResult.error) {
+              setStatus('Email confirmation is still required. Use Resend Verification and confirm the message sent to your inbox.', 'warn');
+              return;
+            }
+            setStatus('Verification email sent. Open the message sent to master-account@private.local, confirm the account, then sign in again.', 'warn');
+            return;
+          }
+
+          setConfirmationAction(false);
           setStatus(getLoginErrorMessage(result.error), 'error');
           return;
         }
@@ -302,10 +323,7 @@
       resendConfirmation.addEventListener('click', async function () {
         setStatus('Sending a new verification email...', 'neutral');
 
-        var resendResult = await client.auth.resend({
-          type: 'signup',
-          email: getWorkspaceEmail()
-        });
+        var resendResult = await resendVerificationEmail(client, getWorkspaceEmail());
 
         if (resendResult.error) {
           setStatus(resendResult.error.message || 'Unable to resend verification email.', 'error');
