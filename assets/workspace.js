@@ -452,10 +452,10 @@
       return Math.max(maxValue, Number(item.visitors || 0));
     }, 0) || 1;
     var chartWidth = 640;
-    var chartHeight = 220;
+    var chartHeight = 280;
     var innerLeft = 20;
     var innerRight = 620;
-    var lineFloor = 176;
+    var lineFloor = 228;
     var lineTop = 42;
     var xStep = items.length > 1 ? (innerRight - innerLeft) / (items.length - 1) : 0;
     var points = items.map(function (item, index) {
