@@ -3,6 +3,12 @@
     return window.WORKSPACE_AUTH_CONFIG || {};
   }
 
+  function getWorkspaceEmail() {
+    var emailInput = byId('workspace-email');
+    var email = emailInput && emailInput.value ? String(emailInput.value).trim() : '';
+    return email || 'master-account@private.local';
+  }
+
   function hasSupabaseConfig(config) {
     return Boolean(config && config.supabaseUrl && config.supabaseAnonKey);
   }
@@ -244,7 +250,7 @@
         event.preventDefault();
         setStatus('Signing in...', 'neutral');
 
-        var email = emailInput ? emailInput.value.trim() : '';
+        var email = getWorkspaceEmail();
         var password = passwordInput ? passwordInput.value : '';
 
         var result = await client.auth.signInWithPassword({
