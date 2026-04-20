@@ -139,22 +139,22 @@
       {
         label: 'Saved Links',
         value: String(linkCount || 0),
-        context: 'Private reference links'
+        context: 'Private links'
       },
       {
         label: 'Notes',
         value: String(noteCount || 0),
-        context: 'Private notes in this dashboard'
+        context: 'Saved notes'
       },
       {
         label: 'Visitors',
         value: String((summary && summary.lifetimeVisitors) || 0),
-        context: 'Unique visitors since launch'
+        context: 'Since launch'
       },
       {
         label: 'Tracked Pages',
         value: String((summary && summary.trackedPages) || 0),
-        context: 'Public pages with traffic data'
+        context: 'Pages tracked'
       }
     ];
   }
@@ -528,7 +528,7 @@
             );
           }).join('') +
         '</div>' +
-        '<div class="workspace-chart-note">Most-visited public pages in the current dataset.</div>' +
+        '<div class="workspace-chart-note">Most-visited public pages.</div>' +
       '</div>'
     );
   }

@@ -107,7 +107,7 @@
       <div class="workspace-page" data-workspace-page data-mode="auth">
         <section class="page-lead" data-workspace-private hidden>
           <div class="page-lead-copy">
-            <div class="eyebrow">Private</div>
+            <div class="eyebrow">Dashboard</div>
             <h1>Dashboard</h1>
           </div>
         </section>
@@ -134,11 +134,11 @@
           </article>
 
           <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private hidden>
-            <div class="eyebrow">Dashboard</div>
-            <h2>Overview</h2>
-            <p>Notes, links, and traffic insights appear here after a verified sign-in.</p>
+            <div class="eyebrow">Overview</div>
+            <h2>Private Dashboard</h2>
+            <p>Private notes, links, and traffic in one place.</p>
             <div class="workspace-metrics" id="workspace-metrics">
-              <div class="workspace-empty">Add dashboard metrics to populate this panel.</div>
+              <div class="workspace-empty">Metrics will appear here.</div>
             </div>
             <div class="workspace-grid">
               <div>
@@ -160,7 +160,7 @@
                 <h3 id="workspace-analytics-title">Traffic</h3>
               </div>
               <div class="workspace-analytics-grid" id="workspace-analytics-summary">
-                <div class="workspace-empty">Traffic summaries will appear here once tracking is connected.</div>
+                <div class="workspace-empty">Traffic summary will appear here.</div>
               </div>
               <div class="workspace-analytics-panels">
                 <div class="workspace-analytics-panel workspace-analytics-panel--featured">
@@ -188,7 +188,7 @@
           <article class="workspace-panel" data-workspace-view="setup" hidden>
             <div class="eyebrow">Setup Required</div>
             <h2>Connect Auth First</h2>
-            <p>The dashboard shell is ready, but authentication is not configured yet. Add your public Supabase project URL and anon key to <code>/assets/workspace-config.js</code>, then allow the dashboard through the master email or role rule in Supabase.</p>
+            <p>The dashboard shell is ready, but authentication is not configured yet. Add your public Supabase project URL and anon key to <code>/assets/workspace-config.js</code>, then allow access through your master role or user rule in Supabase.</p>
             <div class="workspace-list">
               <div class="workspace-card">
                 <h3>What stays private</h3>
@@ -239,7 +239,7 @@
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/assets/workspace-config.js?v=20260420i"></script>
-    <script src="/assets/workspace.js?v=20260420i"></script>
+  <script src="/assets/workspace-config.js?v=20260420j"></script>
+  <script src="/assets/workspace.js?v=20260420j"></script>
 </body>
 </html>
