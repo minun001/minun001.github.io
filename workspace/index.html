@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="robots" content="noindex,nofollow">
-  <title>Workspace | Hyunsik Min</title>
-  <meta name="description" content="Private workspace access for Hyunsik Min.">
+  <title>Dashboard | Hyunsik Min</title>
+  <meta name="description" content="Private dashboard access for Hyunsik Min.">
   <link rel="stylesheet" href="/assets/site.css?v=20260417k">
   <style>
     .workspace-page{display:grid;gap:1.6rem}
@@ -92,7 +92,7 @@
         <a href="/profile/">Profile</a>
         <a href="/publications/">Publications</a>
         <a href="/news/">News</a>
-        <a class="is-active" href="/workspace/">Workspace</a>
+        <a class="is-active" href="/workspace/">Dashboard</a>
       </nav>
     </div>
   </header>
@@ -103,7 +103,7 @@
         <section class="page-lead" data-workspace-private hidden>
           <div class="page-lead-copy">
             <div class="eyebrow">Private</div>
-            <h1>Workspace</h1>
+            <h1>Dashboard</h1>
           </div>
         </section>
 
@@ -111,7 +111,7 @@
           <article class="workspace-panel" data-workspace-view="login" hidden>
             <div class="eyebrow">Login</div>
             <h2>Login</h2>
-            <div id="workspace-status" class="workspace-status" data-tone="neutral" style="margin-top:1rem">Preparing workspace access...</div>
+            <div id="workspace-status" class="workspace-status" data-tone="neutral" style="margin-top:1rem">Preparing dashboard access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
                 <span>Email</span>
@@ -133,7 +133,7 @@
             <h2>Overview</h2>
             <p>Notes, links, and traffic insights appear here after a verified sign-in.</p>
             <div class="workspace-metrics" id="workspace-metrics">
-              <div class="workspace-empty">Add workspace metrics to populate this panel.</div>
+              <div class="workspace-empty">Add dashboard metrics to populate this panel.</div>
             </div>
             <div class="workspace-grid">
               <div>
@@ -177,13 +177,13 @@
           <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
             <div class="eyebrow">Access Restricted</div>
             <h2>Signed In, But Not Authorized</h2>
-            <p>This account authenticated successfully, but it does not match the workspace master access rule yet.</p>
+            <p>This account authenticated successfully, but it does not match the dashboard master access rule yet.</p>
           </article>
 
           <article class="workspace-panel" data-workspace-view="setup" hidden>
             <div class="eyebrow">Setup Required</div>
             <h2>Connect Auth First</h2>
-            <p>The workspace shell is ready, but authentication is not configured yet. Add your public Supabase project URL and anon key to <code>/assets/workspace-config.js</code>, then allow the workspace through the master email or role rule in Supabase.</p>
+            <p>The dashboard shell is ready, but authentication is not configured yet. Add your public Supabase project URL and anon key to <code>/assets/workspace-config.js</code>, then allow the dashboard through the master email or role rule in Supabase.</p>
             <div class="workspace-list">
               <div class="workspace-card">
                 <h3>What stays private</h3>
@@ -230,7 +230,7 @@
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/assets/workspace-config.js?v=20260420d"></script>
-  <script src="/assets/workspace.js?v=20260420d"></script>
+  <script src="/assets/workspace-config.js?v=20260420e"></script>
+  <script src="/assets/workspace.js?v=20260420e"></script>
 </body>
 </html>

@@ -128,7 +128,7 @@
 
   function renderMetricCards(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">Workspace metrics will appear here once your data is connected.</div>';
+      return '<div class="workspace-empty">Dashboard metrics will appear here once your data is connected.</div>';
     }
 
     return items.map(function (item) {
@@ -216,7 +216,7 @@
     if (value === '/profile/') return 'Profile';
     if (value === '/publications/') return 'Publications';
     if (value === '/news/') return 'News';
-    if (value === '/workspace/') return 'Workspace';
+    if (value === '/workspace/') return 'Dashboard';
     return value.replace(/^\//, '').replace(/\/$/, '') || 'Page';
   }
 
@@ -496,7 +496,7 @@
     if (!hasSupabaseConfig(config)) {
       setShellMode('auth');
       setView('setup');
-      setStatus('Workspace auth is not configured yet.', 'warn');
+      setStatus('Dashboard auth is not configured yet.', 'warn');
       return;
     }
 
@@ -521,7 +521,7 @@
         setShellMode('auth');
         setView('login');
         setConfirmationAction(false);
-        setStatus('Sign in with your workspace account.', 'neutral');
+        setStatus('Sign in with your dashboard account.', 'neutral');
         return;
       }
 
@@ -536,7 +536,7 @@
       setIdentity(user, config);
       setShellMode('private');
       setView('dashboard');
-      setStatus('Master workspace unlocked.', 'success');
+      setStatus('Master dashboard unlocked.', 'success');
       try {
         await loadWorkspaceData(client, config);
       } catch (error) {
@@ -614,7 +614,7 @@
     boot().catch(function (error) {
       setShellMode('auth');
       setView('setup');
-      setStatus(error && error.message ? error.message : 'Workspace failed to load.', 'error');
+      setStatus(error && error.message ? error.message : 'Dashboard failed to load.', 'error');
     });
   });
 })();

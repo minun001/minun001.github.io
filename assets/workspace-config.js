@@ -9,7 +9,7 @@ window.WORKSPACE_AUTH_CONFIG = {
     visitsTable: 'site_visits',
     days: 14
   },
-  sectionName: 'Workspace',
+  sectionName: 'Dashboard',
   tables: {
     dashboard: 'workspace_dashboard_metrics',
     links: 'workspace_links',

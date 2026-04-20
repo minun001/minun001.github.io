@@ -24,7 +24,7 @@ values
   ),
   (
     'Lab Notes',
-    'Private workspace for meeting notes and checkpoints.',
+    'Private dashboard for meeting notes and checkpoints.',
     'https://example.com/lab-notes',
     'Open Notes',
     30
@@ -35,7 +35,7 @@ insert into public.workspace_notes (title, body, pinned, sort_order)
 values
   (
     'This week',
-    'Finalize the workspace auth connection, confirm master-only access, and replace placeholder links with real private URLs.',
+    'Finalize the dashboard auth connection, confirm master-only access, and replace placeholder links with real private URLs.',
     true,
     10
   ),
