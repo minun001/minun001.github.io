@@ -3,7 +3,6 @@ window.WORKSPACE_AUTH_CONFIG = {
   supabaseUrl: 'https://brwilcezyrtlpmcokmlo.supabase.co',
   supabaseAnonKey: 'sb_publishable_eEjPLgWLIYFIOf7C4HUgxg_LPcFvPKx',
   requiredRole: 'master',
-  masterEmail: 'master-account@private.local',
   masterUserId: '75145b9d-eece-4dc5-9d50-f5cf92e0eaf2',
   session: {
     idleMinutes: 15

@@ -5,7 +5,6 @@ stable
 as $$
   select
     coalesce((auth.jwt() -> 'app_metadata' ->> 'role') = 'master', false)
-    or lower(coalesce(auth.jwt() ->> 'email', '')) = 'master-account@private.local'
     or lower(coalesce(auth.jwt() ->> 'sub', '')) = '75145b9d-eece-4dc5-9d50-f5cf92e0eaf2';
 $$;
 

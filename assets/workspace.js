@@ -8,10 +8,6 @@
     return emailInput && emailInput.value ? String(emailInput.value).trim() : '';
   }
 
-  function getMasterEmail(config) {
-    return String((config && config.masterEmail) || 'master-account@private.local').trim().toLowerCase();
-  }
-
   function getMasterUserId(config) {
     return String((config && config.masterUserId) || '').trim().toLowerCase();
   }
@@ -102,11 +98,9 @@
   function isAuthorized(user, config) {
     var requiredRole = String((config && config.requiredRole) || 'master').toLowerCase();
     var role = String(resolveRole(user) || '').toLowerCase();
-    var email = user && user.email ? String(user.email).trim().toLowerCase() : '';
     var userId = user && user.id ? String(user.id).trim().toLowerCase() : '';
-    var masterEmail = getMasterEmail(config);
     var masterUserId = getMasterUserId(config);
-    return (Boolean(role) && role === requiredRole) || (Boolean(email) && email === masterEmail) || (Boolean(userId) && userId === masterUserId);
+    return (Boolean(role) && role === requiredRole) || (Boolean(userId) && userId === masterUserId);
   }
 
   function setHtml(id, html) {
@@ -769,7 +763,7 @@
               setStatus('Email confirmation is still required. Use Resend Verification and confirm the message sent to your inbox.', 'warn');
               return;
             }
-            setStatus('Verification email sent. Open the message sent to master-account@private.local, confirm the account, then sign in again.', 'warn');
+            setStatus('Verification email sent. Open the confirmation message in your inbox, confirm the account, then sign in again.', 'warn');
             return;
           }
 
