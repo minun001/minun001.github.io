@@ -79,14 +79,13 @@
 
         <section class="workspace-shell" data-workspace-shell data-mode="auth">
           <article class="workspace-panel" data-workspace-view="login" hidden>
-            <div class="eyebrow">Sign In</div>
-            <h2>Master Workspace Login</h2>
-            <p>Use the email account that has the <strong>master</strong> role in your auth provider.</p>
+            <div class="eyebrow">Login</div>
+            <h2>Login</h2>
             <div id="workspace-status" class="workspace-status" data-tone="neutral" style="margin-top:1rem">Preparing workspace access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
                 <span>Email</span>
-                <input id="workspace-email" type="email" autocomplete="username" placeholder="your-email@example.com" required>
+                <input id="workspace-email" type="email" autocomplete="username" value="master-account@private.local" placeholder="master-account@private.local" required>
               </label>
               <label class="workspace-field">
                 <span>Password</span>
