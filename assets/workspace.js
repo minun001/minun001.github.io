@@ -134,17 +134,17 @@
     });
   }
 
-  function buildFallbackMetricCards(summary, linkCount, noteCount) {
+  function buildFallbackMetricCards(summary) {
     return [
       {
-        label: 'Saved Links',
-        value: String(linkCount || 0),
-        context: 'Private links'
+        label: 'Today',
+        value: String((summary && summary.todayVisitors) || 0),
+        context: 'Unique visitors today'
       },
       {
-        label: 'Notes',
-        value: String(noteCount || 0),
-        context: 'Saved notes'
+        label: 'Last 30 Days',
+        value: String((summary && summary.last30Visitors) || 0),
+        context: 'Recent unique visitors'
       },
       {
         label: 'Visitors',
@@ -159,10 +159,10 @@
     ];
   }
 
-  function renderMetricCards(items, summary, linkCount, noteCount) {
+  function renderMetricCards(items, summary) {
     var safeItems = Array.isArray(items) ? items : [];
     if (!safeItems.length) {
-      safeItems = buildFallbackMetricCards(summary, linkCount, noteCount);
+      safeItems = buildFallbackMetricCards(summary);
     }
 
     return safeItems.map(function (item) {
@@ -176,44 +176,11 @@
     }).join('');
   }
 
-  function renderLinks(items) {
-    if (!items.length) {
-      return '<div class="workspace-empty">No saved links yet.</div>';
-    }
-
-    return items.map(function (item) {
-      return (
-        '<article class="workspace-card">' +
-          '<h3>' + escapeHtml(item.title || 'Saved Link') + '</h3>' +
-          '<p>' + escapeHtml(item.description || '') + '</p>' +
-          (item.url ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">' + escapeHtml(item.tag || 'Open link') + '</a>' : '') +
-        '</article>'
-      );
-    }).join('');
-  }
-
   function formatDate(value) {
     if (!value) return '';
     var date = new Date(value);
     if (Number.isNaN(date.getTime())) return '';
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  }
-
-  function renderNotes(items) {
-    if (!items.length) {
-      return '<div class="workspace-empty">No notes yet.</div>';
-    }
-
-    return items.map(function (item) {
-      var stamp = formatDate(item.updated_at || item.inserted_at);
-      return (
-        '<article class="workspace-card">' +
-          '<h3>' + escapeHtml(item.title || 'Note') + '</h3>' +
-          '<p>' + escapeHtml(item.body || '') + '</p>' +
-          (stamp ? '<div class="workspace-note-meta">' + escapeHtml(stamp) + '</div>' : '') +
-        '</article>'
-      );
-    }).join('');
   }
 
   function getAnalyticsDateKey(date) {
@@ -558,21 +525,6 @@
       .order('sort_order', { ascending: true })
       .limit(limits.dashboard || 4);
 
-    var linksPromise = client
-      .from(tables.links || 'workspace_links')
-      .select('title,description,url,tag,sort_order')
-      .eq('is_active', true)
-      .order('sort_order', { ascending: true })
-      .limit(limits.links || 6);
-
-    var notesPromise = client
-      .from(tables.notes || 'workspace_notes')
-      .select('title,body,updated_at,inserted_at,pinned,sort_order')
-      .eq('is_active', true)
-      .order('pinned', { ascending: false })
-      .order('sort_order', { ascending: true })
-      .limit(limits.notes || 6);
-
     var visitsPromise = client
       .from(analytics.visitsTable || 'site_visits')
       .select('visited_on,visitor_token,page_path')
@@ -580,20 +532,14 @@
       .order('visited_on', { ascending: false })
       .limit(5000);
 
-    var results = await Promise.all([metricsPromise, linksPromise, notesPromise, visitsPromise]);
+    var results = await Promise.all([metricsPromise, visitsPromise]);
     var metrics = results[0];
-    var links = results[1];
-    var notes = results[2];
-    var visits = results[3];
+    var visits = results[1];
 
     var metricsItems = metrics.error ? [] : (metrics.data || []);
-    var linkItems = links.error ? [] : (links.data || []);
-    var noteItems = notes.error ? [] : (notes.data || []);
     var analyticsSummary = visits.error ? buildZeroAnalyticsState(config) : aggregateVisitAnalytics(visits.data || [], config);
 
-    setHtml('workspace-metrics', renderMetricCards(metricsItems, analyticsSummary, linkItems.length, noteItems.length));
-    setHtml('workspace-links', renderLinks(linkItems));
-    setHtml('workspace-notes', renderNotes(noteItems));
+    setHtml('workspace-metrics', renderMetricCards(metricsItems, analyticsSummary));
 
     if (visits.error) {
       renderAnalyticsEmpty(config);

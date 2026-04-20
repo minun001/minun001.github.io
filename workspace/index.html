@@ -48,11 +48,6 @@
     .workspace-card h3{margin-bottom:.28rem;font-size:1.04rem}
     .workspace-card p{margin:0;color:var(--text-soft)}
     .workspace-card a{display:inline-flex;margin-top:.75rem;font-weight:800}
-    .workspace-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem;align-items:stretch}
-    .workspace-section{display:grid;align-content:start}
-    .workspace-section-head{display:grid;gap:.2rem}
-    .workspace-section-head .eyebrow{margin:0}
-    .workspace-section-head p{color:var(--text-soft);font-size:.92rem}
     .workspace-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
     .workspace-mini-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .workspace-mini-card span{display:block;margin-bottom:.28rem;color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -99,7 +94,7 @@
     .workspace-shell[data-mode="private"] > article[data-workspace-view="dashboard"]{order:2}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-grid,.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}}
+    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}}
   </style>
 </head>
 <body class="page-workspace">
@@ -155,7 +150,7 @@
                   <div class="workspace-dashboard-kicker">Dashboard</div>
                   <h2>Overview</h2>
                 </div>
-                <p>Private notes, links, and traffic in one place.</p>
+                <p>Private analytics and session status in one place.</p>
               </div>
             </div>
             <div class="workspace-metrics" id="workspace-metrics">
@@ -184,26 +179,6 @@
                 </div>
               </div>
             </section>
-            <div class="workspace-grid">
-              <section class="workspace-section" aria-labelledby="workspace-links-title">
-                <div class="workspace-section-head">
-                  <div class="eyebrow">Quick Links</div>
-                  <p id="workspace-links-title">Private references and working shortcuts.</p>
-                </div>
-                <div class="workspace-list" id="workspace-links">
-                  <div class="workspace-empty">Saved links will appear here.</div>
-                </div>
-              </section>
-              <section class="workspace-section" aria-labelledby="workspace-notes-title">
-                <div class="workspace-section-head">
-                  <div class="eyebrow">Notes</div>
-                  <p id="workspace-notes-title">Pinned reminders and current working notes.</p>
-                </div>
-                <div class="workspace-list" id="workspace-notes">
-                  <div class="workspace-empty">Notes will appear here.</div>
-                </div>
-              </section>
-            </div>
           </article>
 
           <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
