@@ -19,7 +19,10 @@
     .workspace-panel h2{margin-bottom:.35rem}
     .workspace-panel p{margin:0}
     .workspace-dashboard-head{display:grid;gap:.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-soft)}
-    .workspace-dashboard-copy{display:grid;gap:.15rem}
+    .workspace-dashboard-copy{display:grid;gap:.2rem}
+    .workspace-dashboard-copy h2{margin:0;color:var(--text-title);font-size:clamp(2.2rem,4.6vw,3.4rem);line-height:.98}
+    .workspace-dashboard-kicker{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .workspace-dashboard-copy p{max-width:42rem;color:var(--text-soft);font-size:1rem;line-height:1.55}
     .workspace-status{padding:.85rem 1rem;border-radius:8px;background:#eef4f8;color:var(--text-title);font-weight:700}
     .workspace-status[data-tone="success"]{background:#e8f7ef;color:#176246}
     .workspace-status[data-tone="warn"]{background:#fff4df;color:#8a5a1d}
@@ -143,8 +146,8 @@
           <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private hidden>
             <div class="workspace-dashboard-head">
               <div class="workspace-dashboard-copy">
-                <div class="eyebrow">Overview</div>
-                <h2>Private Dashboard</h2>
+                <div class="workspace-dashboard-kicker">Dashboard</div>
+                <h2>Overview</h2>
                 <p>Private notes, links, and traffic in one place.</p>
               </div>
             </div>
