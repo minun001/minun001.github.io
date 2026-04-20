@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="/assets/site.css?v=20260417k">
   <style>
     .workspace-page{display:grid;gap:1.6rem}
+    .workspace-page[data-mode="auth"]{padding-block:2.4rem 3.2rem}
+    .workspace-page[data-mode="auth"] .page-lead{display:none}
     .workspace-shell{display:grid;gap:1.2rem;align-items:start}
     .workspace-shell[data-mode="auth"]{grid-template-columns:minmax(0,720px);justify-content:center}
     .workspace-shell[data-mode="private"]{grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr)}
@@ -67,8 +69,8 @@
 
   <main class="page" id="main-content">
     <div class="site-shell">
-      <div class="workspace-page">
-        <section class="page-lead">
+      <div class="workspace-page" data-workspace-page data-mode="auth">
+        <section class="page-lead" data-workspace-private hidden>
           <div class="page-lead-copy">
             <div class="eyebrow">Private Access</div>
             <h1>Workspace</h1>
@@ -76,13 +78,12 @@
           </div>
         </section>
 
-        <div id="workspace-status" class="workspace-status" data-tone="neutral">Preparing workspace access...</div>
-
         <section class="workspace-shell" data-workspace-shell data-mode="auth">
           <article class="workspace-panel" data-workspace-view="login" hidden>
             <div class="eyebrow">Sign In</div>
             <h2>Master Workspace Login</h2>
             <p>Use the email account that has the <strong>master</strong> role in your auth provider.</p>
+            <div id="workspace-status" class="workspace-status" data-tone="neutral" style="margin-top:1rem">Preparing workspace access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
                 <span>Email</span>

@@ -27,8 +27,10 @@
 
   function setShellMode(mode) {
     var shell = document.querySelector('[data-workspace-shell]');
+    var page = document.querySelector('[data-workspace-page]');
     var privatePanels = document.querySelectorAll('[data-workspace-private]');
     if (shell) shell.setAttribute('data-mode', mode === 'private' ? 'private' : 'auth');
+    if (page) page.setAttribute('data-mode', mode === 'private' ? 'private' : 'auth');
     Array.prototype.forEach.call(privatePanels, function (panel) {
       panel.hidden = mode !== 'private';
     });
