@@ -71,6 +71,14 @@
     node.innerHTML = html;
   }
 
+  function getLoginErrorMessage(error) {
+    var message = error && error.message ? String(error.message) : '';
+    if (message === 'Invalid login credentials') {
+      return 'Login failed. This usually means the Supabase Auth user does not exist yet or the password does not match.';
+    }
+    return message || 'Unable to sign in.';
+  }
+
   function renderMetricCards(items) {
     if (!items.length) {
       return '<div class="workspace-empty">No private dashboard metrics yet.</div>';
@@ -245,7 +253,7 @@
         });
 
         if (result.error) {
-          setStatus(result.error.message || 'Unable to sign in.', 'error');
+          setStatus(getLoginErrorMessage(result.error), 'error');
           return;
         }
 
