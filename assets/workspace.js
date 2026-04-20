@@ -16,6 +16,18 @@
     return String((config && config.masterUserId) || '').trim().toLowerCase();
   }
 
+  function getIdleTimeoutMinutes(config) {
+    var session = (config && config.session) || {};
+    var minutes = Number(session.idleMinutes || 15);
+    if (!Number.isFinite(minutes) || minutes <= 0) return 15;
+    return minutes;
+  }
+
+  function formatIdleTimeoutLabel(minutes) {
+    var safeMinutes = Math.max(1, Math.round(Number(minutes) || 15));
+    return safeMinutes + ' min idle';
+  }
+
   function hasSupabaseConfig(config) {
     return Boolean(config && config.supabaseUrl && config.supabaseAnonKey);
   }
@@ -74,8 +86,10 @@
   function setIdentity(user, config) {
     var email = byId('workspace-user-email');
     var role = byId('workspace-user-role');
+    var timeout = byId('workspace-session-timeout');
     if (email) email.textContent = user && user.email ? user.email : '-';
     if (role) role.textContent = getAccessLabel(user, config);
+    if (timeout) timeout.textContent = formatIdleTimeoutLabel(getIdleTimeoutMinutes(config));
   }
 
   function resolveRole(user) {
@@ -625,19 +639,89 @@
         autoRefreshToken: true
       }
     });
+    var pendingSignedOutMessage = '';
+    var idleTimeoutMinutes = getIdleTimeoutMinutes(config);
+    var idleTimerId = null;
+    var idleListenersReady = false;
+    var idleTrackingActive = false;
+
+    function clearIdleTimer() {
+      if (idleTimerId) {
+        window.clearTimeout(idleTimerId);
+        idleTimerId = null;
+      }
+    }
+
+    async function signOutForInactivity() {
+      if (!idleTrackingActive) return;
+      idleTrackingActive = false;
+      clearIdleTimer();
+      pendingSignedOutMessage = 'Signed out automatically after ' + idleTimeoutMinutes + ' minutes of inactivity.';
+      await client.auth.signOut();
+    }
+
+    function scheduleIdleTimer() {
+      if (!idleTrackingActive) return;
+      clearIdleTimer();
+      idleTimerId = window.setTimeout(function () {
+        signOutForInactivity().catch(function () {
+          pendingSignedOutMessage = 'Session ended after inactivity. Please sign in again.';
+        });
+      }, idleTimeoutMinutes * 60 * 1000);
+    }
+
+    function trackActivity() {
+      if (!idleTrackingActive) return;
+      if (document.hidden) return;
+      scheduleIdleTimer();
+    }
+
+    function ensureIdleListeners() {
+      if (idleListenersReady) return;
+      idleListenersReady = true;
+      ['pointerdown', 'pointermove', 'keydown', 'scroll', 'touchstart', 'click'].forEach(function (eventName) {
+        window.addEventListener(eventName, trackActivity, { passive: true });
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (!idleTrackingActive) return;
+        if (document.hidden) {
+          clearIdleTimer();
+          return;
+        }
+        scheduleIdleTimer();
+      });
+    }
+
+    function startIdleTracking() {
+      ensureIdleListeners();
+      idleTrackingActive = true;
+      scheduleIdleTimer();
+    }
+
+    function stopIdleTracking() {
+      idleTrackingActive = false;
+      clearIdleTimer();
+    }
 
     async function applySession(session) {
       var user = session && session.user ? session.user : null;
       if (!user) {
+        stopIdleTracking();
         setIdentity(null, config);
         setShellMode('auth');
         setView('login');
         setConfirmationAction(false);
-        setStatus('Sign in with your dashboard account.', 'neutral');
+        if (pendingSignedOutMessage) {
+          setStatus(pendingSignedOutMessage, 'warn');
+          pendingSignedOutMessage = '';
+        } else {
+          setStatus('Sign in with your dashboard account.', 'neutral');
+        }
         return;
       }
 
       if (!isAuthorized(user, config)) {
+        stopIdleTracking();
         setIdentity(user, config);
         setShellMode('auth');
         setView('unauthorized');
@@ -649,6 +733,7 @@
       setShellMode('private');
       setView('dashboard');
       setStatus('Master dashboard unlocked.', 'success');
+      startIdleTracking();
       try {
         await loadWorkspaceData(client, config);
       } catch (error) {
@@ -701,6 +786,7 @@
 
     if (signOut) {
       signOut.addEventListener('click', async function () {
+        stopIdleTracking();
         await client.auth.signOut();
         setStatus('Signed out.', 'neutral');
       });
