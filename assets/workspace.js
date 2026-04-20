@@ -220,11 +220,36 @@
     return value.replace(/^\//, '').replace(/\/$/, '') || 'Page';
   }
 
-  function renderAnalyticsEmpty(message) {
-    var content = '<div class="workspace-empty">' + escapeHtml(message) + '</div>';
-    setHtml('workspace-analytics-summary', content);
-    setHtml('workspace-analytics-days', content);
-    setHtml('workspace-analytics-pages', content);
+  function buildZeroAnalyticsState() {
+    var recentDays = [];
+    for (var index = 6; index >= 0; index -= 1) {
+      recentDays.push({
+        dateKey: getAnalyticsDateOffset(index),
+        visitors: 0,
+        hits: 0
+      });
+    }
+
+    return {
+      todayVisitors: 0,
+      yesterdayVisitors: 0,
+      weeklyVisitors: 0,
+      trackedPages: 0,
+      recentDays: recentDays,
+      topPages: [
+        {
+          path: '/',
+          hits: 0
+        }
+      ]
+    };
+  }
+
+  function renderAnalyticsEmpty() {
+    var emptyState = buildZeroAnalyticsState();
+    setHtml('workspace-analytics-summary', renderAnalyticsSummary(emptyState));
+    setHtml('workspace-analytics-days', renderAnalyticsDays(emptyState.recentDays));
+    setHtml('workspace-analytics-pages', renderAnalyticsPages(emptyState.topPages));
   }
 
   function aggregateVisitAnalytics(items) {
@@ -327,7 +352,7 @@
 
   function renderAnalyticsDays(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">No daily visitor records yet.</div>';
+      return renderAnalyticsDays(buildZeroAnalyticsState().recentDays);
     }
 
     var maxVisitors = items.reduce(function (maxValue, item) {
@@ -359,7 +384,7 @@
 
   function renderAnalyticsPages(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">No top pages yet.</div>';
+      return renderAnalyticsPages(buildZeroAnalyticsState().topPages);
     }
 
     var maxHits = items.reduce(function (maxValue, item) {
@@ -392,7 +417,7 @@
 
   function renderVisitorAnalytics(items) {
     if (!items.length) {
-      renderAnalyticsEmpty('No public visit data has been recorded yet.');
+      renderAnalyticsEmpty();
       return;
     }
 
@@ -453,7 +478,7 @@
     setHtml('workspace-notes', renderNotes(notes.data || []));
 
     if (visits.error) {
-      renderAnalyticsEmpty('Visitor analytics will appear after the tracking table is ready.');
+      renderAnalyticsEmpty();
       return;
     }
 
