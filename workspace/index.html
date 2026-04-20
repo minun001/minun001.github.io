@@ -122,7 +122,7 @@
           <article class="workspace-panel" data-workspace-view="login" hidden>
             <div class="eyebrow">Login</div>
             <h2>Login</h2>
-            <div id="workspace-status" class="workspace-status" data-tone="neutral" style="margin-top:1rem">Preparing dashboard access...</div>
+            <div id="workspace-status" class="workspace-status" data-tone="neutral" style="margin-top:1rem">Checking access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
                 <span>Email</span>
@@ -146,7 +146,7 @@
               </div>
             </div>
             <div class="workspace-metrics" id="workspace-metrics">
-              <div class="workspace-empty">Metrics will appear here.</div>
+              <div class="workspace-empty">No metrics yet.</div>
             </div>
             <section class="workspace-analytics" aria-labelledby="workspace-analytics-title">
               <div>
@@ -154,19 +154,19 @@
                 <h3 id="workspace-analytics-title">Traffic</h3>
               </div>
               <div class="workspace-analytics-grid" id="workspace-analytics-summary">
-                <div class="workspace-empty">Traffic summary will appear here.</div>
+                <div class="workspace-empty">No traffic summary yet.</div>
               </div>
               <div class="workspace-analytics-panels">
                 <div class="workspace-analytics-panel workspace-analytics-panel--featured">
                   <h3>Since Launch</h3>
                   <div class="workspace-analytics-list" id="workspace-analytics-days">
-                    <div class="workspace-empty">Traffic since launch will appear here as a line chart.</div>
+                    <div class="workspace-empty">No launch data yet.</div>
                   </div>
                 </div>
                 <div class="workspace-analytics-panel">
                   <h3>Top Pages</h3>
                   <div class="workspace-analytics-list" id="workspace-analytics-pages">
-                    <div class="workspace-empty">Top pages will appear here as a chart.</div>
+                    <div class="workspace-empty">No page data yet.</div>
                   </div>
                 </div>
               </div>
@@ -176,29 +176,29 @@
           <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
             <div class="eyebrow">Access Restricted</div>
             <h2>Not Authorized</h2>
-            <p>This account does not have dashboard access.</p>
+            <p>No dashboard access for this account.</p>
           </article>
 
           <article class="workspace-panel" data-workspace-view="setup" hidden>
             <div class="eyebrow">Setup Required</div>
             <h2>Connect Auth</h2>
-            <p>Add your Supabase URL and anon key to <code>/assets/workspace-config.js</code>, then allow access through your master role or user rule.</p>
+            <p>Add your Supabase URL and anon key to <code>/assets/workspace-config.js</code>, then allow access through the master rule.</p>
             <div class="workspace-list">
               <div class="workspace-card">
                 <h3>What stays private</h3>
-                <p>Your password is never stored in this repository. Do not commit service-role keys or any backend secret.</p>
+                <p>Passwords and service-role keys should never be committed.</p>
               </div>
               <div class="workspace-card">
                 <h3>What is public</h3>
-                <p>Supabase URL and anon key are safe for client use. The secure boundary comes from auth rules and row-level security.</p>
+                <p>The Supabase URL and anon key are safe for client use.</p>
               </div>
               <div class="workspace-card">
                 <h3>Run the SQL setup</h3>
-                <p>Use <code>tools/workspace_supabase_schema.sql</code> in the Supabase SQL editor, then insert your private dashboard, links, and notes there.</p>
+                <p>Run <code>tools/workspace_supabase_schema.sql</code> in Supabase SQL Editor.</p>
               </div>
               <div class="workspace-card">
                 <h3>Load starter content</h3>
-                <p>After the schema is created, run <code>tools/workspace_supabase_seed.sql</code> to load starter dashboard metrics, links, and notes that you can replace later.</p>
+                <p>Run <code>tools/workspace_supabase_seed.sql</code> to load starter dashboard data.</p>
               </div>
             </div>
           </article>
