@@ -13,12 +13,13 @@
     .pub-lead-collage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
     .pub-lead-collage img{width:100%;aspect-ratio:1/1.06;object-fit:cover;border-radius:8px;box-shadow:var(--shadow-soft)}
     .pub-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;align-items:stretch}
-    .pub-summary-item{position:relative;display:grid;gap:.72rem;align-content:start;min-height:172px;padding:1rem 1rem 1.05rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft);overflow:hidden}
+    .pub-summary-item{position:relative;display:grid;gap:.82rem;align-content:start;min-height:178px;padding:1rem 1rem 1.05rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft);overflow:hidden}
     .pub-summary-item:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,rgba(29,78,216,.84),rgba(16,185,129,.72))}
-    .pub-summary-item span{display:block;margin:0;color:var(--text-soft);font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+    .pub-summary-item span{display:block;margin:0;color:var(--text-soft);font-size:.71rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
     .pub-summary-item strong{display:block;margin:0;color:var(--text-title);font-size:2rem;line-height:1.02}
     .pub-summary-item[data-publication-summary] strong{margin-top:auto}
-    .pub-summary-note{margin-top:auto;padding:.72rem .78rem;border:1px solid rgba(17,32,51,.08);border-radius:8px;background:rgba(255,255,255,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.52);color:var(--text-title);font-size:.92rem;font-weight:700;line-height:1.3}
+    .pub-summary-note{display:inline-flex;align-items:center;gap:.42rem;width:max-content;max-width:100%;margin-top:auto;padding:.46rem .68rem;border-radius:999px;background:rgba(17,32,51,.06);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:var(--text-title);font-size:.8rem;font-weight:800;line-height:1.2;letter-spacing:.01em}
+    .pub-summary-note:before{content:"";width:.42rem;height:.42rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex:0 0 auto}
     .pub-summary-item--metrics{gap:.85rem;background:linear-gradient(180deg,#ffffff 0%,#f2f7fb 100%)}
     .pub-summary-item--metrics:before{background:linear-gradient(90deg,rgba(29,78,216,.9),rgba(14,165,233,.72))}
     .pub-summary-item--metrics p{margin:0}
@@ -140,22 +141,22 @@
           <article class="pub-summary-item" data-publication-summary="international-journals">
             <span>International Journals</span>
             <strong data-publication-summary-count>4 papers</strong>
-            <div class="pub-summary-note">Q1 journals with IF up to 11.0</div>
+            <div class="pub-summary-note">Q1 | IF 11.0 max</div>
           </article>
           <article class="pub-summary-item" data-publication-summary="domestic-journals">
             <span>Domestic Journals</span>
             <strong data-publication-summary-count>2 papers</strong>
-            <div class="pub-summary-note">Driving and legal AI</div>
+            <div class="pub-summary-note">Driving + legal AI</div>
           </article>
           <article class="pub-summary-item" data-publication-summary="international-conferences">
             <span>International Conferences</span>
             <strong data-publication-summary-count>2 papers</strong>
-            <div class="pub-summary-note">Scheduled for 2026</div>
+            <div class="pub-summary-note">2026 schedule</div>
           </article>
           <article class="pub-summary-item" data-publication-summary="domestic-conferences">
             <span>Domestic Conferences</span>
             <strong data-publication-summary-count>5 papers</strong>
-            <div class="pub-summary-note">Four research themes</div>
+            <div class="pub-summary-note">4 themes</div>
           </article>
           <article class="pub-summary-item pub-summary-item--metrics" data-scholar-card data-scholar-source="/assets/data/google-scholar-metrics.json">
             <span>Google Scholar</span>
