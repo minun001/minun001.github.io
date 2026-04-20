@@ -5,7 +5,8 @@ stable
 as $$
   select
     coalesce((auth.jwt() -> 'app_metadata' ->> 'role') = 'master', false)
-    or lower(coalesce(auth.jwt() ->> 'email', '')) = 'master-account@private.local';
+    or lower(coalesce(auth.jwt() ->> 'email', '')) = 'master-account@private.local'
+    or lower(coalesce(auth.jwt() ->> 'sub', '')) = '75145b9d-eece-4dc5-9d50-f5cf92e0eaf2';
 $$;
 
 create table if not exists public.workspace_dashboard_metrics (
@@ -40,9 +41,67 @@ create table if not exists public.workspace_notes (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.site_visits (
+  id bigint generated always as identity primary key,
+  visited_on date not null default (timezone('Asia/Seoul', now()))::date,
+  visitor_token text not null,
+  page_path text not null,
+  page_title text,
+  referrer_host text,
+  inserted_at timestamptz not null default now(),
+  unique (visited_on, visitor_token, page_path)
+);
+
+create or replace function public.record_site_visit(
+  p_visitor_token text,
+  p_page_path text,
+  p_page_title text default null,
+  p_referrer_host text default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  normalized_token text := left(trim(coalesce(p_visitor_token, '')), 96);
+  normalized_path text := left(trim(coalesce(p_page_path, '/')), 180);
+  normalized_title text := left(nullif(trim(coalesce(p_page_title, '')), ''), 240);
+  normalized_referrer text := left(nullif(trim(coalesce(p_referrer_host, '')), ''), 160);
+begin
+  if normalized_token = '' then
+    return;
+  end if;
+
+  if normalized_path = '' then
+    normalized_path := '/';
+  end if;
+
+  insert into public.site_visits (
+    visited_on,
+    visitor_token,
+    page_path,
+    page_title,
+    referrer_host
+  )
+  values (
+    (timezone('Asia/Seoul', now()))::date,
+    normalized_token,
+    normalized_path,
+    normalized_title,
+    normalized_referrer
+  )
+  on conflict (visited_on, visitor_token, page_path) do update
+  set
+    page_title = coalesce(excluded.page_title, public.site_visits.page_title),
+    referrer_host = coalesce(excluded.referrer_host, public.site_visits.referrer_host);
+end;
+$$;
+
 alter table public.workspace_dashboard_metrics enable row level security;
 alter table public.workspace_links enable row level security;
 alter table public.workspace_notes enable row level security;
+alter table public.site_visits enable row level security;
 
 drop policy if exists "master can read workspace dashboard metrics" on public.workspace_dashboard_metrics;
 create policy "master can read workspace dashboard metrics"
@@ -88,3 +147,21 @@ for all
 to authenticated
 using (public.is_master_workspace_user())
 with check (public.is_master_workspace_user());
+
+drop policy if exists "master can read site visits" on public.site_visits;
+create policy "master can read site visits"
+on public.site_visits
+for select
+to authenticated
+using (public.is_master_workspace_user());
+
+drop policy if exists "master can manage site visits" on public.site_visits;
+create policy "master can manage site visits"
+on public.site_visits
+for all
+to authenticated
+using (public.is_master_workspace_user())
+with check (public.is_master_workspace_user());
+
+grant execute on function public.record_site_visit(text, text, text, text) to anon;
+grant execute on function public.record_site_visit(text, text, text, text) to authenticated;

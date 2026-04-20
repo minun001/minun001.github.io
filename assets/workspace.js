@@ -176,9 +176,203 @@
     }).join('');
   }
 
+  function getAnalyticsDateKey(date) {
+    var formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Seoul',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    var parts = formatter.formatToParts(date);
+    var values = {};
+    parts.forEach(function (part) {
+      values[part.type] = part.value;
+    });
+    return [values.year, values.month, values.day].join('-');
+  }
+
+  function getAnalyticsDateOffset(daysAgo) {
+    var date = new Date();
+    date.setUTCDate(date.getUTCDate() - daysAgo);
+    return getAnalyticsDateKey(date);
+  }
+
+  function formatAnalyticsDate(dateKey) {
+    if (!dateKey) return '-';
+    var date = new Date(dateKey + 'T12:00:00Z');
+    if (Number.isNaN(date.getTime())) return dateKey;
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function getPathLabel(path) {
+    var value = String(path || '/');
+    if (value === '/') return 'Home';
+    if (value === '/profile/') return 'Profile';
+    if (value === '/publications/') return 'Publications';
+    if (value === '/news/') return 'News';
+    if (value === '/workspace/') return 'Workspace';
+    return value.replace(/^\//, '').replace(/\/$/, '') || 'Page';
+  }
+
+  function renderAnalyticsEmpty(message) {
+    var content = '<div class="workspace-empty">' + escapeHtml(message) + '</div>';
+    setHtml('workspace-analytics-summary', content);
+    setHtml('workspace-analytics-days', content);
+    setHtml('workspace-analytics-pages', content);
+  }
+
+  function aggregateVisitAnalytics(items) {
+    var days = {};
+    var pages = {};
+    var todayKey = getAnalyticsDateOffset(0);
+    var yesterdayKey = getAnalyticsDateOffset(1);
+    var weeklyCutoff = getAnalyticsDateOffset(6);
+    var weeklyTokens = {};
+    var distinctPages = {};
+
+    items.forEach(function (item) {
+      var dateKey = item.visited_on;
+      var token = String(item.visitor_token || '').trim();
+      var pagePath = String(item.page_path || '/').trim() || '/';
+      if (!dateKey || !token) return;
+
+      if (!days[dateKey]) {
+        days[dateKey] = {
+          tokenMap: {},
+          hits: 0
+        };
+      }
+
+      days[dateKey].tokenMap[token] = true;
+      days[dateKey].hits += 1;
+      pages[pagePath] = (pages[pagePath] || 0) + 1;
+      distinctPages[pagePath] = true;
+
+      if (dateKey >= weeklyCutoff) {
+        weeklyTokens[token] = true;
+      }
+    });
+
+    var dayKeys = Object.keys(days).sort().reverse();
+    var recentDays = dayKeys.slice(0, 7).map(function (dateKey) {
+      return {
+        dateKey: dateKey,
+        visitors: Object.keys(days[dateKey].tokenMap).length,
+        hits: days[dateKey].hits
+      };
+    });
+
+    var topPages = Object.keys(pages)
+      .map(function (pagePath) {
+        return {
+          path: pagePath,
+          hits: pages[pagePath]
+        };
+      })
+      .sort(function (left, right) {
+        return right.hits - left.hits;
+      })
+      .slice(0, 4);
+
+    return {
+      todayVisitors: days[todayKey] ? Object.keys(days[todayKey].tokenMap).length : 0,
+      yesterdayVisitors: days[yesterdayKey] ? Object.keys(days[yesterdayKey].tokenMap).length : 0,
+      weeklyVisitors: Object.keys(weeklyTokens).length,
+      trackedPages: Object.keys(distinctPages).length,
+      recentDays: recentDays,
+      topPages: topPages
+    };
+  }
+
+  function renderAnalyticsSummary(summary) {
+    var cards = [
+      {
+        label: 'Today',
+        value: summary.todayVisitors,
+        detail: 'Unique visitors today'
+      },
+      {
+        label: 'Yesterday',
+        value: summary.yesterdayVisitors,
+        detail: 'Unique visitors yesterday'
+      },
+      {
+        label: 'Last 7 Days',
+        value: summary.weeklyVisitors,
+        detail: 'Unique visitors in the recent week'
+      },
+      {
+        label: 'Tracked Pages',
+        value: summary.trackedPages,
+        detail: 'Public pages with recorded traffic'
+      }
+    ];
+
+    return cards.map(function (card) {
+      return (
+        '<article class="workspace-analytics-card">' +
+          '<span>' + escapeHtml(card.label) + '</span>' +
+          '<strong>' + escapeHtml(card.value) + '</strong>' +
+          '<p>' + escapeHtml(card.detail) + '</p>' +
+        '</article>'
+      );
+    }).join('');
+  }
+
+  function renderAnalyticsDays(items) {
+    if (!items.length) {
+      return '<div class="workspace-empty">No daily visitor records yet.</div>';
+    }
+
+    return items.map(function (item) {
+      return (
+        '<div class="workspace-analytics-row">' +
+          '<div>' +
+            '<strong>' + escapeHtml(formatAnalyticsDate(item.dateKey)) + '</strong>' +
+            '<span>' + escapeHtml(item.hits + ' recorded page hits') + '</span>' +
+          '</div>' +
+          '<div class="workspace-analytics-badge">' + escapeHtml(item.visitors + ' visitors') + '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function renderAnalyticsPages(items) {
+    if (!items.length) {
+      return '<div class="workspace-empty">No top pages yet.</div>';
+    }
+
+    return items.map(function (item) {
+      return (
+        '<div class="workspace-analytics-row">' +
+          '<div>' +
+            '<strong>' + escapeHtml(getPathLabel(item.path)) + '</strong>' +
+            '<span>' + escapeHtml(item.path) + '</span>' +
+          '</div>' +
+          '<div class="workspace-analytics-badge">' + escapeHtml(item.hits + ' hits') + '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function renderVisitorAnalytics(items) {
+    if (!items.length) {
+      renderAnalyticsEmpty('No public visit data has been recorded yet.');
+      return;
+    }
+
+    var summary = aggregateVisitAnalytics(items);
+    setHtml('workspace-analytics-summary', renderAnalyticsSummary(summary));
+    setHtml('workspace-analytics-days', renderAnalyticsDays(summary.recentDays));
+    setHtml('workspace-analytics-pages', renderAnalyticsPages(summary.topPages));
+  }
+
   async function loadWorkspaceData(client, config) {
     var tables = config.tables || {};
     var limits = config.limits || {};
+    var analytics = config.analytics || {};
+    var analyticsDays = Number(analytics.days || 14);
+    var analyticsStart = getAnalyticsDateOffset(Math.max(analyticsDays - 1, 0));
 
     var metricsPromise = client
       .from(tables.dashboard || 'workspace_dashboard_metrics')
@@ -202,10 +396,18 @@
       .order('sort_order', { ascending: true })
       .limit(limits.notes || 6);
 
-    var results = await Promise.all([metricsPromise, linksPromise, notesPromise]);
+    var visitsPromise = client
+      .from(analytics.visitsTable || 'site_visits')
+      .select('visited_on,visitor_token,page_path')
+      .gte('visited_on', analyticsStart)
+      .order('visited_on', { ascending: false })
+      .limit(500);
+
+    var results = await Promise.all([metricsPromise, linksPromise, notesPromise, visitsPromise]);
     var metrics = results[0];
     var links = results[1];
     var notes = results[2];
+    var visits = results[3];
 
     if (metrics.error || links.error || notes.error) {
       throw new Error('Private content tables are not ready yet.');
@@ -214,6 +416,13 @@
     setHtml('workspace-metrics', renderMetricCards(metrics.data || []));
     setHtml('workspace-links', renderLinks(links.data || []));
     setHtml('workspace-notes', renderNotes(notes.data || []));
+
+    if (visits.error) {
+      renderAnalyticsEmpty('Visitor analytics will appear after the tracking table is ready.');
+      return;
+    }
+
+    renderVisitorAnalytics(visits.data || []);
   }
 
   async function boot() {

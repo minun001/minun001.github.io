@@ -5,6 +5,10 @@ window.WORKSPACE_AUTH_CONFIG = {
   requiredRole: 'master',
   masterEmail: 'master-account@private.local',
   masterUserId: '75145b9d-eece-4dc5-9d50-f5cf92e0eaf2',
+  analytics: {
+    visitsTable: 'site_visits',
+    days: 14
+  },
   sectionName: 'Workspace',
   tables: {
     dashboard: 'workspace_dashboard_metrics',
