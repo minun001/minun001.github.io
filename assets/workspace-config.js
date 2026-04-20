@@ -1,7 +1,7 @@
 window.WORKSPACE_AUTH_CONFIG = {
   provider: 'supabase',
-  supabaseUrl: '',
-  supabaseAnonKey: '',
+  supabaseUrl: 'https://brwilcezyrtlpmcokmlo.supabase.co',
+  supabaseAnonKey: 'sb_publishable_eEjPLgWLIYFIOf7C4HUgxg_LPcFvPKx',
   requiredRole: 'master',
   sectionName: 'Workspace',
   tables: {
