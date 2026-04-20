@@ -25,6 +25,15 @@
     });
   }
 
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function setIdentity(user) {
     var email = byId('workspace-user-email');
     var role = byId('workspace-user-role');
@@ -43,6 +52,108 @@
     var requiredRole = String((config && config.requiredRole) || 'master').toLowerCase();
     var role = String(resolveRole(user) || '').toLowerCase();
     return Boolean(role) && role === requiredRole;
+  }
+
+  function setHtml(id, html) {
+    var node = byId(id);
+    if (!node) return;
+    node.innerHTML = html;
+  }
+
+  function renderMetricCards(items) {
+    if (!items.length) {
+      return '<div class="workspace-empty">No private dashboard metrics yet.</div>';
+    }
+
+    return items.map(function (item) {
+      return (
+        '<article class="workspace-mini-card">' +
+          '<span>' + escapeHtml(item.label || 'Metric') + '</span>' +
+          '<strong>' + escapeHtml(item.value || '-') + '</strong>' +
+          '<p>' + escapeHtml(item.context || '') + '</p>' +
+        '</article>'
+      );
+    }).join('');
+  }
+
+  function renderLinks(items) {
+    if (!items.length) {
+      return '<div class="workspace-empty">No private links yet.</div>';
+    }
+
+    return items.map(function (item) {
+      return (
+        '<article class="workspace-card">' +
+          '<h3>' + escapeHtml(item.title || 'Private Link') + '</h3>' +
+          '<p>' + escapeHtml(item.description || '') + '</p>' +
+          (item.url ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">' + escapeHtml(item.tag || 'Open link') + '</a>' : '') +
+        '</article>'
+      );
+    }).join('');
+  }
+
+  function formatDate(value) {
+    if (!value) return '';
+    var date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function renderNotes(items) {
+    if (!items.length) {
+      return '<div class="workspace-empty">No private notes yet.</div>';
+    }
+
+    return items.map(function (item) {
+      var stamp = formatDate(item.updated_at || item.inserted_at);
+      return (
+        '<article class="workspace-card">' +
+          '<h3>' + escapeHtml(item.title || 'Private Note') + '</h3>' +
+          '<p>' + escapeHtml(item.body || '') + '</p>' +
+          (stamp ? '<div class="workspace-note-meta">' + escapeHtml(stamp) + '</div>' : '') +
+        '</article>'
+      );
+    }).join('');
+  }
+
+  async function loadWorkspaceData(client, config) {
+    var tables = config.tables || {};
+    var limits = config.limits || {};
+
+    var metricsPromise = client
+      .from(tables.dashboard || 'workspace_dashboard_metrics')
+      .select('label,value,context,sort_order')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .limit(limits.dashboard || 4);
+
+    var linksPromise = client
+      .from(tables.links || 'workspace_links')
+      .select('title,description,url,tag,sort_order')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .limit(limits.links || 6);
+
+    var notesPromise = client
+      .from(tables.notes || 'workspace_notes')
+      .select('title,body,updated_at,inserted_at,pinned,sort_order')
+      .eq('is_active', true)
+      .order('pinned', { ascending: false })
+      .order('sort_order', { ascending: true })
+      .limit(limits.notes || 6);
+
+    var results = await Promise.all([metricsPromise, linksPromise, notesPromise]);
+    var metrics = results[0];
+    var links = results[1];
+    var notes = results[2];
+
+    if (metrics.error || links.error || notes.error) {
+      throw new Error('Private content tables are not ready yet.');
+    }
+
+    setHtml('workspace-metrics', renderMetricCards(metrics.data || []));
+    setHtml('workspace-links', renderLinks(links.data || []));
+    setHtml('workspace-notes', renderNotes(notes.data || []));
   }
 
   async function boot() {
@@ -90,6 +201,11 @@
       setIdentity(user);
       setView('dashboard');
       setStatus('Master workspace unlocked.', 'success');
+      try {
+        await loadWorkspaceData(client, config);
+      } catch (error) {
+        setStatus(error && error.message ? error.message : 'Private content failed to load.', 'warn');
+      }
     }
 
     client.auth.onAuthStateChange(function (_event, session) {

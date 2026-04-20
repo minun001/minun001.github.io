@@ -35,8 +35,16 @@
     .workspace-card h3{margin-bottom:.28rem;font-size:1.04rem}
     .workspace-card p{margin:0;color:var(--text-soft)}
     .workspace-card a{display:inline-flex;margin-top:.75rem;font-weight:800}
+    .workspace-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+    .workspace-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
+    .workspace-mini-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .workspace-mini-card span{display:block;margin-bottom:.28rem;color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .workspace-mini-card strong{display:block;margin-bottom:.2rem;color:var(--text-title);font-size:1.18rem}
+    .workspace-mini-card p{margin:0;color:var(--text-soft)}
+    .workspace-empty{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-soft)}
+    .workspace-note-meta{margin-top:.8rem;color:var(--text-soft);font-size:.8rem;font-weight:700}
     [data-workspace-view][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell{grid-template-columns:1fr}}
+    @media (max-width:900px){.workspace-shell,.workspace-grid,.workspace-metrics{grid-template-columns:1fr}}
   </style>
 </head>
 <body class="page-workspace">
@@ -91,19 +99,21 @@
             <div class="eyebrow">Master Session</div>
             <h2>Workspace Overview</h2>
             <p>This is the private workspace shell for the master account. Use it as the starting point for private notes, draft materials, and admin-only links that should be fetched only after authentication.</p>
-            <div class="workspace-list">
-              <div class="workspace-card">
-                <h3>Private Research Desk</h3>
-                <p>Keep draft research notes, unpublished project plans, or internal references behind authenticated data sources.</p>
+            <div class="workspace-metrics" id="workspace-metrics">
+              <div class="workspace-empty">Private dashboard metrics will appear here after setup.</div>
+            </div>
+            <div class="workspace-grid">
+              <div>
+                <div class="eyebrow" style="margin-top:1.2rem">Private Links</div>
+                <div class="workspace-list" id="workspace-links">
+                  <div class="workspace-empty">Private links will appear here after setup.</div>
+                </div>
               </div>
-              <div class="workspace-card">
-                <h3>Admin Shortcuts</h3>
-                <p>Link private dashboards, planning boards, or storage-backed documents here after auth is fully connected.</p>
-              </div>
-              <div class="workspace-card">
-                <h3>Next Step</h3>
-                <p>Store the actual private content in Supabase tables or storage with row-level access control, not in public HTML.</p>
-                <a href="https://supabase.com/docs/guides/auth" target="_blank" rel="noopener">Open Supabase Auth</a>
+              <div>
+                <div class="eyebrow" style="margin-top:1.2rem">Private Notes</div>
+                <div class="workspace-list" id="workspace-notes">
+                  <div class="workspace-empty">Private notes will appear here after setup.</div>
+                </div>
               </div>
             </div>
           </article>
@@ -126,6 +136,10 @@
               <div class="workspace-card">
                 <h3>What is public</h3>
                 <p>Supabase URL and anon key are safe for client use. The secure boundary comes from auth rules and row-level security.</p>
+              </div>
+              <div class="workspace-card">
+                <h3>Run the SQL setup</h3>
+                <p>Use <code>tools/workspace_supabase_schema.sql</code> in the Supabase SQL editor, then insert your private dashboard, links, and notes there.</p>
               </div>
             </div>
           </article>
