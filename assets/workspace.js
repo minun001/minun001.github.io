@@ -5,8 +5,7 @@
 
   function getWorkspaceEmail() {
     var emailInput = byId('workspace-email');
-    var email = emailInput && emailInput.value ? String(emailInput.value).trim() : '';
-    return email || 'master-account@private.local';
+    return emailInput && emailInput.value ? String(emailInput.value).trim() : '';
   }
 
   function getMasterEmail(config) {
