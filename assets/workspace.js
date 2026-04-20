@@ -126,12 +126,38 @@
     });
   }
 
-  function renderMetricCards(items) {
-    if (!items.length) {
-      return '<div class="workspace-empty">Dashboard metrics will appear here once your data is connected.</div>';
+  function buildFallbackMetricCards(summary, linkCount, noteCount) {
+    return [
+      {
+        label: 'Saved Links',
+        value: String(linkCount || 0),
+        context: 'Private reference links'
+      },
+      {
+        label: 'Notes',
+        value: String(noteCount || 0),
+        context: 'Private notes in this dashboard'
+      },
+      {
+        label: 'Visitors',
+        value: String((summary && summary.lifetimeVisitors) || 0),
+        context: 'Unique visitors since launch'
+      },
+      {
+        label: 'Tracked Pages',
+        value: String((summary && summary.trackedPages) || 0),
+        context: 'Public pages with traffic data'
+      }
+    ];
+  }
+
+  function renderMetricCards(items, summary, linkCount, noteCount) {
+    var safeItems = Array.isArray(items) ? items : [];
+    if (!safeItems.length) {
+      safeItems = buildFallbackMetricCards(summary, linkCount, noteCount);
     }
 
-    return items.map(function (item) {
+    return safeItems.map(function (item) {
       return (
         '<article class="workspace-mini-card">' +
           '<span>' + escapeHtml(item.label || 'Metric') + '</span>' +
@@ -144,7 +170,7 @@
 
   function renderLinks(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">Saved links will appear here once they are added.</div>';
+      return '<div class="workspace-empty">No saved links yet.</div>';
     }
 
     return items.map(function (item) {
@@ -167,7 +193,7 @@
 
   function renderNotes(items) {
     if (!items.length) {
-      return '<div class="workspace-empty">Notes will appear here once they are added.</div>';
+      return '<div class="workspace-empty">No notes yet.</div>';
     }
 
     return items.map(function (item) {
@@ -468,7 +494,7 @@
 
   function renderAnalyticsPages(items) {
     if (!items.length) {
-      return renderAnalyticsPages(buildZeroAnalyticsState().topPages);
+      return renderAnalyticsPages(buildZeroAnalyticsState(getConfig()).topPages);
     }
 
     var maxHits = items.reduce(function (maxValue, item) {
@@ -552,20 +578,23 @@
     var notes = results[2];
     var visits = results[3];
 
-    if (metrics.error || links.error || notes.error) {
-      throw new Error('Private content tables are not ready yet.');
-    }
+    var metricsItems = metrics.error ? [] : (metrics.data || []);
+    var linkItems = links.error ? [] : (links.data || []);
+    var noteItems = notes.error ? [] : (notes.data || []);
+    var analyticsSummary = visits.error ? buildZeroAnalyticsState(config) : aggregateVisitAnalytics(visits.data || [], config);
 
-    setHtml('workspace-metrics', renderMetricCards(metrics.data || []));
-    setHtml('workspace-links', renderLinks(links.data || []));
-    setHtml('workspace-notes', renderNotes(notes.data || []));
+    setHtml('workspace-metrics', renderMetricCards(metricsItems, analyticsSummary, linkItems.length, noteItems.length));
+    setHtml('workspace-links', renderLinks(linkItems));
+    setHtml('workspace-notes', renderNotes(noteItems));
 
     if (visits.error) {
       renderAnalyticsEmpty(config);
       return;
     }
 
-    renderVisitorAnalytics(visits.data || []);
+    setHtml('workspace-analytics-summary', renderAnalyticsSummary(analyticsSummary));
+    setHtml('workspace-analytics-days', renderAnalyticsDays(analyticsSummary.monthlySeries, analyticsSummary.launchDateKey));
+    setHtml('workspace-analytics-pages', renderAnalyticsPages(analyticsSummary.topPages));
   }
 
   async function boot() {
