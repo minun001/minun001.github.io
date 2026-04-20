@@ -15,7 +15,7 @@
     .workspace-page[data-mode="private"] .page-lead{display:none}
     .workspace-shell{display:grid;gap:1.2rem;align-items:start}
     .workspace-shell[data-mode="auth"]{grid-template-columns:minmax(0,720px);justify-content:center}
-    .workspace-shell[data-mode="private"]{grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr)}
+    .workspace-shell[data-mode="private"]{grid-template-columns:1fr}
     .workspace-panel{padding:1.35rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft)}
     .workspace-panel h2{margin-bottom:.35rem}
     .workspace-panel p{margin:0}
@@ -95,10 +95,11 @@
     .workspace-chart-row-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800}
     .workspace-chart-track{position:relative;height:12px;border-radius:999px;background:rgba(17,32,51,.08);overflow:hidden}
     .workspace-chart-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#2bb3a8 0%,#0f766e 100%)}
-    .workspace-shell[data-mode="private"] > aside.workspace-panel{position:sticky;top:96px}
+    .workspace-shell[data-mode="private"] > aside.workspace-panel{order:1;position:static;top:auto}
+    .workspace-shell[data-mode="private"] > article[data-workspace-view="dashboard"]{order:2}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-grid,.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}.workspace-shell[data-mode="private"] > aside.workspace-panel{position:static;top:auto}}
+    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-grid,.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}}
   </style>
 </head>
 <body class="page-workspace">
