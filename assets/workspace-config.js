@@ -7,7 +7,8 @@ window.WORKSPACE_AUTH_CONFIG = {
   masterUserId: '75145b9d-eece-4dc5-9d50-f5cf92e0eaf2',
   analytics: {
     visitsTable: 'site_visits',
-    days: 14
+    days: 14,
+    launchDate: '2025-11-14'
   },
   sectionName: 'Dashboard',
   tables: {

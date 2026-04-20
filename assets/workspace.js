@@ -203,11 +203,58 @@
     return getAnalyticsDateKey(date);
   }
 
+  function getAnalyticsLaunchDate(config) {
+    var analytics = (config && config.analytics) || {};
+    var launchDate = String(analytics.launchDate || '').trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(launchDate)) return launchDate;
+    return getAnalyticsDateOffset(Math.max(Number(analytics.days || 14) - 1, 0));
+  }
+
   function formatAnalyticsDate(dateKey) {
     if (!dateKey) return '-';
     var date = new Date(dateKey + 'T12:00:00Z');
     if (Number.isNaN(date.getTime())) return dateKey;
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function formatAnalyticsMonth(monthKey) {
+    if (!monthKey) return '-';
+    var date = new Date(monthKey + '-01T12:00:00Z');
+    if (Number.isNaN(date.getTime())) return monthKey;
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+
+  function formatAnalyticsFullDate(dateKey) {
+    if (!dateKey) return '-';
+    var date = new Date(dateKey + 'T12:00:00Z');
+    if (Number.isNaN(date.getTime())) return dateKey;
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function getMonthKeyFromDateKey(dateKey) {
+    return String(dateKey || '').slice(0, 7);
+  }
+
+  function buildMonthlySeries(startDateKey, monthlyBuckets) {
+    var safeStart = /^\d{4}-\d{2}-\d{2}$/.test(String(startDateKey || '')) ? startDateKey : getAnalyticsDateOffset(0);
+    var start = new Date(safeStart.slice(0, 7) + '-01T00:00:00Z');
+    var now = new Date();
+    var end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+    var current = new Date(start.getTime());
+    var series = [];
+
+    while (current <= end) {
+      var monthKey = current.toISOString().slice(0, 7);
+      var bucket = monthlyBuckets[monthKey] || { tokenMap: {}, hits: 0 };
+      series.push({
+        monthKey: monthKey,
+        visitors: Object.keys(bucket.tokenMap || {}).length,
+        hits: Number(bucket.hits || 0)
+      });
+      current.setUTCMonth(current.getUTCMonth() + 1);
+    }
+
+    return series;
   }
 
   function getPathLabel(path) {
@@ -220,45 +267,53 @@
     return value.replace(/^\//, '').replace(/\/$/, '') || 'Page';
   }
 
-  function buildZeroAnalyticsState() {
-    var recentDays = [];
-    for (var index = 6; index >= 0; index -= 1) {
-      recentDays.push({
-        dateKey: getAnalyticsDateOffset(index),
-        visitors: 0,
-        hits: 0
-      });
-    }
+  function buildZeroAnalyticsState(config) {
+    var launchDateKey = getAnalyticsLaunchDate(config);
 
     return {
       todayVisitors: 0,
-      yesterdayVisitors: 0,
-      weeklyVisitors: 0,
+      last30Visitors: 0,
+      lifetimeVisitors: 0,
       trackedPages: 0,
-      recentDays: recentDays,
+      launchDateKey: launchDateKey,
+      monthlySeries: buildMonthlySeries(launchDateKey, {}),
       topPages: [
         {
           path: '/',
+          hits: 0
+        },
+        {
+          path: '/profile/',
+          hits: 0
+        },
+        {
+          path: '/publications/',
+          hits: 0
+        },
+        {
+          path: '/news/',
           hits: 0
         }
       ]
     };
   }
 
-  function renderAnalyticsEmpty() {
-    var emptyState = buildZeroAnalyticsState();
+  function renderAnalyticsEmpty(config) {
+    var emptyState = buildZeroAnalyticsState(config);
     setHtml('workspace-analytics-summary', renderAnalyticsSummary(emptyState));
-    setHtml('workspace-analytics-days', renderAnalyticsDays(emptyState.recentDays));
+    setHtml('workspace-analytics-days', renderAnalyticsDays(emptyState.monthlySeries, emptyState.launchDateKey));
     setHtml('workspace-analytics-pages', renderAnalyticsPages(emptyState.topPages));
   }
 
-  function aggregateVisitAnalytics(items) {
+  function aggregateVisitAnalytics(items, config) {
     var days = {};
     var pages = {};
     var todayKey = getAnalyticsDateOffset(0);
-    var yesterdayKey = getAnalyticsDateOffset(1);
-    var weeklyCutoff = getAnalyticsDateOffset(6);
-    var weeklyTokens = {};
+    var last30Cutoff = getAnalyticsDateOffset(29);
+    var launchDateKey = getAnalyticsLaunchDate(config);
+    var last30Tokens = {};
+    var lifetimeTokens = {};
+    var months = {};
     var distinctPages = {};
 
     items.forEach(function (item) {
@@ -278,19 +333,22 @@
       days[dateKey].hits += 1;
       pages[pagePath] = (pages[pagePath] || 0) + 1;
       distinctPages[pagePath] = true;
+      lifetimeTokens[token] = true;
 
-      if (dateKey >= weeklyCutoff) {
-        weeklyTokens[token] = true;
+      var monthKey = getMonthKeyFromDateKey(dateKey);
+      if (!months[monthKey]) {
+        months[monthKey] = {
+          tokenMap: {},
+          hits: 0
+        };
       }
-    });
 
-    var dayKeys = Object.keys(days).sort().reverse();
-    var recentDays = dayKeys.slice(0, 7).map(function (dateKey) {
-      return {
-        dateKey: dateKey,
-        visitors: Object.keys(days[dateKey].tokenMap).length,
-        hits: days[dateKey].hits
-      };
+      months[monthKey].tokenMap[token] = true;
+      months[monthKey].hits += 1;
+
+      if (dateKey >= last30Cutoff) {
+        last30Tokens[token] = true;
+      }
     });
 
     var topPages = Object.keys(pages)
@@ -307,10 +365,11 @@
 
     return {
       todayVisitors: days[todayKey] ? Object.keys(days[todayKey].tokenMap).length : 0,
-      yesterdayVisitors: days[yesterdayKey] ? Object.keys(days[yesterdayKey].tokenMap).length : 0,
-      weeklyVisitors: Object.keys(weeklyTokens).length,
+      last30Visitors: Object.keys(last30Tokens).length,
+      lifetimeVisitors: Object.keys(lifetimeTokens).length,
       trackedPages: Object.keys(distinctPages).length,
-      recentDays: recentDays,
+      launchDateKey: launchDateKey,
+      monthlySeries: buildMonthlySeries(launchDateKey, months),
       topPages: topPages
     };
   }
@@ -323,14 +382,14 @@
         detail: 'Unique visitors today'
       },
       {
-        label: 'Yesterday',
-        value: summary.yesterdayVisitors,
-        detail: 'Unique visitors yesterday'
+        label: 'Last 30 Days',
+        value: summary.last30Visitors,
+        detail: 'Unique visitors in the recent month'
       },
       {
-        label: 'Last 7 Days',
-        value: summary.weeklyVisitors,
-        detail: 'Unique visitors in the recent week'
+        label: 'Since Launch',
+        value: summary.lifetimeVisitors,
+        detail: 'Unique visitors since ' + formatAnalyticsFullDate(summary.launchDateKey)
       },
       {
         label: 'Tracked Pages',
@@ -350,34 +409,59 @@
     }).join('');
   }
 
-  function renderAnalyticsDays(items) {
+  function renderAnalyticsDays(items, launchDateKey) {
     if (!items.length) {
-      return renderAnalyticsDays(buildZeroAnalyticsState().recentDays);
+      return renderAnalyticsDays(buildZeroAnalyticsState({ analytics: { launchDate: launchDateKey } }).monthlySeries, launchDateKey);
     }
 
     var maxVisitors = items.reduce(function (maxValue, item) {
       return Math.max(maxValue, Number(item.visitors || 0));
     }, 0) || 1;
+    var chartWidth = 640;
+    var chartHeight = 220;
+    var innerLeft = 20;
+    var innerRight = 620;
+    var lineFloor = 176;
+    var lineTop = 42;
+    var xStep = items.length > 1 ? (innerRight - innerLeft) / (items.length - 1) : 0;
+    var points = items.map(function (item, index) {
+      var visitors = Number(item.visitors || 0);
+      var x = items.length > 1 ? innerLeft + (xStep * index) : (chartWidth / 2);
+      var y = lineFloor - ((visitors / maxVisitors) * (lineFloor - lineTop));
+      return {
+        monthKey: item.monthKey,
+        visitors: visitors,
+        x: Math.round(x * 10) / 10,
+        y: Math.round(y * 10) / 10
+      };
+    });
+    var polyline = points.map(function (point) {
+      return point.x + ',' + point.y;
+    }).join(' ');
+    var launchLabel = formatAnalyticsFullDate(launchDateKey);
 
     return (
       '<div class="workspace-chart">' +
-        '<div class="workspace-chart-grid">' +
-          items.slice().reverse().map(function (item) {
-            var visitors = Number(item.visitors || 0);
-            var height = Math.max(12, Math.round((visitors / maxVisitors) * 100));
-            return (
-              '<div class="workspace-chart-col">' +
-                '<div class="workspace-chart-bar-wrap">' +
-                  '<div class="workspace-chart-bar" style="height:' + escapeHtml(height + '%') + '" title="' + escapeHtml(item.dateKey + ': ' + visitors + ' visitors') + '">' +
-                    '<span>' + escapeHtml(visitors) + '</span>' +
-                  '</div>' +
-                '</div>' +
-                '<div class="workspace-chart-label">' + escapeHtml(formatAnalyticsDate(item.dateKey)) + '</div>' +
-              '</div>'
-            );
-          }).join('') +
+        '<div class="workspace-line-chart" role="img" aria-label="' + escapeHtml('Monthly visitors from ' + launchLabel + ' to today') + '">' +
+          '<svg viewBox="0 0 ' + chartWidth + ' ' + chartHeight + '" preserveAspectRatio="none">' +
+            '<line class="workspace-line-chart-axis" x1="' + innerLeft + '" y1="' + lineFloor + '" x2="' + innerRight + '" y2="' + lineFloor + '"></line>' +
+            '<polyline class="workspace-line-chart-path" points="' + escapeHtml(polyline) + '"></polyline>' +
+            points.map(function (point) {
+              return (
+                '<g>' +
+                  '<circle class="workspace-line-chart-dot" cx="' + escapeHtml(point.x) + '" cy="' + escapeHtml(point.y) + '" r="4"></circle>' +
+                  '<text class="workspace-line-chart-value" x="' + escapeHtml(point.x) + '" y="' + escapeHtml(point.y - 10) + '">' + escapeHtml(point.visitors) + '</text>' +
+                '</g>'
+              );
+            }).join('') +
+          '</svg>' +
+          '<div class="workspace-line-chart-labels">' +
+            points.map(function (point) {
+              return '<span>' + escapeHtml(formatAnalyticsMonth(point.monthKey)) + '</span>';
+            }).join('') +
+          '</div>' +
         '</div>' +
-        '<div class="workspace-chart-note">Unique visitors by day across the recent tracking window.</div>' +
+        '<div class="workspace-chart-note">Monthly unique visitors from the site launch on ' + escapeHtml(launchLabel) + ' through today.</div>' +
       '</div>'
     );
   }
@@ -417,13 +501,13 @@
 
   function renderVisitorAnalytics(items) {
     if (!items.length) {
-      renderAnalyticsEmpty();
+      renderAnalyticsEmpty(getConfig());
       return;
     }
 
-    var summary = aggregateVisitAnalytics(items);
+    var summary = aggregateVisitAnalytics(items, getConfig());
     setHtml('workspace-analytics-summary', renderAnalyticsSummary(summary));
-    setHtml('workspace-analytics-days', renderAnalyticsDays(summary.recentDays));
+    setHtml('workspace-analytics-days', renderAnalyticsDays(summary.monthlySeries, summary.launchDateKey));
     setHtml('workspace-analytics-pages', renderAnalyticsPages(summary.topPages));
   }
 
@@ -431,8 +515,7 @@
     var tables = config.tables || {};
     var limits = config.limits || {};
     var analytics = config.analytics || {};
-    var analyticsDays = Number(analytics.days || 14);
-    var analyticsStart = getAnalyticsDateOffset(Math.max(analyticsDays - 1, 0));
+    var analyticsStart = getAnalyticsLaunchDate(config);
 
     var metricsPromise = client
       .from(tables.dashboard || 'workspace_dashboard_metrics')
@@ -461,7 +544,7 @@
       .select('visited_on,visitor_token,page_path')
       .gte('visited_on', analyticsStart)
       .order('visited_on', { ascending: false })
-      .limit(500);
+      .limit(5000);
 
     var results = await Promise.all([metricsPromise, linksPromise, notesPromise, visitsPromise]);
     var metrics = results[0];
@@ -478,7 +561,7 @@
     setHtml('workspace-notes', renderNotes(notes.data || []));
 
     if (visits.error) {
-      renderAnalyticsEmpty();
+      renderAnalyticsEmpty(config);
       return;
     }
 
