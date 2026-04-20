@@ -462,7 +462,6 @@
             }).join('') +
           '</div>' +
         '</div>' +
-        '<div class="workspace-chart-note">Monthly unique visitors from the site launch on ' + escapeHtml(launchLabel) + ' through today.</div>' +
       '</div>'
     );
   }
@@ -495,7 +494,6 @@
             );
           }).join('') +
         '</div>' +
-        '<div class="workspace-chart-note">Most-visited public pages.</div>' +
       '</div>'
     );
   }
