@@ -25,9 +25,6 @@
     <div class="site-shell site-header__inner">
       <div class="brand-lockup">
         <a class="brand" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
-        {% if site.author.affiliation %}
-        <p class="brand-meta">{{ site.author.affiliation | escape }}</p>
-        {% endif %}
       </div>
       <nav class="nav" aria-label="Primary">
         {% for item in site.nav %}

@@ -177,15 +177,6 @@ ul {
   color: var(--text-title);
 }
 
-.brand-meta {
-  margin: 0;
-  color: var(--text-soft);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .nav {
   display: flex;
   flex-wrap: wrap;
@@ -970,10 +961,6 @@ body.theme-night .photo-note {
 
   .brand {
     font-size: 1.35rem;
-  }
-
-  .brand-meta {
-    font-size: 0.69rem;
   }
 
   .nav {
