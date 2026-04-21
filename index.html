@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <title>Hyunsik Min</title>
-  <meta name="description" content="Hyunsik Min is an M.S. candidate in the Smart Autonomous &amp; Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
-  <style>
+---
+layout: default
+title: Hyunsik Min
+description: "Hyunsik Min is an M.S. candidate in the Smart Autonomous & Infrastructure Lab, developing practical AI systems for trajectory prediction, time-series forecasting, and decision support."
+body_class: page-home
+footer_content: >-
+  M.S. candidate at SAIL building deployable AI systems for mobility, energy, and safety-oriented decision support.
+---
+<style>
     .home-refresh{display:grid;gap:2.2rem;color:var(--text-body)}
     .home-poster{position:relative;display:grid;align-items:end;min-height:min(74svh,760px);margin-inline:calc(50% - 50vw);overflow:hidden;animation:riseIn .65s ease both}
     .home-poster-media,.home-poster-media img{position:absolute;inset:0;width:100%;height:100%}
@@ -19,7 +18,7 @@
     .home-poster-kicker{display:inline-flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.78);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-poster-kicker::before{content:"";width:.52rem;height:.52rem;border-radius:999px;background:#8ab4ff}
     .home-poster-title{margin:1rem 0 .88rem;color:#fff;font-size:clamp(3rem,6.6vw,6rem);line-height:.89}
-    .home-poster-subtitle{margin:0 0 1.05rem;color:rgba(255,255,255,.76);font-size:.95rem;font-weight:800;letter-spacing:.07em;line-height:1.35;text-transform:uppercase;white-space:nowrap}
+    .home-poster-subtitle{margin:0 0 1.05rem;color:rgba(255,255,255,.76);font-size:.95rem;font-weight:800;letter-spacing:.07em;line-height:1.35;text-transform:uppercase;white-space:normal;text-wrap:balance}
     .home-poster-copy p{max-width:36rem;margin:0 0 1rem;color:rgba(248,251,255,.88)}
     .home-poster-lead{max-width:46rem;margin:0;color:#f8fbff;font-size:1.08rem;line-height:1.68;font-weight:600;text-wrap:balance}
     .home-poster-lead strong{color:#fff;font-weight:800}
@@ -41,8 +40,8 @@
     .home-poster-meta dt{margin:0;color:rgba(255,255,255,.62);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .home-poster-meta dd{margin:0;color:#fff;font-size:.98rem;font-weight:700}
     .home-poster-meta .home-poster-meta-affiliation{min-width:0}
-    .home-poster-meta .affiliation-inline{white-space:nowrap;font-size:.92rem}
-    .home-poster-meta .home-poster-meta-inline{white-space:nowrap;font-size:.92rem}
+    .home-poster-meta .affiliation-inline{white-space:normal;font-size:.92rem}
+    .home-poster-meta .home-poster-meta-inline{white-space:normal;font-size:.92rem}
     .home-poster-meta .affiliation-inline a{color:inherit;text-decoration:none;box-shadow:inset 0 -1px 0 rgba(255,255,255,.38);transition:box-shadow .18s ease,opacity .18s ease}
     .home-poster-meta .affiliation-inline a:hover,.home-poster-meta .affiliation-inline a:focus-visible{box-shadow:inset 0 -1px 0 rgba(255,255,255,.88);opacity:1;outline:none}
     .home-signal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.25rem;padding-top:.3rem}
@@ -89,25 +88,13 @@
     @media (max-width:760px){.home-poster{min-height:640px}.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid,.home-bulletin{grid-template-columns:1fr 1fr}.home-block{grid-column:span 12}}
     @media (max-width:640px){.home-poster-shell{padding:3rem 0 1.4rem}.home-poster-title{font-size:clamp(2.4rem,12vw,3.7rem)}.home-poster-actions,.home-poster-meta,.home-facts,.home-spotlight-grid,.home-signal-grid,.home-bulletin{grid-template-columns:1fr}.home-links a{width:100%}}
   </style>
-</head>
-<body class="page-home">
-  <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <div class="site-shell">
-      <a class="brand" href="/">Hyunsik Min</a>
-      <nav class="nav">
-        <a class="is-active" href="/">Home</a>
-          <a href="/profile/">Profile</a>
-        <a href="/publications/">Publications</a>
-        <a href="/news/">News</a>
-        <a href="/workspace/">Dashboard</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="page" id="main-content">
-    <div class="site-shell">
-      <div class="home-refresh">
+{% assign home_publication_archive = site.data['google-scholar-publications'] %}
+{% assign home_international_journals = home_publication_archive.sections | where: "key", "international-journals" | first %}
+{% assign home_domestic_journals = home_publication_archive.sections | where: "key", "domestic-journals" | first %}
+{% assign home_international_conferences = home_publication_archive.sections | where: "key", "international-conferences" | first %}
+
+<div class="home-refresh">
         <section class="home-poster">
           <div class="home-poster-media">
             <img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Portrait of Hyunsik Min" width="1920" height="2560" loading="eager" fetchpriority="high">
@@ -118,7 +105,7 @@
               <h1 class="home-poster-title">Hyunsik Min</h1>
               <p class="home-poster-subtitle">M.S. Candidate in Future Convergence Technology</p>
               <p class="home-poster-lead">I build <strong>deployable AI systems</strong> for <strong>mobility</strong>, <strong>energy</strong>, and <strong>decision support</strong> in real-world settings.</p>
-              <div class="home-poster-actions" role="navigation" aria-label="Quick actions">
+              <div class="home-poster-actions">
                 <a class="hero-action hero-action-primary" href="/publications/">
                   <span>Archive</span>
                   <strong>Selected Publications</strong>
@@ -236,18 +223,18 @@
             <div class="home-spotlight-grid">
               <article class="home-spotlight-item">
                 <div class="home-spotlight-label">International Journals</div>
-                <h3>Four international journal records</h3>
+                <h3>{{ home_international_journals.count }} international journal records</h3>
                 <p>The journal record spans <strong>IEEE T-ITS</strong>, <strong>Applied Energy</strong>, <strong>Artificial Intelligence and Law</strong>, and <strong>Electronics</strong>.</p>
               </article>
               <article class="home-spotlight-item">
                 <div class="home-spotlight-label">Domestic Journals</div>
-                <h3>Two domestic journal papers</h3>
+                <h3>{{ home_domestic_journals.count }} domestic journal papers</h3>
                 <p>The domestic journal record includes a <strong>KITS</strong> paper on trajectory prediction and a <strong>Korean Society of Transportation</strong> paper on legal-text-based judgment prediction.</p>
               </article>
               <article class="home-spotlight-item">
                 <div class="home-spotlight-label">International Conferences</div>
-                <h3>Two 2026 conference presentations</h3>
-                <p>The current conference pipeline includes <strong>ITS World Congress 2026</strong> in Gangneung and <strong>EurOMA 2026</strong> in Vienna.</p>
+                <h3>{{ home_international_conferences.count }} international conference records</h3>
+                <p>The current conference pipeline includes <strong>ITS World Congress 2026</strong> in Gangneung, <strong>EurOMA 2026</strong> in Vienna, and synced archive entries from the current scholar snapshot.</p>
               </article>
             </div>
           </div>
@@ -285,20 +272,4 @@
             <strong>Publications</strong>
           </a>
         </nav>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="site-shell">
-      <p>M.S. candidate at SAIL building deployable AI systems for mobility, energy, and safety-oriented decision support.</p>
-      <p class="sr-only" aria-live="polite" id="site-live-region"></p>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/assets/site-analytics-config.js?v=20260420c"></script>
-  <script src="/assets/site.js?v=20260420b"></script>
-  <script src="/assets/visitor-tracker.js?v=20260420c"></script>
-</body>
-</html>
+</div>

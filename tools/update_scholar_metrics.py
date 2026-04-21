@@ -15,8 +15,8 @@ from urllib.request import Request, urlopen
 
 PROFILE_URL = "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en&cstart=0&pagesize=100"
 BASE_URL = "https://scholar.google.com"
-METRICS_OUTPUT_PATH = Path("assets/data/google-scholar-metrics.json")
-PUBLICATIONS_OUTPUT_PATH = Path("assets/data/google-scholar-publications.json")
+METRICS_OUTPUT_PATH = Path("_data/google-scholar-metrics.json")
+PUBLICATIONS_OUTPUT_PATH = Path("_data/google-scholar-publications.json")
 OVERRIDES_PATH = Path("tools/scholar_publication_overrides.json")
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "

@@ -104,6 +104,18 @@
       "topic_copy": "Trajectory reasoning for safer and more reliable vehicle interaction.",
       "keywords": ["autonomous driving", "trajectory prediction", "trustworthy driving", "kits"]
     },
+    "kNdYIx-mwKoC": {
+      "category": "domestic-journals",
+      "display_title": "Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving",
+      "display_venue": "The Journal of The Korea Institute of Intelligent Transport Systems",
+      "authors": "Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh",
+      "summary": "This paper develops a TGCA-based front-side vehicle prediction framework for trustworthy autonomous driving and anticipatory maneuver understanding.",
+      "details": "Volume 24, Issue 6 | Pages 121-133 | 2025",
+      "doi": "10.12815/kits.2025.24.6.121",
+      "topic_title": "Autonomous Driving",
+      "topic_copy": "Trajectory reasoning for safer and more reliable vehicle interaction.",
+      "keywords": ["autonomous driving", "trajectory prediction", "trustworthy driving", "kits"]
+    },
     "WF5omc3nYNoC": {
       "category": "domestic-journals",
       "display_title": "Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations",
@@ -113,6 +125,23 @@
       "topic_title": "Legal AI",
       "topic_copy": "Judgment prediction from accident narratives and legal context.",
       "keywords": ["legal ai", "road traffic accidents", "judgment prediction", "natural language processing"]
+    },
+    "3fE2CSJIrl8C": {
+      "category": "domestic-journals",
+      "display_title": "Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations",
+      "display_venue": "Journal of Korean Society of Transportation",
+      "authors": "Hyunsik Min, Junyeong Yun, Byeongjoon Noh",
+      "summary": "This paper presents a judgment-prediction system for road-traffic accidents using textual descriptions of accident situations and legal context.",
+      "details": "Volume 42, Issue 4 | Pages 385-397 | 2024",
+      "topic_title": "Legal AI",
+      "topic_copy": "Judgment prediction from accident narratives and legal context.",
+      "keywords": ["legal ai", "road traffic accidents", "judgment prediction", "natural language processing"]
+    },
+    "8k81kl-MbHgC": {
+      "hidden": true
+    },
+    "MXK_kJrjxJIC": {
+      "hidden": true
     },
     "roLk4NBRz8UC": {
       "category": "domestic-conferences",

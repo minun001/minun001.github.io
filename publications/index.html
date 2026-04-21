@@ -1,606 +1,344 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <title>Publications | Hyunsik Min</title>
-  <meta name="description" content="A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
-  <style>
-    .publications-page{display:grid;gap:1.5rem}
-    .pub-lead-visual{gap:1rem}
-    .pub-lead-collage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
-    .pub-lead-collage img{width:100%;aspect-ratio:1/1.06;object-fit:cover;border-radius:8px;box-shadow:var(--shadow-soft)}
-    .pub-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;align-items:stretch}
-    .pub-summary-item{position:relative;display:grid;gap:.82rem;align-content:start;min-height:178px;padding:1rem 1rem 1.05rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft);overflow:hidden}
-    .pub-summary-item:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,rgba(29,78,216,.84),rgba(16,185,129,.72))}
-    .pub-summary-item span{display:block;margin:0;color:var(--text-soft);font-size:.71rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
-    .pub-summary-item strong{display:block;margin:0;color:var(--text-title);font-size:2rem;line-height:1.02}
-    .pub-summary-item[data-publication-summary] strong{margin-top:auto}
-    .pub-summary-note{display:inline-flex;align-items:center;gap:.42rem;width:max-content;max-width:100%;margin-top:auto;padding:.46rem .68rem;border-radius:999px;background:rgba(17,32,51,.06);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:var(--text-title);font-size:.8rem;font-weight:800;line-height:1.2;letter-spacing:.01em}
-    .pub-summary-note:before{content:"";width:.42rem;height:.42rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex:0 0 auto}
-    .pub-summary-item--metrics{gap:.85rem;background:linear-gradient(180deg,#ffffff 0%,#f2f7fb 100%)}
-    .pub-summary-item--metrics:before{background:linear-gradient(90deg,rgba(29,78,216,.9),rgba(14,165,233,.72))}
-    .pub-summary-item--metrics p{margin:0}
-    .pub-scholar-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
-    .pub-scholar-stat{display:grid;gap:.3rem;padding:.8rem .85rem .85rem;border:1px solid rgba(17,32,51,.08);border-radius:8px;background:rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
-    .pub-scholar-stat-label{color:var(--text-soft);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .pub-scholar-stat-value{color:var(--text-title);font-size:1.55rem;font-weight:800;line-height:1}
-    .pub-scholar-link{display:inline-flex;align-items:center;justify-content:center;min-height:38px;width:100%;padding:.55rem .9rem;border-radius:8px;background:#102033;color:#fff;font-size:.9rem;font-weight:800;box-shadow:0 12px 24px rgba(16,32,51,.14)}
-    .pub-scholar-link:hover,.pub-scholar-link:focus-visible{transform:translateY(-1px);filter:brightness(1.04)}
-    .pub-scholar-note{color:var(--text-soft);font-size:.84rem;line-height:1.5}
-    .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .9s ease both}
-    .pub-search-wrap{position:relative;display:grid;gap:.7rem}
-    .pub-search{display:flex;align-items:center;gap:.75rem;min-height:50px;padding:0 .95rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
-    .pub-search span{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-    .pub-search input{width:100%;border:none;background:transparent;color:var(--text-title);font:600 .98rem/1.4 var(--font-body)}
-    .pub-search input:focus{outline:none}
-    .pub-search-results{display:grid;gap:.45rem;padding:.8rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
-    .pub-search-results[hidden]{display:none}
-    .pub-search-results-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding-bottom:.2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-    .pub-search-result-list{display:grid;gap:.45rem}
-    .pub-search-result{display:grid;gap:.18rem;padding:.78rem .82rem;border-radius:8px;background:#f7fafb;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:inherit;text-decoration:none;transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
-    .pub-search-result:hover,.pub-search-result:focus-visible{background:#eef6f7;box-shadow:inset 0 0 0 1px rgba(17,32,51,.14);transform:translateY(-1px);outline:none}
-    .pub-search-result-title{color:var(--text-title);font-size:.98rem;font-weight:800;line-height:1.35}
-    .pub-search-result-meta{color:var(--text-soft);font-size:.86rem;line-height:1.45}
-    .pub-search-result-kind{display:inline-flex;align-items:center;width:max-content;padding:.26rem .48rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-    .pub-search-result-empty{padding:.2rem .1rem;color:var(--text-soft);font-size:.92rem;line-height:1.5}
-    .pub-tool-meta{display:flex;align-items:center;gap:.7rem;justify-content:flex-end;color:var(--text-soft);font-size:.9rem}
-    .pub-section{display:grid;gap:1rem;scroll-margin-top:104px}
-    .pub-section-head{display:grid;gap:.2rem;padding:1.2rem 0 0;border-top:1px solid var(--border-soft)}
-    .pub-section-head h2{margin:0}
-    .pub-section-grid{display:grid;grid-template-columns:1fr;gap:0;align-items:start}
-    .pub-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,280px);gap:.45rem 1.35rem;align-content:start;align-items:start;min-width:0;padding:1.25rem 0;border-top:1px solid var(--border-soft);background:transparent;border-radius:0;box-shadow:none;border-inline:none;border-bottom:none}
-    .pub-item:before{grid-column:1/-1;margin-bottom:.15rem}
-    .pub-item h3{margin:0;text-wrap:balance;font-size:1.16rem;line-height:1.35}
-    .pub-meta{display:grid;gap:.35rem}
-    .pub-meta-row{display:flex;flex-wrap:wrap;gap:.35rem .6rem;align-items:baseline}
-    .pub-meta-label{min-width:70px;color:var(--text-soft);font-size:.73rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .pub-meta-value{color:var(--text-title);font-size:.95rem;font-weight:600;line-height:1.5}
-    .pub-journal-line{display:inline-flex;flex-wrap:wrap;gap:.45rem;align-items:center}
-    .pub-journal-name{color:inherit}
-    .pub-journal-metrics{display:inline-flex;flex-wrap:wrap;gap:.35rem;align-items:center}
-    .pub-journal-chip{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:.28rem .7rem;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.72rem;font-weight:900;line-height:1;letter-spacing:.01em;text-shadow:0 1px 1px rgba(8,15,30,.18);box-shadow:0 10px 18px rgba(17,32,51,.1),inset 0 1px 0 rgba(255,255,255,.24);transform-origin:center;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
-    .pub-journal-chip:hover,.pub-journal-chip:focus-visible{transform:translateY(-1px) scale(1.04);filter:saturate(1.08) brightness(1.04)}
-    .pub-journal-chip--top{background:radial-gradient(circle at top left,rgba(255,255,255,.32),transparent 42%),linear-gradient(135deg,var(--chip-red-from,#ffb8ac),var(--chip-red-mid,#f56a57) 52%,var(--chip-red-to,#cb3027));box-shadow:0 12px 20px rgba(203,48,39,var(--chip-red-shadow,.18)),inset 0 1px 0 rgba(255,255,255,.26)}
-    .pub-journal-chip--quartile{background:radial-gradient(circle at top left,rgba(255,255,255,.28),transparent 40%),linear-gradient(135deg,var(--chip-green-from,#9ee1ba),var(--chip-green-mid,#45b978) 52%,var(--chip-green-to,#1a834f));box-shadow:0 12px 20px rgba(23,134,76,var(--chip-green-shadow,.16)),inset 0 1px 0 rgba(255,255,255,.24)}
-    .pub-journal-chip--if{background:radial-gradient(circle at top left,rgba(255,255,255,.3),transparent 42%),linear-gradient(135deg,var(--chip-blue-from,#acd9ff),var(--chip-blue-mid,#5c9cf1) 54%,var(--chip-blue-to,#2567c7));box-shadow:0 12px 20px rgba(37,103,199,var(--chip-blue-shadow,.16)),inset 0 1px 0 rgba(255,255,255,.24)}
-    .pub-chip-burst{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:60}
-    .pub-chip-spark{position:absolute;left:0;top:0;width:var(--spark-size,6px);height:var(--spark-size,6px);margin-left:calc(var(--spark-size,6px) / -2);margin-top:calc(var(--spark-size,6px) / -2);border-radius:999px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),var(--spark-color,#fff067) 42%,rgba(255,255,255,0) 76%);box-shadow:0 0 10px var(--spark-color,#fff067);transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.45);opacity:0;animation:chipSparkBurst .72s cubic-bezier(.16,.84,.28,1) forwards}
-    @keyframes chipSparkBurst{
-      0%{opacity:0;transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.3)}
-      20%{opacity:1}
-      100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(calc(var(--spark-rotate,0deg) + 36deg)) scale(1)}
-    }
-    .pub-note{margin:0;color:var(--text-soft);font-size:.92rem}
-    .pub-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.35rem}
-    .pub-action{text-align:center}
-    .pub-image{grid-column:2;grid-row:2 / span 5;display:flex;justify-content:center;align-items:center;max-width:100%;margin:0;padding:.85rem 1.05rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
-    .pub-image img{width:100%;max-height:220px;height:auto;object-fit:contain}
-    .pub-marker{grid-column:2;grid-row:2 / span 4;display:grid;gap:.8rem;align-content:space-between;min-height:190px;padding:1.15rem 1.25rem;border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f2f7f9 100%);box-shadow:inset 0 0 0 1px rgba(23,49,78,.12)}
-    .pub-marker-head{display:grid;gap:.28rem}
-    .pub-marker-label{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:.34rem .58rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .pub-marker-title{margin:0;color:var(--text-title);font-size:1.02rem;line-height:1.25}
-    .pub-marker-copy{margin:0;color:var(--text-soft);font-size:.88rem;line-height:1.45}
-    .pub-marker-year{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:.32rem .54rem;border-radius:999px;background:rgba(190,112,56,.12);color:#8e4f1f;font-size:.8rem;font-weight:800}
-    .bibtex-modal[hidden]{display:none}
-    .bibtex-modal{position:fixed;inset:0;z-index:40}
-    .bibtex-backdrop{position:absolute;inset:0;background:rgba(11,16,30,.62)}
-    .bibtex-dialog{position:relative;display:grid;gap:.9rem;max-width:min(92vw,760px);margin:8vh auto 0;padding:1.1rem;background:var(--bg-card-strong);box-shadow:0 28px 90px rgba(11,16,30,.28), inset 0 0 0 1px rgba(17,32,51,.14);border-radius:8px}
-    .bibtex-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-    .bibtex-dialog-head h3{margin:0;font-size:1.08rem}
-    .bibtex-close{min-height:38px;padding:.55rem .85rem;border:none;border-radius:8px;background:rgba(255,255,255,.62);box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;cursor:pointer}
-    .bibtex-code{margin:0;padding:1rem;overflow:auto;border-radius:8px;background:rgba(248,250,252,.96);color:#102033;box-shadow:inset 0 0 0 1px rgba(17,32,51,.12);font:500 .9rem/1.55 "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;white-space:pre-wrap;word-break:break-word}
-    .bibtex-dialog-actions{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:flex-end}
-    .bibtex-copy-state{margin:0;color:var(--text-title);font-size:.88rem}
-    .page-lead{animation:riseIn .6s ease both}
-    .pub-summary{animation:riseIn .8s ease both}
-    .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-    @media (max-width:1260px){.pub-summary{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.55rem}.pub-marker{min-height:auto}}
-  </style>
-</head>
-<body class="page-publications">
-  <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <div class="site-shell">
-      <a class="brand" href="/">Hyunsik Min</a>
-      <nav class="nav">
-        <a href="/">Home</a>
-          <a href="/profile/">Profile</a>
-        <a class="is-active" href="/publications/">Publications</a>
-        <a href="/news/">News</a>
-        <a href="/workspace/">Dashboard</a>
-      </nav>
+---
+layout: default
+title: Publications
+description: A structured publication archive spanning international journals, domestic journals, and conference papers across autonomous driving, energy systems, legal AI, and urban sensing.
+body_class: page-publications
+footer_content: "[Google Scholar profile](https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en)"
+---
+<style>
+  .publications-page{display:grid;gap:1.5rem}
+  .pub-lead-visual{gap:1rem}
+  .pub-lead-collage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
+  .pub-lead-collage img{width:100%;aspect-ratio:1/1.06;object-fit:cover;border-radius:8px;box-shadow:var(--shadow-soft)}
+  .pub-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;align-items:stretch}
+  .pub-summary-item{position:relative;display:grid;gap:.82rem;align-content:start;min-height:178px;padding:1rem 1rem 1.05rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft);overflow:hidden}
+  .pub-summary-item:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,rgba(29,78,216,.84),rgba(16,185,129,.72))}
+  .pub-summary-item span{display:block;margin:0;color:var(--text-soft);font-size:.71rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+  .pub-summary-item strong{display:block;margin:0;color:var(--text-title);font-size:2rem;line-height:1.02}
+  .pub-summary-item[data-publication-summary] strong{margin-top:auto}
+  .pub-summary-note{display:inline-flex;align-items:center;gap:.42rem;width:max-content;max-width:100%;margin-top:auto;padding:.46rem .68rem;border-radius:999px;background:rgba(17,32,51,.06);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:var(--text-title);font-size:.8rem;font-weight:800;line-height:1.2;letter-spacing:.01em}
+  .pub-summary-note:before{content:"";width:.42rem;height:.42rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex:0 0 auto}
+  .pub-summary-item--metrics{gap:.85rem;background:linear-gradient(180deg,#ffffff 0%,#f2f7fb 100%)}
+  .pub-summary-item--metrics:before{background:linear-gradient(90deg,rgba(29,78,216,.9),rgba(14,165,233,.72))}
+  .pub-summary-item--metrics p{margin:0}
+  .pub-scholar-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+  .pub-scholar-stat{display:grid;gap:.3rem;padding:.8rem .85rem .85rem;border:1px solid rgba(17,32,51,.08);border-radius:8px;background:rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+  .pub-scholar-stat-label{color:var(--text-soft);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .pub-scholar-stat-value{color:var(--text-title);font-size:1.55rem;font-weight:800;line-height:1}
+  .pub-scholar-link{display:inline-flex;align-items:center;justify-content:center;min-height:38px;width:100%;padding:.55rem .9rem;border-radius:8px;background:#102033;color:#fff;font-size:.9rem;font-weight:800;box-shadow:0 12px 24px rgba(16,32,51,.14)}
+  .pub-scholar-link:hover,.pub-scholar-link:focus-visible{transform:translateY(-1px);filter:brightness(1.04)}
+  .pub-scholar-note{color:var(--text-soft);font-size:.84rem;line-height:1.5}
+  .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:center;padding:1rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .9s ease both}
+  .pub-search-wrap{position:relative;display:grid;gap:.7rem}
+  .pub-search{display:flex;align-items:center;gap:.75rem;min-height:50px;padding:0 .95rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
+  .pub-search span{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+  .pub-search input{width:100%;border:none;background:transparent;color:var(--text-title);font:600 .98rem/1.4 var(--font-body)}
+  .pub-search input:focus{outline:none}
+  .pub-search-results{display:grid;gap:.45rem;padding:.8rem;border:1px solid var(--border-soft);border-radius:8px;background:#fff;box-shadow:var(--shadow-soft)}
+  .pub-search-results[hidden]{display:none}
+  .pub-search-results-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding-bottom:.2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+  .pub-search-result-list{display:grid;gap:.45rem}
+  .pub-search-result{display:grid;gap:.18rem;padding:.78rem .82rem;border-radius:8px;background:#f7fafb;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:inherit;text-decoration:none;transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
+  .pub-search-result:hover,.pub-search-result:focus-visible{background:#eef6f7;box-shadow:inset 0 0 0 1px rgba(17,32,51,.14);transform:translateY(-1px);outline:none}
+  .pub-search-result-title{color:var(--text-title);font-size:.98rem;font-weight:800;line-height:1.35}
+  .pub-search-result-meta{color:var(--text-soft);font-size:.86rem;line-height:1.45}
+  .pub-search-result-kind{display:inline-flex;align-items:center;width:max-content;padding:.26rem .48rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+  .pub-search-result-empty{padding:.2rem .1rem;color:var(--text-soft);font-size:.92rem;line-height:1.5}
+  .pub-tool-meta{display:flex;align-items:center;gap:.7rem;justify-content:flex-end;color:var(--text-soft);font-size:.9rem}
+  .pub-section{display:grid;gap:1rem;scroll-margin-top:104px}
+  .pub-section-head{display:grid;gap:.2rem;padding:1.2rem 0 0;border-top:1px solid var(--border-soft)}
+  .pub-section-head h2{margin:0}
+  .pub-section-grid{display:grid;grid-template-columns:1fr;gap:0;align-items:start}
+  .pub-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,280px);gap:.45rem 1.35rem;align-content:start;align-items:start;min-width:0;padding:1.25rem 0;border-top:1px solid var(--border-soft);background:transparent;border-radius:0;box-shadow:none;border-inline:none;border-bottom:none}
+  .pub-item:before{grid-column:1/-1;margin-bottom:.15rem}
+  .pub-item h3{margin:0;text-wrap:balance;font-size:1.16rem;line-height:1.35}
+  .pub-meta{display:grid;gap:.35rem}
+  .pub-meta-row{display:flex;flex-wrap:wrap;gap:.35rem .6rem;align-items:baseline}
+  .pub-meta-label{min-width:70px;color:var(--text-soft);font-size:.73rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .pub-meta-value{color:var(--text-title);font-size:.95rem;font-weight:600;line-height:1.5}
+  .pub-journal-line{display:inline-flex;flex-wrap:wrap;gap:.45rem;align-items:center}
+  .pub-journal-name{color:inherit}
+  .pub-journal-metrics{display:inline-flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+  .pub-journal-chip{position:relative;display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:.28rem .7rem;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.72rem;font-weight:900;line-height:1;letter-spacing:.01em;text-shadow:0 1px 1px rgba(8,15,30,.18);box-shadow:0 10px 18px rgba(17,32,51,.1),inset 0 1px 0 rgba(255,255,255,.24);transform-origin:center;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+  .pub-journal-chip:hover,.pub-journal-chip:focus-visible{transform:translateY(-1px) scale(1.04);filter:saturate(1.08) brightness(1.04)}
+  .pub-journal-chip--top{background:radial-gradient(circle at top left,rgba(255,255,255,.32),transparent 42%),linear-gradient(135deg,var(--chip-red-from,#ffb8ac),var(--chip-red-mid,#f56a57) 52%,var(--chip-red-to,#cb3027));box-shadow:0 12px 20px rgba(203,48,39,var(--chip-red-shadow,.18)),inset 0 1px 0 rgba(255,255,255,.26)}
+  .pub-journal-chip--quartile{background:radial-gradient(circle at top left,rgba(255,255,255,.28),transparent 40%),linear-gradient(135deg,var(--chip-green-from,#9ee1ba),var(--chip-green-mid,#45b978) 52%,var(--chip-green-to,#1a834f));box-shadow:0 12px 20px rgba(23,134,76,var(--chip-green-shadow,.16)),inset 0 1px 0 rgba(255,255,255,.24)}
+  .pub-journal-chip--if{background:radial-gradient(circle at top left,rgba(255,255,255,.3),transparent 42%),linear-gradient(135deg,var(--chip-blue-from,#acd9ff),var(--chip-blue-mid,#5c9cf1) 54%,var(--chip-blue-to,#2567c7));box-shadow:0 12px 20px rgba(37,103,199,var(--chip-blue-shadow,.16)),inset 0 1px 0 rgba(255,255,255,.24)}
+  .pub-chip-burst{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:60}
+  .pub-chip-spark{position:absolute;left:0;top:0;width:var(--spark-size,6px);height:var(--spark-size,6px);margin-left:calc(var(--spark-size,6px) / -2);margin-top:calc(var(--spark-size,6px) / -2);border-radius:999px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),var(--spark-color,#fff067) 42%,rgba(255,255,255,0) 76%);box-shadow:0 0 10px var(--spark-color,#fff067);transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.45);opacity:0;animation:chipSparkBurst .72s cubic-bezier(.16,.84,.28,1) forwards}
+  @keyframes chipSparkBurst{
+    0%{opacity:0;transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.3)}
+    20%{opacity:1}
+    100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(calc(var(--spark-rotate,0deg) + 36deg)) scale(1)}
+  }
+  .pub-note{margin:0;color:var(--text-soft);font-size:.92rem}
+  .pub-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.35rem}
+  .pub-action{text-align:center}
+  .pub-image{grid-column:2;grid-row:2 / span 5;display:flex;justify-content:center;align-items:center;max-width:100%;margin:0;padding:.85rem 1.05rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
+  .pub-image img{width:100%;max-height:220px;height:auto;object-fit:contain}
+  .pub-marker{grid-column:2;grid-row:2 / span 4;display:grid;gap:.8rem;align-content:space-between;min-height:190px;padding:1.15rem 1.25rem;border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f2f7f9 100%);box-shadow:inset 0 0 0 1px rgba(23,49,78,.12)}
+  .pub-marker-head{display:grid;gap:.28rem}
+  .pub-marker-label{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:.34rem .58rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .pub-marker-title{margin:0;color:var(--text-title);font-size:1.02rem;line-height:1.25}
+  .pub-marker-copy{margin:0;color:var(--text-soft);font-size:.88rem;line-height:1.45}
+  .pub-marker-year{display:inline-flex;align-items:center;justify-content:center;width:max-content;padding:.32rem .54rem;border-radius:999px;background:rgba(190,112,56,.12);color:#8e4f1f;font-size:.8rem;font-weight:800}
+  .bibtex-modal[hidden]{display:none}
+  .bibtex-modal{position:fixed;inset:0;z-index:40}
+  .bibtex-backdrop{position:absolute;inset:0;background:rgba(11,16,30,.62)}
+  .bibtex-dialog{position:relative;display:grid;gap:.9rem;max-width:min(92vw,760px);margin:8vh auto 0;padding:1.1rem;background:var(--bg-card-strong);box-shadow:0 28px 90px rgba(11,16,30,.28), inset 0 0 0 1px rgba(17,32,51,.14);border-radius:8px}
+  .bibtex-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .bibtex-dialog-head h3{margin:0;font-size:1.08rem}
+  .bibtex-close{min-height:38px;padding:.55rem .85rem;border:none;border-radius:8px;background:rgba(255,255,255,.62);box-shadow:inset 0 0 0 1px var(--border-soft);font-weight:800;cursor:pointer}
+  .bibtex-code{margin:0;padding:1rem;overflow:auto;border-radius:8px;background:rgba(248,250,252,.96);color:#102033;box-shadow:inset 0 0 0 1px rgba(17,32,51,.12);font:500 .9rem/1.55 "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;white-space:pre-wrap;word-break:break-word}
+  .bibtex-dialog-actions{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:flex-end}
+  .bibtex-copy-state{margin:0;color:var(--text-title);font-size:.88rem}
+  .page-lead{animation:riseIn .6s ease both}
+  .pub-summary{animation:riseIn .8s ease both}
+  .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
+  @media (max-width:1260px){.pub-summary{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr}.pub-tool-meta{justify-content:flex-start}.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.55rem}.pub-marker{min-height:auto}}
+</style>
+
+{% assign publication_archive = site.data['google-scholar-publications'] %}
+{% assign scholar_metrics = site.data['google-scholar-metrics'] %}
+
+<div class="publications-page" data-publications-root>
+  <section class="page-lead">
+    <div class="page-lead-copy">
+      <div class="eyebrow">Research Archive</div>
+      <h1>Publications</h1>
+      <p>Journal and conference work across mobility, energy forecasting, legal AI, and safety-oriented AI.</p>
     </div>
-  </header>
+    <aside class="page-lead-side pub-lead-visual">
+      <div class="eyebrow">Archive</div>
+      <strong>Search and browse</strong>
+      <p>Journal papers and conference records in one place.</p>
+      <div class="pub-lead-collage" aria-hidden="true">
+        <img src="/assets/img/SolarNexus_framework.png" alt="" loading="lazy">
+        <img src="/assets/img/TRACM_LLM_framework.png" alt="" loading="lazy">
+        <img src="/assets/img/electronics-13-02071-g002-550.jpg" alt="" loading="lazy">
+      </div>
+    </aside>
+  </section>
 
-  <main class="page" id="main-content">
-    <div class="site-shell">
-      <div class="publications-page" data-publications-root data-publication-source="/assets/data/google-scholar-publications.json">
-        <section class="page-lead">
-          <div class="page-lead-copy">
-            <div class="eyebrow">Research Archive</div>
-            <h1>Publications</h1>
-            <p>Journal and conference work across mobility, energy forecasting, legal AI, and safety-oriented AI.</p>
-          </div>
-          <aside class="page-lead-side pub-lead-visual">
-            <div class="eyebrow">Archive</div>
-            <strong>Search and browse</strong>
-            <p>Journal papers and conference records in one place.</p>
-            <div class="pub-lead-collage" aria-hidden="true">
-              <img src="/assets/img/SolarNexus_framework.png" alt="" loading="lazy">
-              <img src="/assets/img/TRACM_LLM_framework.png" alt="" loading="lazy">
-              <img src="/assets/img/electronics-13-02071-g002-550.jpg" alt="" loading="lazy">
-            </div>
-          </aside>
-        </section>
-
-        <section class="pub-summary" aria-label="Publication summary">
-          <article class="pub-summary-item" data-publication-summary="international-journals">
-            <span>International Journals</span>
-            <strong data-publication-summary-count>4 papers</strong>
-            <div class="pub-summary-note">Q1 | IF up to 11.0</div>
-          </article>
-          <article class="pub-summary-item" data-publication-summary="domestic-journals">
-            <span>Domestic Journals</span>
-            <strong data-publication-summary-count>2 papers</strong>
-            <div class="pub-summary-note">Driving | Legal AI</div>
-          </article>
-          <article class="pub-summary-item" data-publication-summary="international-conferences">
-            <span>International Conferences</span>
-            <strong data-publication-summary-count>2 papers</strong>
-            <div class="pub-summary-note">2026 presentations</div>
-          </article>
-          <article class="pub-summary-item" data-publication-summary="domestic-conferences">
-            <span>Domestic Conferences</span>
-            <strong data-publication-summary-count>5 papers</strong>
-            <div class="pub-summary-note">5 papers | 4 themes</div>
-          </article>
-          <article class="pub-summary-item pub-summary-item--metrics" data-scholar-card data-scholar-source="/assets/data/google-scholar-metrics.json">
-            <span>Google Scholar</span>
-            <div class="pub-scholar-stats" aria-label="Google Scholar metrics">
-              <div class="pub-scholar-stat">
-                <div class="pub-scholar-stat-label">Citations</div>
-                <div class="pub-scholar-stat-value" data-scholar-citations>34</div>
-              </div>
-              <div class="pub-scholar-stat">
-                <div class="pub-scholar-stat-label">h-index</div>
-                <div class="pub-scholar-stat-value" data-scholar-hindex>2</div>
-              </div>
-            </div>
-            <a class="pub-scholar-link" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Open Google Scholar</a>
-            <p class="pub-scholar-note" data-scholar-updated>Last checked on April 19, 2026.</p>
-          </article>
-        </section>
-
-        <section class="pub-tools" aria-label="Publication tools">
-          <div class="pub-search-wrap">
-            <label class="pub-search">
-              <span>Search</span>
-              <input type="search" placeholder="Find papers by topic, title, or venue" data-publication-search aria-expanded="false" aria-controls="publication-search-results" autocomplete="off">
-            </label>
-            <div class="pub-search-results" id="publication-search-results" data-publication-results hidden></div>
-          </div>
-          <div class="pub-tool-meta">
-            <strong data-publication-count>13 total records</strong>
-            <button class="btn-soft" type="button" data-publication-reset hidden>Reset</button>
-          </div>
-        </section>
-
-        <section class="pub-jump page-index" aria-label="Jump to publication type">
-          <a href="#international-journals">International Journals</a>
-          <a href="#domestic-journals">Domestic Journals</a>
-          <a href="#international-conferences">International Conferences</a>
-          <a href="#domestic-conferences">Domestic Conferences</a>
-        </section>
-
-        <section class="pub-section" id="international-journals" data-publication-section>
-          <div class="pub-section-head">
-            <h2>International Journals</h2>
-          </div>
-          <div class="pub-section-grid" data-publication-grid="international-journals">
-            <article class="pub-item" data-publication-item data-search="international journal ieee transactions on intelligent transportation systems accepted trajectory prediction front vehicle temporal graph cross attention anticipatory driving hyunsik min">
-              <h3>Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Journal</span><span class="pub-meta-value"><span class="pub-journal-line"><span class="pub-journal-name">IEEE Transactions on Intelligent Transportation Systems</span><span class="pub-journal-metrics"><span class="pub-journal-chip pub-journal-chip--top" style="--chip-red-from:hsl(10 84% 63%);--chip-red-mid:hsl(6 90% 50%);--chip-red-to:hsl(2 92% 42%);--chip-red-shadow:0.27;">Top 2%</span><span class="pub-journal-chip pub-journal-chip--quartile" style="--chip-green-from:hsl(144 70% 62%);--chip-green-mid:hsl(142 76% 48%);--chip-green-to:hsl(140 78% 36%);--chip-green-shadow:0.22;">Q1</span><span class="pub-journal-chip pub-journal-chip--if" style="--chip-blue-from:hsl(207 72% 72%);--chip-blue-mid:hsl(213 76% 59%);--chip-blue-to:hsl(219 79% 48%);--chip-blue-shadow:0.17;">IF 8.4</span></span></span></span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Accepted paper | 2026</span></div>
-              </div>
-              <div class="pub-image">
-                <img src="/assets/img/fig-model.png" alt="Temporal graph cross attention trajectory prediction model diagram" width="5989" height="2037" loading="lazy">
-              </div>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:5nxA0vEk-isC" target="_blank" rel="noopener">Google Scholar</a>
-              </div>
-            </article>
-
-            <article class="pub-item" data-publication-item data-search="international journal applied energy solarnexus photovoltaic forecasting scalable management hyunsik min byeongjoon noh">
-              <h3>SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Journal</span><span class="pub-meta-value"><span class="pub-journal-line"><span class="pub-journal-name">Applied Energy</span><span class="pub-journal-metrics"><span class="pub-journal-chip pub-journal-chip--top" style="--chip-red-from:hsl(10 82% 65%);--chip-red-mid:hsl(6 88% 53%);--chip-red-to:hsl(2 90% 45%);--chip-red-shadow:0.25;">Top 7%</span><span class="pub-journal-chip pub-journal-chip--quartile" style="--chip-green-from:hsl(144 70% 62%);--chip-green-mid:hsl(142 76% 48%);--chip-green-to:hsl(140 78% 36%);--chip-green-shadow:0.22;">Q1</span><span class="pub-journal-chip pub-journal-chip--if" style="--chip-blue-from:hsl(207 75% 68%);--chip-blue-mid:hsl(213 79% 55%);--chip-blue-to:hsl(219 82% 45%);--chip-blue-shadow:0.20;">IF 11.0</span></span></span></span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Volume 391 | Article 125848 | 2025</span></div>
-              </div>
-              <p class="pub-note">DOI: 10.1016/j.apenergy.2025.125848</p>
-              <div class="pub-image">
-                <img src="/assets/img/SolarNexus_framework.png" alt="SolarNexus framework" width="1509" height="1624" loading="lazy">
-              </div>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:ufrVoPGSRksC" target="_blank" rel="noopener">Google Scholar</a>
-                <button class="pub-action" type="button" data-bibtex-target="bibtex-solarnexus-2025">Cite</button>
-              </div>
-            </article>
-
-            <article class="pub-item" data-publication-item data-search="international journal artificial intelligence and law tracs-llm traffic accident sentencing legal ai hyunsik min byeongjoon noh">
-              <h3>TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Journal</span><span class="pub-meta-value"><span class="pub-journal-line"><span class="pub-journal-name">Artificial Intelligence and Law</span><span class="pub-journal-metrics"><span class="pub-journal-chip pub-journal-chip--top" style="--chip-red-from:hsl(10 84% 63%);--chip-red-mid:hsl(6 90% 50%);--chip-red-to:hsl(2 92% 42%);--chip-red-shadow:0.27;">Top 2%</span><span class="pub-journal-chip pub-journal-chip--quartile" style="--chip-green-from:hsl(144 70% 62%);--chip-green-mid:hsl(142 76% 48%);--chip-green-to:hsl(140 78% 36%);--chip-green-shadow:0.22;">Q1</span><span class="pub-journal-chip pub-journal-chip--if" style="--chip-blue-from:hsl(207 66% 79%);--chip-blue-mid:hsl(213 70% 66%);--chip-blue-to:hsl(219 73% 54%);--chip-blue-shadow:0.11;">IF 3.1</span></span></span></span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">First published online Jul. 23, 2025</span></div>
-              </div>
-              <p class="pub-note">DOI: 10.1007/s10506-025-09472-8</p>
-              <div class="pub-image">
-                <img src="/assets/img/TRACM_LLM_framework.png" alt="TRACS-LLM framework" width="2894" height="3027" loading="lazy">
-              </div>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:LkGwnXOMwfcC" target="_blank" rel="noopener">Google Scholar</a>
-                <button class="pub-action" type="button" data-bibtex-target="bibtex-tracs-2025">Cite</button>
-              </div>
-            </article>
-
-            <article class="pub-item" data-publication-item data-search="international journal electronics solarflux predictor photovoltaic power forecasting south korea hyunsik min">
-              <h3>SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Journal</span><span class="pub-meta-value"><span class="pub-journal-line"><span class="pub-journal-name">Electronics</span><span class="pub-journal-metrics"><span class="pub-journal-chip pub-journal-chip--top" style="--chip-red-from:hsl(10 78% 75%);--chip-red-mid:hsl(6 84% 61%);--chip-red-to:hsl(2 86% 53%);--chip-red-shadow:0.20;">Top 24%</span><span class="pub-journal-chip pub-journal-chip--quartile" style="--chip-green-from:hsl(144 64% 69%);--chip-green-mid:hsl(142 70% 54%);--chip-green-to:hsl(140 73% 41%);--chip-green-shadow:0.17;">Q2</span><span class="pub-journal-chip pub-journal-chip--if" style="--chip-blue-from:hsl(207 65% 80%);--chip-blue-mid:hsl(213 69% 67%);--chip-blue-to:hsl(219 72% 55%);--chip-blue-shadow:0.11;">IF 2.6</span></span></span></span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Seokjun Hong, Jeonghoon Song, Byeoungmin Son, Byeongjoon Noh, Jihoon Moon</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Volume 13, Issue 11 | Article 2071 | 2024</span></div>
-              </div>
-              <p class="pub-note">DOI: 10.3390/electronics13112071</p>
-              <div class="pub-image">
-                <img src="/assets/img/electronics-13-02071-g002-550.jpg" alt="SolarFlux Predictor photovoltaic forecasting figure" width="550" height="385" loading="lazy">
-              </div>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:u-x6o8ySG0sC" target="_blank" rel="noopener">Google Scholar</a>
-                <button class="pub-action" type="button" data-bibtex-target="bibtex-solarflux-2024">Cite</button>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="pub-section" id="domestic-journals" data-publication-section>
-          <div class="pub-section-head">
-            <h2>Domestic Journals</h2>
-          </div>
-          <div class="pub-section-grid" data-publication-grid="domestic-journals">
-            <article class="pub-item pub-item-text" data-publication-item data-search="domestic journal korea intelligent transport systems anticipating front-side vehicles maneuvers trustworthy autonomous driving trajectory prediction kits hyunsik min">
-              <h3>Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The Journal of The Korea Institute of Intelligent Transport Systems</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Volume 24, Issue 6 | Pages 121-133 | 2025</span></div>
-              </div>
-              <p class="pub-note">DOI: 10.12815/kits.2025.24.6.121</p>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Journal Paper</span>
-                  <p class="pub-marker-title">Autonomous Driving</p>
-                  <p class="pub-marker-copy">Trajectory reasoning for safer and more reliable vehicle interaction.</p>
-                </div>
-                <span class="pub-marker-year">2025</span>
-              </aside>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:hqOjcs7Dif8C" target="_blank" rel="noopener">Google Scholar</a>
-                <button class="pub-action" type="button" data-bibtex-target="bibtex-tgca-domestic-2025">Cite</button>
-              </div>
-            </article>
-
-            <article class="pub-item pub-item-text" data-publication-item data-search="domestic journal korean society of transportation natural language processing judgement prediction road traffic accidents legal ai hyunsik min">
-              <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">Journal of Korean Society of Transportation</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Junyeong Yun, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Volume 42, Issue 4 | Pages 385-397 | 2024</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Journal Paper</span>
-                  <p class="pub-marker-title">Legal AI</p>
-                  <p class="pub-marker-copy">Judgment prediction from accident narratives and legal context.</p>
-                </div>
-                <span class="pub-marker-year">2024</span>
-              </aside>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:WF5omc3nYNoC" target="_blank" rel="noopener">Google Scholar</a>
-                <button class="pub-action" type="button" data-bibtex-target="bibtex-nlp-road-2024">Cite</button>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="pub-section" id="international-conferences" data-publication-section>
-          <div class="pub-section-head">
-            <h2>International Conferences</h2>
-          </div>
-          <div class="pub-section-grid" data-publication-grid="international-conferences">
-            <article class="pub-item pub-item-text" data-publication-item data-search="international conference its world congress 2026 comfort centric trajectory prediction autonomous driving temporal graph cross attention hyunsik min">
-              <h3>Comfort-Centric Trajectory Prediction for Autonomous Driving via Temporal Graph Cross Attention</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">ITS World Congress 2026</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Gangneung, South Korea | Oct. 19-23, 2026</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Conference Paper</span>
-                  <p class="pub-marker-title">Autonomous Driving</p>
-                  <p class="pub-marker-copy">Comfort-aware prediction strategies for future driving systems.</p>
-                </div>
-                <span class="pub-marker-year">2026</span>
-              </aside>
-            </article>
-
-            <article class="pub-item pub-item-text" data-publication-item data-search="international conference euroma 2026 theorising service routines ontological granularity behavioural sequencing hyunsik min">
-              <h3>Theorising Service Routines through Ontological Granularity and Behavioural Sequencing</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">European Operations Management Association, The 2026 EurOMA Annual Conference</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Youngseok Thomas Choi, Changwon Park, Habin Lee, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Vienna, Austria | Jun. 27-Jul. 2, 2026</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Conference Paper</span>
-                  <p class="pub-marker-title">Operations Research</p>
-                  <p class="pub-marker-copy">Service-routine structure and sequencing in operations contexts.</p>
-                </div>
-                <span class="pub-marker-year">2026</span>
-              </aside>
-            </article>
-          </div>
-        </section>
-
-        <section class="pub-section" id="domestic-conferences" data-publication-section>
-          <div class="pub-section-head">
-            <h2>Domestic Conferences</h2>
-          </div>
-          <div class="pub-section-grid" data-publication-grid="domestic-conferences">
-            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference temporal graph cross attention front-side vehicle trajectory prediction hyunsik min">
-              <h3>Temporal Graph Cross Attention-Based Front-Side Vehicle Trajectory Prediction</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 93rd Conference of Korean Society of Transportation</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Yeeun Kim, Jungryul Kim, Seongjin Lee, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">2025</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Conference Paper</span>
-                  <p class="pub-marker-title">Autonomous Driving</p>
-                  <p class="pub-marker-copy">Graph-based front-vehicle prediction for anticipatory driving support.</p>
-                </div>
-                <span class="pub-marker-year">2025</span>
-              </aside>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:roLk4NBRz8UC" target="_blank" rel="noopener">Google Scholar</a>
-              </div>
-            </article>
-
-            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference traffic noise recognition classification urban environments hyunsik min">
-              <h3>Development of a Model for Traffic Noise Recognition and Classification in Urban Environments</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The Korea Society of Computer and Information Summer Conference 2024</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Byeongjoon Noh, Jiyoung Woo</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Jeju Island, Korea | Jul. 2024</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Conference Paper</span>
-                  <p class="pub-marker-title">Urban Sensing</p>
-                  <p class="pub-marker-copy">Urban sound recognition for road-noise monitoring and classification.</p>
-                </div>
-                <span class="pub-marker-year">2024</span>
-              </aside>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:Y0pCki6q_DkC" target="_blank" rel="noopener">Google Scholar</a>
-              </div>
-            </article>
-
-            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference llm traffic accident sentencing prediction system legal ai hyunsik min">
-              <h3>LLM-based Traffic Accident Sentencing Prediction System</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 2024 Korea Institute of ITS Fall Conference</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Gangneung, Korea | Apr. 2024</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Conference Paper</span>
-                  <p class="pub-marker-title">Legal AI</p>
-                  <p class="pub-marker-copy">Sentencing prediction with language models for traffic-accident cases.</p>
-                </div>
-                <span class="pub-marker-year">2024</span>
-              </aside>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:W7OEmFMy1HYC" target="_blank" rel="noopener">Google Scholar</a>
-              </div>
-            </article>
-
-            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference natural language processing judgement prediction system road traffic accidents hyunsik min">
-              <h3>Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 2024 Korea Institute of ITS Spring Conference</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Junyeong Yun, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Jeju Island, Korea | Apr. 2024</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Conference Paper</span>
-                  <p class="pub-marker-title">Legal AI</p>
-                  <p class="pub-marker-copy">Early legal-text modeling for road-traffic judgment prediction.</p>
-                </div>
-                <span class="pub-marker-year">2024</span>
-              </aside>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:2osOgNQ5qMEC" target="_blank" rel="noopener">Google Scholar</a>
-              </div>
-            </article>
-
-            <article class="pub-item pub-item-text" data-publication-item data-search="domestic conference tooth segmentation identification panoramic radiographs mask r-cnn medical image segmentation hyunsik min">
-              <h3>Tooth Segmentation and Identification Method in Panoramic Radiographs Using Mask R-CNN</h3>
-              <div class="pub-meta">
-                <div class="pub-meta-row"><span class="pub-meta-label">Venue</span><span class="pub-meta-value">The 4th Korea Artificial Intelligence Conference</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Authors</span><span class="pub-meta-value">Hyunsik Min, Byeongjoon Noh</span></div>
-                <div class="pub-meta-row"><span class="pub-meta-label">Details</span><span class="pub-meta-value">Jeju Island, Korea | Sep. 2023</span></div>
-              </div>
-              <aside class="pub-marker" aria-hidden="true">
-                <div class="pub-marker-head">
-                  <span class="pub-marker-label">Conference Paper</span>
-                  <p class="pub-marker-title">Medical Imaging</p>
-                  <p class="pub-marker-copy">Segmentation and identification for panoramic dental imaging.</p>
-                </div>
-                <span class="pub-marker-year">2023</span>
-              </aside>
-              <div class="pub-actions">
-                <a class="pub-action" href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=ko&amp;user=2AUQlE8AAAAJ&amp;citation_for_view=2AUQlE8AAAAJ:9yKSN-GCB0IC" target="_blank" rel="noopener">Google Scholar</a>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <p class="pub-empty" data-publication-empty hidden>No publication matched that search yet.</p>
-
-        <nav class="chapter-nav" aria-label="Continue through site chapters">
-          <a class="chapter-link" href="/profile/">
-            <span>Previous Chapter</span>
-            <strong>Profile</strong>
-          </a>
-          <a class="chapter-link" href="/news/">
-            <span>Next Chapter</span>
-            <strong>News</strong>
-          </a>
-        </nav>
-
-        <div class="bibtex-modal" id="bibtex-modal" hidden>
-          <div class="bibtex-backdrop" data-bibtex-close></div>
-          <div class="bibtex-dialog" role="dialog" aria-modal="true" aria-labelledby="bibtex-title">
-            <div class="bibtex-dialog-head">
-              <h3 id="bibtex-title">BibTeX</h3>
-              <button class="bibtex-close" type="button" data-bibtex-close>Close</button>
-            </div>
-            <pre class="bibtex-code" id="bibtex-content"></pre>
-            <div class="bibtex-dialog-actions">
-              <p class="bibtex-copy-state" id="bibtex-copy-state">Ready to copy.</p>
-              <button class="pub-action" id="bibtex-copy-button" type="button">Copy BibTeX</button>
-            </div>
-          </div>
+  <section class="pub-summary" aria-label="Publication summary">
+    {% for section in publication_archive.sections %}
+    <article class="pub-summary-item" data-publication-summary="{{ section.key }}">
+      <span>{{ section.label }}</span>
+      <strong data-publication-summary-count>{{ section.count }} {% if section.count == 1 %}paper{% else %}papers{% endif %}</strong>
+      {% case section.key %}
+        {% when 'international-journals' %}
+      <div class="pub-summary-note">Q1 | IF up to 11.0</div>
+        {% when 'domestic-journals' %}
+      <div class="pub-summary-note">Driving | Legal AI</div>
+        {% when 'international-conferences' %}
+      <div class="pub-summary-note">2026 presentations</div>
+        {% when 'domestic-conferences' %}
+      <div class="pub-summary-note">5 papers | 4 themes</div>
+      {% endcase %}
+    </article>
+    {% endfor %}
+    <article class="pub-summary-item pub-summary-item--metrics" data-scholar-card>
+      <span>Google Scholar</span>
+      <div class="pub-scholar-stats" aria-label="Google Scholar metrics">
+        <div class="pub-scholar-stat">
+          <div class="pub-scholar-stat-label">Citations</div>
+          <div class="pub-scholar-stat-value" data-scholar-citations>{{ scholar_metrics.citations.all }}</div>
         </div>
+        <div class="pub-scholar-stat">
+          <div class="pub-scholar-stat-label">h-index</div>
+          <div class="pub-scholar-stat-value" data-scholar-hindex>{{ scholar_metrics.h_index.all }}</div>
+        </div>
+      </div>
+      <a class="pub-scholar-link" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Open Google Scholar</a>
+      <p class="pub-scholar-note" data-scholar-updated>Last checked on {{ scholar_metrics.checked_at_display }}.</p>
+    </article>
+  </section>
 
-        <script type="text/plain" id="bibtex-tits-2026">@article{min2026anticipatory,
-  title={Anticipatory driving maneuver for safety and comfort: Temporal graph cross attention-based front vehicle trajectory prediction},
-  author={Min, Hyunsik and Baek, Gyeongseon and Kim, Yeeun and Noh, Byeongjoon},
-  journal={IEEE Transactions on Intelligent Transportation Systems},
-  year={2026}
-}</script>
-        <script type="text/plain" id="bibtex-solarnexus-2025">@article{min2025solarnexus,
-  title={SolarNexus: A deep learning framework for adaptive photovoltaic power generation forecasting and scalable management},
-  author={Min, Hyunsik and Noh, Byeongjoon},
-  journal={Applied Energy},
-  volume={391},
-  pages={125848},
-  year={2025}
-}</script>
-        <script type="text/plain" id="bibtex-tracs-2025">@article{min2025tracsllm,
-  title={TRACS-LLM: LLM-based Traffic Accident Criminal Sentencing Prediction Focusing on Imprisonment, Probation, and Fines},
-  author={Min, Hyunsik and Noh, Byeongjoon},
-  journal={Artificial Intelligence and Law},
-  year={2025}
-}</script>
-        <script type="text/plain" id="bibtex-solarflux-2024">@article{min2024solarflux,
-  title={SolarFlux Predictor: A Novel Deep Learning Approach for Photovoltaic Power Forecasting in South Korea},
-  author={Min, Hyunsik and Hong, Seokjun and Song, Jeonghoon and Son, Byeoungmin and Noh, Byeongjoon and Moon, Jihoon},
-  journal={Electronics},
-  year={2024}
-}</script>
-        <script type="text/plain" id="bibtex-tgca-domestic-2025">@article{min2025tgca,
-  title={Anticipating Front-Side Vehicles' Maneuvers for Trustworthy Autonomous Driving},
-  author={Min, Hyunsik and Kim, Yeeun and Kim, Jungryul and Lee, Seongjin and Noh, Byeongjoon},
-  journal={The Journal of The Korea Institute of Intelligent Transport Systems},
-  year={2025},
-  doi={10.12815/kits.2025.24.6.121}
-}</script>
-        <script type="text/plain" id="bibtex-nlp-road-2024">@article{min2024nlpjudgement,
-  title={Natural Language Processing-based Judgement Prediction System for Road Traffic Accidents: Focused on Text Information for Traffic Accident Situations},
-  author={Min, Hyunsik and Yun, Junyeong and Noh, Byeongjoon},
-  journal={Korean Society of Transportation},
-  year={2024}
-}</script>
+  <section class="pub-tools" aria-label="Publication tools">
+    <div class="pub-search-wrap">
+      <label class="pub-search">
+        <span>Search</span>
+        <input type="search" placeholder="Find papers by topic, title, or venue" data-publication-search aria-expanded="false" aria-controls="publication-search-results" autocomplete="off">
+      </label>
+      <div class="pub-search-results" id="publication-search-results" data-publication-results hidden></div>
+    </div>
+    <div class="pub-tool-meta">
+      <strong data-publication-count>{{ publication_archive.total_records }} total records</strong>
+      <button class="btn-soft" type="button" data-publication-reset hidden>Reset</button>
+    </div>
+  </section>
+
+  <section class="pub-jump page-index" aria-label="Jump to publication type">
+    {% for section in publication_archive.sections %}
+    <a href="#{{ section.key }}">{{ section.label }}</a>
+    {% endfor %}
+  </section>
+
+  {% for section in publication_archive.sections %}
+  <section class="pub-section" id="{{ section.key }}" data-publication-section>
+    <div class="pub-section-head">
+      <h2>{{ section.label }}</h2>
+    </div>
+    <div class="pub-section-grid" data-publication-grid="{{ section.key }}">
+      {% for item in section.items %}
+      <article class="pub-item{% unless item.image and item.image != '' %} pub-item-text{% endunless %}" data-publication-item data-search="{{ item.search_terms | escape }}">
+        <h3>{{ item.title | escape }}</h3>
+        <div class="pub-meta">
+          <div class="pub-meta-row">
+            <span class="pub-meta-label">{% if section.key contains 'journals' %}Journal{% else %}Venue{% endif %}</span>
+            <span class="pub-meta-value">
+              {% if item.journal_metrics and item.journal_metrics.top_label %}
+              <span class="pub-journal-line">
+                <span class="pub-journal-name">{{ item.venue | escape }}</span>
+                <span class="pub-journal-metrics">
+                  {% if item.journal_metrics.top_label %}
+                  <span class="pub-journal-chip pub-journal-chip--top">{{ item.journal_metrics.top_label }}</span>
+                  {% endif %}
+                  {% if item.journal_metrics.quartile_label %}
+                  <span class="pub-journal-chip pub-journal-chip--quartile">{{ item.journal_metrics.quartile_label }}</span>
+                  {% endif %}
+                  {% if item.journal_metrics.if_label %}
+                  <span class="pub-journal-chip pub-journal-chip--if">{{ item.journal_metrics.if_label }}</span>
+                  {% endif %}
+                </span>
+              </span>
+              {% else %}
+              {{ item.venue | escape }}
+              {% endif %}
+            </span>
+          </div>
+          <div class="pub-meta-row">
+            <span class="pub-meta-label">Authors</span>
+            <span class="pub-meta-value">{{ item.authors | escape }}</span>
+          </div>
+          {% if item.details and item.details != '' %}
+          <div class="pub-meta-row">
+            <span class="pub-meta-label">Details</span>
+            <span class="pub-meta-value">{{ item.details | escape }}</span>
+          </div>
+          {% endif %}
+        </div>
+        {% if item.doi and item.doi != '' %}
+        <p class="pub-note">DOI: {{ item.doi | escape }}</p>
+        {% endif %}
+        {% if item.image and item.image != '' %}
+        <div class="pub-image">
+          <img src="{{ item.image }}" alt="{{ item.image_alt | default: item.title | escape }}" loading="lazy">
+        </div>
+        {% else %}
+        <aside class="pub-marker" aria-hidden="true">
+          <div class="pub-marker-head">
+            <span class="pub-marker-label">{% if section.key contains 'journals' %}Journal Paper{% else %}Conference Paper{% endif %}</span>
+            <p class="pub-marker-title">{{ item.topic_title | default: 'Research Paper' | escape }}</p>
+            <p class="pub-marker-copy">{{ item.topic_copy | default: 'Synchronized from the Google Scholar archive.' | escape }}</p>
+          </div>
+          <span class="pub-marker-year">{{ item.year }}</span>
+        </aside>
+        {% endif %}
+        {% if item.scholar_url or item.bibtex %}
+        <div class="pub-actions">
+          {% if item.scholar_url and item.scholar_url != '' %}
+          <a class="pub-action" href="{{ item.scholar_url }}" target="_blank" rel="noopener">Google Scholar</a>
+          {% endif %}
+          {% if item.bibtex and section.key contains 'journals' %}
+          <button class="pub-action" type="button" data-bibtex-target="bibtex-{{ item.id }}">Cite</button>
+          {% endif %}
+        </div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+  <p class="pub-empty" data-publication-empty hidden>No publication matched that search yet.</p>
+
+  <nav class="chapter-nav" aria-label="Continue through site chapters">
+    <a class="chapter-link" href="/profile/">
+      <span>Previous Chapter</span>
+      <strong>Profile</strong>
+    </a>
+    <a class="chapter-link" href="/news/">
+      <span>Next Chapter</span>
+      <strong>News</strong>
+    </a>
+  </nav>
+
+  <div class="bibtex-modal" id="bibtex-modal" hidden>
+    <div class="bibtex-backdrop" data-bibtex-close></div>
+    <div class="bibtex-dialog" role="dialog" aria-modal="true" aria-labelledby="bibtex-title">
+      <div class="bibtex-dialog-head">
+        <h3 id="bibtex-title">BibTeX</h3>
+        <button class="bibtex-close" type="button" data-bibtex-close>Close</button>
+      </div>
+      <pre class="bibtex-code" id="bibtex-content"></pre>
+      <div class="bibtex-dialog-actions">
+        <p class="bibtex-copy-state" id="bibtex-copy-state">Ready to copy.</p>
+        <button class="pub-action" id="bibtex-copy-button" type="button">Copy BibTeX</button>
       </div>
     </div>
-  </main>
+  </div>
 
-  <footer class="footer">
-    <div class="site-shell">
-      <p><a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar profile</a></p>
-      <p class="sr-only" aria-live="polite" id="site-live-region"></p>
-    </div>
-  </footer>
+  {% for section in publication_archive.sections %}
+    {% for item in section.items %}
+      {% if item.bibtex and section.key contains 'journals' %}
+  <script type="text/plain" id="bibtex-{{ item.id }}">{{ item.bibtex }}</script>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/assets/site-analytics-config.js?v=20260420c"></script>
-  <script src="/assets/site.js?v=20260420b"></script>
-  <script src="/assets/visitor-tracker.js?v=20260420c"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var modal = document.getElementById('bibtex-modal');
-      var content = document.getElementById('bibtex-content');
-      var copyState = document.getElementById('bibtex-copy-state');
-      var copyButton = document.getElementById('bibtex-copy-button');
-      if (!modal || !content || !copyButton) return;
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var modal = document.getElementById('bibtex-modal');
+    var content = document.getElementById('bibtex-content');
+    var copyState = document.getElementById('bibtex-copy-state');
+    var copyButton = document.getElementById('bibtex-copy-button');
+    if (!modal || !content || !copyButton) return;
 
-      function closeModal() {
-        modal.hidden = true;
-        copyState.textContent = 'Ready to copy.';
+    function closeModal() {
+      modal.hidden = true;
+      copyState.textContent = 'Ready to copy.';
+    }
+
+    function openModal(text) {
+      content.textContent = text.trim();
+      modal.hidden = false;
+    }
+
+    document.addEventListener('click', function (event) {
+      var target = event.target;
+      if (!(target instanceof Element)) return;
+      var button = target.closest('[data-bibtex-target],[data-bibtex-content]');
+      if (!button) return;
+
+      var inlineContent = button.getAttribute('data-bibtex-content');
+      if (inlineContent) {
+        openModal(inlineContent);
+        return;
       }
 
-      function openModal(text) {
-        content.textContent = text.trim();
-        modal.hidden = false;
-      }
-
-      document.addEventListener('click', function (event) {
-        var target = event.target;
-        if (!(target instanceof Element)) return;
-        var button = target.closest('[data-bibtex-target],[data-bibtex-content]');
-        if (!button) return;
-
-        var inlineContent = button.getAttribute('data-bibtex-content');
-        if (inlineContent) {
-          openModal(inlineContent);
-          return;
-        }
-
-        var source = document.getElementById(button.getAttribute('data-bibtex-target'));
-        if (!source) return;
-        openModal(source.textContent);
-      });
-
-      modal.querySelectorAll('[data-bibtex-close]').forEach(function (button) {
-        button.addEventListener('click', closeModal);
-      });
-
-      copyButton.addEventListener('click', async function () {
-        try {
-          await navigator.clipboard.writeText(content.textContent);
-          copyState.textContent = 'Copied to clipboard.';
-        } catch (error) {
-          copyState.textContent = 'Copy failed. Select and copy manually.';
-        }
-      });
-
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && !modal.hidden) closeModal();
-      });
+      var source = document.getElementById(button.getAttribute('data-bibtex-target'));
+      if (!source) return;
+      openModal(source.textContent);
     });
-  </script>
-</body>
-</html>
+
+    modal.querySelectorAll('[data-bibtex-close]').forEach(function (button) {
+      button.addEventListener('click', closeModal);
+    });
+
+    copyButton.addEventListener('click', async function () {
+      try {
+        await navigator.clipboard.writeText(content.textContent);
+        copyState.textContent = 'Copied to clipboard.';
+      } catch (error) {
+        copyState.textContent = 'Copy failed. Select and copy manually.';
+      }
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  });
+</script>

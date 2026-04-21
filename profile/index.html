@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <title>Profile | Hyunsik Min</title>
-  <meta name="description" content="About Hyunsik Min, including research interests, experience, projects, honors, and academic background.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
-  <style>
+---
+layout: default
+title: Profile
+description: About Hyunsik Min, including research interests, experience, projects, honors, and academic background.
+body_class: page-profile
+footer_content: >-
+  Research profile covering publications, projects, awards, and collaboration tools.
+---
+<style>
     .about-page{display:grid;gap:1.6rem}
     .about-name{white-space:nowrap}
     .about-hero-copy{display:grid;gap:1.1rem;padding-top:.35rem;animation:riseIn .7s ease both}
@@ -46,25 +45,8 @@
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
     @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
   </style>
-</head>
-<body class="page-profile">
-  <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <div class="site-shell">
-      <a class="brand" href="/">Hyunsik Min</a>
-      <nav class="nav">
-        <a href="/">Home</a>
-          <a class="is-active" href="/profile/">Profile</a>
-        <a href="/publications/">Publications</a>
-        <a href="/news/">News</a>
-        <a href="/workspace/">Dashboard</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="page" id="main-content">
-    <div class="site-shell">
-      <div class="about-page">
+<div class="about-page">
         <section class="photo-layout">
           <div class="panel photo-card">
             <img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1920" height="2560" loading="eager" fetchpriority="high">
@@ -262,20 +244,4 @@
             <strong>Publications</strong>
           </a>
         </nav>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="site-shell">
-      <p>Research profile covering publications, projects, awards, and collaboration tools.</p>
-      <p class="sr-only" aria-live="polite" id="site-live-region"></p>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/assets/site-analytics-config.js?v=20260420c"></script>
-  <script src="/assets/site.js?v=20260420b"></script>
-  <script src="/assets/visitor-tracker.js?v=20260420c"></script>
-</body>
-</html>
+</div>

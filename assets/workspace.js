@@ -236,6 +236,38 @@
     return String(dateKey || '').slice(0, 7);
   }
 
+  function normalizePath(path) {
+    var value = String(path || '/').trim();
+    if (!value) return '/';
+    if (!value.startsWith('/')) value = '/' + value;
+    if (value !== '/' && !value.endsWith('/')) value += '/';
+    return value;
+  }
+
+  function getSiteNavItems(config) {
+    var navItems = Array.isArray(window.SITE_NAV) ? window.SITE_NAV : [];
+    var resolved = navItems
+      .map(function (item) {
+        return {
+          name: String((item && item.name) || '').trim(),
+          link: normalizePath((item && item.link) || '/')
+        };
+      })
+      .filter(function (item) {
+        return Boolean(item.name && item.link);
+      });
+
+    if (resolved.length) return resolved;
+
+    return [
+      { name: 'Home', link: '/' },
+      { name: 'Profile', link: '/profile/' },
+      { name: 'Publications', link: '/publications/' },
+      { name: 'News', link: '/news/' },
+      { name: String(((config && config.sectionName) || 'Dashboard')).trim() || 'Dashboard', link: '/workspace/' }
+    ];
+  }
+
   function buildMonthlySeries(startDateKey, monthlyBuckets) {
     var safeStart = /^\d{4}-\d{2}-\d{2}$/.test(String(startDateKey || '')) ? startDateKey : getAnalyticsDateOffset(0);
     var start = new Date(safeStart.slice(0, 7) + '-01T00:00:00Z');
@@ -259,17 +291,22 @@
   }
 
   function getPathLabel(path) {
-    var value = String(path || '/');
-    if (value === '/') return 'Home';
-    if (value === '/profile/') return 'Profile';
-    if (value === '/publications/') return 'Publications';
-    if (value === '/news/') return 'News';
-    if (value === '/workspace/') return 'Dashboard';
+    var value = normalizePath(path);
+    var match = getSiteNavItems(getConfig()).find(function (item) {
+      return item.link === value;
+    });
+    if (match) return match.name;
     return value.replace(/^\//, '').replace(/\/$/, '') || 'Page';
   }
 
   function buildZeroAnalyticsState(config) {
     var launchDateKey = getAnalyticsLaunchDate(config);
+    var defaultTopPages = getSiteNavItems(config).map(function (item) {
+      return {
+        path: item.link,
+        hits: 0
+      };
+    });
 
     return {
       todayVisitors: 0,
@@ -278,24 +315,7 @@
       trackedPages: 0,
       launchDateKey: launchDateKey,
       monthlySeries: buildMonthlySeries(launchDateKey, {}),
-      topPages: [
-        {
-          path: '/',
-          hits: 0
-        },
-        {
-          path: '/profile/',
-          hits: 0
-        },
-        {
-          path: '/publications/',
-          hits: 0
-        },
-        {
-          path: '/news/',
-          hits: 0
-        }
-      ]
+      topPages: defaultTopPages
     };
   }
 

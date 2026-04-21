@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Dashboard | Hyunsik Min</title>
-  <meta name="description" content="Private dashboard access for Hyunsik Min.">
-  <link rel="stylesheet" href="/assets/site.css?v=20260417k">
-  <style>
+---
+layout: default
+title: Dashboard
+description: Private dashboard access for Hyunsik Min.
+body_class: page-workspace
+robots: noindex,nofollow
+show_footer: false
+include_public_analytics: false
+script_bundle: workspace
+---
+<style>
     .workspace-page{display:grid;gap:1.6rem}
     .workspace-page[data-mode="auth"]{padding-block:2.4rem 3.2rem}
     .workspace-page[data-mode="auth"] .page-lead{display:none}
@@ -92,25 +92,8 @@
     [data-workspace-private][hidden]{display:none}
     @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}}
   </style>
-</head>
-<body class="page-workspace">
-  <a class="skip-link" href="#main-content">Skip to content</a>
-  <header class="site-header">
-    <div class="site-shell">
-      <a class="brand" href="/">Hyunsik Min</a>
-      <nav class="nav">
-        <a href="/">Home</a>
-        <a href="/profile/">Profile</a>
-        <a href="/publications/">Publications</a>
-        <a href="/news/">News</a>
-        <a class="is-active" href="/workspace/">Dashboard</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="page" id="main-content">
-    <div class="site-shell">
-      <div class="workspace-page" data-workspace-page data-mode="auth">
+<div class="workspace-page" data-workspace-page data-mode="auth">
         <section class="page-lead" data-workspace-private hidden>
           <div class="page-lead-copy">
             <div class="eyebrow">Dashboard</div>
@@ -119,10 +102,11 @@
         </section>
 
         <section class="workspace-shell" data-workspace-shell data-mode="auth">
-          <article class="workspace-panel" data-workspace-view="login" hidden>
+          <article class="workspace-panel" data-workspace-view="login">
             <div class="eyebrow">Login</div>
             <h2>Login</h2>
-            <div id="workspace-status" class="workspace-status" data-tone="neutral" style="margin-top:1rem">Checking access...</div>
+            <p>Sign in with the master dashboard account. If a valid session is already active, access will unlock automatically.</p>
+            <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true" style="margin-top:1rem">Checking dashboard access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
                 <span>Email</span>
@@ -230,11 +214,4 @@
             </div>
           </aside>
         </section>
-      </div>
-    </div>
-  </main>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/assets/workspace-config.js?v=20260420k"></script>
-  <script src="/assets/workspace.js?v=20260420k"></script>
-</body>
-</html>
+</div>

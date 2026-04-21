@@ -38,11 +38,13 @@ nav:
   - name: "Home"
     link: "/"
   - name: "Profile"
-    link: "/profile"
+    link: "/profile/"
   - name: "Publications"
-    link: "/publications"
+    link: "/publications/"
   - name: "News"
-    link: "/news"
+    link: "/news/"
+  - name: "Dashboard"
+    link: "/workspace/"
 
 exclude:
   - Gemfile

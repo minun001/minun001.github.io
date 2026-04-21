@@ -247,24 +247,8 @@
   }
 
   function loadPublicationArchive() {
-    var root = document.querySelector('[data-publications-root]');
-    if (!root || !window.fetch) return Promise.resolve(false);
-
-    var source = root.getAttribute('data-publication-source');
-    if (!source) return Promise.resolve(false);
-
-    var cacheKey = new Date().toISOString().slice(0, 10);
-    return window.fetch(source + '?v=' + encodeURIComponent(cacheKey), { cache: 'no-store' })
-      .then(function (response) {
-        if (!response.ok) throw new Error('Failed to load publication archive.');
-        return response.json();
-      })
-      .then(function (archive) {
-        return renderPublicationArchive(archive);
-      })
-      .catch(function () {
-        return false;
-      });
+    // Publications now render statically from Jekyll _data.
+    return Promise.resolve(false);
   }
 
   function applyTheme() {
@@ -550,36 +534,7 @@
   }
 
   function bindScholarMetrics() {
-    var card = document.querySelector('[data-scholar-card]');
-    if (!card) return;
-
-    var source = card.getAttribute('data-scholar-source');
-    var citationsTarget = card.querySelector('[data-scholar-citations]');
-    var hIndexTarget = card.querySelector('[data-scholar-hindex]');
-    var updatedTarget = card.querySelector('[data-scholar-updated]');
-    if (!source || !citationsTarget || !hIndexTarget || !updatedTarget || !window.fetch) return;
-
-    var cacheKey = new Date().toISOString().slice(0, 10);
-
-    window.fetch(source + '?v=' + encodeURIComponent(cacheKey), { cache: 'no-store' })
-      .then(function (response) {
-        if (!response.ok) throw new Error('Failed to load scholar metrics.');
-        return response.json();
-      })
-      .then(function (metrics) {
-        if (metrics && metrics.citations && typeof metrics.citations.all === 'number') {
-          citationsTarget.textContent = String(metrics.citations.all);
-        }
-        if (metrics && metrics.h_index && typeof metrics.h_index.all === 'number') {
-          hIndexTarget.textContent = String(metrics.h_index.all);
-        }
-        if (metrics && metrics.checked_at_display) {
-          updatedTarget.textContent = 'Last checked on ' + metrics.checked_at_display + '.';
-        }
-      })
-      .catch(function () {
-        // Keep the static fallback values when the daily metrics snapshot is unavailable.
-      });
+    // Scholar metrics now render statically from Jekyll _data.
   }
 
   function bindNewsFilter() {
@@ -592,8 +547,18 @@
     var empty = root.querySelector('[data-news-empty]');
     var params = new URLSearchParams(window.location.search);
     if (!buttons.length || !items.length) return;
+    var allowedFilters = buttons
+      .map(function (button) {
+        return button.getAttribute('data-news-filter') || '';
+      })
+      .filter(Boolean);
+
+    function sanitizeFilter(nextKind) {
+      return allowedFilters.indexOf(nextKind) !== -1 ? nextKind : 'all';
+    }
 
     function setFilter(nextKind, shouldSync) {
+      nextKind = sanitizeFilter(nextKind || 'all');
       var visibleCount = 0;
 
       buttons.forEach(function (button) {
@@ -636,7 +601,9 @@
       });
     });
 
-    setFilter(params.get('news') || 'all', false);
+    var requestedFilter = params.get('news') || 'all';
+    var initialFilter = sanitizeFilter(requestedFilter);
+    setFilter(initialFilter, requestedFilter !== initialFilter);
   }
 
   function bindSectionIndex() {
@@ -847,13 +814,10 @@
     applyTheme();
     bindCopyButtons();
     installTopButton();
-    bindScholarMetrics();
     bindNewsBadgeEffects();
     bindNewsFilter();
     bindSectionIndex();
-    loadPublicationArchive().finally(function () {
-      bindPublicationChipEffects();
-      bindPublicationSearch();
-    });
+    bindPublicationChipEffects();
+    bindPublicationSearch();
   });
 })();
