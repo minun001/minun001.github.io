@@ -14,6 +14,8 @@ footer_content: >-
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
+    .about-email-copy{padding:0;border:0;background:none;color:inherit;font:inherit;font-weight:inherit;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(29,78,216,.32);text-underline-offset:.16em;transition:color .2s ease,text-decoration-color .2s ease}
+    .about-email-copy:hover,.about-email-copy:focus-visible{color:var(--accent);text-decoration-color:currentColor;outline:none}
     .about-jump{margin-top:-.15rem}
     .about-interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:.35rem}
     .about-interest{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
@@ -67,7 +69,7 @@ footer_content: >-
               </div>
               <div>
                 <dt>Email</dt>
-                <dd><a href="mailto:minun001@sch.ac.kr">minun001@sch.ac.kr</a></dd>
+                <dd><button class="about-email-copy" type="button" aria-label="Copy email address" data-copy-email="minun001@sch.ac.kr" data-copy-label="minun001@sch.ac.kr"><span data-copy-text>minun001@sch.ac.kr</span></button></dd>
               </div>
               <div>
                 <dt>Location</dt>
@@ -78,8 +80,6 @@ footer_content: >-
               <a class="btn-soft" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
               <a class="btn-soft" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
               <a class="btn-soft" href="https://github.com/minun001" target="_blank" rel="noopener">GitHub</a>
-              <a class="btn-soft" href="https://minun001.github.io/" target="_blank" rel="noopener">Website</a>
-              <button class="btn-soft" type="button" data-copy-email="minun001@sch.ac.kr" data-copy-label="Copy Email"><span data-copy-text>Copy Email</span></button>
             </div>
           </div>
         </section>
