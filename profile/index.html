@@ -10,14 +10,6 @@ footer_content: >-
     .about-page{display:grid;gap:1.8rem}
     .about-name{text-wrap:balance}
     .about-hero-copy{display:grid;gap:1.2rem;padding-top:.35rem;animation:riseIn .7s ease both}
-    .profile-portrait-frame{position:relative;isolation:isolate;padding:1.1rem 1rem 1.3rem .1rem}
-    .profile-portrait-frame:before{content:"";position:absolute;left:1.4rem;right:1.2rem;top:1rem;bottom:1.2rem;border-radius:30px;background:radial-gradient(circle at 24% 24%,rgba(185,28,28,.16),transparent 38%),radial-gradient(circle at 78% 70%,rgba(15,118,110,.12),transparent 40%);filter:blur(10px);z-index:0}
-    .profile-portrait-frame:after{content:"";position:absolute;inset:.3rem 1.2rem .5rem .4rem;border-radius:32px;border:1px dashed rgba(17,32,51,.18);transform:rotate(-2.4deg);z-index:0}
-    .profile-portrait-frame img{position:relative;z-index:1;border-radius:28px;box-shadow:0 24px 40px rgba(15,23,42,.12)}
-    .profile-portrait-node{position:absolute;z-index:2;width:.78rem;height:.78rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 6px rgba(185,28,28,.08);animation:profileNodePulse 4.2s ease-in-out infinite}
-    .profile-portrait-node--one{right:1.3rem;top:2rem}
-    .profile-portrait-node--two{left:1.05rem;bottom:2.3rem;animation-delay:1.25s}
-    .profile-portrait-node--three{right:3.2rem;bottom:1rem;animation-delay:2.1s}
     .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.1rem;margin-top:.3rem}
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -53,8 +45,6 @@ footer_content: >-
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
     .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
     .about-actions > *{width:100%}
-    @keyframes profileNodePulse{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.15);opacity:1}}
-    @media (prefers-reduced-motion: reduce){.profile-portrait-node{animation:none}}
     @media (max-width:1024px){.about-meta,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.4rem,6vw,3.6rem)}}
     @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid,.about-actions{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
   </style>
@@ -62,12 +52,7 @@ footer_content: >-
 <div class="about-page">
         <section class="photo-layout">
           <div class="panel photo-card">
-            <div class="profile-portrait-frame">
-              <img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1920" height="2560" loading="eager" fetchpriority="high">
-              <span class="profile-portrait-node profile-portrait-node--one" aria-hidden="true"></span>
-              <span class="profile-portrait-node profile-portrait-node--two" aria-hidden="true"></span>
-              <span class="profile-portrait-node profile-portrait-node--three" aria-hidden="true"></span>
-            </div>
+            <img src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1920" height="2560" loading="eager" fetchpriority="high">
           </div>
           <div class="panel identity-card about-hero-copy">
             <div>
