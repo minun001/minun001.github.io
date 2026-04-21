@@ -29,7 +29,8 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-scholar-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;width:100%;padding:.55rem .9rem;border-radius:999px;background:#102033;color:#fff;font-size:.88rem;font-weight:800;box-shadow:0 10px 20px rgba(16,32,51,.1)}
   .pub-scholar-link:hover,.pub-scholar-link:focus-visible{transform:translateY(-1px);filter:brightness(1.04)}
   .pub-scholar-note{color:var(--text-soft);font-size:.82rem;line-height:1.5}
-  .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:center;padding:1.05rem 1.05rem 1.1rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(248,250,253,.92) 100%);box-shadow:0 12px 24px rgba(15,23,42,.035);animation:riseIn .9s ease both}
+  .pub-tools{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.85fr);gap:1rem 1.15rem;align-items:start;padding:1.05rem 1.05rem 1.1rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(248,250,253,.92) 100%);box-shadow:0 12px 24px rgba(15,23,42,.035);animation:riseIn .9s ease both}
+  .pub-tools-main{display:grid;gap:.78rem;min-width:0}
   .pub-search-wrap{position:relative;display:grid;gap:.7rem}
   .pub-search{display:flex;align-items:center;gap:.75rem;min-height:50px;padding:0 .95rem;border:1px solid rgba(17,32,51,.07);border-radius:12px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.04)}
   .pub-search span{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
@@ -45,7 +46,8 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-search-result-meta{color:var(--text-soft);font-size:.86rem;line-height:1.45}
   .pub-search-result-kind{display:inline-flex;align-items:center;width:max-content;padding:.26rem .48rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
   .pub-search-result-empty{padding:.2rem .1rem;color:var(--text-soft);font-size:.92rem;line-height:1.5}
-  .pub-tool-meta{display:flex;align-items:center;gap:.7rem;justify-content:flex-end;color:var(--text-soft);font-size:.9rem}
+  .pub-tool-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;justify-content:flex-start;color:var(--text-soft);font-size:.9rem}
+  .pub-scholar-panel--tools{height:100%;align-content:start}
   .pub-jump{margin-top:-.1rem;padding:.1rem 0 .7rem;border-bottom:1px solid rgba(17,32,51,.08)}
   .pub-section{display:grid;gap:1.2rem;padding-top:.1rem;scroll-margin-top:var(--section-anchor-offset)}
   .pub-section-head{display:grid;gap:.2rem;padding:1.7rem 0 0;border-top:1px solid var(--border-soft)}
@@ -98,7 +100,8 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-summary{animation:riseIn .8s ease both}
   .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
   @media (max-width:980px){.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.7rem}.pub-marker{min-height:auto;padding-left:0;border-left:none;padding-top:.1rem}}
-  @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-tools{grid-template-columns:1fr;padding:1rem}.pub-tool-meta{justify-content:flex-start}}
+  @media (max-width:980px){.pub-tools{grid-template-columns:1fr}}
+  @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-tools{padding:1rem}.pub-tool-meta{justify-content:flex-start}}
 </style>
 
 {% assign publication_archive = site.data['google-scholar-publications'] %}
@@ -118,21 +121,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
         <img src="/assets/img/TRACM_LLM_framework.png" alt="" loading="lazy">
         <img src="/assets/img/electronics-13-02071-g002-550.jpg" alt="" loading="lazy">
       </div>
-      <article class="pub-scholar-panel" data-scholar-card>
-        <span class="pub-scholar-label">Google Scholar</span>
-        <div class="pub-scholar-stats" aria-label="Google Scholar metrics">
-          <div class="pub-scholar-stat">
-            <div class="pub-scholar-stat-label">Citations</div>
-            <div class="pub-scholar-stat-value" data-scholar-citations>{{ scholar_metrics.citations.all }}</div>
-          </div>
-          <div class="pub-scholar-stat">
-            <div class="pub-scholar-stat-label">h-index</div>
-            <div class="pub-scholar-stat-value" data-scholar-hindex>{{ scholar_metrics.h_index.all }}</div>
-          </div>
-        </div>
-        <a class="pub-scholar-link" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Open Google Scholar</a>
-        <p class="pub-scholar-note" data-scholar-updated>Last checked on {{ scholar_metrics.checked_at_display }}.</p>
-      </article>
     </aside>
   </section>
 
@@ -156,17 +144,34 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   </section>
 
   <section class="pub-tools" aria-label="Publication tools">
-    <div class="pub-search-wrap">
-      <label class="pub-search">
-        <span>Search</span>
-        <input type="search" placeholder="Find papers by topic, title, or venue" data-publication-search aria-expanded="false" aria-controls="publication-search-results" autocomplete="off">
-      </label>
-      <div class="pub-search-results" id="publication-search-results" data-publication-results hidden></div>
+    <div class="pub-tools-main">
+      <div class="pub-search-wrap">
+        <label class="pub-search">
+          <span>Search</span>
+          <input type="search" placeholder="Find papers by topic, title, or venue" data-publication-search aria-expanded="false" aria-controls="publication-search-results" autocomplete="off">
+        </label>
+        <div class="pub-search-results" id="publication-search-results" data-publication-results hidden></div>
+      </div>
+      <div class="pub-tool-meta">
+        <strong data-publication-count>{{ publication_archive.total_records }} total records</strong>
+        <button class="btn-soft" type="button" data-publication-reset hidden>Reset</button>
+      </div>
     </div>
-    <div class="pub-tool-meta">
-      <strong data-publication-count>{{ publication_archive.total_records }} total records</strong>
-      <button class="btn-soft" type="button" data-publication-reset hidden>Reset</button>
-    </div>
+    <article class="pub-scholar-panel pub-scholar-panel--tools" data-scholar-card>
+      <span class="pub-scholar-label">Google Scholar</span>
+      <div class="pub-scholar-stats" aria-label="Google Scholar metrics">
+        <div class="pub-scholar-stat">
+          <div class="pub-scholar-stat-label">Citations</div>
+          <div class="pub-scholar-stat-value" data-scholar-citations>{{ scholar_metrics.citations.all }}</div>
+        </div>
+        <div class="pub-scholar-stat">
+          <div class="pub-scholar-stat-label">h-index</div>
+          <div class="pub-scholar-stat-value" data-scholar-hindex>{{ scholar_metrics.h_index.all }}</div>
+        </div>
+      </div>
+      <a class="pub-scholar-link" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Open Google Scholar</a>
+      <p class="pub-scholar-note" data-scholar-updated>Last checked on {{ scholar_metrics.checked_at_display }}.</p>
+    </article>
   </section>
 
   <section class="pub-jump page-index" aria-label="Jump to publication type">
