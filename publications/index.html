@@ -29,8 +29,8 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-scholar-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;width:100%;padding:.55rem .9rem;border-radius:999px;background:#102033;color:#fff;font-size:.88rem;font-weight:800;box-shadow:0 10px 20px rgba(16,32,51,.1)}
   .pub-scholar-link:hover,.pub-scholar-link:focus-visible{transform:translateY(-1px);filter:brightness(1.04)}
   .pub-scholar-note{color:var(--text-soft);font-size:.82rem;line-height:1.5}
-  .pub-tools{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.85fr);gap:1rem 1.15rem;align-items:start;padding:1.05rem 1.05rem 1.1rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(248,250,253,.92) 100%);box-shadow:0 12px 24px rgba(15,23,42,.035);animation:riseIn .9s ease both}
-  .pub-tools-main{display:grid;gap:.78rem;min-width:0}
+  .pub-tools{display:grid;gap:1rem;padding:1.05rem 1.05rem 1.1rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(248,250,253,.92) 100%);box-shadow:0 12px 24px rgba(15,23,42,.035);animation:riseIn .9s ease both}
+  .pub-tools-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem 1.15rem;align-items:start;min-width:0}
   .pub-search-wrap{position:relative;display:grid;gap:.7rem}
   .pub-search{display:flex;align-items:center;gap:.75rem;min-height:50px;padding:0 .95rem;border:1px solid rgba(17,32,51,.07);border-radius:12px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.04)}
   .pub-search span{color:var(--text-soft);font-size:.88rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
@@ -47,7 +47,11 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-search-result-kind{display:inline-flex;align-items:center;width:max-content;padding:.26rem .48rem;border-radius:999px;background:rgba(18,118,98,.09);color:#17685b;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
   .pub-search-result-empty{padding:.2rem .1rem;color:var(--text-soft);font-size:.92rem;line-height:1.5}
   .pub-tool-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;justify-content:flex-start;color:var(--text-soft);font-size:.9rem}
-  .pub-scholar-panel--tools{height:100%;align-content:start}
+  .pub-scholar-panel--tools{grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:.85rem 1rem;padding:.9rem 1rem}
+  .pub-scholar-panel--tools .pub-scholar-label{align-self:start;padding-top:.18rem}
+  .pub-scholar-panel--tools .pub-scholar-stats{grid-template-columns:repeat(2,minmax(110px,140px));gap:.55rem}
+  .pub-scholar-panel--tools .pub-scholar-link{width:auto;min-width:max-content;padding:.55rem .95rem}
+  .pub-scholar-panel--tools .pub-scholar-note{grid-column:2 / 4;margin-top:-.1rem}
   .pub-jump{margin-top:-.1rem;padding:.1rem 0 .7rem;border-bottom:1px solid rgba(17,32,51,.08)}
   .pub-section{display:grid;gap:1.2rem;padding-top:.1rem;scroll-margin-top:var(--section-anchor-offset)}
   .pub-section-head{display:grid;gap:.2rem;padding:1.7rem 0 0;border-top:1px solid var(--border-soft)}
@@ -99,8 +103,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .page-lead{animation:riseIn .6s ease both}
   .pub-summary{animation:riseIn .8s ease both}
   .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-  @media (max-width:980px){.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.7rem}.pub-marker{min-height:auto;padding-left:0;border-left:none;padding-top:.1rem}}
-  @media (max-width:980px){.pub-tools{grid-template-columns:1fr}}
+  @media (max-width:980px){.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.7rem}.pub-marker{min-height:auto;padding-left:0;border-left:none;padding-top:.1rem}.pub-tools-main{grid-template-columns:1fr}.pub-scholar-panel--tools{grid-template-columns:1fr}.pub-scholar-panel--tools .pub-scholar-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.pub-scholar-panel--tools .pub-scholar-link{width:100%;min-width:0}.pub-scholar-panel--tools .pub-scholar-note{grid-column:auto;margin-top:0}}
   @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-tools{padding:1rem}.pub-tool-meta{justify-content:flex-start}}
 </style>
 
