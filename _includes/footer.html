@@ -1,7 +1,30 @@
-{% assign footer_content = page.footer_content | default: site.description %}
+{% assign footer_content = page.footer_content %}
 <footer class="footer">
-  <div class="site-shell">
-    {{ footer_content | markdownify }}
+  <div class="site-shell footer-grid">
+    <div class="footer-copy">
+      <div class="footer-eyebrow">Research Profile</div>
+      <a class="footer-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+      <p class="footer-description">{{ site.description | escape }}</p>
+    </div>
+    <nav class="footer-links" aria-label="External links">
+      {% if site.email %}
+      <a class="footer-link" href="mailto:{{ site.email | escape }}">Email</a>
+      {% endif %}
+      {% if site.github_username %}
+      <a class="footer-link" href="https://github.com/{{ site.github_username | escape }}" target="_blank" rel="noopener">GitHub</a>
+      {% endif %}
+      {% if site.linkedin_url %}
+      <a class="footer-link" href="{{ site.linkedin_url | escape }}" target="_blank" rel="noopener">LinkedIn</a>
+      {% endif %}
+      {% if site.scholar_url %}
+      <a class="footer-link" href="{{ site.scholar_url | escape }}" target="_blank" rel="noopener">Scholar</a>
+      {% endif %}
+    </nav>
+    {% if footer_content %}
+    <div class="footer-note">
+      {{ footer_content | markdownify }}
+    </div>
+    {% endif %}
     <p class="sr-only" aria-live="polite" id="site-live-region"></p>
   </div>
 </footer>

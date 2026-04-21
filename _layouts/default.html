@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260417k">
+  <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260421d">
 </head>
 {% assign current_url = page.url | replace: 'index.html', '' %}
 {% if current_url == '' %}
@@ -22,8 +22,13 @@
 <body class="{{ page.body_class | default: '' }}">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
-    <div class="site-shell">
-      <a class="brand" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+    <div class="site-shell site-header__inner">
+      <div class="brand-lockup">
+        <a class="brand" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+        {% if site.author.affiliation %}
+        <p class="brand-meta">{{ site.author.affiliation | escape }}</p>
+        {% endif %}
+      </div>
       <nav class="nav" aria-label="Primary">
         {% for item in site.nav %}
           {% assign item_link = item.link | replace: 'index.html', '' %}
