@@ -9,12 +9,13 @@ include_public_analytics: false
 script_bundle: workspace
 ---
 <style>
-    .workspace-page{display:grid;gap:1.6rem}
-    .workspace-page[data-mode="auth"]{padding-block:2.4rem 3.2rem}
-    .workspace-page[data-mode="auth"] .page-lead{display:none}
+    .workspace-page{display:grid;gap:1.7rem}
+    .workspace-page[data-mode="auth"]{padding-block:1.5rem 3.2rem}
     .workspace-page[data-mode="private"] .page-lead{display:none}
-    .workspace-shell{display:grid;gap:1.2rem;align-items:start}
-    .workspace-shell[data-mode="auth"]{grid-template-columns:minmax(0,720px);justify-content:center}
+    .workspace-lead{grid-template-columns:minmax(0,1fr);gap:1rem;padding:0 0 .55rem;border-bottom:none}
+    .workspace-lead .page-lead-copy p{max-width:40rem}
+    .workspace-shell{display:grid;gap:1.3rem;align-items:start}
+    .workspace-shell[data-mode="auth"]{grid-template-columns:minmax(0,760px);justify-content:center}
     .workspace-shell[data-mode="private"]{grid-template-columns:1fr}
     .workspace-panel{padding:1.35rem;border:1px solid var(--border-soft);border-radius:8px;background:linear-gradient(180deg,#ffffff 0%,#f7fafb 100%);box-shadow:var(--shadow-soft)}
     .workspace-panel h2{margin-bottom:.35rem}
@@ -24,10 +25,10 @@ script_bundle: workspace
     .workspace-dashboard-copy h2{margin:0;color:var(--text-title);font-size:clamp(2.2rem,4.6vw,3.4rem);line-height:.98}
     .workspace-account-head{display:grid;gap:.3rem}
     .workspace-account-head h2{margin:0;color:var(--text-title);font-size:clamp(1.35rem,2vw,1.75rem);line-height:1.05}
-    .workspace-status{padding:.85rem 1rem;border-radius:8px;background:#eef4f8;color:var(--text-title);font-weight:700}
-    .workspace-status[data-tone="success"]{background:#e8f7ef;color:#176246}
-    .workspace-status[data-tone="warn"]{background:#fff4df;color:#8a5a1d}
-    .workspace-status[data-tone="error"]{background:#fdebec;color:#a23138}
+    .workspace-status{margin-top:1rem;padding:.85rem 1rem;border-radius:8px;background:#edf3f8;color:var(--text-title);font-weight:700}
+    .workspace-status[data-tone="success"]{background:#ecf7f1;color:#176246}
+    .workspace-status[data-tone="warn"]{background:#fff6e5;color:#8a5a1d}
+    .workspace-status[data-tone="error"]{background:#fbeef0;color:#a23138}
     .workspace-form{display:grid;gap:.9rem;margin-top:1rem}
     .workspace-field{display:grid;gap:.38rem}
     .workspace-field span{color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -40,11 +41,13 @@ script_bundle: workspace
     .workspace-meta-row{display:flex;justify-content:space-between;gap:1rem;padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .workspace-meta-label{color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .workspace-meta-value{color:var(--text-title);font-weight:700;text-align:right}
-    .workspace-list{display:grid;gap:.8rem;margin-top:1rem}
+    .workspace-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem;margin-top:1.1rem}
     .workspace-card{display:grid;align-content:start;gap:.45rem;height:100%;padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
+    .workspace-card-step{display:inline-flex;align-items:center;width:max-content;padding:.28rem .52rem;border-radius:999px;background:rgba(29,78,216,.08);color:var(--accent);font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
     .workspace-card h3{margin-bottom:.28rem;font-size:1.04rem}
     .workspace-card p{margin:0;color:var(--text-soft)}
     .workspace-card a{display:inline-flex;margin-top:.75rem;font-weight:800}
+    .workspace-setup-copy{max-width:40rem}
     .workspace-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1rem}
     .workspace-mini-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .workspace-mini-card span{display:block;margin-bottom:.28rem;color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -53,7 +56,7 @@ script_bundle: workspace
     .workspace-empty{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);color:var(--text-soft)}
     .workspace-note-meta{margin-top:.8rem;color:var(--text-soft);font-size:.8rem;font-weight:700}
     .workspace-analytics{display:grid;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-soft)}
-    .workspace-analytics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
+    .workspace-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem}
     .workspace-analytics-card{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft)}
     .workspace-analytics-card span{display:block;margin-bottom:.3rem;color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .workspace-analytics-card strong{display:block;color:var(--text-title);font-size:1.35rem;line-height:1.05}
@@ -90,14 +93,15 @@ script_bundle: workspace
     .workspace-shell[data-mode="private"] > article[data-workspace-view="dashboard"]{order:2}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-grid,.workspace-analytics-panels{grid-template-columns:1fr}}
+    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list{grid-template-columns:1fr}}
   </style>
 
 <div class="workspace-page" data-workspace-page data-mode="auth">
-        <section class="page-lead" data-workspace-private hidden>
+        <section class="page-lead workspace-lead">
           <div class="page-lead-copy">
             <div class="eyebrow">Dashboard</div>
             <h1>Dashboard</h1>
+            <p>Private access, setup guidance, and lightweight visit analytics for the personal site.</p>
           </div>
         </section>
 
@@ -106,7 +110,7 @@ script_bundle: workspace
             <div class="eyebrow">Login</div>
             <h2>Login</h2>
             <p>Sign in with the master dashboard account. If a valid session is already active, access will unlock automatically.</p>
-            <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true" style="margin-top:1rem">Checking dashboard access...</div>
+            <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true">Checking dashboard access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
                 <span>Email</span>
@@ -166,21 +170,25 @@ script_bundle: workspace
           <article class="workspace-panel" data-workspace-view="setup" hidden>
             <div class="eyebrow">Setup Required</div>
             <h2>Connect Auth</h2>
-            <p>Add your Supabase URL and anon key to <code>/assets/workspace-config.js</code>, then allow access through the master rule.</p>
-            <div class="workspace-list">
+            <p class="workspace-setup-copy">Add your Supabase URL and anon key to <code>/assets/workspace-config.js</code>, then allow access through the master rule.</p>
+            <div class="workspace-list workspace-setup-list">
               <div class="workspace-card">
+                <span class="workspace-card-step">Step 1</span>
                 <h3>What stays private</h3>
                 <p>Passwords and service-role keys should never be committed.</p>
               </div>
               <div class="workspace-card">
+                <span class="workspace-card-step">Step 2</span>
                 <h3>What is public</h3>
                 <p>The Supabase URL and anon key are safe for client use.</p>
               </div>
               <div class="workspace-card">
+                <span class="workspace-card-step">Step 3</span>
                 <h3>Run the SQL setup</h3>
                 <p>Run <code>tools/workspace_supabase_schema.sql</code> in Supabase SQL Editor.</p>
               </div>
               <div class="workspace-card">
+                <span class="workspace-card-step">Step 4</span>
                 <h3>Load starter content</h3>
                 <p>Run <code>tools/workspace_supabase_seed.sql</code> to load starter dashboard data.</p>
               </div>

@@ -7,15 +7,15 @@ footer_content: >-
   Research profile covering publications, projects, awards, and collaboration tools.
 ---
 <style>
-    .about-page{display:grid;gap:1.6rem}
-    .about-name{white-space:nowrap}
-    .about-hero-copy{display:grid;gap:1.1rem;padding-top:.35rem;animation:riseIn .7s ease both}
-    .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem 1rem;margin-top:.25rem}
+    .about-page{display:grid;gap:1.8rem}
+    .about-name{text-wrap:balance}
+    .about-hero-copy{display:grid;gap:1.2rem;padding-top:.35rem;animation:riseIn .7s ease both}
+    .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.1rem;margin-top:.3rem}
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
     .about-jump{margin-top:-.15rem}
-    .about-interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:.35rem}
+    .about-interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:.35rem}
     .about-interest{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
     .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
     .about-stack{display:grid;gap:.9rem}
@@ -27,8 +27,8 @@ footer_content: >-
     #profile-experience .about-entry h3{display:flex;align-items:flex-start;min-height:3.15rem}
     .about-list{margin:0;padding-left:1.1rem}
     .about-list li+li{margin-top:.55rem}
-    .profile-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem 1.2rem;align-items:start}
-    .about-project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem 1.2rem}
+    .profile-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.25rem;align-items:start}
+    .about-project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem 1.25rem}
     .about-project{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);border-top:none;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
     .about-project h3{margin-bottom:.25rem;font-size:1.08rem}
     .about-project p{margin:0}
@@ -43,7 +43,10 @@ footer_content: >-
     .photo-card:after{display:none}
     .identity-card{border:none;box-shadow:none;background:transparent;padding:0}
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
-    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
+    .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
+    .about-actions > *{width:100%}
+    @media (max-width:1024px){.about-meta,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.4rem,6vw,3.6rem)}}
+    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid,.about-actions{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
   </style>
 
 <div class="about-page">
@@ -73,7 +76,7 @@ footer_content: >-
                 <dd>Seoul, Republic of Korea</dd>
               </div>
             </dl>
-            <div class="button-row">
+            <div class="button-row about-actions">
               <a class="btn-soft" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
               <a class="btn-soft" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
               <a class="btn-soft" href="https://github.com/minun001" target="_blank" rel="noopener">GitHub</a>
