@@ -9,18 +9,13 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .publications-page{display:grid;gap:2rem}
   .pub-lead-copy{display:grid;gap:1rem}
   .pub-lead-visual{gap:1rem}
-  .pub-topic-atlas{position:relative;display:grid;gap:.55rem;padding:.95rem 1rem 1rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(245,249,253,.95) 100%);box-shadow:0 14px 28px rgba(15,23,42,.04);overflow:hidden}
-  .pub-topic-atlas:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,rgba(37,99,235,.84),rgba(8,145,178,.7))}
-  .pub-topic-atlas span{color:var(--text-soft);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-  .pub-topic-atlas svg{display:block;width:100%;height:auto}
-  .pub-topic-atlas .atlas-link{fill:none;stroke:rgba(37,99,235,.24);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 16;animation:pubAtlasFlow 18s linear infinite}
-  .pub-topic-atlas .atlas-link--soft{stroke:rgba(8,145,178,.24);stroke-dasharray:6 16}
-  .pub-topic-atlas .atlas-node{fill:#fff;stroke:#2563eb;stroke-width:2.2;filter:drop-shadow(0 0 12px rgba(37,99,235,.16));animation:pubAtlasPulse 4s ease-in-out infinite}
-  .pub-topic-atlas .atlas-node--soft{stroke:#0891b2;animation-delay:1.2s}
-  .pub-topic-atlas .atlas-node--late{animation-delay:2.1s}
-  .pub-topic-atlas text{fill:var(--text-title);font:800 15px/1.2 var(--font-body)}
   .pub-lead-collage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem}
-  .pub-lead-collage img{width:100%;aspect-ratio:1/1.06;object-fit:cover;border-radius:8px;box-shadow:var(--shadow-soft)}
+  .pub-lead-collage{position:relative;padding:.35rem .1rem .2rem}
+  .pub-lead-collage:before{content:"";position:absolute;inset:.25rem 0 0;border-radius:18px;background:radial-gradient(circle at 18% 18%,rgba(37,99,235,.08),transparent 32%),radial-gradient(circle at 82% 72%,rgba(8,145,178,.1),transparent 38%);filter:blur(6px)}
+  .pub-lead-collage img{position:relative;width:100%;aspect-ratio:1/1.06;object-fit:cover;border-radius:14px;box-shadow:var(--shadow-soft);transition:transform .28s ease,box-shadow .28s ease}
+  .pub-lead-collage img:nth-child(1){transform:translateY(12px) rotate(-3deg);animation:pubCollageDriftA 14s ease-in-out infinite}
+  .pub-lead-collage img:nth-child(2){z-index:1;transform:translateY(0) rotate(1deg);animation:pubCollageDriftB 16s ease-in-out infinite}
+  .pub-lead-collage img:nth-child(3){transform:translateY(16px) rotate(3deg);animation:pubCollageDriftC 15s ease-in-out infinite}
   .pub-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;align-items:stretch;padding:.3rem 0 .55rem}
   .pub-summary-item{position:relative;display:grid;gap:.72rem;align-content:start;min-width:0;min-height:164px;padding:1rem 1rem 1.05rem;border:1px solid rgba(17,32,51,.08);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(247,250,252,.96) 100%);box-shadow:0 14px 28px rgba(15,23,42,.04);overflow:hidden}
   .pub-summary-item:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,rgba(29,78,216,.84),rgba(16,185,129,.72))}
@@ -113,11 +108,12 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .page-lead{animation:riseIn .6s ease both}
   .pub-summary{animation:riseIn .8s ease both}
   .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-  @keyframes pubAtlasFlow{from{stroke-dashoffset:0}to{stroke-dashoffset:-180}}
-  @keyframes pubAtlasPulse{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.16);opacity:1}}
-  @media (prefers-reduced-motion: reduce){.pub-topic-atlas .atlas-link,.pub-topic-atlas .atlas-node{animation:none}}
+  @keyframes pubCollageDriftA{0%,100%{transform:translateY(12px) rotate(-3deg)}50%{transform:translateY(6px) rotate(-1.8deg)}}
+  @keyframes pubCollageDriftB{0%,100%{transform:translateY(0) rotate(1deg)}50%{transform:translateY(-6px) rotate(2.2deg)}}
+  @keyframes pubCollageDriftC{0%,100%{transform:translateY(16px) rotate(3deg)}50%{transform:translateY(10px) rotate(1.8deg)}}
+  @media (prefers-reduced-motion: reduce){.pub-lead-collage img{animation:none;transform:none}}
   @media (max-width:980px){.pub-item{grid-template-columns:1fr}.pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.7rem}.pub-marker{min-height:auto;padding-left:0;border-left:none;padding-top:.1rem}.pub-tools{grid-template-columns:1fr}.pub-scholar-panel--overview{width:100%;grid-template-columns:1fr}.pub-scholar-panel--overview .pub-scholar-stats{grid-column:1;grid-row:auto;grid-template-columns:repeat(2,minmax(0,1fr))}.pub-scholar-panel--overview .pub-scholar-link{grid-column:1;width:100%;min-width:0}.pub-scholar-panel--overview .pub-scholar-note{grid-column:1;max-width:none;margin-top:0}}
-  @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-tools{padding:1rem}.pub-tool-meta{justify-content:flex-start}}
+  @media (max-width:760px){.pub-lead-collage,.pub-summary,.pub-scholar-stats{grid-template-columns:1fr}.pub-lead-collage img:nth-child(1),.pub-lead-collage img:nth-child(2),.pub-lead-collage img:nth-child(3){transform:none}.pub-tools{padding:1rem}.pub-tool-meta{justify-content:flex-start}}
 </style>
 
 {% assign publication_archive = site.data['google-scholar-publications'] %}
@@ -147,22 +143,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     <aside class="page-lead-side pub-lead-visual">
       <strong>Search and browse</strong>
       <p>Journal papers and conference records in one place.</p>
-      <div class="pub-topic-atlas" aria-hidden="true">
-        <span>Topic atlas</span>
-        <svg viewBox="0 0 360 220" role="presentation">
-          <path class="atlas-link" d="M84 116c36-34 71-57 111-69 43-13 85-14 130-1 28 8 54 19 78 34" />
-          <path class="atlas-link atlas-link--soft" d="M96 162c44-12 81-18 116-11 34 7 66 24 103 49" />
-          <path class="atlas-link atlas-link--soft" d="M170 66c15 27 32 48 56 66 24 19 52 31 92 43" />
-          <circle class="atlas-node" cx="76" cy="128" r="10" />
-          <circle class="atlas-node atlas-node--soft" cx="168" cy="68" r="11" />
-          <circle class="atlas-node atlas-node--late" cx="302" cy="94" r="11" />
-          <circle class="atlas-node atlas-node--soft" cx="250" cy="166" r="10" />
-          <text x="30" y="118">Mobility</text>
-          <text x="116" y="54">Energy</text>
-          <text x="282" y="82">Legal AI</text>
-          <text x="212" y="198">Safety AI</text>
-        </svg>
-      </div>
       <div class="pub-lead-collage" aria-hidden="true">
         <img src="/assets/img/SolarNexus_framework.png" alt="" loading="lazy">
         <img src="/assets/img/TRACM_LLM_framework.png" alt="" loading="lazy">
