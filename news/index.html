@@ -7,15 +7,15 @@ footer_content: >-
   Recent research updates.
 ---
 <style>
-    .news-page{display:grid;gap:1.7rem}
+    .news-page{display:grid;gap:1.95rem}
     .news-featured{counter-reset:featured}
-    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.35rem;padding:1.5rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);animation:riseIn .8s ease both}
-    .news-featured article{position:relative;display:grid;gap:.35rem;padding:1.25rem 1.2rem 0 0;border-right:1px solid var(--border-soft);counter-increment:featured}
+    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;padding:1.6rem 1.4rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(247,250,252,.92) 100%);box-shadow:0 14px 28px rgba(15,23,42,.04);animation:riseIn .8s ease both}
+    .news-featured article{position:relative;display:grid;gap:.35rem;padding:1.15rem 1.2rem 0 0;border-right:1px solid var(--border-soft);counter-increment:featured}
     .news-featured article:before{content:"0" counter(featured);position:absolute;top:0;right:1.2rem;font-family:var(--font-display);font-size:2.2rem;line-height:1;color:rgba(17,32,51,.08)}
     .news-featured article:last-child{padding-right:0;border-right:none}
     .news-featured h3{margin-bottom:.35rem;font-size:1.28rem}
     .news-featured p{margin:0}
-    .news-filter{display:flex;flex-wrap:wrap;gap:.65rem;padding:1.05rem 0 .95rem;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
+    .news-filter{display:flex;flex-wrap:wrap;gap:.65rem;padding:1.15rem 0 1rem;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
     .news-filter button{font-weight:800}
     .news-badge-burst{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:60}
     .news-badge-spark{position:absolute;left:0;top:0;width:var(--spark-size,6px);height:var(--spark-size,6px);margin-left:calc(var(--spark-size,6px) / -2);margin-top:calc(var(--spark-size,6px) / -2);border-radius:999px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),var(--spark-color,#fff067) 42%,rgba(255,255,255,0) 76%);box-shadow:0 0 10px var(--spark-color,#fff067);transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.45);opacity:0;animation:newsBadgeSparkBurst .74s cubic-bezier(.16,.84,.28,1) forwards}
@@ -24,19 +24,22 @@ footer_content: >-
       20%{opacity:1}
       100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(calc(var(--spark-rotate,0deg) + 32deg)) scale(1)}
     }
-    .news-jump{margin-top:-.2rem;padding-bottom:1.15rem;border-bottom:1px solid rgba(17,32,51,.08)}
+    .news-jump{margin-top:-.15rem;padding-bottom:1.3rem;border-bottom:1px solid rgba(17,32,51,.08)}
     .news-year{display:grid;grid-template-columns:120px minmax(0,1fr);gap:1.6rem;align-items:start;scroll-margin-top:var(--section-anchor-offset)}
     .news-year + .news-year{padding-top:1.15rem;border-top:1px solid rgba(17,32,51,.08)}
     .news-year-head{position:sticky;top:calc(var(--page-index-offset) + .7rem);padding-top:.55rem}
     .news-year-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .news-year-head h2{margin-top:.2rem;font-size:2.35rem}
-    .news-timeline{position:relative;display:grid;gap:1rem;padding-left:1.35rem}
+    .news-timeline{position:relative;display:grid;gap:1.15rem;padding-left:1.35rem}
     .news-timeline:before{content:"";position:absolute;left:.38rem;top:.35rem;bottom:.35rem;width:1px;background:linear-gradient(180deg,rgba(29,78,216,.35),rgba(15,118,110,.12))}
     .timeline-item{position:relative}
     .timeline-item:after{content:"";position:absolute;left:-1.28rem;top:1.45rem;width:.72rem;height:.72rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 6px rgba(29,78,216,.08)}
+    .news-page .timeline-item{border:none;border-radius:0;background:transparent;box-shadow:none;border-top:1px solid rgba(17,32,51,.08);border-inline:none;border-bottom:none;padding:1.35rem 0 0}
+    .news-page .timeline-item:first-child{padding-top:0;border-top:none}
+    .news-page .timeline-item:hover{transform:none;box-shadow:none;border-color:rgba(17,32,51,.08)}
     .news-meta-row{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;margin-bottom:.7rem}
     .news-date{color:var(--text-soft);font-size:.92rem}
-    .news-badge{position:relative;display:inline-flex;align-items:center;min-height:28px;padding:.3rem .62rem;border-radius:8px;color:var(--text-title);font-size:.78rem;font-weight:800;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+    .news-badge{position:relative;display:inline-flex;align-items:center;min-height:28px;padding:.3rem .62rem;border-radius:999px;color:var(--text-title);font-size:.78rem;font-weight:800;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
     .news-badge:hover,.news-badge:focus-visible{transform:translateY(-1px) scale(1.03);filter:saturate(1.08) brightness(1.03)}
     .news-badge.conference{background:rgba(29,78,216,.08)}
     .news-badge.journal{background:rgba(16,185,129,.1)}
@@ -44,7 +47,7 @@ footer_content: >-
     .news-badge.project{background:rgba(148,163,184,.14)}
     .page-lead{animation:riseIn .6s ease both}
     .news-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-    @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr))}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
+    @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr));padding:1.3rem}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
     @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
   </style>
 
