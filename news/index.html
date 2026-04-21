@@ -8,6 +8,17 @@ footer_content: >-
 ---
 <style>
     .news-page{display:grid;gap:1.95rem}
+    .news-ribbon{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.9rem;padding:1rem 1rem 1.05rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(247,250,252,.95) 100%);box-shadow:0 14px 28px rgba(15,23,42,.04);overflow:hidden;animation:riseIn .72s ease both}
+    .news-ribbon:before{content:"";position:absolute;left:8%;right:8%;top:1.45rem;height:2px;background:linear-gradient(90deg,rgba(29,78,216,.18),rgba(15,118,110,.34),rgba(29,78,216,.18))}
+    .news-ribbon:after{content:"";position:absolute;left:-18%;top:1.22rem;width:26%;height:10px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(133,198,255,.58),rgba(255,255,255,0));filter:blur(1px);animation:newsRibbonSweep 9s ease-in-out infinite}
+    .news-ribbon-year{position:relative;display:grid;gap:.3rem;padding-top:1.35rem;text-align:center}
+    .news-ribbon-year:before{content:"";position:absolute;left:50%;top:1.1rem;width:.78rem;height:.78rem;margin-left:-.39rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 6px rgba(29,78,216,.08);animation:newsRibbonPulse 4s ease-in-out infinite}
+    .news-ribbon-year span{color:var(--text-soft);font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .news-ribbon-year strong{color:var(--text-title);font-size:.9rem;line-height:1.25}
+    .news-ribbon-year:nth-child(2):before{animation-delay:.6s}
+    .news-ribbon-year:nth-child(3):before{animation-delay:1.2s}
+    .news-ribbon-year:nth-child(4):before{animation-delay:1.8s}
+    .news-ribbon-year:nth-child(5):before{animation-delay:2.4s}
     .news-featured{counter-reset:featured}
     .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;padding:1.6rem 1.4rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(247,250,252,.92) 100%);box-shadow:0 14px 28px rgba(15,23,42,.04);animation:riseIn .8s ease both}
     .news-featured article{position:relative;display:grid;gap:.35rem;padding:1.15rem 1.2rem 0 0;border-right:1px solid var(--border-soft);counter-increment:featured}
@@ -47,8 +58,11 @@ footer_content: >-
     .news-badge.project{background:rgba(148,163,184,.14)}
     .page-lead{animation:riseIn .6s ease both}
     .news-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-    @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr));padding:1.3rem}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
-    @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
+    @keyframes newsRibbonSweep{0%,100%{transform:translateX(0);opacity:.1}45%{opacity:.95}50%{transform:translateX(410%);opacity:.88}}
+    @keyframes newsRibbonPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+    @media (prefers-reduced-motion: reduce){.news-ribbon:after,.news-ribbon-year:before{animation:none}}
+    @media (max-width:980px){.news-ribbon{grid-template-columns:repeat(3,minmax(0,1fr))}.news-featured{grid-template-columns:repeat(2,minmax(0,1fr));padding:1.3rem}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
+    @media (max-width:720px){.news-ribbon{grid-template-columns:repeat(2,minmax(0,1fr))}.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}}
   </style>
 
 <div class="news-page" data-news-root>
@@ -56,6 +70,29 @@ footer_content: >-
           <div class="page-lead-copy">
             <h1>News</h1>
             <p>Publications, projects, awards, and conference activity.</p>
+          </div>
+        </section>
+
+        <section class="news-ribbon" aria-hidden="true">
+          <div class="news-ribbon-year">
+            <span>2021</span>
+            <strong>First recognition</strong>
+          </div>
+          <div class="news-ribbon-year">
+            <span>2023</span>
+            <strong>Research momentum</strong>
+          </div>
+          <div class="news-ribbon-year">
+            <span>2024</span>
+            <strong>Conference and awards</strong>
+          </div>
+          <div class="news-ribbon-year">
+            <span>2025</span>
+            <strong>Journal expansion</strong>
+          </div>
+          <div class="news-ribbon-year">
+            <span>2026</span>
+            <strong>International presentations</strong>
           </div>
         </section>
 

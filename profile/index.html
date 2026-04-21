@@ -10,6 +10,21 @@ footer_content: >-
     .about-page{display:grid;gap:1.8rem}
     .about-name{text-wrap:balance}
     .about-hero-copy{display:grid;gap:1.2rem;padding-top:.35rem;animation:riseIn .7s ease both}
+    .about-research-map{position:relative;display:grid;gap:.8rem;padding:1rem 1.05rem 1rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(247,250,252,.94) 100%);box-shadow:0 14px 28px rgba(15,23,42,.045);overflow:hidden}
+    .about-research-map:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,rgba(185,28,28,.84),rgba(15,118,110,.6))}
+    .about-research-map-head{display:grid;gap:.18rem}
+    .about-research-map-head span{color:var(--text-soft);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .about-research-map-head p{margin:0;color:var(--text-body);font-size:.92rem}
+    .about-research-map-visual{position:relative;min-height:180px;border-radius:14px;background:radial-gradient(circle at 22% 28%,rgba(185,28,28,.08),transparent 32%),radial-gradient(circle at 78% 34%,rgba(15,118,110,.1),transparent 34%),linear-gradient(180deg,rgba(255,255,255,.66) 0%,rgba(243,247,251,.92) 100%);overflow:hidden}
+    .about-research-map-visual svg{position:absolute;inset:0;width:100%;height:100%}
+    .about-research-map .orbit-line{fill:none;stroke:rgba(17,32,51,.18);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 16;animation:aboutOrbitFlow 18s linear infinite}
+    .about-research-map .orbit-line--accent{stroke:rgba(15,118,110,.28);stroke-dasharray:6 14}
+    .about-research-map .orbit-core{fill:url(#aboutOrbitCore);filter:drop-shadow(0 0 18px rgba(185,28,28,.16))}
+    .about-research-map .orbit-node{fill:#fff;stroke:var(--accent);stroke-width:2.6;filter:drop-shadow(0 0 12px rgba(185,28,28,.18));animation:aboutOrbitPulse 3.8s ease-in-out infinite}
+    .about-research-map .orbit-node--soft{stroke:var(--accent-2);animation-delay:1.15s}
+    .about-research-map .orbit-node--late{animation-delay:2.1s}
+    .about-research-map-legend{display:flex;flex-wrap:wrap;gap:.55rem}
+    .about-research-map-legend span{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:.42rem .72rem;border-radius:999px;background:rgba(255,255,255,.82);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:var(--text-title);font-size:.82rem;font-weight:800;line-height:1.2}
     .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.1rem;margin-top:.3rem}
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -45,6 +60,9 @@ footer_content: >-
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
     .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
     .about-actions > *{width:100%}
+    @keyframes aboutOrbitFlow{from{stroke-dashoffset:0}to{stroke-dashoffset:-180}}
+    @keyframes aboutOrbitPulse{0%,100%{transform:scale(1);opacity:.92}50%{transform:scale(1.16);opacity:1}}
+    @media (prefers-reduced-motion: reduce){.about-research-map .orbit-line,.about-research-map .orbit-node{animation:none}}
     @media (max-width:1024px){.about-meta,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.4rem,6vw,3.6rem)}}
     @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid,.about-actions{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
   </style>
@@ -59,6 +77,39 @@ footer_content: >-
               <h1 class="about-name">Hyunsik Min</h1>
               <p class="hero-intro">I work on trustworthy AI for mobility, energy forecasting, and practical decision support.</p>
               <p class="hero-intro">My recent work spans trajectory prediction, photovoltaic forecasting, legal AI, and foundation-model systems for interpretable decision support.</p>
+            </div>
+            <div class="about-research-map">
+              <div class="about-research-map-head">
+                <span>Research map</span>
+                <p>One connected research line across reasoning, autonomy, and forecasting.</p>
+              </div>
+              <div class="about-research-map-visual" aria-hidden="true">
+                <svg viewBox="0 0 640 220" role="presentation">
+                  <defs>
+                    <radialGradient id="aboutOrbitCore" cx="50%" cy="50%" r="58%">
+                      <stop offset="0%" stop-color="#ffffff" stop-opacity=".98" />
+                      <stop offset="65%" stop-color="#f7d7d9" stop-opacity=".86" />
+                      <stop offset="100%" stop-color="#f0c2c8" stop-opacity=".38" />
+                    </radialGradient>
+                  </defs>
+                  <path class="orbit-line" d="M84 168c48-40 95-72 151-87 65-17 123-8 178 20 55 28 109 58 188 64" />
+                  <path class="orbit-line orbit-line--accent" d="M122 70c56 28 98 72 160 96 56 22 113 26 173 11 43-10 81-29 124-55" />
+                  <path class="orbit-line orbit-line--accent" d="M232 184c40-50 72-101 126-128 48-23 103-27 174-11" />
+                  <circle class="orbit-core" cx="318" cy="108" r="28" />
+                  <circle class="orbit-node" cx="178" cy="88" r="10" />
+                  <circle class="orbit-node orbit-node--soft" cx="486" cy="78" r="11" />
+                  <circle class="orbit-node orbit-node--late" cx="520" cy="150" r="10" />
+                  <circle class="orbit-node orbit-node--soft" cx="152" cy="164" r="9" />
+                  <circle class="orbit-node orbit-node--late" cx="404" cy="168" r="9" />
+                </svg>
+              </div>
+              <div class="about-research-map-legend">
+                <span>Foundation Models</span>
+                <span>VLA</span>
+                <span>Autonomous Driving</span>
+                <span>Generative AI</span>
+                <span>Time Series Forecasting</span>
+              </div>
             </div>
             <dl class="about-meta">
               <div>
