@@ -1,7 +1,0 @@
-<svg width="840" height="560" viewBox="0 0 840 560" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="840" height="560" rx="28" fill="url(#bg)"/>
-  <rect x="160" y="118" width="364" height="254" rx="24" fill="#F8FAFC"/><rect x="210" y="164" width="364" height="254" rx="24" fill="#E0F2FE"/><rect x="260" y="210" width="364" height="254" rx="24" fill="#DBEAFE"/><rect x="306" y="252" width="364" height="254" rx="24" fill="white"/>
-  <rect x="348" y="296" width="182" height="18" rx="9" fill="#1D4ED8"/><rect x="348" y="336" width="248" height="14" rx="7" fill="#BFDBFE"/><rect x="348" y="368" width="220" height="14" rx="7" fill="#BFDBFE"/><rect x="348" y="400" width="196" height="14" rx="7" fill="#BFDBFE"/>
-  <circle cx="166" cy="418" r="56" fill="#0F172A"/><text x="132" y="426" fill="#EFF6FF" font-family="Manrope, Segoe UI, sans-serif" font-size="22" font-weight="800">PDF</text>
-  <defs><linearGradient id="bg" x1="48" y1="44" x2="740" y2="518" gradientUnits="userSpaceOnUse"><stop stop-color="#082F49"/><stop offset="1" stop-color="#0F172A"/></linearGradient></defs>
-</svg>

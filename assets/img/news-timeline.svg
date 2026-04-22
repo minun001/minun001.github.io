@@ -1,8 +1,0 @@
-<svg width="840" height="560" viewBox="0 0 840 560" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="840" height="560" rx="28" fill="url(#bg)"/>
-  <path d="M222 110V448" stroke="#86EFAC" stroke-width="8" stroke-linecap="round"/>
-  <circle cx="222" cy="158" r="22" fill="#F8FAFC"/><circle cx="222" cy="278" r="22" fill="#BBF7D0"/><circle cx="222" cy="398" r="22" fill="#DCFCE7"/>
-  <rect x="286" y="122" width="360" height="70" rx="20" fill="#FFFFFF" fill-opacity="0.9"/><rect x="286" y="242" width="320" height="70" rx="20" fill="#FFFFFF" fill-opacity="0.82"/><rect x="286" y="362" width="280" height="70" rx="20" fill="#FFFFFF" fill-opacity="0.74"/>
-  <text x="322" y="164" fill="#0F172A" font-family="Manrope, Segoe UI, sans-serif" font-size="20" font-weight="800">Papers Accepted</text><text x="322" y="284" fill="#0F172A" font-family="Manrope, Segoe UI, sans-serif" font-size="20" font-weight="800">Research Programs</text><text x="322" y="404" fill="#0F172A" font-family="Manrope, Segoe UI, sans-serif" font-size="20" font-weight="800">Awards &amp; Milestones</text>
-  <defs><linearGradient id="bg" x1="44" y1="40" x2="744" y2="520" gradientUnits="userSpaceOnUse"><stop stop-color="#052E16"/><stop offset="1" stop-color="#14532D"/></linearGradient></defs>
-</svg>

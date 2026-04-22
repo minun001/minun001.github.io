@@ -6,8 +6,8 @@ on:
       - ".github/workflows/update-scholar-metrics.yml"
       - "tools/update_scholar_metrics.py"
       - "tools/scholar_publication_overrides.json"
-      - "assets/data/google-scholar-metrics.json"
-      - "assets/data/google-scholar-publications.json"
+      - "_data/google-scholar-metrics.json"
+      - "_data/google-scholar-publications.json"
   workflow_dispatch:
   schedule:
     - cron: "15 15 * * *"
@@ -42,6 +42,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/data/google-scholar-metrics.json assets/data/google-scholar-publications.json
+          git add _data/google-scholar-metrics.json _data/google-scholar-publications.json
           git commit -m "Update Google Scholar data"
           git push
