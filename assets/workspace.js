@@ -28,6 +28,15 @@
     return Boolean(config && config.supabaseUrl && config.supabaseAnonKey);
   }
 
+  var workspaceState = {
+    notesItems: [],
+    linksItems: [],
+    analyticsSummary: null,
+    selectedNoteId: null,
+    selectedLinkId: null,
+    selectedSignalKey: null
+  };
+
   function byId(id) {
     return document.getElementById(id);
   }
@@ -176,73 +185,139 @@
     }).join('');
   }
 
-  function renderNotes(items) {
+  function toSelectionId(value) {
+    return String(value == null ? '' : value);
+  }
+
+  function truncateText(value, maxLength) {
+    var text = String(value || '').replace(/\s+/g, ' ').trim();
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.slice(0, Math.max(0, maxLength - 1)).trimEnd() + '…';
+  }
+
+  function formatRichText(value) {
+    var text = String(value || '').trim();
+    if (!text) return '<p>No details yet.</p>';
+    return text
+      .split(/\n{2,}/)
+      .map(function (paragraph) {
+        return '<p>' + escapeHtml(paragraph).replace(/\n/g, '<br>') + '</p>';
+      })
+      .join('');
+  }
+
+  function revealSectionDetail(detailId) {
+    if (!window.matchMedia || !window.matchMedia('(max-width: 900px)').matches) return;
+    window.requestAnimationFrame(function () {
+      var node = byId(detailId);
+      if (node && typeof node.scrollIntoView === 'function') {
+        node.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  }
+
+  function renderNotes(items, selectedId) {
     var safeItems = Array.isArray(items) ? items : [];
     if (!safeItems.length) {
       return '<div class="workspace-empty">No research log yet.</div>';
     }
 
-    var featured = safeItems.length && safeItems[0].pinned ? safeItems[0] : null;
-    var recentItems = featured ? safeItems.slice(1) : safeItems;
-    var parts = [];
+    var activeId = String(selectedId || '');
+    var activeItem = safeItems.find(function (item) {
+      return toSelectionId(item.id) === activeId;
+    }) || null;
 
-    if (featured) {
-      parts.push(
-        '<article class="workspace-note-card workspace-note-card--featured">' +
-          '<div class="workspace-note-card-head">' +
-            '<div>' +
-              '<h4>' + escapeHtml(featured.title || 'Untitled note') + '</h4>' +
-            '</div>' +
-            '<span class="workspace-note-badge">Pinned</span>' +
-          '</div>' +
-          '<p>' + escapeHtml(featured.body || '') + '</p>' +
-          '<div class="workspace-note-meta">Updated ' + escapeHtml(formatDate(featured.updated_at) || 'recently') + '</div>' +
-        '</article>'
-      );
-    }
-
-    if (recentItems.length) {
-      parts.push(
-        '<div class="workspace-note-list">' +
-          recentItems.map(function (item) {
-            return (
-              '<article class="workspace-note-card">' +
-                '<div class="workspace-note-card-head">' +
-                  '<div>' +
-                    '<h4>' + escapeHtml(item.title || 'Untitled note') + '</h4>' +
-                  '</div>' +
+    return (
+      '<div class="workspace-summary-grid">' +
+        safeItems.map(function (item, index) {
+          var itemId = toSelectionId(item.id);
+          var isActive = itemId === activeId;
+          var isPinnedFeatured = Boolean(item.pinned) && index === 0;
+          return (
+            '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + (isPinnedFeatured ? ' workspace-select-card--featured' : '') + '" data-workspace-note-trigger="' + escapeHtml(itemId) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-note-detail">' +
+              '<div class="workspace-select-card-head">' +
+                '<div>' +
+                  '<h4>' + escapeHtml(item.title || 'Untitled note') + '</h4>' +
                 '</div>' +
-                '<p>' + escapeHtml(item.body || '') + '</p>' +
-                '<div class="workspace-note-meta">Updated ' + escapeHtml(formatDate(item.updated_at) || 'recently') + '</div>' +
-              '</article>'
-            );
-          }).join('') +
-        '</div>'
-      );
-    }
-
-    return parts.join('');
+                (item.pinned ? '<span class="workspace-note-badge">Pinned</span>' : '<span class="workspace-card-microtag">Log</span>') +
+              '</div>' +
+              '<p class="workspace-select-card-copy">' + escapeHtml(truncateText(item.body, isPinnedFeatured ? 180 : 110)) + '</p>' +
+              '<div class="workspace-note-meta">Updated ' + escapeHtml(formatDate(item.updated_at) || 'recently') + '</div>' +
+            '</button>'
+          );
+        }).join('') +
+      '</div>' +
+      '<section class="workspace-detail-panel" id="workspace-note-detail" role="region" aria-labelledby="workspace-note-detail-title"' + (activeItem ? '' : ' hidden') + '>' +
+        (activeItem ? (
+          '<div class="workspace-detail-head">' +
+            '<div>' +
+              '<div class="eyebrow">Research Log</div>' +
+              '<h4 id="workspace-note-detail-title">' + escapeHtml(activeItem.title || 'Untitled note') + '</h4>' +
+            '</div>' +
+            '<button type="button" class="workspace-detail-close" data-workspace-note-close>Close</button>' +
+          '</div>' +
+          '<div class="workspace-detail-meta">' +
+            '<span>Updated ' + escapeHtml(formatDate(activeItem.updated_at) || 'recently') + '</span>' +
+            '<span>' + escapeHtml(activeItem.pinned ? 'Pinned note' : 'Research note') + '</span>' +
+          '</div>' +
+          '<div class="workspace-detail-copy">' + formatRichText(activeItem.body) + '</div>'
+        ) : '') +
+      '</section>'
+    );
   }
 
-  function renderLinks(items) {
+  function renderLinks(items, selectedId) {
     var safeItems = Array.isArray(items) ? items : [];
     if (!safeItems.length) {
       return '<div class="workspace-empty">No private library links yet.</div>';
     }
 
-    return safeItems.map(function (item) {
-      var label = String(item.tag || 'Open').trim() || 'Open';
-      return (
-        '<article class="workspace-link-card">' +
-          '<div class="workspace-link-card-head">' +
-            '<h4>' + escapeHtml(item.title || 'Resource') + '</h4>' +
-            '<span class="workspace-link-tag">' + escapeHtml(label) + '</span>' +
+    var activeId = String(selectedId || '');
+    var activeItem = safeItems.find(function (item) {
+      return toSelectionId(item.id) === activeId;
+    }) || null;
+
+    return (
+      '<div class="workspace-summary-grid">' +
+        safeItems.map(function (item) {
+          var itemId = toSelectionId(item.id);
+          var isActive = itemId === activeId;
+          var label = String(item.tag || 'Open').trim() || 'Open';
+          return (
+            '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-link-trigger="' + escapeHtml(itemId) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-link-detail">' +
+              '<div class="workspace-select-card-head">' +
+                '<div>' +
+                  '<h4>' + escapeHtml(item.title || 'Resource') + '</h4>' +
+                '</div>' +
+                '<span class="workspace-link-tag">' + escapeHtml(label) + '</span>' +
+              '</div>' +
+              '<p class="workspace-select-card-copy">' + escapeHtml(truncateText(item.description, 110)) + '</p>' +
+              '<div class="workspace-note-meta">' + escapeHtml(label) + '</div>' +
+            '</button>'
+          );
+        }).join('') +
+      '</div>' +
+      '<section class="workspace-detail-panel" id="workspace-link-detail" role="region" aria-labelledby="workspace-link-detail-title"' + (activeItem ? '' : ' hidden') + '>' +
+        (activeItem ? (
+          '<div class="workspace-detail-head">' +
+            '<div>' +
+              '<div class="eyebrow">Private Library</div>' +
+              '<h4 id="workspace-link-detail-title">' + escapeHtml(activeItem.title || 'Resource') + '</h4>' +
+            '</div>' +
+            '<button type="button" class="workspace-detail-close" data-workspace-link-close>Close</button>' +
           '</div>' +
-          '<p>' + escapeHtml(item.description || '') + '</p>' +
-          '<a class="workspace-link-action" href="' + escapeHtml(item.url || '#') + '" target="_blank" rel="noreferrer">' + escapeHtml(label) + '</a>' +
-        '</article>'
-      );
-    }).join('');
+          '<div class="workspace-detail-meta">' +
+            '<span>' + escapeHtml(String(activeItem.tag || 'Open').trim() || 'Open') + '</span>' +
+            '<span>External resource</span>' +
+          '</div>' +
+          '<div class="workspace-detail-copy">' + formatRichText(activeItem.description) + '</div>' +
+          '<div class="workspace-detail-actions">' +
+            '<a class="workspace-button" href="' + escapeHtml(activeItem.url || '#') + '" target="_blank" rel="noreferrer">' + escapeHtml(String(activeItem.tag || 'Open').trim() || 'Open') + '</a>' +
+          '</div>'
+        ) : '') +
+      '</section>'
+    );
   }
 
   function formatDate(value) {
@@ -386,13 +461,6 @@
       monthlySeries: buildMonthlySeries(launchDateKey, {}),
       topPages: defaultTopPages
     };
-  }
-
-  function renderAnalyticsEmpty(config) {
-    var emptyState = buildZeroAnalyticsState(config);
-    setHtml('workspace-analytics-summary', renderAnalyticsSummary(emptyState));
-    setHtml('workspace-analytics-days', renderAnalyticsDays(emptyState.monthlySeries, emptyState.launchDateKey));
-    setHtml('workspace-analytics-pages', renderAnalyticsPages(emptyState.topPages));
   }
 
   function aggregateVisitAnalytics(items, config) {
@@ -587,16 +655,267 @@
     );
   }
 
-  function renderVisitorAnalytics(items) {
-    if (!items.length) {
-      renderAnalyticsEmpty(getConfig());
-      return;
+  function renderSignalSparkline(items) {
+    var safeItems = Array.isArray(items) ? items.slice(-6) : [];
+    if (!safeItems.length) {
+      return '<div class="workspace-signal-empty">No trend data yet.</div>';
     }
 
-    var summary = aggregateVisitAnalytics(items, getConfig());
-    setHtml('workspace-analytics-summary', renderAnalyticsSummary(summary));
-    setHtml('workspace-analytics-days', renderAnalyticsDays(summary.monthlySeries, summary.launchDateKey));
-    setHtml('workspace-analytics-pages', renderAnalyticsPages(summary.topPages));
+    var width = 240;
+    var height = 110;
+    var left = 10;
+    var right = 230;
+    var top = 18;
+    var bottom = 92;
+    var maxVisitors = safeItems.reduce(function (maxValue, item) {
+      return Math.max(maxValue, Number(item.visitors || 0));
+    }, 0) || 1;
+    var step = safeItems.length > 1 ? (right - left) / (safeItems.length - 1) : 0;
+    var points = safeItems.map(function (item, index) {
+      var visitors = Number(item.visitors || 0);
+      var x = safeItems.length > 1 ? left + (step * index) : (width / 2);
+      var y = bottom - ((visitors / maxVisitors) * (bottom - top));
+      return {
+        x: Math.round(x * 10) / 10,
+        y: Math.round(y * 10) / 10,
+        visitors: visitors
+      };
+    });
+
+    return (
+      '<div class="workspace-signal-mini">' +
+        '<svg viewBox="0 0 ' + width + ' ' + height + '" preserveAspectRatio="none" aria-hidden="true">' +
+          '<polyline class="workspace-signal-mini-path" points="' + escapeHtml(points.map(function (point) { return point.x + ',' + point.y; }).join(' ')) + '"></polyline>' +
+          points.map(function (point) {
+            return '<circle class="workspace-signal-mini-dot" cx="' + escapeHtml(point.x) + '" cy="' + escapeHtml(point.y) + '" r="3"></circle>';
+          }).join('') +
+        '</svg>' +
+      '</div>'
+    );
+  }
+
+  function renderSignalPagesMini(items) {
+    var safeItems = Array.isArray(items) ? items.slice(0, 3) : [];
+    if (!safeItems.length) {
+      return '<div class="workspace-signal-empty">No page ranking yet.</div>';
+    }
+
+    var maxHits = safeItems.reduce(function (maxValue, item) {
+      return Math.max(maxValue, Number(item.hits || 0));
+    }, 0) || 1;
+
+    return (
+      '<div class="workspace-signal-mini-bars">' +
+        safeItems.map(function (item) {
+          var hits = Number(item.hits || 0);
+          var width = Math.max(10, Math.round((hits / maxHits) * 100));
+          return (
+            '<div class="workspace-signal-mini-bar">' +
+              '<div class="workspace-signal-mini-bar-head">' +
+                '<span>' + escapeHtml(getPathLabel(item.path)) + '</span>' +
+                '<strong>' + escapeHtml(String(hits)) + '</strong>' +
+              '</div>' +
+              '<div class="workspace-signal-mini-bar-track" aria-hidden="true">' +
+                '<div class="workspace-signal-mini-bar-fill" style="width:' + escapeHtml(width + '%') + '"></div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('') +
+      '</div>'
+    );
+  }
+
+  function renderSignalSummaryTiles(summary, selectedKey) {
+    var safeSummary = summary || buildZeroAnalyticsState(getConfig());
+    var activeKey = String(selectedKey || '');
+    var cards = [
+      {
+        key: 'snapshot',
+        title: 'Traffic Snapshot',
+        copy: 'Quick read on recent visitors and tracked public pages.',
+        body: (
+          '<div class="workspace-signal-stats">' +
+            [
+              { label: 'Today', value: safeSummary.todayVisitors },
+              { label: 'Last 30', value: safeSummary.last30Visitors },
+              { label: 'Since Launch', value: safeSummary.lifetimeVisitors },
+              { label: 'Tracked', value: safeSummary.trackedPages }
+            ].map(function (item) {
+              return (
+                '<div class="workspace-signal-stat">' +
+                  '<span>' + escapeHtml(item.label) + '</span>' +
+                  '<strong>' + escapeHtml(String(item.value)) + '</strong>' +
+                '</div>'
+              );
+            }).join('') +
+          '</div>'
+        )
+      },
+      {
+        key: 'trend',
+        title: 'Trend',
+        copy: 'Small visitor sparkline for the recent monthly trajectory.',
+        body: renderSignalSparkline(safeSummary.monthlySeries)
+      },
+      {
+        key: 'pages',
+        title: 'Top Pages',
+        copy: 'Quick ranking of the public pages drawing the most visits.',
+        body: renderSignalPagesMini(safeSummary.topPages)
+      }
+    ];
+
+    return (
+      '<div class="workspace-signal-grid">' +
+        cards.map(function (card) {
+          var isActive = card.key === activeKey;
+          return (
+            '<button type="button" class="workspace-signal-card' + (isActive ? ' is-active' : '') + '" data-workspace-signal-trigger="' + escapeHtml(card.key) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-signal-detail">' +
+              '<div class="workspace-signal-head">' +
+                '<div>' +
+                  '<h4>' + escapeHtml(card.title) + '</h4>' +
+                '</div>' +
+                '<span class="workspace-card-microtag">View</span>' +
+              '</div>' +
+              '<p class="workspace-signal-copy">' + escapeHtml(card.copy) + '</p>' +
+              card.body +
+            '</button>'
+          );
+        }).join('') +
+      '</div>'
+    );
+  }
+
+  function renderSignalDetail(summary, selectedKey) {
+    var safeSummary = summary || buildZeroAnalyticsState(getConfig());
+    var key = String(selectedKey || '');
+    if (!key) {
+      return '<section class="workspace-detail-panel" id="workspace-signal-detail" role="region" aria-labelledby="workspace-signal-detail-title" hidden></section>';
+    }
+
+    var title = 'Site Signals';
+    var description = '';
+    var body = '';
+
+    if (key === 'snapshot') {
+      title = 'Traffic Snapshot';
+      description = 'Expanded traffic overview across the current site footprint.';
+      body = renderAnalyticsSummary(safeSummary);
+    } else if (key === 'trend') {
+      title = 'Trend';
+      description = 'Monthly visitor trend since launch.';
+      body = renderAnalyticsDays(safeSummary.monthlySeries, safeSummary.launchDateKey);
+    } else {
+      title = 'Top Pages';
+      description = 'Page ranking based on recorded visits.';
+      body = renderAnalyticsPages(safeSummary.topPages);
+    }
+
+    return (
+      '<section class="workspace-detail-panel" id="workspace-signal-detail" role="region" aria-labelledby="workspace-signal-detail-title">' +
+        '<div class="workspace-detail-head">' +
+          '<div>' +
+            '<div class="eyebrow">Site Signals</div>' +
+            '<h4 id="workspace-signal-detail-title">' + escapeHtml(title) + '</h4>' +
+          '</div>' +
+          '<button type="button" class="workspace-detail-close" data-workspace-signal-close>Close</button>' +
+        '</div>' +
+        '<div class="workspace-detail-meta">' +
+          '<span>' + escapeHtml(description) + '</span>' +
+        '</div>' +
+        '<div class="workspace-detail-copy">' + body + '</div>' +
+      '</section>'
+    );
+  }
+
+  function renderSignals(summary, selectedKey) {
+    return renderSignalSummaryTiles(summary, selectedKey) + renderSignalDetail(summary, selectedKey);
+  }
+
+  function syncInteractiveSelections() {
+    if (!workspaceState.notesItems.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedNoteId || ''); })) {
+      workspaceState.selectedNoteId = null;
+    }
+    if (!workspaceState.linksItems.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedLinkId || ''); })) {
+      workspaceState.selectedLinkId = null;
+    }
+    if (['snapshot', 'trend', 'pages'].indexOf(String(workspaceState.selectedSignalKey || '')) === -1) {
+      workspaceState.selectedSignalKey = null;
+    }
+  }
+
+  function renderWorkspaceNotes() {
+    setHtml('workspace-notes', renderNotes(workspaceState.notesItems, workspaceState.selectedNoteId));
+  }
+
+  function renderWorkspaceLinks() {
+    setHtml('workspace-links', renderLinks(workspaceState.linksItems, workspaceState.selectedLinkId));
+  }
+
+  function renderWorkspaceSignals() {
+    setHtml('workspace-signals', renderSignals(workspaceState.analyticsSummary || buildZeroAnalyticsState(getConfig()), workspaceState.selectedSignalKey));
+  }
+
+  function bindInteractiveSections() {
+    var notesRoot = byId('workspace-notes');
+    if (notesRoot && !notesRoot.dataset.bound) {
+      notesRoot.dataset.bound = 'true';
+      notesRoot.addEventListener('click', function (event) {
+        var closeButton = event.target.closest('[data-workspace-note-close]');
+        if (closeButton) {
+          workspaceState.selectedNoteId = null;
+          renderWorkspaceNotes();
+          return;
+        }
+        var trigger = event.target.closest('[data-workspace-note-trigger]');
+        if (!trigger) return;
+        var noteId = String(trigger.getAttribute('data-workspace-note-trigger') || '');
+        var nextId = workspaceState.selectedNoteId === noteId ? null : noteId;
+        workspaceState.selectedNoteId = nextId;
+        renderWorkspaceNotes();
+        if (nextId) revealSectionDetail('workspace-note-detail');
+      });
+    }
+
+    var linksRoot = byId('workspace-links');
+    if (linksRoot && !linksRoot.dataset.bound) {
+      linksRoot.dataset.bound = 'true';
+      linksRoot.addEventListener('click', function (event) {
+        var closeButton = event.target.closest('[data-workspace-link-close]');
+        if (closeButton) {
+          workspaceState.selectedLinkId = null;
+          renderWorkspaceLinks();
+          return;
+        }
+        var trigger = event.target.closest('[data-workspace-link-trigger]');
+        if (!trigger) return;
+        var linkId = String(trigger.getAttribute('data-workspace-link-trigger') || '');
+        var nextId = workspaceState.selectedLinkId === linkId ? null : linkId;
+        workspaceState.selectedLinkId = nextId;
+        renderWorkspaceLinks();
+        if (nextId) revealSectionDetail('workspace-link-detail');
+      });
+    }
+
+    var signalsRoot = byId('workspace-signals');
+    if (signalsRoot && !signalsRoot.dataset.bound) {
+      signalsRoot.dataset.bound = 'true';
+      signalsRoot.addEventListener('click', function (event) {
+        var closeButton = event.target.closest('[data-workspace-signal-close]');
+        if (closeButton) {
+          workspaceState.selectedSignalKey = null;
+          renderWorkspaceSignals();
+          return;
+        }
+        var trigger = event.target.closest('[data-workspace-signal-trigger]');
+        if (!trigger) return;
+        var signalKey = String(trigger.getAttribute('data-workspace-signal-trigger') || '');
+        var nextKey = workspaceState.selectedSignalKey === signalKey ? null : signalKey;
+        workspaceState.selectedSignalKey = nextKey;
+        renderWorkspaceSignals();
+        if (nextKey) revealSectionDetail('workspace-signal-detail');
+      });
+    }
   }
 
   async function loadWorkspaceData(client, config) {
@@ -621,7 +940,7 @@
 
     var notesPromise = client
       .from(tables.notes || 'workspace_notes')
-      .select('title,body,pinned,sort_order,updated_at')
+      .select('id,title,body,pinned,sort_order,updated_at')
       .eq('is_active', true)
       .order('pinned', { ascending: false })
       .order('sort_order', { ascending: true })
@@ -630,7 +949,7 @@
 
     var linksPromise = client
       .from(tables.links || 'workspace_links')
-      .select('title,description,url,tag,sort_order')
+      .select('id,title,description,url,tag,sort_order')
       .eq('is_active', true)
       .order('sort_order', { ascending: true })
       .limit(limits.links || 6);
@@ -649,18 +968,15 @@
       return !/example\.com/.test(url);
     });
 
+    workspaceState.notesItems = notesItems;
+    workspaceState.linksItems = linksItems;
+    workspaceState.analyticsSummary = analyticsSummary;
+    syncInteractiveSelections();
+
     setHtml('workspace-metrics', renderMetricCards(metricsItems, analyticsSummary));
-    setHtml('workspace-notes', renderNotes(notesItems));
-    setHtml('workspace-links', renderLinks(linksItems));
-
-    if (visits.error) {
-      renderAnalyticsEmpty(config);
-      return;
-    }
-
-    setHtml('workspace-analytics-summary', renderAnalyticsSummary(analyticsSummary));
-    setHtml('workspace-analytics-days', renderAnalyticsDays(analyticsSummary.monthlySeries, analyticsSummary.launchDateKey));
-    setHtml('workspace-analytics-pages', renderAnalyticsPages(analyticsSummary.topPages));
+    renderWorkspaceNotes();
+    renderWorkspaceLinks();
+    renderWorkspaceSignals();
   }
 
   async function boot() {
@@ -691,6 +1007,7 @@
         autoRefreshToken: true
       }
     });
+    bindInteractiveSections();
     var pendingSignedOutMessage = '';
     var idleTimeoutMinutes = getIdleTimeoutMinutes(config);
     var idleTimerId = null;
