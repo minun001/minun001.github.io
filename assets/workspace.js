@@ -31,9 +31,11 @@
   var workspaceState = {
     notesItems: [],
     linksItems: [],
+    opsTargets: [],
     analyticsSummary: null,
     selectedNoteId: null,
     selectedLinkId: null,
+    selectedOpsId: null,
     selectedSignalKey: null
   };
 
@@ -193,7 +195,7 @@
     var text = String(value || '').replace(/\s+/g, ' ').trim();
     if (!text) return '';
     if (text.length <= maxLength) return text;
-    return text.slice(0, Math.max(0, maxLength - 1)).trimEnd() + '…';
+    return text.slice(0, Math.max(0, maxLength - 3)).trimEnd() + '...';
   }
 
   function formatRichText(value) {
@@ -320,6 +322,97 @@
     );
   }
 
+  function getOpsBadge(item) {
+    return String((item && item.id) || '') === 'shared-shell-deploy' ? 'Deploy' : 'Edit Target';
+  }
+
+  function renderOps(items, selectedId) {
+    var safeItems = Array.isArray(items) ? items : [];
+    if (!safeItems.length) {
+      return '<div class="workspace-empty">No website ops targets yet.</div>';
+    }
+
+    var activeId = String(selectedId || '');
+    var activeItem = safeItems.find(function (item) {
+      return toSelectionId(item.id) === activeId;
+    }) || null;
+
+    return (
+      '<div class="workspace-summary-grid">' +
+        safeItems.map(function (item) {
+          var itemId = toSelectionId(item.id);
+          var isActive = itemId === activeId;
+          var badge = getOpsBadge(item);
+          var pathCount = item.repoPaths.length;
+          return (
+            '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-op-trigger="' + escapeHtml(itemId) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-op-detail">' +
+              '<div class="workspace-select-card-head">' +
+                '<div>' +
+                  '<h4>' + escapeHtml(item.title || 'Website Ops') + '</h4>' +
+                '</div>' +
+                '<span class="workspace-card-microtag">' + escapeHtml(badge) + '</span>' +
+              '</div>' +
+              '<p class="workspace-select-card-copy">' + escapeHtml(item.summary || 'Frequent website maintenance target.') + '</p>' +
+              '<div class="workspace-note-meta">' + escapeHtml(String(pathCount) + ' edit surface' + (pathCount === 1 ? '' : 's')) + '</div>' +
+            '</button>'
+          );
+        }).join('') +
+      '</div>' +
+      '<section class="workspace-detail-panel" id="workspace-op-detail" role="region" aria-labelledby="workspace-op-detail-title"' + (activeItem ? '' : ' hidden') + '>' +
+        (activeItem ? (
+          '<div class="workspace-detail-head">' +
+            '<div>' +
+              '<div class="eyebrow">Website Ops</div>' +
+              '<h4 id="workspace-op-detail-title">' + escapeHtml(activeItem.title || 'Website Ops') + '</h4>' +
+            '</div>' +
+            '<button type="button" class="workspace-detail-close" data-workspace-op-close>Close</button>' +
+          '</div>' +
+          '<div class="workspace-detail-meta">' +
+            '<span>' + escapeHtml(getOpsBadge(activeItem)) + '</span>' +
+            (activeItem.previewPath ? '<span>' + escapeHtml('Preview ' + activeItem.previewPath) + '</span>' : '') +
+          '</div>' +
+          '<div class="workspace-detail-copy">' +
+            '<div class="workspace-detail-block">' +
+              '<h5>Why this area matters</h5>' +
+              '<p>' + escapeHtml(activeItem.summary || 'Frequent website maintenance area.') + '</p>' +
+            '</div>' +
+            '<div class="workspace-detail-block">' +
+              '<h5>Frequent edit points</h5>' +
+              '<ul class="workspace-detail-list">' +
+                activeItem.commonTasks.map(function (task) {
+                  return '<li>' + escapeHtml(task) + '</li>';
+                }).join('') +
+              '</ul>' +
+            '</div>' +
+            '<div class="workspace-detail-block">' +
+              '<h5>Affected repo paths</h5>' +
+              '<ul class="workspace-detail-list">' +
+                activeItem.repoPaths.map(function (path) {
+                  return '<li><code>' + escapeHtml(path) + '</code></li>';
+                }).join('') +
+              '</ul>' +
+            '</div>' +
+            '<div class="workspace-detail-block">' +
+              '<h5>Verification checklist</h5>' +
+              '<ul class="workspace-detail-list">' +
+                activeItem.verifyChecklist.map(function (task) {
+                  return '<li>' + escapeHtml(task) + '</li>';
+                }).join('') +
+              '</ul>' +
+            '</div>' +
+          '</div>' +
+          (activeItem.previewPath ? (
+            '<div class="workspace-detail-actions">' +
+              '<a class="workspace-button secondary" href="' + escapeHtml(activeItem.previewPath) + '" target="_blank" rel="noreferrer">' +
+                escapeHtml(activeItem.id === 'shared-shell-deploy' ? 'Open production site' : 'Open live page') +
+              '</a>' +
+            '</div>'
+          ) : '')
+        ) : '') +
+      '</section>'
+    );
+  }
+
   function formatDate(value) {
     if (!value) return '';
     var date = new Date(value);
@@ -410,6 +503,32 @@
       { name: 'News', link: '/news/' },
       { name: String(((config && config.sectionName) || 'Dashboard')).trim() || 'Dashboard', link: '/workspace/' }
     ];
+  }
+
+  function getOpsTargets(config) {
+    var items = Array.isArray(config && config.opsTargets) ? config.opsTargets : [];
+    return items
+      .map(function (item) {
+        var previewPath = String((item && item.previewPath) || '').trim();
+        return {
+          id: String((item && item.id) || '').trim(),
+          title: String((item && item.title) || '').trim(),
+          summary: String((item && item.summary) || '').trim(),
+          previewPath: previewPath ? normalizePath(previewPath) : '',
+          repoPaths: Array.isArray(item && item.repoPaths) ? item.repoPaths.map(function (path) {
+            return String(path || '').trim();
+          }).filter(Boolean) : [],
+          commonTasks: Array.isArray(item && item.commonTasks) ? item.commonTasks.map(function (task) {
+            return String(task || '').trim();
+          }).filter(Boolean) : [],
+          verifyChecklist: Array.isArray(item && item.verifyChecklist) ? item.verifyChecklist.map(function (task) {
+            return String(task || '').trim();
+          }).filter(Boolean) : []
+        };
+      })
+      .filter(function (item) {
+        return Boolean(item.id && item.title);
+      });
   }
 
   function buildMonthlySeries(startDateKey, monthlyBuckets) {
@@ -839,6 +958,9 @@
     if (!workspaceState.linksItems.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedLinkId || ''); })) {
       workspaceState.selectedLinkId = null;
     }
+    if (!workspaceState.opsTargets.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedOpsId || ''); })) {
+      workspaceState.selectedOpsId = null;
+    }
     if (['snapshot', 'trend', 'pages'].indexOf(String(workspaceState.selectedSignalKey || '')) === -1) {
       workspaceState.selectedSignalKey = null;
     }
@@ -850,6 +972,10 @@
 
   function renderWorkspaceLinks() {
     setHtml('workspace-links', renderLinks(workspaceState.linksItems, workspaceState.selectedLinkId));
+  }
+
+  function renderWorkspaceOps() {
+    setHtml('workspace-ops', renderOps(workspaceState.opsTargets, workspaceState.selectedOpsId));
   }
 
   function renderWorkspaceSignals() {
@@ -894,6 +1020,26 @@
         workspaceState.selectedLinkId = nextId;
         renderWorkspaceLinks();
         if (nextId) revealSectionDetail('workspace-link-detail');
+      });
+    }
+
+    var opsRoot = byId('workspace-ops');
+    if (opsRoot && !opsRoot.dataset.bound) {
+      opsRoot.dataset.bound = 'true';
+      opsRoot.addEventListener('click', function (event) {
+        var closeButton = event.target.closest('[data-workspace-op-close]');
+        if (closeButton) {
+          workspaceState.selectedOpsId = null;
+          renderWorkspaceOps();
+          return;
+        }
+        var trigger = event.target.closest('[data-workspace-op-trigger]');
+        if (!trigger) return;
+        var opsId = String(trigger.getAttribute('data-workspace-op-trigger') || '');
+        var nextId = workspaceState.selectedOpsId === opsId ? null : opsId;
+        workspaceState.selectedOpsId = nextId;
+        renderWorkspaceOps();
+        if (nextId) revealSectionDetail('workspace-op-detail');
       });
     }
 
@@ -976,6 +1122,7 @@
     setHtml('workspace-metrics', renderMetricCards(metricsItems, analyticsSummary));
     renderWorkspaceNotes();
     renderWorkspaceLinks();
+    renderWorkspaceOps();
     renderWorkspaceSignals();
   }
 
@@ -1007,7 +1154,10 @@
         autoRefreshToken: true
       }
     });
+    workspaceState.opsTargets = getOpsTargets(config);
+    syncInteractiveSelections();
     bindInteractiveSections();
+    renderWorkspaceOps();
     var pendingSignedOutMessage = '';
     var idleTimeoutMinutes = getIdleTimeoutMinutes(config);
     var idleTimerId = null;
@@ -1103,6 +1253,7 @@
       setView('dashboard');
       setStatus('Workspace unlocked.', 'success');
       startIdleTracking();
+      renderWorkspaceOps();
       try {
         await loadWorkspaceData(client, config);
       } catch (error) {
@@ -1185,3 +1336,4 @@
     });
   });
 })();
+
