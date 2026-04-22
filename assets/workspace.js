@@ -176,6 +176,75 @@
     }).join('');
   }
 
+  function renderNotes(items) {
+    var safeItems = Array.isArray(items) ? items : [];
+    if (!safeItems.length) {
+      return '<div class="workspace-empty">No research log yet.</div>';
+    }
+
+    var featured = safeItems.length && safeItems[0].pinned ? safeItems[0] : null;
+    var recentItems = featured ? safeItems.slice(1) : safeItems;
+    var parts = [];
+
+    if (featured) {
+      parts.push(
+        '<article class="workspace-note-card workspace-note-card--featured">' +
+          '<div class="workspace-note-card-head">' +
+            '<div>' +
+              '<h4>' + escapeHtml(featured.title || 'Untitled note') + '</h4>' +
+            '</div>' +
+            '<span class="workspace-note-badge">Pinned</span>' +
+          '</div>' +
+          '<p>' + escapeHtml(featured.body || '') + '</p>' +
+          '<div class="workspace-note-meta">Updated ' + escapeHtml(formatDate(featured.updated_at) || 'recently') + '</div>' +
+        '</article>'
+      );
+    }
+
+    if (recentItems.length) {
+      parts.push(
+        '<div class="workspace-note-list">' +
+          recentItems.map(function (item) {
+            return (
+              '<article class="workspace-note-card">' +
+                '<div class="workspace-note-card-head">' +
+                  '<div>' +
+                    '<h4>' + escapeHtml(item.title || 'Untitled note') + '</h4>' +
+                  '</div>' +
+                '</div>' +
+                '<p>' + escapeHtml(item.body || '') + '</p>' +
+                '<div class="workspace-note-meta">Updated ' + escapeHtml(formatDate(item.updated_at) || 'recently') + '</div>' +
+              '</article>'
+            );
+          }).join('') +
+        '</div>'
+      );
+    }
+
+    return parts.join('');
+  }
+
+  function renderLinks(items) {
+    var safeItems = Array.isArray(items) ? items : [];
+    if (!safeItems.length) {
+      return '<div class="workspace-empty">No private library links yet.</div>';
+    }
+
+    return safeItems.map(function (item) {
+      var label = String(item.tag || 'Open').trim() || 'Open';
+      return (
+        '<article class="workspace-link-card">' +
+          '<div class="workspace-link-card-head">' +
+            '<h4>' + escapeHtml(item.title || 'Resource') + '</h4>' +
+            '<span class="workspace-link-tag">' + escapeHtml(label) + '</span>' +
+          '</div>' +
+          '<p>' + escapeHtml(item.description || '') + '</p>' +
+          '<a class="workspace-link-action" href="' + escapeHtml(item.url || '#') + '" target="_blank" rel="noreferrer">' + escapeHtml(label) + '</a>' +
+        '</article>'
+      );
+    }).join('');
+  }
+
   function formatDate(value) {
     if (!value) return '';
     var date = new Date(value);
@@ -550,14 +619,39 @@
       .order('visited_on', { ascending: false })
       .limit(5000);
 
-    var results = await Promise.all([metricsPromise, visitsPromise]);
+    var notesPromise = client
+      .from(tables.notes || 'workspace_notes')
+      .select('title,body,pinned,sort_order,updated_at')
+      .eq('is_active', true)
+      .order('pinned', { ascending: false })
+      .order('sort_order', { ascending: true })
+      .order('updated_at', { ascending: false })
+      .limit(limits.notes || 6);
+
+    var linksPromise = client
+      .from(tables.links || 'workspace_links')
+      .select('title,description,url,tag,sort_order')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .limit(limits.links || 6);
+
+    var results = await Promise.all([metricsPromise, visitsPromise, notesPromise, linksPromise]);
     var metrics = results[0];
     var visits = results[1];
+    var notes = results[2];
+    var links = results[3];
 
     var metricsItems = metrics.error ? [] : (metrics.data || []);
     var analyticsSummary = visits.error ? buildZeroAnalyticsState(config) : aggregateVisitAnalytics(visits.data || [], config);
+    var notesItems = notes.error ? [] : (notes.data || []);
+    var linksItems = links.error ? [] : (links.data || []).filter(function (item) {
+      var url = String((item && item.url) || '').trim().toLowerCase();
+      return !/example\.com/.test(url);
+    });
 
     setHtml('workspace-metrics', renderMetricCards(metricsItems, analyticsSummary));
+    setHtml('workspace-notes', renderNotes(notesItems));
+    setHtml('workspace-links', renderLinks(linksItems));
 
     if (visits.error) {
       renderAnalyticsEmpty(config);
@@ -580,7 +674,7 @@
     if (!hasSupabaseConfig(config)) {
       setShellMode('auth');
       setView('setup');
-      setStatus('Dashboard auth is not configured yet.', 'warn');
+      setStatus('Workspace auth is not configured yet.', 'warn');
       return;
     }
 
@@ -673,7 +767,7 @@
           setStatus(pendingSignedOutMessage, 'warn');
           pendingSignedOutMessage = '';
         } else {
-          setStatus('Sign in with your dashboard account.', 'neutral');
+          setStatus('Sign in with your workspace account.', 'neutral');
         }
         return;
       }
@@ -683,14 +777,14 @@
         setIdentity(user, config);
         setShellMode('auth');
         setView('unauthorized');
-        setStatus('This account is signed in but does not have master access.', 'error');
+        setStatus('This account is signed in but does not have workspace access.', 'error');
         return;
       }
 
       setIdentity(user, config);
       setShellMode('private');
       setView('dashboard');
-      setStatus('Master dashboard unlocked.', 'success');
+      setStatus('Workspace unlocked.', 'success');
       startIdleTracking();
       try {
         await loadWorkspaceData(client, config);
@@ -770,7 +864,7 @@
     boot().catch(function (error) {
       setShellMode('auth');
       setView('setup');
-      setStatus(error && error.message ? error.message : 'Dashboard failed to load.', 'error');
+      setStatus(error && error.message ? error.message : 'Workspace failed to load.', 'error');
     });
   });
 })();

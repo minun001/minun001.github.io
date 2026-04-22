@@ -42,7 +42,7 @@ nav:
     link: "/publications/"
   - name: "News"
     link: "/news/"
-  - name: "Dashboard"
+  - name: "Workspace"
     link: "/workspace/"
 
 exclude:

@@ -12,7 +12,7 @@ window.WORKSPACE_AUTH_CONFIG = {
     days: 14,
     launchDate: '2025-11-14'
   },
-  sectionName: 'Dashboard',
+  sectionName: 'Workspace',
   tables: {
     dashboard: 'workspace_dashboard_metrics',
     links: 'workspace_links',

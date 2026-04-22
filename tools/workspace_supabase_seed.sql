@@ -9,46 +9,59 @@ on conflict do nothing;
 insert into public.workspace_links (title, description, url, tag, sort_order)
 values
   (
-    'Private Drive',
-    'Working files, drafts, and supporting material.',
-    'https://example.com/private-drive',
+    'Research Drive',
+    'Drafts, slides, figures, and supporting working files.',
+    'https://drive.google.com/',
     'Open Drive',
     10
   ),
   (
-    'Research Board',
-    'Internal planning board for active projects.',
-    'https://example.com/research-board',
-    'Open Board',
+    'Reading Queue',
+    'Paper shortlist, writing prompts, and the next reading stack.',
+    'https://www.notion.so/',
+    'Open Queue',
     20
   ),
   (
-    'Lab Notes',
-    'Private dashboard for meeting notes and checkpoints.',
-    'https://example.com/lab-notes',
-    'Open Notes',
+    'Scholar Profile',
+    'Citation cross-checks and publication metadata reference.',
+    'https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en',
+    'Open Scholar',
     30
+  ),
+  (
+    'Research Board',
+    'Planning board for active tracks, milestones, and follow-ups.',
+    'https://trello.com/',
+    'Open Board',
+    40
   )
 on conflict do nothing;
 
 insert into public.workspace_notes (title, body, pinned, sort_order)
 values
   (
-    'This week',
-    'Finalize the dashboard auth connection, confirm master-only access, and replace placeholder links with real private URLs.',
+    'Current focus',
+    'Keep the private workspace aligned with active writing, short research notes, and the next set of publication follow-ups.',
     true,
     10
   ),
   (
-    'Publication follow-up',
-    'Prepare internal notes for the IEEE T-ITS line and gather material for the next presentation update.',
+    'Writing queue',
+    'Refresh manuscript notes for the mobility and energy lines, then consolidate the next revision checklist in one place.',
     false,
     20
   ),
   (
-    'Safety monitoring',
-    'Keep the latest experiment summary and deployment checklist in this private note area instead of the public site.',
+    'Research ops',
+    'Track slide updates, reading backlog, and small internal reminders here instead of scattering them across public pages.',
     false,
     30
+  ),
+  (
+    'Next review',
+    'Use this pinned workspace as the quick checkpoint before updating publications, news, or analytics-facing content.',
+    false,
+    40
   )
 on conflict do nothing;
