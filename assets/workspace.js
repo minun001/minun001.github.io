@@ -729,11 +729,29 @@
     }).join(' / ');
   }
 
+  function formatStorageValue(megabytes) {
+    var safeMegabytes = toFiniteNumber(megabytes, 0);
+    if (!safeMegabytes) return '0 GB';
+    if (safeMegabytes >= 1024 * 1024) {
+      return (safeMegabytes / (1024 * 1024)).toFixed(1) + ' TB';
+    }
+    if (safeMegabytes >= 1024) {
+      return (safeMegabytes / 1024).toFixed(1) + ' GB';
+    }
+    return Math.round(safeMegabytes) + ' MB';
+  }
+
   function formatMemoryPair(usedMb, totalMb) {
     var used = Math.round(toFiniteNumber(usedMb, 0));
     var total = Math.round(toFiniteNumber(totalMb, 0));
     if (!total) return 'No memory snapshot';
     return used + ' / ' + total + ' MB';
+  }
+
+  function formatStoragePairCompact(usedMb, totalMb) {
+    var total = toFiniteNumber(totalMb, 0);
+    if (!total) return 'No memory snapshot';
+    return formatStorageValue(usedMb) + ' / ' + formatStorageValue(totalMb);
   }
 
   function formatDiskDetail(item) {
@@ -770,24 +788,59 @@
     );
   }
 
+  function renderServerStatCard(label, value, subtitle, percent, toneOverride) {
+    var tone = toneOverride || getUsageTone(percent);
+    var width = tone === 'muted' ? 0 : clampPercent(percent);
+    return (
+      '<div class="workspace-server-stat-card">' +
+        '<span class="workspace-server-stat-label">' + escapeHtml(label) + '</span>' +
+        '<strong class="workspace-server-stat-value">' + escapeHtml(value) + '</strong>' +
+        '<span class="workspace-server-stat-subtitle">' + escapeHtml(subtitle) + '</span>' +
+        '<div class="workspace-server-stat-track" aria-hidden="true">' +
+          '<div class="workspace-server-stat-fill" data-tone="' + escapeHtml(tone) + '" style="width:' + escapeHtml(width + '%') + '"></div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function renderServerFactPill(label, value) {
+    return (
+      '<div class="workspace-server-fact-pill">' +
+        '<strong>' + escapeHtml(label) + '</strong>' +
+        '<span>' + escapeHtml(value) + '</span>' +
+      '</div>'
+    );
+  }
+
+  function getPrimaryGpuLabel(item) {
+    var firstDevice = safeArray(item && item.gpuPayload)[0] || null;
+    return (firstDevice && firstDevice.name) || 'No GPU';
+  }
+
   function renderServerDevices(item) {
     var devices = safeArray(item && item.gpuPayload);
     if (!devices.length) {
-      return '<p>No GPU for this server.</p>';
+      return '<div class="workspace-empty">No GPU for this server.</div>';
     }
 
     return (
       '<div class="workspace-server-device-list">' +
         devices.map(function (device, index) {
-          var memoryUsed = Math.round(toFiniteNumber(device && device.memory_used_mb, 0));
-          var memoryTotal = Math.round(toFiniteNumber(device && device.memory_total_mb, 0));
-          var utilization = formatPercent(device && device.utilization_percent, 0);
+          var utilizationPercent = toFiniteNumber(device && device.utilization_percent, 0);
+          var memoryUsedMb = toFiniteNumber(device && device.memory_used_mb, 0);
+          var memoryTotalMb = toFiniteNumber(device && device.memory_total_mb, 0);
+          var memoryPercent = memoryTotalMb ? (memoryUsedMb / memoryTotalMb) * 100 : 0;
           var temperature = device && device.temperature_c ? device.temperature_c + 'C' : 'Temp unavailable';
           return (
             '<div class="workspace-server-device">' +
-              '<strong>' + escapeHtml((device && device.name) || ('GPU ' + index)) + '</strong>' +
-              '<span>' + escapeHtml('Utilization ' + utilization + ' | Memory ' + memoryUsed + ' / ' + memoryTotal + ' MB') + '</span>' +
-              '<span>' + escapeHtml(temperature) + '</span>' +
+              '<div class="workspace-server-device-head">' +
+                '<strong>' + escapeHtml((device && device.name) || ('GPU ' + index)) + '</strong>' +
+                '<span class="workspace-server-chip">' + escapeHtml(temperature) + '</span>' +
+              '</div>' +
+              '<div class="workspace-server-device-meters">' +
+                renderServerMeter('Utilization', utilizationPercent, formatPercent(utilizationPercent, 0), null) +
+                renderServerMeter('Memory', memoryPercent, formatStoragePairCompact(memoryUsedMb, memoryTotalMb), memoryTotalMb ? null : 'muted') +
+              '</div>' +
             '</div>'
           );
         }).join('') +
@@ -906,41 +959,41 @@
           '</div>' +
           (activeItem.errorMessage ? '<div class="workspace-server-error">' + escapeHtml(activeItem.errorMessage) + '</div>' : '') +
           (!activeItem.generatedAt && !activeItem.errorMessage ? '<div class="workspace-empty">No server snapshot yet for this target.</div>' : '') +
-          (activeItem.generatedAt ? '<div class="workspace-server-detail-grid">' +
-            '<div class="workspace-detail-block">' +
-              '<h5>Overview</h5>' +
-              '<ul class="workspace-detail-list">' +
-                '<li>' + escapeHtml('Uptime: ' + (activeItem.uptime || 'Unavailable')) + '</li>' +
-                '<li>' + escapeHtml('Refresh age: ' + formatRelativeAge(activeItem.generatedAt)) + '</li>' +
-                '<li>' + escapeHtml('Disk: ' + formatDiskDetail(activeItem)) + '</li>' +
-              '</ul>' +
+          (activeItem.generatedAt ? '<div class="workspace-server-hero-grid">' +
+            renderServerStatCard('CPU', formatPercent(activeItem.cpuUsagePercent, 1), (activeItem.logicalCores || 0) + ' cores', activeItem.cpuUsagePercent, null) +
+            renderServerStatCard('Memory', formatPercent(activeItem.memoryUsagePercent, 1), formatStoragePairCompact(activeItem.memoryUsedMb, activeItem.memoryTotalMb), activeItem.memoryUsagePercent, null) +
+            renderServerStatCard('Disk', formatPercent(activeItem.diskPercent, 0), formatDiskDetail(activeItem), activeItem.diskPercent, null) +
+            renderServerStatCard('GPU', activeItem.gpuCount ? formatPercent(activeItem.gpuAvgUsagePercent, 0) : 'No GPU', activeItem.gpuCount ? (activeItem.gpuCount + (activeItem.gpuCount === 1 ? ' device' : ' devices')) : 'No device attached', activeItem.gpuCount ? activeItem.gpuAvgUsagePercent : 0, activeItem.gpuCount ? null : 'muted') +
+          '</div>' +
+          '<div class="workspace-server-fact-row">' +
+            renderServerFactPill('Uptime', activeItem.uptime || 'Unavailable') +
+            renderServerFactPill('Refresh', formatRelativeAge(activeItem.generatedAt)) +
+            renderServerFactPill('CPU', activeItem.cpuModel || 'CPU unavailable') +
+            renderServerFactPill('GPU', getPrimaryGpuLabel(activeItem)) +
+          '</div>' +
+          '<div class="workspace-server-detail-grid workspace-server-detail-grid--visual">' +
+            '<div class="workspace-detail-block workspace-server-detail-block">' +
+              '<h5>CPU Load</h5>' +
+              renderServerMeter('Usage', activeItem.cpuUsagePercent, formatPercent(activeItem.cpuUsagePercent, 1), null) +
+              '<div class="workspace-server-chip-row">' +
+                '<span class="workspace-server-chip">' + escapeHtml('Load ' + formatLoadAverage(activeItem.loadAverage)) + '</span>' +
+                '<span class="workspace-server-chip">' + escapeHtml((activeItem.logicalCores || 0) + ' cores') + '</span>' +
+              '</div>' +
             '</div>' +
-            '<div class="workspace-detail-block">' +
-              '<h5>CPU</h5>' +
-              '<ul class="workspace-detail-list">' +
-                '<li>' + escapeHtml('Usage: ' + formatPercent(activeItem.cpuUsagePercent, 1)) + '</li>' +
-                '<li>' + escapeHtml('Load average: ' + formatLoadAverage(activeItem.loadAverage)) + '</li>' +
-                '<li>' + escapeHtml('Cores: ' + (activeItem.logicalCores || 0)) + '</li>' +
-                '<li>' + escapeHtml(activeItem.cpuModel || 'CPU model unavailable') + '</li>' +
-              '</ul>' +
-            '</div>' +
-            '<div class="workspace-detail-block">' +
+            '<div class="workspace-detail-block workspace-server-detail-block">' +
               '<h5>Memory & Disk</h5>' +
-              '<ul class="workspace-detail-list">' +
-                '<li>' + escapeHtml('Memory: ' + formatMemoryPair(activeItem.memoryUsedMb, activeItem.memoryTotalMb)) + '</li>' +
-                '<li>' + escapeHtml('Memory usage: ' + formatPercent(activeItem.memoryUsagePercent, 1)) + '</li>' +
-                '<li>' + escapeHtml('Disk: ' + formatDiskDetail(activeItem)) + '</li>' +
-                '<li>' + escapeHtml('Disk usage: ' + formatPercent(activeItem.diskPercent, 0)) + '</li>' +
-              '</ul>' +
+              renderServerMeter('Memory', activeItem.memoryUsagePercent, formatStoragePairCompact(activeItem.memoryUsedMb, activeItem.memoryTotalMb), null) +
+              renderServerMeter('Disk', activeItem.diskPercent, formatDiskDetail(activeItem), null) +
             '</div>' +
-            '<div class="workspace-detail-block">' +
+            '<div class="workspace-detail-block workspace-server-detail-block">' +
               '<h5>GPU</h5>' +
-              '<ul class="workspace-detail-list">' +
-                '<li>' + escapeHtml(activeItem.gpuCount ? ('Devices: ' + activeItem.gpuCount) : 'Devices: No GPU') + '</li>' +
-                '<li>' + escapeHtml(activeItem.gpuCount ? ('Average usage: ' + formatPercent(activeItem.gpuAvgUsagePercent, 0)) : 'Average usage: No GPU') + '</li>' +
-              '</ul>' +
+              (activeItem.gpuCount ? renderServerMeter('Average', activeItem.gpuAvgUsagePercent, formatPercent(activeItem.gpuAvgUsagePercent, 0), null) : '<div class="workspace-empty">No GPU for this server.</div>') +
+              '<div class="workspace-server-chip-row">' +
+                '<span class="workspace-server-chip">' + escapeHtml(activeItem.gpuCount ? (activeItem.gpuCount + (activeItem.gpuCount === 1 ? ' device' : ' devices')) : 'No GPU') + '</span>' +
+                (activeItem.gpuCount ? '<span class="workspace-server-chip">' + escapeHtml(getPrimaryGpuLabel(activeItem)) + '</span>' : '') +
+              '</div>' +
             '</div>' +
-            '<div class="workspace-detail-block">' +
+            '<div class="workspace-detail-block workspace-server-detail-block workspace-server-detail-block--full">' +
               '<h5>GPU Devices</h5>' +
               renderServerDevices(activeItem) +
             '</div>' +
