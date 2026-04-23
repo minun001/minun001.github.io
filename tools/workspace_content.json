@@ -31,34 +31,34 @@
   ],
   "workspace_links": [
     {
-      "title": "Research Drive",
-      "description": "Drafts, slides, figures, and working files for active projects. Use this as the first stop when a manuscript, presentation, or experiment asset needs a quick update.",
-      "url": "https://drive.google.com/",
-      "tag": "Open Drive",
+      "title": "Site Repository",
+      "description": "Source repo for page edits, commit history, and deployment-facing diffs. Use this when a section needs a direct content or layout change.",
+      "url": "https://github.com/minun001/minun001.github.io",
+      "tag": "Open Repo",
       "sort_order": 10,
       "is_active": true
     },
     {
-      "title": "Reading Queue",
-      "description": "Paper shortlist, writing prompts, and the next reading stack. Keep the references here that are worth revisiting before the next publication or presentation pass.",
-      "url": "https://www.notion.so/",
-      "tag": "Open Queue",
+      "title": "Supabase Console",
+      "description": "Workspace auth, private content tables, and server snapshot data all connect here. Open this when the workspace state or server sync needs a direct fix.",
+      "url": "https://supabase.com/dashboard/project/brwilcezyrtlpmcokmlo",
+      "tag": "Open Console",
       "sort_order": 20,
       "is_active": true
     },
     {
-      "title": "Scholar Profile",
-      "description": "Citation cross-checks and publication metadata reference. Use it when counts, venue details, or profile-facing updates need a fast verification pass.",
+      "title": "Scholar Checks",
+      "description": "Fast verification surface for citations, h-index, venue details, and publication metadata before changing the Publications page.",
       "url": "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en",
       "tag": "Open Scholar",
       "sort_order": 30,
       "is_active": true
     },
     {
-      "title": "Research Board",
-      "description": "Planning board for active tracks, milestones, and follow-ups. This is the private coordination surface for deciding what to write, revise, or present next.",
-      "url": "https://trello.com/",
-      "tag": "Open Board",
+      "title": "Live Site Check",
+      "description": "Production site entry point for final copy, layout, and deployment verification. Use this as the last check after a push reaches GitHub Pages.",
+      "url": "https://minun001.github.io/",
+      "tag": "Open Site",
       "sort_order": 40,
       "is_active": true
     }

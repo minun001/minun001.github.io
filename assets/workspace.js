@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260423f';
+  var WORKSPACE_CONTENT_VERSION = '20260424g';
   var workspaceContentFallbackCache = null;
 
   function getConfig() {
@@ -1741,18 +1741,16 @@
     var metricsItems = metrics.error ? [] : (metrics.data || []);
     var analyticsSummary = visits.error ? buildZeroAnalyticsState(config) : aggregateVisitAnalytics(visits.data || [], config);
     var notesItems = notes.error ? [] : (notes.data || []);
-    var linksItems = links.error ? [] : (links.data || []).filter(function (item) {
+    var liveLinksItems = links.error ? [] : (links.data || []).filter(function (item) {
       var url = String((item && item.url) || '').trim().toLowerCase();
       return !/example\.com/.test(url);
     });
+    var linksItems = contentFallback.links.length ? contentFallback.links.slice() : liveLinksItems;
     if (!metricsItems.length && contentFallback.metrics.length) {
       metricsItems = contentFallback.metrics;
     }
     if (!notesItems.length && contentFallback.notes.length) {
       notesItems = contentFallback.notes;
-    }
-    if (!linksItems.length && contentFallback.links.length) {
-      linksItems = contentFallback.links;
     }
     var liveServerItems = buildServerItems(
       serverTargets.error ? [] : (serverTargets.data || []),

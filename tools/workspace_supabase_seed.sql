@@ -21,31 +21,31 @@ where not exists (
 with link_seed (title, description, url, tag, sort_order) as (
   values
     (
-      'Research Drive',
-      'Drafts, slides, figures, and working files for active projects. Use this as the first stop when a manuscript, presentation, or experiment asset needs a quick update.',
-      'https://drive.google.com/',
-      'Open Drive',
+      'Site Repository',
+      'Source repo for page edits, commit history, and deployment-facing diffs. Use this when a section needs a direct content or layout change.',
+      'https://github.com/minun001/minun001.github.io',
+      'Open Repo',
       10
     ),
     (
-      'Reading Queue',
-      'Paper shortlist, writing prompts, and the next reading stack. Keep the references here that are worth revisiting before the next publication or presentation pass.',
-      'https://www.notion.so/',
-      'Open Queue',
+      'Supabase Console',
+      'Workspace auth, private content tables, and server snapshot data all connect here. Open this when the workspace state or server sync needs a direct fix.',
+      'https://supabase.com/dashboard/project/brwilcezyrtlpmcokmlo',
+      'Open Console',
       20
     ),
     (
-      'Scholar Profile',
-      'Citation cross-checks and publication metadata reference. Use it when counts, venue details, or profile-facing updates need a fast verification pass.',
+      'Scholar Checks',
+      'Fast verification surface for citations, h-index, venue details, and publication metadata before changing the Publications page.',
       'https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en',
       'Open Scholar',
       30
     ),
     (
-      'Research Board',
-      'Planning board for active tracks, milestones, and follow-ups. This is the private coordination surface for deciding what to write, revise, or present next.',
-      'https://trello.com/',
-      'Open Board',
+      'Live Site Check',
+      'Production site entry point for final copy, layout, and deployment verification. Use this as the last check after a push reaches GitHub Pages.',
+      'https://minun001.github.io/',
+      'Open Site',
       40
     )
 )
