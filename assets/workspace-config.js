@@ -17,7 +17,7 @@ window.WORKSPACE_AUTH_CONFIG = {
     {
       id: 'profile',
       title: 'Profile',
-      summary: 'Intro copy, email exposure, portrait crop, and top label cleanup.',
+      summary: 'Intro, email, portrait.',
       previewPath: '/profile/',
       repoPaths: ['profile/index.html', '_config.yml'],
       commonTasks: [
@@ -34,7 +34,7 @@ window.WORKSPACE_AUTH_CONFIG = {
     {
       id: 'publications',
       title: 'Publications',
-      summary: 'Summary card wording, Scholar placement, lead copy, and category labels.',
+      summary: 'Cards, Scholar, labels.',
       previewPath: '/publications/',
       repoPaths: ['publications/index.html', 'assets/site.js'],
       commonTasks: [
@@ -51,7 +51,7 @@ window.WORKSPACE_AUTH_CONFIG = {
     {
       id: 'news',
       title: 'News',
-      summary: 'Featured strip cleanup, helper text removal, labels, and timeline readability.',
+      summary: 'Featured strip, labels, timeline.',
       previewPath: '/news/',
       repoPaths: ['news/index.html', 'assets/site.js'],
       commonTasks: [
@@ -68,7 +68,7 @@ window.WORKSPACE_AUTH_CONFIG = {
     {
       id: 'shared-shell-deploy',
       title: 'Shared Shell & Deploy',
-      summary: 'Footer copy, shared nav/title, asset cache versioning, and production checks.',
+      summary: 'Footer, nav, deploy check.',
       previewPath: '/',
       repoPaths: ['_includes/footer.html', '_config.yml', '_layouts/default.html'],
       commonTasks: [

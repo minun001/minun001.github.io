@@ -1,4 +1,7 @@
 (function () {
+  var WORKSPACE_CONTENT_VERSION = '20260423e';
+  var workspaceContentFallbackCache = null;
+
   function getConfig() {
     return window.WORKSPACE_AUTH_CONFIG || {};
   }
@@ -157,17 +160,17 @@
       {
         label: 'Last 30 Days',
         value: String((summary && summary.last30Visitors) || 0),
-        context: 'Recent unique visitors'
+        context: ''
       },
       {
-        label: 'Visitors',
+        label: 'Since Launch',
         value: String((summary && summary.lifetimeVisitors) || 0),
-        context: 'Since launch'
+        context: ''
       },
       {
         label: 'Tracked Pages',
         value: String((summary && summary.trackedPages) || 0),
-        context: 'Pages tracked'
+        context: ''
       }
     ];
   }
@@ -183,7 +186,6 @@
         '<article class="workspace-mini-card">' +
           '<span>' + escapeHtml(item.label || 'Metric') + '</span>' +
           '<strong>' + escapeHtml(item.value || '-') + '</strong>' +
-          '<p>' + escapeHtml(item.context || '') + '</p>' +
         '</article>'
       );
     }).join('');
@@ -204,6 +206,76 @@
     var text = truncateText(value, maxLength || 120);
     if (!text) return '';
     return '<p class="workspace-select-card-copy">' + escapeHtml(text) + '</p>';
+  }
+
+  function createFallbackId(prefix, index) {
+    return prefix + '-' + String(index + 1);
+  }
+
+  function normalizeContentFallback(raw) {
+    var safeRaw = raw && typeof raw === 'object' ? raw : {};
+    return {
+      metrics: safeArray(safeRaw.workspace_dashboard_metrics).map(function (item, index) {
+        return {
+          id: createFallbackId('fallback-metric', index),
+          label: String((item && item.label) || '').trim(),
+          value: String((item && item.value) || '').trim(),
+          context: String((item && item.context) || '').trim(),
+          sort_order: Number((item && item.sort_order) || ((index + 1) * 10))
+        };
+      }).filter(function (item) {
+        return Boolean(item.label && item.value);
+      }),
+      links: safeArray(safeRaw.workspace_links).map(function (item, index) {
+        return {
+          id: createFallbackId('fallback-link', index),
+          title: String((item && item.title) || '').trim(),
+          description: String((item && item.description) || '').trim(),
+          url: String((item && item.url) || '').trim(),
+          tag: String((item && item.tag) || 'Open').trim() || 'Open',
+          sort_order: Number((item && item.sort_order) || ((index + 1) * 10))
+        };
+      }).filter(function (item) {
+        return Boolean(item.title && item.url);
+      }),
+      notes: safeArray(safeRaw.workspace_notes).map(function (item, index) {
+        return {
+          id: createFallbackId('fallback-note', index),
+          title: String((item && item.title) || '').trim(),
+          body: String((item && item.body) || '').trim(),
+          pinned: Boolean(item && item.pinned),
+          sort_order: Number((item && item.sort_order) || ((index + 1) * 10)),
+          updated_at: ''
+        };
+      }).filter(function (item) {
+        return Boolean(item.title && item.body);
+      })
+    };
+  }
+
+  async function loadWorkspaceContentFallback() {
+    if (workspaceContentFallbackCache) return workspaceContentFallbackCache;
+    if (!window.fetch) {
+      workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
+      return workspaceContentFallbackCache;
+    }
+
+    try {
+      var response = await window.fetch('/tools/workspace_content.json?v=' + WORKSPACE_CONTENT_VERSION, {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+      if (!response.ok) {
+        workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
+        return workspaceContentFallbackCache;
+      }
+      var payload = await response.json();
+      workspaceContentFallbackCache = normalizeContentFallback(payload);
+      return workspaceContentFallbackCache;
+    } catch (_error) {
+      workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
+      return workspaceContentFallbackCache;
+    }
   }
 
   function formatRichText(value) {
@@ -288,15 +360,9 @@
         id: 'restore-private-links',
         title: 'Restore private links',
         badge: 'Action',
-        summary: 'The live workspace_links table is empty or out of sync with repo content.',
-        detailSummary: 'Repo-managed private links are missing from the current Supabase state.',
-        repoPaths: [
-          'tools/workspace_content.json',
-          'tools/workspace_content_sync.py',
-          'tools/workspace_supabase_seed.sql'
-        ],
+        summary: 'Run content sync to restore repo-managed links.',
+        detailSummary: 'The workspace_links table is empty or out of sync.',
         checklist: [
-          'Confirm the canonical link rows in tools/workspace_content.json.',
           'Run python tools/workspace_content_sync.py --dry-run.',
           'Export WORKSPACE_SUPABASE_URL and WORKSPACE_SUPABASE_SERVICE_ROLE_KEY, then run the sync without --dry-run.'
         ]
@@ -310,16 +376,10 @@
         id: 'sync-server-targets',
         title: 'Sync server targets',
         badge: 'Action',
-        summary: 'Add the private server inventory so cards can render stable target entries.',
-        detailSummary: 'Server target rows have not been created yet in workspace_server_targets.',
-        repoPaths: [
-          'tools/workspace_servers.local.json',
-          'tools/workspace_servers.example.json',
-          'tools/workspace_server_sync.py'
-        ],
+        summary: 'Add the private server inventory first.',
+        detailSummary: 'Server target rows are missing from workspace_server_targets.',
         checklist: [
           'Create tools/workspace_servers.local.json on a trusted machine.',
-          'Check aliases, labels, SSH targets, and root labels before the first sync.',
           'Run python tools/workspace_server_sync.py --dry-run to verify the payload.'
         ]
       },
@@ -327,12 +387,8 @@
         id: 'run-first-snapshot',
         title: 'Run first snapshot',
         badge: 'Action',
-        summary: 'Push CPU, memory, and GPU readings into Supabase so the dashboard can visualize them.',
-        detailSummary: 'Server snapshots have not been written yet to workspace_server_snapshots.',
-        repoPaths: [
-          'tools/workspace_server_sync.py',
-          'tools/workspace_supabase_schema.sql'
-        ],
+        summary: 'Push CPU, memory, and GPU readings into Supabase.',
+        detailSummary: 'Server snapshots are missing from workspace_server_snapshots.',
         checklist: [
           'Export WORKSPACE_SUPABASE_URL.',
           'Export WORKSPACE_SUPABASE_SERVICE_ROLE_KEY.',
@@ -448,19 +504,16 @@
           (activeAction ? (
             '<div class="workspace-detail-head">' +
               '<div>' +
-                '<div class="eyebrow">Private Library</div>' +
                 '<h4 id="workspace-link-detail-title">' + escapeHtml(activeAction.title) + '</h4>' +
               '</div>' +
               '<button type="button" class="workspace-detail-close" data-workspace-link-close>Close</button>' +
             '</div>' +
             '<div class="workspace-detail-meta">' +
               '<span>Repo sync required</span>' +
-              '<span>Table workspace_links</span>' +
             '</div>' +
             '<div class="workspace-detail-copy">' +
               '<p>' + escapeHtml(activeAction.detailSummary) + '</p>' +
             '</div>' +
-            renderDetailListBlock('Affected repo paths', activeAction.repoPaths, true) +
             renderDetailListBlock('Next steps', activeAction.checklist, false)
           ) : '') +
         '</section>'
@@ -495,7 +548,6 @@
         (activeItem ? (
           '<div class="workspace-detail-head">' +
             '<div>' +
-              '<div class="eyebrow">Private Library</div>' +
               '<h4 id="workspace-link-detail-title">' + escapeHtml(activeItem.title || 'Resource') + '</h4>' +
             '</div>' +
             '<button type="button" class="workspace-detail-close" data-workspace-link-close>Close</button>' +
@@ -535,7 +587,6 @@
           var itemId = toSelectionId(item.id);
           var isActive = itemId === activeId;
           var badge = getOpsBadge(item);
-          var pathCount = item.repoPaths.length;
           return (
             '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-op-trigger="' + escapeHtml(itemId) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-op-detail">' +
               '<div class="workspace-select-card-head">' +
@@ -553,7 +604,6 @@
         (activeItem ? (
           '<div class="workspace-detail-head">' +
             '<div>' +
-              '<div class="eyebrow">Website Ops</div>' +
               '<h4 id="workspace-op-detail-title">' + escapeHtml(activeItem.title || 'Website Ops') + '</h4>' +
             '</div>' +
             '<button type="button" class="workspace-detail-close" data-workspace-op-close>Close</button>' +
@@ -812,19 +862,16 @@
           (activeAction ? (
             '<div class="workspace-detail-head">' +
               '<div>' +
-                '<div class="eyebrow">Server Signals</div>' +
                 '<h4 id="workspace-server-detail-title">' + escapeHtml(activeAction.title) + '</h4>' +
               '</div>' +
               '<button type="button" class="workspace-detail-close" data-workspace-server-close>Close</button>' +
             '</div>' +
             '<div class="workspace-detail-meta">' +
               '<span>Server sync required</span>' +
-              '<span>' + escapeHtml(activeAction.id === 'sync-server-targets' ? 'Table workspace_server_targets' : 'Table workspace_server_snapshots') + '</span>' +
             '</div>' +
             '<div class="workspace-detail-copy">' +
               '<p>' + escapeHtml(activeAction.detailSummary) + '</p>' +
             '</div>' +
-            renderDetailListBlock('Required files', activeAction.repoPaths, true) +
             renderDetailListBlock('Next steps', activeAction.checklist, false)
           ) : '') +
         '</section>'
@@ -874,7 +921,6 @@
         (activeItem ? (
           '<div class="workspace-detail-head">' +
             '<div>' +
-              '<div class="eyebrow">Server Signals</div>' +
               '<h4 id="workspace-server-detail-title">' + escapeHtml(activeItem.label) + '</h4>' +
             '</div>' +
             '<button type="button" class="workspace-detail-close" data-workspace-server-close>Close</button>' +
@@ -1458,7 +1504,6 @@
       '<section class="workspace-detail-panel" id="workspace-signal-detail" role="region" aria-labelledby="workspace-signal-detail-title">' +
         '<div class="workspace-detail-head">' +
           '<div>' +
-            '<div class="eyebrow">Site Signals</div>' +
             '<h4 id="workspace-signal-detail-title">' + escapeHtml(title) + '</h4>' +
           '</div>' +
           '<button type="button" class="workspace-detail-close" data-workspace-signal-close>Close</button>' +
@@ -1622,6 +1667,7 @@
   }
 
   async function loadWorkspaceData(client, config) {
+    var contentFallback = await loadWorkspaceContentFallback();
     var tables = config.tables || {};
     var limits = config.limits || {};
     var analytics = config.analytics || {};
@@ -1683,6 +1729,15 @@
       var url = String((item && item.url) || '').trim().toLowerCase();
       return !/example\.com/.test(url);
     });
+    if (!metricsItems.length && contentFallback.metrics.length) {
+      metricsItems = contentFallback.metrics;
+    }
+    if (!notesItems.length && contentFallback.notes.length) {
+      notesItems = contentFallback.notes;
+    }
+    if (!linksItems.length && contentFallback.links.length) {
+      linksItems = contentFallback.links;
+    }
     var serverItems = buildServerItems(
       serverTargets.error ? [] : (serverTargets.data || []),
       serverSnapshots.error ? [] : (serverSnapshots.data || [])
