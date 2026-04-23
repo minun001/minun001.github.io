@@ -200,6 +200,12 @@
     return text.slice(0, Math.max(0, maxLength - 3)).trimEnd() + '...';
   }
 
+  function renderCardCopy(value, maxLength) {
+    var text = truncateText(value, maxLength || 120);
+    if (!text) return '';
+    return '<p class="workspace-select-card-copy">' + escapeHtml(text) + '</p>';
+  }
+
   function formatRichText(value) {
     var text = String(value || '').trim();
     if (!text) return '<p>No details yet.</p>';
@@ -235,12 +241,6 @@
     return Math.max(0, Math.min(100, Math.round(toFiniteNumber(value, 0))));
   }
 
-  function getWordCount(value) {
-    var text = String(value || '').trim();
-    if (!text) return 0;
-    return text.split(/\s+/).filter(Boolean).length;
-  }
-
   function renderCardMeta(parts) {
     var safeParts = safeArray(parts).filter(function (part) {
       return Boolean(String(part || '').trim());
@@ -262,6 +262,84 @@
     } catch (_error) {
       return 'External link';
     }
+  }
+
+  function renderDetailListBlock(title, items, useCode) {
+    var safeItems = safeArray(items).filter(function (item) {
+      return Boolean(String(item || '').trim());
+    });
+    if (!safeItems.length) return '';
+    return (
+      '<div class="workspace-detail-block">' +
+        '<h5>' + escapeHtml(title) + '</h5>' +
+        '<ul class="workspace-detail-list">' +
+          safeItems.map(function (item) {
+            var content = useCode ? '<code>' + escapeHtml(item) + '</code>' : escapeHtml(item);
+            return '<li>' + content + '</li>';
+          }).join('') +
+        '</ul>' +
+      '</div>'
+    );
+  }
+
+  function getLinkActionItems() {
+    return [
+      {
+        id: 'restore-private-links',
+        title: 'Restore private links',
+        badge: 'Action',
+        summary: 'The live workspace_links table is empty or out of sync with repo content.',
+        detailSummary: 'Repo-managed private links are missing from the current Supabase state.',
+        repoPaths: [
+          'tools/workspace_content.json',
+          'tools/workspace_content_sync.py',
+          'tools/workspace_supabase_seed.sql'
+        ],
+        checklist: [
+          'Confirm the canonical link rows in tools/workspace_content.json.',
+          'Run python tools/workspace_content_sync.py --dry-run.',
+          'Export WORKSPACE_SUPABASE_URL and WORKSPACE_SUPABASE_SERVICE_ROLE_KEY, then run the sync without --dry-run.'
+        ]
+      }
+    ];
+  }
+
+  function getServerActionItems() {
+    return [
+      {
+        id: 'sync-server-targets',
+        title: 'Sync server targets',
+        badge: 'Action',
+        summary: 'Add the private server inventory so cards can render stable target entries.',
+        detailSummary: 'Server target rows have not been created yet in workspace_server_targets.',
+        repoPaths: [
+          'tools/workspace_servers.local.json',
+          'tools/workspace_servers.example.json',
+          'tools/workspace_server_sync.py'
+        ],
+        checklist: [
+          'Create tools/workspace_servers.local.json on a trusted machine.',
+          'Check aliases, labels, SSH targets, and root labels before the first sync.',
+          'Run python tools/workspace_server_sync.py --dry-run to verify the payload.'
+        ]
+      },
+      {
+        id: 'run-first-snapshot',
+        title: 'Run first snapshot',
+        badge: 'Action',
+        summary: 'Push CPU, memory, and GPU readings into Supabase so the dashboard can visualize them.',
+        detailSummary: 'Server snapshots have not been written yet to workspace_server_snapshots.',
+        repoPaths: [
+          'tools/workspace_server_sync.py',
+          'tools/workspace_supabase_schema.sql'
+        ],
+        checklist: [
+          'Export WORKSPACE_SUPABASE_URL.',
+          'Export WORKSPACE_SUPABASE_SERVICE_ROLE_KEY.',
+          'Run python tools/workspace_server_sync.py from the trusted machine after schema setup.'
+        ]
+      }
+    ];
   }
 
   function getUsageTone(value) {
@@ -313,9 +391,9 @@
                 '</div>' +
                 (item.pinned ? '<span class="workspace-note-badge">Pinned</span>' : '<span class="workspace-card-microtag">Log</span>') +
               '</div>' +
+              renderCardCopy(item.body, 112) +
               renderCardMeta([
-                'Updated ' + (formatDate(item.updated_at) || 'recently'),
-                getWordCount(item.body) + ' words'
+                'Updated ' + (formatDate(item.updated_at) || 'recently')
               ]) +
             '</button>'
           );
@@ -343,7 +421,50 @@
   function renderLinks(items, selectedId) {
     var safeItems = Array.isArray(items) ? items : [];
     if (!safeItems.length) {
-      return '<div class="workspace-empty">No private library links yet.</div>';
+      var linkActions = getLinkActionItems();
+      var activeActionId = String(selectedId || '');
+      var activeAction = linkActions.find(function (item) {
+        return item.id === activeActionId;
+      }) || null;
+
+      return (
+        '<div class="workspace-summary-grid">' +
+          linkActions.map(function (item) {
+            var isActive = item.id === activeActionId;
+            return (
+              '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-link-trigger="' + escapeHtml(item.id) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-link-detail">' +
+                '<div class="workspace-select-card-head">' +
+                  '<div>' +
+                    '<h4>' + escapeHtml(item.title) + '</h4>' +
+                  '</div>' +
+                  '<span class="workspace-link-tag">' + escapeHtml(item.badge) + '</span>' +
+                '</div>' +
+                renderCardCopy(item.summary, 120) +
+              '</button>'
+            );
+          }).join('') +
+        '</div>' +
+        '<section class="workspace-detail-panel" id="workspace-link-detail" role="region" aria-labelledby="workspace-link-detail-title"' + (activeAction ? '' : ' hidden') + '>' +
+          (activeAction ? (
+            '<div class="workspace-detail-head">' +
+              '<div>' +
+                '<div class="eyebrow">Private Library</div>' +
+                '<h4 id="workspace-link-detail-title">' + escapeHtml(activeAction.title) + '</h4>' +
+              '</div>' +
+              '<button type="button" class="workspace-detail-close" data-workspace-link-close>Close</button>' +
+            '</div>' +
+            '<div class="workspace-detail-meta">' +
+              '<span>Repo sync required</span>' +
+              '<span>Table workspace_links</span>' +
+            '</div>' +
+            '<div class="workspace-detail-copy">' +
+              '<p>' + escapeHtml(activeAction.detailSummary) + '</p>' +
+            '</div>' +
+            renderDetailListBlock('Affected repo paths', activeAction.repoPaths, true) +
+            renderDetailListBlock('Next steps', activeAction.checklist, false)
+          ) : '') +
+        '</section>'
+      );
     }
 
     var activeId = String(selectedId || '');
@@ -365,10 +486,7 @@
                 '</div>' +
                 '<span class="workspace-link-tag">' + escapeHtml(label) + '</span>' +
               '</div>' +
-              renderCardMeta([
-                getLinkHost(item.url),
-                'Ready to open'
-              ]) +
+              renderCardCopy(item.description, 112) +
             '</button>'
           );
         }).join('') +
@@ -384,7 +502,7 @@
           '</div>' +
           '<div class="workspace-detail-meta">' +
             '<span>' + escapeHtml(String(activeItem.tag || 'Open').trim() || 'Open') + '</span>' +
-            '<span>External resource</span>' +
+            '<span>' + escapeHtml(getLinkHost(activeItem.url)) + '</span>' +
           '</div>' +
           '<div class="workspace-detail-copy">' + formatRichText(activeItem.description) + '</div>' +
           '<div class="workspace-detail-actions">' +
@@ -409,6 +527,7 @@
     var activeItem = safeItems.find(function (item) {
       return toSelectionId(item.id) === activeId;
     }) || null;
+    var activePathCount = activeItem ? activeItem.repoPaths.length : 0;
 
     return (
       '<div class="workspace-summary-grid">' +
@@ -425,10 +544,7 @@
                 '</div>' +
                 '<span class="workspace-card-microtag">' + escapeHtml(badge) + '</span>' +
               '</div>' +
-              renderCardMeta([
-                String(pathCount) + ' edit surface' + (pathCount === 1 ? '' : 's'),
-                item.previewPath ? 'Preview ' + item.previewPath : 'Checklist ready'
-              ]) +
+              renderCardCopy(item.summary, 112) +
             '</button>'
           );
         }).join('') +
@@ -444,6 +560,7 @@
           '</div>' +
           '<div class="workspace-detail-meta">' +
             '<span>' + escapeHtml(getOpsBadge(activeItem)) + '</span>' +
+            '<span>' + escapeHtml(String(activePathCount) + ' edit surface' + (activePathCount === 1 ? '' : 's')) + '</span>' +
             (activeItem.previewPath ? '<span>' + escapeHtml('Preview ' + activeItem.previewPath) + '</span>' : '') +
           '</div>' +
           '<div class="workspace-detail-copy">' +
@@ -665,7 +782,53 @@
   function renderServerSignals(items, selectedAlias) {
     var safeItems = safeArray(items);
     if (!safeItems.length) {
-      return '<div class="workspace-empty">No server snapshot yet.</div>';
+      var serverActions = getServerActionItems();
+      var activeActionId = String(selectedAlias || '');
+      var activeAction = serverActions.find(function (item) {
+        return item.id === activeActionId;
+      }) || null;
+
+      return (
+        '<div class="workspace-summary-grid">' +
+          serverActions.map(function (item) {
+            var isActive = item.id === activeActionId;
+            return (
+              '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-server-trigger="' + escapeHtml(item.id) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-server-detail">' +
+                '<div class="workspace-select-card-head">' +
+                  '<div>' +
+                    '<h4>' + escapeHtml(item.title) + '</h4>' +
+                  '</div>' +
+                  '<span class="workspace-server-status" data-state="stale">' +
+                    '<span class="workspace-server-status-dot" aria-hidden="true"></span>' +
+                    'Action' +
+                  '</span>' +
+                '</div>' +
+                renderCardCopy(item.summary, 120) +
+              '</button>'
+            );
+          }).join('') +
+        '</div>' +
+        '<section class="workspace-detail-panel" id="workspace-server-detail" role="region" aria-labelledby="workspace-server-detail-title"' + (activeAction ? '' : ' hidden') + '>' +
+          (activeAction ? (
+            '<div class="workspace-detail-head">' +
+              '<div>' +
+                '<div class="eyebrow">Server Signals</div>' +
+                '<h4 id="workspace-server-detail-title">' + escapeHtml(activeAction.title) + '</h4>' +
+              '</div>' +
+              '<button type="button" class="workspace-detail-close" data-workspace-server-close>Close</button>' +
+            '</div>' +
+            '<div class="workspace-detail-meta">' +
+              '<span>Server sync required</span>' +
+              '<span>' + escapeHtml(activeAction.id === 'sync-server-targets' ? 'Table workspace_server_targets' : 'Table workspace_server_snapshots') + '</span>' +
+            '</div>' +
+            '<div class="workspace-detail-copy">' +
+              '<p>' + escapeHtml(activeAction.detailSummary) + '</p>' +
+            '</div>' +
+            renderDetailListBlock('Required files', activeAction.repoPaths, true) +
+            renderDetailListBlock('Next steps', activeAction.checklist, false)
+          ) : '') +
+        '</section>'
+      );
     }
 
     var activeAlias = String(selectedAlias || '');
@@ -1216,7 +1379,6 @@
       {
         key: 'snapshot',
         title: 'Traffic Snapshot',
-        meta: ['Today', '30d', 'Tracked'],
         body: (
           '<div class="workspace-signal-stats">' +
             [
@@ -1238,13 +1400,11 @@
       {
         key: 'trend',
         title: 'Trend',
-        meta: ['Recent monthly sparkline'],
         body: renderSignalSparkline(safeSummary.monthlySeries)
       },
       {
         key: 'pages',
         title: 'Top Pages',
-        meta: ['Current leaders'],
         body: renderSignalPagesMini(safeSummary.topPages)
       }
     ];
@@ -1261,7 +1421,6 @@
                 '</div>' +
                 '<span class="workspace-card-microtag">View</span>' +
               '</div>' +
-              renderCardMeta(card.meta) +
               card.body +
             '</button>'
           );
@@ -1320,13 +1479,19 @@
     if (!workspaceState.notesItems.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedNoteId || ''); })) {
       workspaceState.selectedNoteId = null;
     }
-    if (!workspaceState.linksItems.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedLinkId || ''); })) {
+    var availableLinkIds = (workspaceState.linksItems.length ? workspaceState.linksItems : getLinkActionItems()).map(function (item) {
+      return toSelectionId(item.id);
+    });
+    if (availableLinkIds.indexOf(String(workspaceState.selectedLinkId || '')) === -1) {
       workspaceState.selectedLinkId = null;
     }
     if (!workspaceState.opsTargets.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedOpsId || ''); })) {
       workspaceState.selectedOpsId = null;
     }
-    if (!workspaceState.serverItems.some(function (item) { return String(item.alias || '') === String(workspaceState.selectedServerAlias || ''); })) {
+    var availableServerIds = (workspaceState.serverItems.length ? workspaceState.serverItems : getServerActionItems()).map(function (item) {
+      return String(item.alias || item.id || '');
+    });
+    if (availableServerIds.indexOf(String(workspaceState.selectedServerAlias || '')) === -1) {
       workspaceState.selectedServerAlias = null;
     }
     if (['snapshot', 'trend', 'pages'].indexOf(String(workspaceState.selectedSignalKey || '')) === -1) {

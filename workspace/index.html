@@ -212,8 +212,8 @@ script_bundle: workspace
           <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private hidden>
             <div class="workspace-dashboard-head">
               <div class="workspace-dashboard-copy">
-                <h2>Overview</h2>
-                <p>Notes, servers, and site checks at a glance.</p>
+                <h2>Workspace</h2>
+                <p>Private notes, links, server health, and site checks.</p>
               </div>
             </div>
             <div class="workspace-stack">
@@ -229,7 +229,7 @@ script_bundle: workspace
               <section class="workspace-section" aria-labelledby="workspace-notes-title">
                 <div class="workspace-section-head">
                   <h3 id="workspace-notes-title">Research Log</h3>
-                  <p>Pinned notes and active writing threads.</p>
+                  <p>Active notes and writing threads.</p>
                 </div>
                 <div class="workspace-notes" id="workspace-notes">
                   <div class="workspace-empty">No research log yet.</div>
@@ -239,7 +239,7 @@ script_bundle: workspace
               <section class="workspace-section" aria-labelledby="workspace-library-title">
                 <div class="workspace-section-head">
                   <h3 id="workspace-library-title">Private Library</h3>
-                  <p>Private links for drafts, queues, and reference tools.</p>
+                  <p>Private links for drafts and references.</p>
                 </div>
                 <div class="workspace-links" id="workspace-links">
                   <div class="workspace-empty">No private library links yet.</div>
@@ -259,7 +259,7 @@ script_bundle: workspace
               <section class="workspace-section" aria-labelledby="workspace-servers-title">
                 <div class="workspace-section-head">
                   <h3 id="workspace-servers-title">Server Signals</h3>
-                  <p>CPU, memory, and GPU status across connected servers.</p>
+                  <p>CPU, memory, and GPU status.</p>
                 </div>
                 <div class="workspace-servers" id="workspace-servers">
                   <div class="workspace-empty">No server snapshot yet.</div>
@@ -268,9 +268,8 @@ script_bundle: workspace
 
               <section class="workspace-section workspace-analytics" aria-labelledby="workspace-analytics-title">
                 <div class="workspace-section-head">
-                  <div class="eyebrow">Site Signals</div>
                   <h3 id="workspace-analytics-title">Site Signals</h3>
-                  <p>Traffic snapshot for the public site.</p>
+                  <p>Public site traffic at a glance.</p>
                 </div>
                 <div class="workspace-signals" id="workspace-signals">
                   <div class="workspace-empty">No traffic summary yet.</div>
@@ -307,8 +306,8 @@ script_bundle: workspace
               </div>
               <div class="workspace-card">
                 <span class="workspace-card-step">Step 4</span>
-                <h3>Load starter content</h3>
-                <p>Run <code>tools/workspace_supabase_seed.sql</code> for starter notes and links.</p>
+                <h3>Sync workspace content</h3>
+                <p>Run <code>tools/workspace_content_sync.py</code> after the schema setup.</p>
               </div>
               <div class="workspace-card">
                 <span class="workspace-card-step">Step 5</span>
