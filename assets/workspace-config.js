@@ -90,7 +90,8 @@ window.WORKSPACE_AUTH_CONFIG = {
       { alias: 'sch-gpu-30', label: 'GPU Server 30', ssh_alias: '', root_label: '', sort_order: 30, is_active: true },
       { alias: 'sch-user-71', label: 'Server 71', ssh_alias: '', root_label: '', sort_order: 40, is_active: true },
       { alias: 'sch-user-72', label: 'Server 72', ssh_alias: '', root_label: '', sort_order: 50, is_active: true },
-      { alias: 'sch-gpu-sail', label: 'GPU Server SAIL', ssh_alias: '', root_label: '', sort_order: 60, is_active: true }
+      { alias: 'sch-gpu-sail', label: 'GPU Server SAIL', ssh_alias: '', root_label: '', sort_order: 60, is_active: true },
+      { alias: 'sch-min-hs-74', label: 'GPU Server 74', ssh_alias: '', root_label: '', sort_order: 70, is_active: true }
     ],
     snapshots: [
       {
@@ -284,6 +285,38 @@ window.WORKSPACE_AUTH_CONFIG = {
         gpu_processes: [],
         top_processes: [],
         updated_at: '2026-04-23T15:54:23.655046Z'
+      },
+      {
+        server_alias: 'sch-min-hs-74',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T16:10:14.193841Z',
+        host: '',
+        uptime: 'up 3 weeks, 3 days, 5 hours, 1 minute',
+        cpu_usage_percent: 0.8,
+        cpu_model: 'AMD Ryzen Threadripper PRO 7985WX 64-Cores',
+        logical_cores: 128,
+        load_average: { one: 1.0, five: 1.0, fifteen: 1.0 },
+        memory_used_mb: 26748.4,
+        memory_total_mb: 257182.1,
+        memory_usage_percent: 10.4,
+        disk_used_text: '1.7T used of 1.8T (100%)',
+        disk_percent: 100.0,
+        gpu_count: 1,
+        gpu_avg_usage_percent: 100.0,
+        gpu_payload: [
+          {
+            name: 'NVIDIA H200 NVL',
+            temperature_c: '49',
+            utilization_percent: 100.0,
+            memory_total_mb: 143771.0,
+            memory_used_mb: 54139.0,
+            memory_percent: 37.7
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T16:10:14.121516Z'
       }
     ]
   },
