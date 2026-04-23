@@ -1,5 +1,6 @@
 (function () {
   var WORKSPACE_CONTENT_VERSION = '20260424g';
+  var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var workspaceContentFallbackCache = null;
 
   function getConfig() {
@@ -1816,6 +1817,9 @@
     var idleTimerId = null;
     var idleListenersReady = false;
     var idleTrackingActive = false;
+    var refreshTimerId = null;
+    var refreshInFlight = false;
+    var privateSessionActive = false;
 
     function clearIdleTimer() {
       if (idleTimerId) {
@@ -1875,10 +1879,49 @@
       clearIdleTimer();
     }
 
+    function clearRefreshTimer() {
+      if (refreshTimerId) {
+        window.clearInterval(refreshTimerId);
+        refreshTimerId = null;
+      }
+    }
+
+    async function refreshWorkspaceData(options) {
+      var settings = options || {};
+      if (!privateSessionActive) return;
+      if (document.hidden && !settings.force) return;
+      if (refreshInFlight) return;
+
+      refreshInFlight = true;
+      try {
+        await loadWorkspaceData(client, config);
+      } catch (error) {
+        if (settings.surfaceError !== false) {
+          setStatus(error && error.message ? error.message : 'Private content failed to refresh.', 'warn');
+        }
+      } finally {
+        refreshInFlight = false;
+      }
+    }
+
+    function startWorkspaceRefresh() {
+      clearRefreshTimer();
+      refreshTimerId = window.setInterval(function () {
+        refreshWorkspaceData({ surfaceError: false }).catch(function () {});
+      }, WORKSPACE_AUTO_REFRESH_MS);
+    }
+
+    function stopWorkspaceRefresh() {
+      clearRefreshTimer();
+      refreshInFlight = false;
+    }
+
     async function applySession(session) {
       var user = session && session.user ? session.user : null;
       if (!user) {
+        privateSessionActive = false;
         stopIdleTracking();
+        stopWorkspaceRefresh();
         setIdentity(null, config);
         setShellMode('auth');
         setView('login');
@@ -1893,7 +1936,9 @@
       }
 
       if (!isAuthorized(user, config)) {
+        privateSessionActive = false;
         stopIdleTracking();
+        stopWorkspaceRefresh();
         setIdentity(user, config);
         setShellMode('auth');
         setView('unauthorized');
@@ -1906,12 +1951,10 @@
       setView('dashboard');
       setStatus('Workspace unlocked.', 'success');
       startIdleTracking();
+      privateSessionActive = true;
+      startWorkspaceRefresh();
       renderWorkspaceOps();
-      try {
-        await loadWorkspaceData(client, config);
-      } catch (error) {
-        setStatus(error && error.message ? error.message : 'Private content failed to load.', 'warn');
-      }
+      await refreshWorkspaceData({ force: true, surfaceError: true });
     }
 
     client.auth.onAuthStateChange(function (_event, session) {
@@ -1959,7 +2002,9 @@
 
     if (signOut) {
       signOut.addEventListener('click', async function () {
+        privateSessionActive = false;
         stopIdleTracking();
+        stopWorkspaceRefresh();
         await client.auth.signOut();
         setStatus('Signed out.', 'neutral');
       });
@@ -1979,6 +2024,15 @@
         setStatus('A new verification email has been sent. Confirm the email, then sign in again.', 'success');
       });
     }
+
+    document.addEventListener('visibilitychange', function () {
+      if (!privateSessionActive || document.hidden) return;
+      refreshWorkspaceData({ force: true, surfaceError: false }).catch(function () {});
+    });
+    window.addEventListener('focus', function () {
+      if (!privateSessionActive) return;
+      refreshWorkspaceData({ force: true, surfaceError: false }).catch(function () {});
+    });
   }
 
   document.addEventListener('DOMContentLoaded', function () {
