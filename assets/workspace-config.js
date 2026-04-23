@@ -91,7 +91,8 @@ window.WORKSPACE_AUTH_CONFIG = {
       { alias: 'sch-user-71', label: 'Server 71', ssh_alias: '', root_label: '', sort_order: 40, is_active: true },
       { alias: 'sch-user-72', label: 'Server 72', ssh_alias: '', root_label: '', sort_order: 50, is_active: true },
       { alias: 'sch-gpu-sail', label: 'GPU Server SAIL', ssh_alias: '', root_label: '', sort_order: 60, is_active: true },
-      { alias: 'sch-min-hs-74', label: 'GPU Server 74', ssh_alias: '', root_label: '', sort_order: 70, is_active: true }
+      { alias: 'sch-min-hs-74', label: 'GPU Server 74', ssh_alias: '', root_label: '', sort_order: 70, is_active: true },
+      { alias: 'sch-user-135', label: 'GPU Server 135', ssh_alias: '', root_label: '', sort_order: 80, is_active: true }
     ],
     snapshots: [
       {
@@ -317,6 +318,74 @@ window.WORKSPACE_AUTH_CONFIG = {
         gpu_processes: [],
         top_processes: [],
         updated_at: '2026-04-23T16:10:14.121516Z'
+      },
+      {
+        server_alias: 'sch-user-135',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T16:15:41.673247Z',
+        host: '',
+        uptime: 'up 22 weeks, 2 days, 11 hours, 26 minutes',
+        cpu_usage_percent: 0.5,
+        cpu_model: 'Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz',
+        logical_cores: 80,
+        load_average: { one: 0.36, five: 0.21, fifteen: 0.18 },
+        memory_used_mb: 15842.7,
+        memory_total_mb: 772641.2,
+        memory_usage_percent: 2.1,
+        disk_used_text: '831G used of 879G (100%)',
+        disk_percent: 100.0,
+        gpu_count: 4,
+        gpu_avg_usage_percent: 0.0,
+        gpu_payload: [
+          {
+            index: '0',
+            name: 'NVIDIA A100-PCIE-40GB',
+            temperature_c: '28',
+            utilization_percent: 0.0,
+            memory_total_mb: 40960.0,
+            memory_used_mb: 13.0,
+            memory_percent: 0.0,
+            power_draw_w: '32.60',
+            power_limit_w: '250.00'
+          },
+          {
+            index: '1',
+            name: 'NVIDIA A100-PCIE-40GB',
+            temperature_c: '28',
+            utilization_percent: 0.0,
+            memory_total_mb: 40960.0,
+            memory_used_mb: 13.0,
+            memory_percent: 0.0,
+            power_draw_w: '32.92',
+            power_limit_w: '250.00'
+          },
+          {
+            index: '2',
+            name: 'NVIDIA A100-PCIE-40GB',
+            temperature_c: '28',
+            utilization_percent: 0.0,
+            memory_total_mb: 40960.0,
+            memory_used_mb: 13.0,
+            memory_percent: 0.0,
+            power_draw_w: '32.13',
+            power_limit_w: '250.00'
+          },
+          {
+            index: '3',
+            name: 'NVIDIA A100-PCIE-40GB',
+            temperature_c: '31',
+            utilization_percent: 0.0,
+            memory_total_mb: 40960.0,
+            memory_used_mb: 13.0,
+            memory_percent: 0.0,
+            power_draw_w: '36.86',
+            power_limit_w: '250.00'
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T16:15:41.561471Z'
       }
     ]
   },
