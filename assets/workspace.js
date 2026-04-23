@@ -32,10 +32,12 @@
     notesItems: [],
     linksItems: [],
     opsTargets: [],
+    serverItems: [],
     analyticsSummary: null,
     selectedNoteId: null,
     selectedLinkId: null,
     selectedOpsId: null,
+    selectedServerAlias: null,
     selectedSignalKey: null
   };
 
@@ -219,6 +221,74 @@
     });
   }
 
+  function safeArray(value) {
+    return Array.isArray(value) ? value : [];
+  }
+
+  function toFiniteNumber(value, fallback) {
+    var number = Number(value);
+    if (Number.isFinite(number)) return number;
+    return Number.isFinite(Number(fallback)) ? Number(fallback) : 0;
+  }
+
+  function clampPercent(value) {
+    return Math.max(0, Math.min(100, Math.round(toFiniteNumber(value, 0))));
+  }
+
+  function getWordCount(value) {
+    var text = String(value || '').trim();
+    if (!text) return 0;
+    return text.split(/\s+/).filter(Boolean).length;
+  }
+
+  function renderCardMeta(parts) {
+    var safeParts = safeArray(parts).filter(function (part) {
+      return Boolean(String(part || '').trim());
+    });
+    if (!safeParts.length) return '';
+    return (
+      '<div class="workspace-select-card-meta">' +
+        safeParts.map(function (part) {
+          return '<span>' + escapeHtml(part) + '</span>';
+        }).join('') +
+      '</div>'
+    );
+  }
+
+  function getLinkHost(url) {
+    try {
+      var parsed = new URL(String(url || ''), window.location.origin);
+      return parsed.host || normalizePath(parsed.pathname);
+    } catch (_error) {
+      return 'External link';
+    }
+  }
+
+  function getUsageTone(value) {
+    var percent = toFiniteNumber(value, 0);
+    if (percent >= 85) return 'danger';
+    if (percent >= 60) return 'warn';
+    return 'ok';
+  }
+
+  function getRelativeAgeMinutes(value) {
+    if (!value) return null;
+    var date = new Date(value);
+    if (Number.isNaN(date.getTime())) return null;
+    return Math.max(0, Math.round((Date.now() - date.getTime()) / 60000));
+  }
+
+  function formatRelativeAge(value) {
+    var minutes = getRelativeAgeMinutes(value);
+    if (minutes === null) return 'No snapshot';
+    if (minutes < 1) return 'Just now';
+    if (minutes < 60) return minutes + 'm ago';
+    var hours = Math.round(minutes / 60);
+    if (hours < 24) return hours + 'h ago';
+    var days = Math.round(hours / 24);
+    return days + 'd ago';
+  }
+
   function renderNotes(items, selectedId) {
     var safeItems = Array.isArray(items) ? items : [];
     if (!safeItems.length) {
@@ -232,20 +302,21 @@
 
     return (
       '<div class="workspace-summary-grid">' +
-        safeItems.map(function (item, index) {
+        safeItems.map(function (item) {
           var itemId = toSelectionId(item.id);
           var isActive = itemId === activeId;
-          var isPinnedFeatured = Boolean(item.pinned) && index === 0;
           return (
-            '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + (isPinnedFeatured ? ' workspace-select-card--featured' : '') + '" data-workspace-note-trigger="' + escapeHtml(itemId) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-note-detail">' +
+            '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-note-trigger="' + escapeHtml(itemId) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-note-detail">' +
               '<div class="workspace-select-card-head">' +
                 '<div>' +
                   '<h4>' + escapeHtml(item.title || 'Untitled note') + '</h4>' +
                 '</div>' +
                 (item.pinned ? '<span class="workspace-note-badge">Pinned</span>' : '<span class="workspace-card-microtag">Log</span>') +
               '</div>' +
-              '<p class="workspace-select-card-copy">' + escapeHtml(truncateText(item.body, isPinnedFeatured ? 180 : 110)) + '</p>' +
-              '<div class="workspace-note-meta">Updated ' + escapeHtml(formatDate(item.updated_at) || 'recently') + '</div>' +
+              renderCardMeta([
+                'Updated ' + (formatDate(item.updated_at) || 'recently'),
+                getWordCount(item.body) + ' words'
+              ]) +
             '</button>'
           );
         }).join('') +
@@ -294,8 +365,10 @@
                 '</div>' +
                 '<span class="workspace-link-tag">' + escapeHtml(label) + '</span>' +
               '</div>' +
-              '<p class="workspace-select-card-copy">' + escapeHtml(truncateText(item.description, 110)) + '</p>' +
-              '<div class="workspace-note-meta">' + escapeHtml(label) + '</div>' +
+              renderCardMeta([
+                getLinkHost(item.url),
+                'Ready to open'
+              ]) +
             '</button>'
           );
         }).join('') +
@@ -352,8 +425,10 @@
                 '</div>' +
                 '<span class="workspace-card-microtag">' + escapeHtml(badge) + '</span>' +
               '</div>' +
-              '<p class="workspace-select-card-copy">' + escapeHtml(item.summary || 'Frequent website maintenance target.') + '</p>' +
-              '<div class="workspace-note-meta">' + escapeHtml(String(pathCount) + ' edit surface' + (pathCount === 1 ? '' : 's')) + '</div>' +
+              renderCardMeta([
+                String(pathCount) + ' edit surface' + (pathCount === 1 ? '' : 's'),
+                item.previewPath ? 'Preview ' + item.previewPath : 'Checklist ready'
+              ]) +
             '</button>'
           );
         }).join('') +
@@ -408,6 +483,296 @@
               '</a>' +
             '</div>'
           ) : '')
+        ) : '') +
+      '</section>'
+    );
+  }
+
+  function normalizeLoadAverage(value) {
+    var safeValue = value && typeof value === 'object' ? value : {};
+    return {
+      one: toFiniteNumber(safeValue.one, 0),
+      five: toFiniteNumber(safeValue.five, 0),
+      fifteen: toFiniteNumber(safeValue.fifteen, 0)
+    };
+  }
+
+  function getServerRootLabel(target) {
+    var explicitLabel = String((target && target.root_label) || '').trim();
+    if (explicitLabel) return explicitLabel;
+    var label = String((target && target.label) || '').trim();
+    return label ? label + ' root' : 'Workspace root';
+  }
+
+  function buildServerItems(targets, snapshots) {
+    var snapshotMap = {};
+    safeArray(snapshots).forEach(function (snapshot) {
+      var alias = String((snapshot && snapshot.server_alias) || '').trim();
+      if (alias) snapshotMap[alias] = snapshot;
+    });
+
+    return safeArray(targets)
+      .map(function (target, index) {
+        var alias = String((target && target.alias) || '').trim();
+        if (!alias) return null;
+        var snapshot = snapshotMap[alias] || {};
+        var gpuPayload = safeArray(snapshot.gpu_payload);
+        var gpuProcesses = safeArray(snapshot.gpu_processes);
+        var topProcesses = safeArray(snapshot.top_processes);
+        var gpuCount = Math.max(0, Math.round(toFiniteNumber(snapshot.gpu_count, gpuPayload.length)));
+        var gpuAverage = toFiniteNumber(snapshot.gpu_avg_usage_percent, 0);
+        if (!gpuAverage && gpuPayload.length) {
+          gpuAverage = gpuPayload.reduce(function (sum, device) {
+            return sum + toFiniteNumber(device && device.utilization_percent, 0);
+          }, 0) / gpuPayload.length;
+        }
+
+        return {
+          alias: alias,
+          label: String((target && target.label) || alias).trim() || alias,
+          sshAlias: String((target && target.ssh_alias) || '').trim(),
+          rootLabel: getServerRootLabel(target),
+          sortOrder: toFiniteNumber(target && target.sort_order, (index + 1) * 10),
+          status: String((snapshot && snapshot.status) || '').trim().toLowerCase(),
+          errorMessage: String((snapshot && snapshot.error_message) || '').trim(),
+          generatedAt: String((snapshot && (snapshot.generated_at || snapshot.updated_at)) || '').trim(),
+          host: String((snapshot && snapshot.host) || '').trim(),
+          uptime: String((snapshot && snapshot.uptime) || '').trim(),
+          cpuUsagePercent: toFiniteNumber(snapshot && snapshot.cpu_usage_percent, 0),
+          cpuModel: String((snapshot && snapshot.cpu_model) || '').trim(),
+          logicalCores: Math.max(0, Math.round(toFiniteNumber(snapshot && snapshot.logical_cores, 0))),
+          loadAverage: normalizeLoadAverage(snapshot && snapshot.load_average),
+          memoryUsedMb: toFiniteNumber(snapshot && snapshot.memory_used_mb, 0),
+          memoryTotalMb: toFiniteNumber(snapshot && snapshot.memory_total_mb, 0),
+          memoryUsagePercent: toFiniteNumber(snapshot && snapshot.memory_usage_percent, 0),
+          diskUsedText: String((snapshot && snapshot.disk_used_text) || '').trim(),
+          diskPercent: toFiniteNumber(snapshot && snapshot.disk_percent, 0),
+          gpuCount: gpuCount,
+          gpuAvgUsagePercent: gpuAverage,
+          gpuPayload: gpuPayload,
+          gpuProcesses: gpuProcesses,
+          topProcesses: topProcesses
+        };
+      })
+      .filter(Boolean)
+      .sort(function (left, right) {
+        if (left.sortOrder !== right.sortOrder) return left.sortOrder - right.sortOrder;
+        return left.label.localeCompare(right.label);
+      });
+  }
+
+  function getServerStatusInfo(item) {
+    var rawStatus = String((item && item.status) || '').toLowerCase();
+    var ageMinutes = getRelativeAgeMinutes(item && item.generatedAt);
+    if (rawStatus === 'error' || (item && item.errorMessage)) {
+      return { key: 'error', label: 'Error' };
+    }
+    if (rawStatus === 'stale' || ageMinutes === null || ageMinutes > 60) {
+      return { key: 'stale', label: 'Stale' };
+    }
+    return { key: 'live', label: 'Live' };
+  }
+
+  function formatPercent(value, decimals) {
+    var precision = Number.isFinite(Number(decimals)) ? Number(decimals) : 0;
+    return toFiniteNumber(value, 0).toFixed(precision) + '%';
+  }
+
+  function formatLoadAverage(value) {
+    var load = normalizeLoadAverage(value);
+    return [load.one, load.five, load.fifteen].map(function (item) {
+      return item.toFixed(2);
+    }).join(' / ');
+  }
+
+  function formatMemoryPair(usedMb, totalMb) {
+    var used = Math.round(toFiniteNumber(usedMb, 0));
+    var total = Math.round(toFiniteNumber(totalMb, 0));
+    if (!total) return 'No memory snapshot';
+    return used + ' / ' + total + ' MB';
+  }
+
+  function formatDiskDetail(item) {
+    if (item && item.diskUsedText) return item.diskUsedText;
+    return 'No disk snapshot';
+  }
+
+  function getTopCpuProcess(item) {
+    return safeArray(item && item.topProcesses)[0] || null;
+  }
+
+  function getTopGpuProcess(item) {
+    var processes = safeArray(item && item.gpuProcesses).slice();
+    if (!processes.length) return null;
+    processes.sort(function (left, right) {
+      return toFiniteNumber(right && right.used_memory_mb, 0) - toFiniteNumber(left && left.used_memory_mb, 0);
+    });
+    return processes[0] || null;
+  }
+
+  function renderServerMeter(label, percent, detail, toneOverride) {
+    var tone = toneOverride || getUsageTone(percent);
+    var width = tone === 'muted' ? 0 : clampPercent(percent);
+    return (
+      '<div class="workspace-server-meter">' +
+        '<div class="workspace-server-meter-head">' +
+          '<strong>' + escapeHtml(label) + '</strong>' +
+          '<span>' + escapeHtml(detail) + '</span>' +
+        '</div>' +
+        '<div class="workspace-server-meter-track" aria-hidden="true">' +
+          '<div class="workspace-server-meter-fill" data-tone="' + escapeHtml(tone) + '" style="width:' + escapeHtml(width + '%') + '"></div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function renderServerDevices(item) {
+    var devices = safeArray(item && item.gpuPayload);
+    if (!devices.length) {
+      return '<p>No GPU for this server.</p>';
+    }
+
+    return (
+      '<div class="workspace-server-device-list">' +
+        devices.map(function (device, index) {
+          var memoryUsed = Math.round(toFiniteNumber(device && device.memory_used_mb, 0));
+          var memoryTotal = Math.round(toFiniteNumber(device && device.memory_total_mb, 0));
+          var utilization = formatPercent(device && device.utilization_percent, 0);
+          var temperature = device && device.temperature_c ? device.temperature_c + 'C' : 'Temp unavailable';
+          var powerDraw = device && device.power_draw_w ? device.power_draw_w + 'W' : 'Power unavailable';
+          var powerLimit = device && device.power_limit_w ? device.power_limit_w + 'W limit' : '';
+          return (
+            '<div class="workspace-server-device">' +
+              '<strong>' + escapeHtml((device && device.name) || ('GPU ' + index)) + '</strong>' +
+              '<span>' + escapeHtml('Utilization ' + utilization + ' · Memory ' + memoryUsed + ' / ' + memoryTotal + ' MB') + '</span>' +
+              '<span>' + escapeHtml(temperature + (powerLimit ? ' · ' + powerDraw + ' / ' + powerLimit : ' · ' + powerDraw)) + '</span>' +
+            '</div>'
+          );
+        }).join('') +
+      '</div>'
+    );
+  }
+
+  function renderServerProcessBlock(title, process, emptyText, builder) {
+    return (
+      '<div class="workspace-detail-block">' +
+        '<h5>' + escapeHtml(title) + '</h5>' +
+        (process ? builder(process) : '<p>' + escapeHtml(emptyText) + '</p>') +
+      '</div>'
+    );
+  }
+
+  function renderServerSignals(items, selectedAlias) {
+    var safeItems = safeArray(items);
+    if (!safeItems.length) {
+      return '<div class="workspace-empty">No server snapshot yet.</div>';
+    }
+
+    var activeAlias = String(selectedAlias || '');
+    var activeItem = safeItems.find(function (item) {
+      return item.alias === activeAlias;
+    }) || null;
+
+    return (
+      '<div class="workspace-summary-grid">' +
+        safeItems.map(function (item) {
+          var status = getServerStatusInfo(item);
+          var isActive = item.alias === activeAlias;
+          var hasSnapshot = Boolean(item.generatedAt);
+          var cpuDetail = hasSnapshot ? formatPercent(item.cpuUsagePercent, 0) : 'No snapshot';
+          var memoryDetail = hasSnapshot ? formatPercent(item.memoryUsagePercent, 0) : 'No snapshot';
+          var gpuDetail = !hasSnapshot ? 'No snapshot' : (item.gpuCount ? formatPercent(item.gpuAvgUsagePercent, 0) : 'No GPU');
+          return (
+            '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-server-trigger="' + escapeHtml(item.alias) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-server-detail">' +
+              '<div class="workspace-select-card-head">' +
+                '<div>' +
+                  '<h4>' + escapeHtml(item.label) + '</h4>' +
+                '</div>' +
+                '<span class="workspace-server-status" data-state="' + escapeHtml(status.key) + '">' +
+                  '<span class="workspace-server-status-dot" aria-hidden="true"></span>' +
+                  escapeHtml(status.label) +
+                '</span>' +
+              '</div>' +
+              renderCardMeta([
+                'Updated ' + formatRelativeAge(item.generatedAt),
+                item.host || item.sshAlias || item.alias
+              ]) +
+              '<div class="workspace-server-meters">' +
+                renderServerMeter('CPU', item.cpuUsagePercent, cpuDetail, (!hasSnapshot || status.key === 'error') ? 'muted' : null) +
+                renderServerMeter('Memory', item.memoryUsagePercent, memoryDetail, (!hasSnapshot || status.key === 'error') ? 'muted' : null) +
+                renderServerMeter('GPU', item.gpuAvgUsagePercent, gpuDetail, (!hasSnapshot || status.key === 'error') ? 'muted' : (item.gpuCount ? null : 'muted')) +
+              '</div>' +
+              (status.key === 'error' && item.errorMessage ? '<div class="workspace-server-error">' + escapeHtml(truncateText(item.errorMessage, 120)) + '</div>' : '') +
+            '</button>'
+          );
+        }).join('') +
+      '</div>' +
+      '<section class="workspace-detail-panel" id="workspace-server-detail" role="region" aria-labelledby="workspace-server-detail-title"' + (activeItem ? '' : ' hidden') + '>' +
+        (activeItem ? (
+          '<div class="workspace-detail-head">' +
+            '<div>' +
+              '<div class="eyebrow">Server Signals</div>' +
+              '<h4 id="workspace-server-detail-title">' + escapeHtml(activeItem.label) + '</h4>' +
+            '</div>' +
+            '<button type="button" class="workspace-detail-close" data-workspace-server-close>Close</button>' +
+          '</div>' +
+          '<div class="workspace-detail-meta">' +
+            '<span>' + escapeHtml(getServerStatusInfo(activeItem).label) + '</span>' +
+            '<span>' + escapeHtml('Updated ' + formatRelativeAge(activeItem.generatedAt)) + '</span>' +
+            '<span>' + escapeHtml(activeItem.host || activeItem.alias) + '</span>' +
+          '</div>' +
+          (activeItem.errorMessage ? '<div class="workspace-server-error">' + escapeHtml(activeItem.errorMessage) + '</div>' : '') +
+          (!activeItem.generatedAt && !activeItem.errorMessage ? '<div class="workspace-empty">No server snapshot yet for this target.</div>' : '') +
+          (activeItem.generatedAt ? '<div class="workspace-server-detail-grid">' +
+            '<div class="workspace-detail-block">' +
+              '<h5>Overview</h5>' +
+              '<ul class="workspace-detail-list">' +
+                '<li>' + escapeHtml('Host: ' + (activeItem.host || activeItem.alias)) + '</li>' +
+                '<li>' + escapeHtml('Uptime: ' + (activeItem.uptime || 'Unavailable')) + '</li>' +
+                '<li>' + escapeHtml('Root label: ' + activeItem.rootLabel) + '</li>' +
+                '<li>' + escapeHtml('Refresh age: ' + formatRelativeAge(activeItem.generatedAt)) + '</li>' +
+              '</ul>' +
+            '</div>' +
+            '<div class="workspace-detail-block">' +
+              '<h5>CPU</h5>' +
+              '<ul class="workspace-detail-list">' +
+                '<li>' + escapeHtml('Usage: ' + formatPercent(activeItem.cpuUsagePercent, 1)) + '</li>' +
+                '<li>' + escapeHtml('Load average: ' + formatLoadAverage(activeItem.loadAverage)) + '</li>' +
+                '<li>' + escapeHtml('Cores: ' + (activeItem.logicalCores || 0)) + '</li>' +
+                '<li>' + escapeHtml(activeItem.cpuModel || 'CPU model unavailable') + '</li>' +
+              '</ul>' +
+            '</div>' +
+            '<div class="workspace-detail-block">' +
+              '<h5>Memory & Disk</h5>' +
+              '<ul class="workspace-detail-list">' +
+                '<li>' + escapeHtml('Memory: ' + formatMemoryPair(activeItem.memoryUsedMb, activeItem.memoryTotalMb)) + '</li>' +
+                '<li>' + escapeHtml('Memory usage: ' + formatPercent(activeItem.memoryUsagePercent, 1)) + '</li>' +
+                '<li>' + escapeHtml('Disk: ' + formatDiskDetail(activeItem)) + '</li>' +
+                '<li>' + escapeHtml('Disk usage: ' + formatPercent(activeItem.diskPercent, 0)) + '</li>' +
+              '</ul>' +
+            '</div>' +
+            '<div class="workspace-detail-block">' +
+              '<h5>GPU</h5>' +
+              '<ul class="workspace-detail-list">' +
+                '<li>' + escapeHtml(activeItem.gpuCount ? ('Devices: ' + activeItem.gpuCount) : 'Devices: No GPU') + '</li>' +
+                '<li>' + escapeHtml(activeItem.gpuCount ? ('Average usage: ' + formatPercent(activeItem.gpuAvgUsagePercent, 0)) : 'Average usage: No GPU') + '</li>' +
+              '</ul>' +
+            '</div>' +
+            '<div class="workspace-detail-block">' +
+              '<h5>GPU Devices</h5>' +
+              renderServerDevices(activeItem) +
+            '</div>' +
+            renderServerProcessBlock('Top CPU Process', getTopCpuProcess(activeItem), 'No CPU process captured.', function (process) {
+              var command = String(process.command || process.args || 'Process').trim();
+              var user = String(process.user || '').trim();
+              return '<p>' + escapeHtml((user ? user + ' · ' : '') + command + ' · ' + formatPercent(process.cpu_percent, 1) + ' CPU · ' + formatPercent(process.mem_percent, 1) + ' MEM') + '</p>';
+            }) +
+            renderServerProcessBlock('Top GPU Process', getTopGpuProcess(activeItem), 'No GPU process captured.', function (process) {
+              var name = String(process.process_name || process.command || 'Process').trim();
+              var usedMemory = Math.round(toFiniteNumber(process.used_memory_mb, 0));
+              return '<p>' + escapeHtml(name + ' · ' + usedMemory + ' MB GPU memory') + '</p>';
+            }) +
+          '</div>' : '')
         ) : '') +
       '</section>'
     );
@@ -851,7 +1216,7 @@
       {
         key: 'snapshot',
         title: 'Traffic Snapshot',
-        copy: 'Quick read on recent visitors and tracked public pages.',
+        meta: ['Today', '30d', 'Tracked'],
         body: (
           '<div class="workspace-signal-stats">' +
             [
@@ -873,13 +1238,13 @@
       {
         key: 'trend',
         title: 'Trend',
-        copy: 'Small visitor sparkline for the recent monthly trajectory.',
+        meta: ['Recent monthly sparkline'],
         body: renderSignalSparkline(safeSummary.monthlySeries)
       },
       {
         key: 'pages',
         title: 'Top Pages',
-        copy: 'Quick ranking of the public pages drawing the most visits.',
+        meta: ['Current leaders'],
         body: renderSignalPagesMini(safeSummary.topPages)
       }
     ];
@@ -896,7 +1261,7 @@
                 '</div>' +
                 '<span class="workspace-card-microtag">View</span>' +
               '</div>' +
-              '<p class="workspace-signal-copy">' + escapeHtml(card.copy) + '</p>' +
+              renderCardMeta(card.meta) +
               card.body +
             '</button>'
           );
@@ -961,6 +1326,9 @@
     if (!workspaceState.opsTargets.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedOpsId || ''); })) {
       workspaceState.selectedOpsId = null;
     }
+    if (!workspaceState.serverItems.some(function (item) { return String(item.alias || '') === String(workspaceState.selectedServerAlias || ''); })) {
+      workspaceState.selectedServerAlias = null;
+    }
     if (['snapshot', 'trend', 'pages'].indexOf(String(workspaceState.selectedSignalKey || '')) === -1) {
       workspaceState.selectedSignalKey = null;
     }
@@ -976,6 +1344,10 @@
 
   function renderWorkspaceOps() {
     setHtml('workspace-ops', renderOps(workspaceState.opsTargets, workspaceState.selectedOpsId));
+  }
+
+  function renderWorkspaceServers() {
+    setHtml('workspace-servers', renderServerSignals(workspaceState.serverItems, workspaceState.selectedServerAlias));
   }
 
   function renderWorkspaceSignals() {
@@ -1043,6 +1415,26 @@
       });
     }
 
+    var serversRoot = byId('workspace-servers');
+    if (serversRoot && !serversRoot.dataset.bound) {
+      serversRoot.dataset.bound = 'true';
+      serversRoot.addEventListener('click', function (event) {
+        var closeButton = event.target.closest('[data-workspace-server-close]');
+        if (closeButton) {
+          workspaceState.selectedServerAlias = null;
+          renderWorkspaceServers();
+          return;
+        }
+        var trigger = event.target.closest('[data-workspace-server-trigger]');
+        if (!trigger) return;
+        var serverAlias = String(trigger.getAttribute('data-workspace-server-trigger') || '');
+        var nextAlias = workspaceState.selectedServerAlias === serverAlias ? null : serverAlias;
+        workspaceState.selectedServerAlias = nextAlias;
+        renderWorkspaceServers();
+        if (nextAlias) revealSectionDetail('workspace-server-detail');
+      });
+    }
+
     var signalsRoot = byId('workspace-signals');
     if (signalsRoot && !signalsRoot.dataset.bound) {
       signalsRoot.dataset.bound = 'true';
@@ -1100,11 +1492,24 @@
       .order('sort_order', { ascending: true })
       .limit(limits.links || 6);
 
-    var results = await Promise.all([metricsPromise, visitsPromise, notesPromise, linksPromise]);
+    var serverTargetsPromise = client
+      .from(tables.serverTargets || 'workspace_server_targets')
+      .select('alias,label,ssh_alias,root_label,sort_order')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .limit(limits.servers || 12);
+
+    var serverSnapshotsPromise = client
+      .from(tables.serverSnapshots || 'workspace_server_snapshots')
+      .select('server_alias,status,error_message,generated_at,host,uptime,cpu_usage_percent,cpu_model,logical_cores,load_average,memory_used_mb,memory_total_mb,memory_usage_percent,disk_used_text,disk_percent,gpu_count,gpu_avg_usage_percent,gpu_payload,gpu_processes,top_processes,updated_at');
+
+    var results = await Promise.all([metricsPromise, visitsPromise, notesPromise, linksPromise, serverTargetsPromise, serverSnapshotsPromise]);
     var metrics = results[0];
     var visits = results[1];
     var notes = results[2];
     var links = results[3];
+    var serverTargets = results[4];
+    var serverSnapshots = results[5];
 
     var metricsItems = metrics.error ? [] : (metrics.data || []);
     var analyticsSummary = visits.error ? buildZeroAnalyticsState(config) : aggregateVisitAnalytics(visits.data || [], config);
@@ -1113,9 +1518,14 @@
       var url = String((item && item.url) || '').trim().toLowerCase();
       return !/example\.com/.test(url);
     });
+    var serverItems = buildServerItems(
+      serverTargets.error ? [] : (serverTargets.data || []),
+      serverSnapshots.error ? [] : (serverSnapshots.data || [])
+    );
 
     workspaceState.notesItems = notesItems;
     workspaceState.linksItems = linksItems;
+    workspaceState.serverItems = serverItems;
     workspaceState.analyticsSummary = analyticsSummary;
     syncInteractiveSelections();
 
@@ -1123,6 +1533,7 @@
     renderWorkspaceNotes();
     renderWorkspaceLinks();
     renderWorkspaceOps();
+    renderWorkspaceServers();
     renderWorkspaceSignals();
   }
 
@@ -1158,6 +1569,7 @@
     syncInteractiveSelections();
     bindInteractiveSections();
     renderWorkspaceOps();
+    renderWorkspaceServers();
     var pendingSignedOutMessage = '';
     var idleTimeoutMinutes = getIdleTimeoutMinutes(config);
     var idleTimerId = null;

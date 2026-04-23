@@ -40,6 +40,40 @@ create table if not exists public.workspace_notes (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.workspace_server_targets (
+  alias text primary key,
+  label text not null,
+  ssh_alias text,
+  root_label text,
+  sort_order integer not null default 100,
+  is_active boolean not null default true,
+  inserted_at timestamptz not null default now()
+);
+
+create table if not exists public.workspace_server_snapshots (
+  server_alias text primary key references public.workspace_server_targets(alias) on delete cascade,
+  status text not null default 'live',
+  error_message text,
+  generated_at timestamptz not null default now(),
+  host text,
+  uptime text,
+  cpu_usage_percent numeric,
+  cpu_model text,
+  logical_cores integer,
+  load_average jsonb,
+  memory_used_mb numeric,
+  memory_total_mb numeric,
+  memory_usage_percent numeric,
+  disk_used_text text,
+  disk_percent numeric,
+  gpu_count integer,
+  gpu_avg_usage_percent numeric,
+  gpu_payload jsonb,
+  gpu_processes jsonb,
+  top_processes jsonb,
+  updated_at timestamptz not null default now()
+);
+
 create table if not exists public.site_visits (
   id bigint generated always as identity primary key,
   visited_on date not null default (timezone('Asia/Seoul', now()))::date,
@@ -100,6 +134,8 @@ $$;
 alter table public.workspace_dashboard_metrics enable row level security;
 alter table public.workspace_links enable row level security;
 alter table public.workspace_notes enable row level security;
+alter table public.workspace_server_targets enable row level security;
+alter table public.workspace_server_snapshots enable row level security;
 alter table public.site_visits enable row level security;
 
 drop policy if exists "master can read workspace dashboard metrics" on public.workspace_dashboard_metrics;
@@ -142,6 +178,36 @@ using (public.is_master_workspace_user());
 drop policy if exists "master can manage workspace notes" on public.workspace_notes;
 create policy "master can manage workspace notes"
 on public.workspace_notes
+for all
+to authenticated
+using (public.is_master_workspace_user())
+with check (public.is_master_workspace_user());
+
+drop policy if exists "master can read workspace server targets" on public.workspace_server_targets;
+create policy "master can read workspace server targets"
+on public.workspace_server_targets
+for select
+to authenticated
+using (public.is_master_workspace_user());
+
+drop policy if exists "master can manage workspace server targets" on public.workspace_server_targets;
+create policy "master can manage workspace server targets"
+on public.workspace_server_targets
+for all
+to authenticated
+using (public.is_master_workspace_user())
+with check (public.is_master_workspace_user());
+
+drop policy if exists "master can read workspace server snapshots" on public.workspace_server_snapshots;
+create policy "master can read workspace server snapshots"
+on public.workspace_server_snapshots
+for select
+to authenticated
+using (public.is_master_workspace_user());
+
+drop policy if exists "master can manage workspace server snapshots" on public.workspace_server_snapshots;
+create policy "master can manage workspace server snapshots"
+on public.workspace_server_snapshots
 for all
 to authenticated
 using (public.is_master_workspace_user())

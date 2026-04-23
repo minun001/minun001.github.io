@@ -28,7 +28,7 @@ script_bundle: workspace
     .workspace-section:first-of-type{padding-top:0;border-top:none}
     .workspace-section-head{display:grid;gap:.2rem}
     .workspace-section-head h3{margin:0;color:var(--text-title);font-size:1.15rem}
-    .workspace-section-head p{color:var(--text-soft)}
+    .workspace-section-head p{color:var(--text-soft);font-size:.92rem;line-height:1.5}
     .workspace-account-head{display:grid;gap:.3rem}
     .workspace-account-head h2{margin:0;color:var(--text-title);font-size:clamp(1.35rem,2vw,1.75rem);line-height:1.05}
     .workspace-status{margin-top:1rem;padding:.92rem 1rem;border-radius:14px;background:#edf3f8;color:var(--text-title);font-weight:700;box-shadow:inset 0 0 0 1px rgba(17,32,51,.05)}
@@ -61,7 +61,7 @@ script_bundle: workspace
     .workspace-mini-card p{margin:0;color:var(--text-soft)}
     .workspace-empty{padding:1rem;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);color:var(--text-soft)}
     .workspace-note-meta{margin-top:.2rem;color:var(--text-soft);font-size:.8rem;font-weight:700}
-    .workspace-notes,.workspace-links,.workspace-ops,.workspace-signals{display:grid;gap:.9rem}
+    .workspace-notes,.workspace-links,.workspace-ops,.workspace-servers,.workspace-signals{display:grid;gap:.9rem}
     .workspace-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.85rem}
     .workspace-select-card{display:grid;gap:.75rem;width:100%;padding:1.05rem;border:none;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);text-align:left;cursor:pointer;transition:transform .2s ease, box-shadow .2s ease, background .2s ease}
     .workspace-select-card:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08),0 10px 24px rgba(15,23,42,.06)}
@@ -74,6 +74,8 @@ script_bundle: workspace
     .workspace-link-tag{background:rgba(17,32,51,.06);color:var(--text-title)}
     .workspace-card-microtag{min-width:0;background:rgba(16,185,129,.12);color:#0f766e}
     .workspace-select-card-copy{margin:0;color:var(--text-soft);line-height:1.65}
+    .workspace-select-card-meta{display:flex;flex-wrap:wrap;gap:.42rem .72rem;color:var(--text-soft);font-size:.79rem;font-weight:700}
+    .workspace-select-card-meta span{display:inline-flex;align-items:center;gap:.3rem}
     .workspace-detail-panel{display:grid;gap:1rem;padding:1.05rem 1.1rem;border-radius:18px;background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);box-shadow:inset 0 0 0 1px rgba(29,78,216,.12)}
     .workspace-detail-panel[hidden]{display:none}
     .workspace-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
@@ -89,6 +91,30 @@ script_bundle: workspace
     .workspace-detail-list{display:grid;gap:.45rem;margin:0;padding-left:1.15rem;color:var(--text-soft)}
     .workspace-detail-list li{line-height:1.62}
     .workspace-detail-list code{font-size:.92em;font-weight:700}
+    .workspace-server-status{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .6rem;border-radius:999px;background:rgba(17,32,51,.06);color:var(--text-title);font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+    .workspace-server-status-dot{width:.55rem;height:.55rem;border-radius:999px;background:rgba(17,32,51,.38)}
+    .workspace-server-status[data-state="live"]{background:rgba(21,128,61,.12);color:#176246}
+    .workspace-server-status[data-state="live"] .workspace-server-status-dot{background:#22c55e}
+    .workspace-server-status[data-state="stale"]{background:rgba(180,83,9,.12);color:#8a5a1d}
+    .workspace-server-status[data-state="stale"] .workspace-server-status-dot{background:#f59e0b}
+    .workspace-server-status[data-state="error"]{background:rgba(162,49,56,.12);color:#a23138}
+    .workspace-server-status[data-state="error"] .workspace-server-status-dot{background:#ef4444}
+    .workspace-server-updated{color:var(--text-soft);font-size:.8rem;font-weight:700}
+    .workspace-server-meters{display:grid;gap:.58rem}
+    .workspace-server-meter{display:grid;gap:.28rem}
+    .workspace-server-meter-head{display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:var(--text-soft);font-size:.78rem;font-weight:800}
+    .workspace-server-meter-head strong{color:var(--text-title);font-size:.8rem}
+    .workspace-server-meter-track{position:relative;height:10px;border-radius:999px;background:rgba(17,32,51,.08);overflow:hidden}
+    .workspace-server-meter-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#2bb3a8 0%,#0f766e 100%)}
+    .workspace-server-meter-fill[data-tone="warn"]{background:linear-gradient(90deg,#f59e0b 0%,#d97706 100%)}
+    .workspace-server-meter-fill[data-tone="danger"]{background:linear-gradient(90deg,#ef4444 0%,#dc2626 100%)}
+    .workspace-server-meter-fill[data-tone="muted"]{background:linear-gradient(90deg,#cbd5e1 0%,#94a3b8 100%)}
+    .workspace-server-error{padding:.78rem .82rem;border-radius:14px;background:rgba(162,49,56,.08);color:#a23138;font-size:.84rem;font-weight:700;line-height:1.55}
+    .workspace-server-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem}
+    .workspace-server-device-list{display:grid;gap:.65rem}
+    .workspace-server-device{padding:.85rem;border-radius:14px;background:rgba(17,32,51,.035)}
+    .workspace-server-device strong{display:block;color:var(--text-title);font-size:.94rem}
+    .workspace-server-device span{display:block;margin-top:.22rem;color:var(--text-soft);font-size:.82rem;line-height:1.5}
     .workspace-analytics{display:grid;gap:1rem}
     .workspace-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem}
     .workspace-analytics-card{padding:1rem;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08)}
@@ -149,7 +175,7 @@ script_bundle: workspace
     .workspace-shell[data-mode="private"] > article[data-workspace-view="dashboard"]{order:1}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list,.workspace-summary-grid,.workspace-signal-grid,.workspace-signal-stats{grid-template-columns:1fr}.workspace-shell[data-mode="private"]>aside.workspace-panel{position:static;top:auto}.workspace-detail-head{grid-template-columns:1fr;display:grid}}
+    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list,.workspace-summary-grid,.workspace-signal-grid,.workspace-signal-stats,.workspace-server-detail-grid{grid-template-columns:1fr}.workspace-shell[data-mode="private"]>aside.workspace-panel{position:static;top:auto}.workspace-detail-head{grid-template-columns:1fr;display:grid}}
   </style>
 
 <div class="workspace-page" data-workspace-page data-mode="auth">
@@ -157,7 +183,7 @@ script_bundle: workspace
           <div class="page-lead-copy">
             <div class="eyebrow">Workspace</div>
             <h1>Workspace</h1>
-            <p>Private access, research notes, curated links, and lightweight site signals.</p>
+            <p>Private notes, server signals, and site checks.</p>
           </div>
         </section>
 
@@ -165,7 +191,7 @@ script_bundle: workspace
           <article class="workspace-panel" data-workspace-view="login">
             <div class="eyebrow">Login</div>
             <h2>Workspace Login</h2>
-            <p>Sign in with the master workspace account. If a valid session is already active, access will unlock automatically.</p>
+            <p>Sign in with the master workspace account. Active sessions unlock automatically.</p>
             <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true">Checking workspace access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
@@ -187,7 +213,7 @@ script_bundle: workspace
             <div class="workspace-dashboard-head">
               <div class="workspace-dashboard-copy">
                 <h2>Overview</h2>
-                <p>Private workspace signals, active notes, and curated research shortcuts.</p>
+                <p>Notes, servers, and site checks at a glance.</p>
               </div>
             </div>
             <div class="workspace-stack">
@@ -203,7 +229,7 @@ script_bundle: workspace
               <section class="workspace-section" aria-labelledby="workspace-notes-title">
                 <div class="workspace-section-head">
                   <h3 id="workspace-notes-title">Research Log</h3>
-                  <p>Private notes, active writing threads, and short internal checkpoints.</p>
+                  <p>Pinned notes and active writing threads.</p>
                 </div>
                 <div class="workspace-notes" id="workspace-notes">
                   <div class="workspace-empty">No research log yet.</div>
@@ -213,7 +239,7 @@ script_bundle: workspace
               <section class="workspace-section" aria-labelledby="workspace-library-title">
                 <div class="workspace-section-head">
                   <h3 id="workspace-library-title">Private Library</h3>
-                  <p>Frequently used private links for drafts, reading queues, and working material.</p>
+                  <p>Private links for drafts, queues, and reference tools.</p>
                 </div>
                 <div class="workspace-links" id="workspace-links">
                   <div class="workspace-empty">No private library links yet.</div>
@@ -223,10 +249,20 @@ script_bundle: workspace
               <section class="workspace-section" aria-labelledby="workspace-ops-title">
                 <div class="workspace-section-head">
                   <h3 id="workspace-ops-title">Website Ops</h3>
-                  <p>Frequent website edit targets, recurring cleanup points, and deployment checks.</p>
+                  <p>Frequent edit targets and deploy checks.</p>
                 </div>
                 <div class="workspace-ops" id="workspace-ops">
                   <div class="workspace-empty">No website ops targets yet.</div>
+                </div>
+              </section>
+
+              <section class="workspace-section" aria-labelledby="workspace-servers-title">
+                <div class="workspace-section-head">
+                  <h3 id="workspace-servers-title">Server Signals</h3>
+                  <p>CPU, memory, and GPU status across connected servers.</p>
+                </div>
+                <div class="workspace-servers" id="workspace-servers">
+                  <div class="workspace-empty">No server snapshot yet.</div>
                 </div>
               </section>
 
@@ -234,7 +270,7 @@ script_bundle: workspace
                 <div class="workspace-section-head">
                   <div class="eyebrow">Site Signals</div>
                   <h3 id="workspace-analytics-title">Site Signals</h3>
-                  <p>Lightweight traffic summaries for the public site.</p>
+                  <p>Traffic snapshot for the public site.</p>
                 </div>
                 <div class="workspace-signals" id="workspace-signals">
                   <div class="workspace-empty">No traffic summary yet.</div>
@@ -246,33 +282,38 @@ script_bundle: workspace
           <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
             <div class="eyebrow">Access Restricted</div>
             <h2>Not Authorized</h2>
-            <p>No workspace access for this account.</p>
+            <p>This account does not have workspace access.</p>
           </article>
 
           <article class="workspace-panel" data-workspace-view="setup" hidden>
             <div class="eyebrow">Setup Required</div>
             <h2>Connect Workspace Auth</h2>
-            <p class="workspace-setup-copy">Add your Supabase URL and anon key to <code>/assets/workspace-config.js</code>, then allow access through the master rule.</p>
+            <p class="workspace-setup-copy">Add Supabase auth, run the SQL setup, then sync private server snapshots from a trusted machine.</p>
             <div class="workspace-list workspace-setup-list">
               <div class="workspace-card">
                 <span class="workspace-card-step">Step 1</span>
                 <h3>What stays private</h3>
-                <p>Passwords and service-role keys should never be committed.</p>
+                <p>Never commit passwords or service-role keys.</p>
               </div>
               <div class="workspace-card">
                 <span class="workspace-card-step">Step 2</span>
                 <h3>What is public</h3>
-                <p>The Supabase URL and anon key are safe for client use.</p>
+                <p>The Supabase URL and anon key are safe in the client.</p>
               </div>
               <div class="workspace-card">
                 <span class="workspace-card-step">Step 3</span>
                 <h3>Run the SQL setup</h3>
-                <p>Run <code>tools/workspace_supabase_schema.sql</code> in Supabase SQL Editor.</p>
+                <p>Run <code>tools/workspace_supabase_schema.sql</code> in Supabase.</p>
               </div>
               <div class="workspace-card">
                 <span class="workspace-card-step">Step 4</span>
                 <h3>Load starter content</h3>
-                <p>Run <code>tools/workspace_supabase_seed.sql</code> to load starter workspace content.</p>
+                <p>Run <code>tools/workspace_supabase_seed.sql</code> for starter notes and links.</p>
+              </div>
+              <div class="workspace-card">
+                <span class="workspace-card-step">Step 5</span>
+                <h3>Sync server snapshots</h3>
+                <p>Run <code>tools/workspace_server_sync.py</code> from a trusted machine.</p>
               </div>
             </div>
           </article>
