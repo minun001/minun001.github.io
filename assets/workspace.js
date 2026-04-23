@@ -304,6 +304,17 @@
     return Array.isArray(value) ? value : [];
   }
 
+  function getServerFallback(config) {
+    var fallback = config && config.serverFallback;
+    if (!fallback || typeof fallback !== 'object') {
+      return { targets: [], snapshots: [] };
+    }
+    return {
+      targets: safeArray(fallback.targets),
+      snapshots: safeArray(fallback.snapshots)
+    };
+  }
+
   function toFiniteNumber(value, fallback) {
     var number = Number(value);
     if (Number.isFinite(number)) return number;
@@ -508,91 +519,26 @@
   function renderLinks(items, selectedId) {
     var safeItems = Array.isArray(items) ? items : [];
     if (!safeItems.length) {
-      var linkActions = getLinkActionItems();
-      var activeActionId = String(selectedId || '');
-      var activeAction = linkActions.find(function (item) {
-        return item.id === activeActionId;
-      }) || null;
-
-      return (
-        '<div class="workspace-summary-grid">' +
-          linkActions.map(function (item) {
-            var isActive = item.id === activeActionId;
-            return (
-              '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-link-trigger="' + escapeHtml(item.id) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-link-detail">' +
-                '<div class="workspace-select-card-head">' +
-                  '<div>' +
-                    '<h4>' + escapeHtml(item.title) + '</h4>' +
-                  '</div>' +
-                  '<span class="workspace-link-tag">' + escapeHtml(item.badge) + '</span>' +
-                '</div>' +
-                renderCardCopy(item.summary, 120) +
-              '</button>'
-            );
-          }).join('') +
-        '</div>' +
-        '<section class="workspace-detail-panel" id="workspace-link-detail" role="region" aria-labelledby="workspace-link-detail-title"' + (activeAction ? '' : ' hidden') + '>' +
-          (activeAction ? (
-            '<div class="workspace-detail-head">' +
-              '<div>' +
-                '<h4 id="workspace-link-detail-title">' + escapeHtml(activeAction.title) + '</h4>' +
-              '</div>' +
-              '<button type="button" class="workspace-detail-close" data-workspace-link-close>Close</button>' +
-            '</div>' +
-            '<div class="workspace-detail-meta">' +
-              '<span>Repo sync required</span>' +
-            '</div>' +
-            '<div class="workspace-detail-copy">' +
-              '<p>' + escapeHtml(activeAction.detailSummary) + '</p>' +
-            '</div>' +
-            renderDetailListBlock('Next steps', activeAction.checklist, false)
-          ) : '') +
-        '</section>'
-      );
+      return '<div class="workspace-empty">No private links yet.</div>';
     }
-
-    var activeId = String(selectedId || '');
-    var activeItem = safeItems.find(function (item) {
-      return toSelectionId(item.id) === activeId;
-    }) || null;
 
     return (
       '<div class="workspace-summary-grid">' +
         safeItems.map(function (item) {
-          var itemId = toSelectionId(item.id);
-          var isActive = itemId === activeId;
           var label = String(item.tag || 'Open').trim() || 'Open';
           return (
-            '<button type="button" class="workspace-select-card' + (isActive ? ' is-active' : '') + '" data-workspace-link-trigger="' + escapeHtml(itemId) + '" aria-expanded="' + (isActive ? 'true' : 'false') + '" aria-controls="workspace-link-detail">' +
+            '<a class="workspace-select-card workspace-link-card" href="' + escapeHtml(item.url || '#') + '" target="_blank" rel="noreferrer">' +
               '<div class="workspace-select-card-head">' +
                 '<div>' +
                   '<h4>' + escapeHtml(item.title || 'Resource') + '</h4>' +
                 '</div>' +
                 '<span class="workspace-link-tag">' + escapeHtml(label) + '</span>' +
               '</div>' +
-              renderCardCopy(item.description, 112) +
-            '</button>'
+              renderCardCopy(item.description, 108) +
+            '</a>'
           );
         }).join('') +
-      '</div>' +
-      '<section class="workspace-detail-panel" id="workspace-link-detail" role="region" aria-labelledby="workspace-link-detail-title"' + (activeItem ? '' : ' hidden') + '>' +
-        (activeItem ? (
-          '<div class="workspace-detail-head">' +
-            '<div>' +
-              '<h4 id="workspace-link-detail-title">' + escapeHtml(activeItem.title || 'Resource') + '</h4>' +
-            '</div>' +
-            '<button type="button" class="workspace-detail-close" data-workspace-link-close>Close</button>' +
-          '</div>' +
-          '<div class="workspace-detail-meta">' +
-            '<span>' + escapeHtml(String(activeItem.tag || 'Open').trim() || 'Open') + '</span>' +
-            '<span>' + escapeHtml(getLinkHost(activeItem.url)) + '</span>' +
-          '</div>' +
-          '<div class="workspace-detail-copy">' + formatRichText(activeItem.description) + '</div>' +
-          '<div class="workspace-detail-actions">' +
-            '<a class="workspace-button" href="' + escapeHtml(activeItem.url || '#') + '" target="_blank" rel="noreferrer">' + escapeHtml(String(activeItem.tag || 'Open').trim() || 'Open') + '</a>' +
-          '</div>'
-        ) : '') +
-      '</section>'
+      '</div>'
     );
   }
 
@@ -765,7 +711,7 @@
     if (rawStatus === 'error' || (item && item.errorMessage)) {
       return { key: 'error', label: 'Error' };
     }
-    if (rawStatus === 'stale' || ageMinutes === null || ageMinutes > 60) {
+    if (rawStatus === 'stale' || ageMinutes === null || ageMinutes > 1440) {
       return { key: 'stale', label: 'Stale' };
     }
     return { key: 'live', label: 'Live' };
@@ -837,13 +783,11 @@
           var memoryTotal = Math.round(toFiniteNumber(device && device.memory_total_mb, 0));
           var utilization = formatPercent(device && device.utilization_percent, 0);
           var temperature = device && device.temperature_c ? device.temperature_c + 'C' : 'Temp unavailable';
-          var powerDraw = device && device.power_draw_w ? device.power_draw_w + 'W' : 'Power unavailable';
-          var powerLimit = device && device.power_limit_w ? device.power_limit_w + 'W limit' : '';
           return (
             '<div class="workspace-server-device">' +
               '<strong>' + escapeHtml((device && device.name) || ('GPU ' + index)) + '</strong>' +
-              '<span>' + escapeHtml('Utilization ' + utilization + ' · Memory ' + memoryUsed + ' / ' + memoryTotal + ' MB') + '</span>' +
-              '<span>' + escapeHtml(temperature + (powerLimit ? ' · ' + powerDraw + ' / ' + powerLimit : ' · ' + powerDraw)) + '</span>' +
+              '<span>' + escapeHtml('Utilization ' + utilization + ' | Memory ' + memoryUsed + ' / ' + memoryTotal + ' MB') + '</span>' +
+              '<span>' + escapeHtml(temperature) + '</span>' +
             '</div>'
           );
         }).join('') +
@@ -936,7 +880,7 @@
               '</div>' +
               renderCardMeta([
                 'Updated ' + formatRelativeAge(item.generatedAt),
-                item.host || item.sshAlias || item.alias
+                item.gpuCount ? ((item.gpuPayload[0] && item.gpuPayload[0].name) || 'GPU') : 'No GPU'
               ]) +
               '<div class="workspace-server-meters">' +
                 renderServerMeter('CPU', item.cpuUsagePercent, cpuDetail, (!hasSnapshot || status.key === 'error') ? 'muted' : null) +
@@ -959,7 +903,6 @@
           '<div class="workspace-detail-meta">' +
             '<span>' + escapeHtml(getServerStatusInfo(activeItem).label) + '</span>' +
             '<span>' + escapeHtml('Updated ' + formatRelativeAge(activeItem.generatedAt)) + '</span>' +
-            '<span>' + escapeHtml(activeItem.host || activeItem.alias) + '</span>' +
           '</div>' +
           (activeItem.errorMessage ? '<div class="workspace-server-error">' + escapeHtml(activeItem.errorMessage) + '</div>' : '') +
           (!activeItem.generatedAt && !activeItem.errorMessage ? '<div class="workspace-empty">No server snapshot yet for this target.</div>' : '') +
@@ -967,10 +910,9 @@
             '<div class="workspace-detail-block">' +
               '<h5>Overview</h5>' +
               '<ul class="workspace-detail-list">' +
-                '<li>' + escapeHtml('Host: ' + (activeItem.host || activeItem.alias)) + '</li>' +
                 '<li>' + escapeHtml('Uptime: ' + (activeItem.uptime || 'Unavailable')) + '</li>' +
-                '<li>' + escapeHtml('Root label: ' + activeItem.rootLabel) + '</li>' +
                 '<li>' + escapeHtml('Refresh age: ' + formatRelativeAge(activeItem.generatedAt)) + '</li>' +
+                '<li>' + escapeHtml('Disk: ' + formatDiskDetail(activeItem)) + '</li>' +
               '</ul>' +
             '</div>' +
             '<div class="workspace-detail-block">' +
@@ -1002,16 +944,6 @@
               '<h5>GPU Devices</h5>' +
               renderServerDevices(activeItem) +
             '</div>' +
-            renderServerProcessBlock('Top CPU Process', getTopCpuProcess(activeItem), 'No CPU process captured.', function (process) {
-              var command = String(process.command || process.args || 'Process').trim();
-              var user = String(process.user || '').trim();
-              return '<p>' + escapeHtml((user ? user + ' · ' : '') + command + ' · ' + formatPercent(process.cpu_percent, 1) + ' CPU · ' + formatPercent(process.mem_percent, 1) + ' MEM') + '</p>';
-            }) +
-            renderServerProcessBlock('Top GPU Process', getTopGpuProcess(activeItem), 'No GPU process captured.', function (process) {
-              var name = String(process.process_name || process.command || 'Process').trim();
-              var usedMemory = Math.round(toFiniteNumber(process.used_memory_mb, 0));
-              return '<p>' + escapeHtml(name + ' · ' + usedMemory + ' MB GPU memory') + '</p>';
-            }) +
           '</div>' : '')
         ) : '') +
       '</section>'
@@ -1496,7 +1428,6 @@
                 '<div>' +
                   '<h4>' + escapeHtml(card.title) + '</h4>' +
                 '</div>' +
-                '<span class="workspace-card-microtag">View</span>' +
               '</div>' +
               card.body +
             '</button>'
@@ -1699,6 +1630,7 @@
 
   async function loadWorkspaceData(client, config) {
     var contentFallback = await loadWorkspaceContentFallback();
+    var serverFallback = getServerFallback(config);
     var tables = config.tables || {};
     var limits = config.limits || {};
     var analytics = config.analytics || {};
@@ -1769,10 +1701,12 @@
     if (!linksItems.length && contentFallback.links.length) {
       linksItems = contentFallback.links;
     }
-    var serverItems = buildServerItems(
+    var liveServerItems = buildServerItems(
       serverTargets.error ? [] : (serverTargets.data || []),
       serverSnapshots.error ? [] : (serverSnapshots.data || [])
     );
+    var fallbackServerItems = buildServerItems(serverFallback.targets, serverFallback.snapshots);
+    var serverItems = liveServerItems.length ? liveServerItems : fallbackServerItems;
     var serverActionMode = (
       isMissingTableError(serverTargets.error, 'workspace_server_targets') ||
       isMissingTableError(serverSnapshots.error, 'workspace_server_snapshots')

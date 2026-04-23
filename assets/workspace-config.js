@@ -83,6 +83,210 @@ window.WORKSPACE_AUTH_CONFIG = {
       ]
     }
   ],
+  serverFallback: {
+    targets: [
+      { alias: 'sch-gpu-9', label: 'GPU Server 9', ssh_alias: '', root_label: '', sort_order: 10, is_active: true },
+      { alias: 'sch-gpu-15', label: 'GPU Server 15', ssh_alias: '', root_label: '', sort_order: 20, is_active: true },
+      { alias: 'sch-gpu-30', label: 'GPU Server 30', ssh_alias: '', root_label: '', sort_order: 30, is_active: true },
+      { alias: 'sch-user-71', label: 'Server 71', ssh_alias: '', root_label: '', sort_order: 40, is_active: true },
+      { alias: 'sch-user-72', label: 'Server 72', ssh_alias: '', root_label: '', sort_order: 50, is_active: true },
+      { alias: 'sch-gpu-sail', label: 'GPU Server SAIL', ssh_alias: '', root_label: '', sort_order: 60, is_active: true }
+    ],
+    snapshots: [
+      {
+        server_alias: 'sch-gpu-9',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T15:54:21.027292Z',
+        host: '',
+        uptime: 'up 17 weeks, 3 days, 6 hours, 45 minutes',
+        cpu_usage_percent: 0.5,
+        cpu_model: '12th Gen Intel(R) Core(TM) i7-12700F',
+        logical_cores: 20,
+        load_average: { one: 0.05, five: 0.03, fifteen: 0.0 },
+        memory_used_mb: 4791.6,
+        memory_total_mb: 31930.9,
+        memory_usage_percent: 15.0,
+        disk_used_text: '143G used of 457G (33%)',
+        disk_percent: 33.0,
+        gpu_count: 1,
+        gpu_avg_usage_percent: 0.0,
+        gpu_payload: [
+          {
+            name: 'NVIDIA GeForce RTX 4070',
+            temperature_c: '44',
+            utilization_percent: 0.0,
+            memory_total_mb: 12282.0,
+            memory_used_mb: 112.0,
+            memory_percent: 0.9
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T15:54:20.965066Z'
+      },
+      {
+        server_alias: 'sch-gpu-15',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T15:54:21.512049Z',
+        host: '',
+        uptime: 'up 20 weeks, 1 day, 9 hours, 29 minutes',
+        cpu_usage_percent: 46.6,
+        cpu_model: '12th Gen Intel(R) Core(TM) i7-12700F',
+        logical_cores: 20,
+        load_average: { one: 9.67, five: 8.44, fifteen: 8.63 },
+        memory_used_mb: 22279.5,
+        memory_total_mb: 31930.9,
+        memory_usage_percent: 69.8,
+        disk_used_text: '149G used of 457G (35%)',
+        disk_percent: 35.0,
+        gpu_count: 1,
+        gpu_avg_usage_percent: 0.0,
+        gpu_payload: [
+          {
+            name: 'NVIDIA GeForce RTX 4070',
+            temperature_c: '44',
+            utilization_percent: 0.0,
+            memory_total_mb: 12282.0,
+            memory_used_mb: 12.0,
+            memory_percent: 0.1
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T15:54:21.436116Z'
+      },
+      {
+        server_alias: 'sch-gpu-30',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T15:54:22.103231Z',
+        host: '',
+        uptime: 'up 13 weeks, 8 hours, 34 minutes',
+        cpu_usage_percent: 0.0,
+        cpu_model: '12th Gen Intel(R) Core(TM) i7-12700F',
+        logical_cores: 20,
+        load_average: { one: 0.01, five: 0.01, fifteen: 0.0 },
+        memory_used_mb: 2181.5,
+        memory_total_mb: 31930.9,
+        memory_usage_percent: 6.8,
+        disk_used_text: '52G used of 457G (12%)',
+        disk_percent: 12.0,
+        gpu_count: 1,
+        gpu_avg_usage_percent: 0.0,
+        gpu_payload: [
+          {
+            name: 'NVIDIA GeForce RTX 4070',
+            temperature_c: '39',
+            utilization_percent: 0.0,
+            memory_total_mb: 12282.0,
+            memory_used_mb: 63.0,
+            memory_percent: 0.5
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T15:54:22.019347Z'
+      },
+      {
+        server_alias: 'sch-user-71',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T15:54:22.625882Z',
+        host: '',
+        uptime: 'up 2 weeks, 3 days, 9 hours, 52 minutes',
+        cpu_usage_percent: 0.0,
+        cpu_model: 'AMD Ryzen Threadripper PRO 5995WX 64-Cores',
+        logical_cores: 128,
+        load_average: { one: 0.04, five: 0.04, fifteen: 0.0 },
+        memory_used_mb: 8175.1,
+        memory_total_mb: 515579.7,
+        memory_usage_percent: 1.6,
+        disk_used_text: '1.6T used of 1.8T (91%)',
+        disk_percent: 91.0,
+        gpu_count: 1,
+        gpu_avg_usage_percent: 0.0,
+        gpu_payload: [
+          {
+            name: 'NVIDIA GeForce RTX 4090',
+            temperature_c: '27',
+            utilization_percent: 0.0,
+            memory_total_mb: 24564.0,
+            memory_used_mb: 115.0,
+            memory_percent: 0.5
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T15:54:22.566401Z'
+      },
+      {
+        server_alias: 'sch-user-72',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T15:54:23.128694Z',
+        host: '',
+        uptime: 'up 4 weeks, 1 hour, 50 minutes',
+        cpu_usage_percent: 0.4,
+        cpu_model: 'AMD Ryzen Threadripper PRO 5965WX 24-Cores',
+        logical_cores: 48,
+        load_average: { one: 0.03, five: 0.01, fifteen: 0.0 },
+        memory_used_mb: 7210.8,
+        memory_total_mb: 257573.7,
+        memory_usage_percent: 2.8,
+        disk_used_text: '1.3T used of 1.8T (72%)',
+        disk_percent: 72.0,
+        gpu_count: 1,
+        gpu_avg_usage_percent: 0.0,
+        gpu_payload: [
+          {
+            name: 'NVIDIA GeForce RTX 4090',
+            temperature_c: '30',
+            utilization_percent: 0.0,
+            memory_total_mb: 24564.0,
+            memory_used_mb: 164.0,
+            memory_percent: 0.7
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T15:54:23.063748Z'
+      },
+      {
+        server_alias: 'sch-gpu-sail',
+        status: 'live',
+        error_message: null,
+        generated_at: '2026-04-23T15:54:23.740990Z',
+        host: '',
+        uptime: 'up 1 day, 2 hours',
+        cpu_usage_percent: 4.5,
+        cpu_model: 'AMD Ryzen Threadripper PRO 5955WX 16-Cores',
+        logical_cores: 32,
+        load_average: { one: 1.26, five: 1.16, fifteen: 1.1 },
+        memory_used_mb: 10717.3,
+        memory_total_mb: 64090.7,
+        memory_usage_percent: 16.7,
+        disk_used_text: '856G used of 938G (97%)',
+        disk_percent: 97.0,
+        gpu_count: 1,
+        gpu_avg_usage_percent: 90.0,
+        gpu_payload: [
+          {
+            name: 'NVIDIA GeForce RTX 4090',
+            temperature_c: '61',
+            utilization_percent: 90.0,
+            memory_total_mb: 24564.0,
+            memory_used_mb: 19172.0,
+            memory_percent: 78.0
+          }
+        ],
+        gpu_processes: [],
+        top_processes: [],
+        updated_at: '2026-04-23T15:54:23.655046Z'
+      }
+    ]
+  },
   tables: {
     dashboard: 'workspace_dashboard_metrics',
     links: 'workspace_links',
