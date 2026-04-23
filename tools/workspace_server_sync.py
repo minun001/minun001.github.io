@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -15,10 +16,41 @@ from urllib.request import Request, urlopen
 TOOLS_DIR = Path(__file__).resolve().parent
 DEFAULT_LOCAL_CONFIG = TOOLS_DIR / "workspace_servers.local.json"
 DEFAULT_EXAMPLE_CONFIG = TOOLS_DIR / "workspace_servers.example.json"
+PUBLIC_WORKSPACE_CONFIG_PATH = TOOLS_DIR.parent / "assets" / "workspace-config.js"
 
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def load_public_workspace_config() -> dict[str, str]:
+    if not PUBLIC_WORKSPACE_CONFIG_PATH.exists():
+        return {}
+    text = PUBLIC_WORKSPACE_CONFIG_PATH.read_text(encoding="utf-8")
+    url_match = re.search(r"supabaseUrl:\s*'([^']+)'", text)
+    anon_key_match = re.search(r"supabaseAnonKey:\s*'([^']+)'", text)
+    return {
+        "supabase_url": url_match.group(1).strip() if url_match else "",
+        "supabase_anon_key": anon_key_match.group(1).strip() if anon_key_match else "",
+    }
+
+
+def resolve_supabase_auth() -> tuple[str, str, str, str]:
+    public_config = load_public_workspace_config()
+    supabase_url = os.environ.get("WORKSPACE_SUPABASE_URL", "").strip() or public_config.get("supabase_url", "")
+    service_role_key = os.environ.get("WORKSPACE_SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    access_token = os.environ.get("WORKSPACE_SUPABASE_ACCESS_TOKEN", "").strip()
+    anon_key = (
+        os.environ.get("WORKSPACE_SUPABASE_ANON_KEY", "").strip()
+        or os.environ.get("SUPABASE_ANON_KEY", "").strip()
+        or public_config.get("supabase_anon_key", "")
+    )
+
+    if supabase_url and service_role_key:
+        return supabase_url, service_role_key, service_role_key, "service_role"
+    if supabase_url and anon_key and access_token:
+        return supabase_url, anon_key, access_token, "session_token"
+    return supabase_url, "", "", ""
 
 
 def load_config(path: Path) -> dict[str, Any]:
@@ -364,7 +396,7 @@ def build_error_snapshot(server: dict[str, Any], message: str) -> dict[str, Any]
     }
 
 
-def upsert_rows(base_url: str, service_role_key: str, table: str, conflict_column: str, rows: list[dict[str, Any]]) -> None:
+def upsert_rows(base_url: str, api_key: str, auth_token: str, table: str, conflict_column: str, rows: list[dict[str, Any]]) -> None:
     if not rows:
         return
     query = urlencode({"on_conflict": conflict_column})
@@ -373,8 +405,8 @@ def upsert_rows(base_url: str, service_role_key: str, table: str, conflict_colum
         url,
         data=json.dumps(rows).encode("utf-8"),
         headers={
-            "apikey": service_role_key,
-            "Authorization": f"Bearer {service_role_key}",
+            "apikey": api_key,
+            "Authorization": f"Bearer {auth_token}",
             "Content-Type": "application/json",
             "Prefer": "resolution=merge-duplicates,return=minimal",
         },
@@ -424,17 +456,20 @@ def main() -> int:
         sys.stdout.write("\n")
         return 0
 
-    supabase_url = os.environ.get("WORKSPACE_SUPABASE_URL", "").strip()
-    service_role_key = os.environ.get("WORKSPACE_SUPABASE_SERVICE_ROLE_KEY", "").strip()
-    if not supabase_url or not service_role_key:
-        raise SystemExit("WORKSPACE_SUPABASE_URL and WORKSPACE_SUPABASE_SERVICE_ROLE_KEY are required unless --dry-run is used.")
+    supabase_url, api_key, auth_token, auth_mode = resolve_supabase_auth()
+    if not supabase_url or not api_key or not auth_token:
+        raise SystemExit(
+            "Supabase write auth is required unless --dry-run is used. "
+            "Set WORKSPACE_SUPABASE_SERVICE_ROLE_KEY, or set WORKSPACE_SUPABASE_ACCESS_TOKEN "
+            "with an anon key available in env or assets/workspace-config.js."
+        )
 
-    upsert_rows(supabase_url, service_role_key, "workspace_server_targets", "alias", payload["targets"])
-    upsert_rows(supabase_url, service_role_key, "workspace_server_snapshots", "server_alias", payload["snapshots"])
+    upsert_rows(supabase_url, api_key, auth_token, "workspace_server_targets", "alias", payload["targets"])
+    upsert_rows(supabase_url, api_key, auth_token, "workspace_server_snapshots", "server_alias", payload["snapshots"])
 
     print(
         f"Synced {len(payload['targets'])} server target(s) and {len(payload['snapshots'])} snapshot(s) "
-        f"from {config_path}."
+        f"from {config_path} using {auth_mode}."
     )
     return 0
 

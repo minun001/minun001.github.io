@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -14,6 +15,7 @@ from urllib.request import Request, urlopen
 
 TOOLS_DIR = Path(__file__).resolve().parent
 DEFAULT_CONTENT_PATH = TOOLS_DIR / "workspace_content.json"
+PUBLIC_WORKSPACE_CONFIG_PATH = TOOLS_DIR.parent / "assets" / "workspace-config.js"
 
 TABLE_SPECS: dict[str, dict[str, Any]] = {
     "workspace_dashboard_metrics": {
@@ -30,6 +32,36 @@ TABLE_SPECS: dict[str, dict[str, Any]] = {
         "touch_updated_at": True,
     },
 }
+
+
+def load_public_workspace_config() -> dict[str, str]:
+    if not PUBLIC_WORKSPACE_CONFIG_PATH.exists():
+        return {}
+    text = PUBLIC_WORKSPACE_CONFIG_PATH.read_text(encoding="utf-8")
+    url_match = re.search(r"supabaseUrl:\s*'([^']+)'", text)
+    anon_key_match = re.search(r"supabaseAnonKey:\s*'([^']+)'", text)
+    return {
+        "supabase_url": url_match.group(1).strip() if url_match else "",
+        "supabase_anon_key": anon_key_match.group(1).strip() if anon_key_match else "",
+    }
+
+
+def resolve_supabase_auth() -> tuple[str, str, str, str]:
+    public_config = load_public_workspace_config()
+    supabase_url = os.environ.get("WORKSPACE_SUPABASE_URL", "").strip() or public_config.get("supabase_url", "")
+    service_role_key = os.environ.get("WORKSPACE_SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    access_token = os.environ.get("WORKSPACE_SUPABASE_ACCESS_TOKEN", "").strip()
+    anon_key = (
+        os.environ.get("WORKSPACE_SUPABASE_ANON_KEY", "").strip()
+        or os.environ.get("SUPABASE_ANON_KEY", "").strip()
+        or public_config.get("supabase_anon_key", "")
+    )
+
+    if supabase_url and service_role_key:
+        return supabase_url, service_role_key, service_role_key, "service_role"
+    if supabase_url and anon_key and access_token:
+        return supabase_url, anon_key, access_token, "session_token"
+    return supabase_url, "", "", ""
 
 
 def utc_now() -> str:
@@ -133,7 +165,8 @@ def load_content(path: Path) -> dict[str, list[dict[str, Any]]]:
 
 def request_json(
     base_url: str,
-    service_role_key: str,
+    api_key: str,
+    auth_token: str,
     table: str,
     method: str = "GET",
     query: dict[str, str] | None = None,
@@ -145,8 +178,8 @@ def request_json(
     if query_string:
         url += f"?{query_string}"
     headers = {
-        "apikey": service_role_key,
-        "Authorization": f"Bearer {service_role_key}",
+        "apikey": api_key,
+        "Authorization": f"Bearer {auth_token}",
     }
     data = None
     if payload is not None:
@@ -162,11 +195,12 @@ def request_json(
     return json.loads(body)
 
 
-def fetch_existing_rows(base_url: str, service_role_key: str, table: str, fields: list[str]) -> list[dict[str, Any]]:
+def fetch_existing_rows(base_url: str, api_key: str, auth_token: str, table: str, fields: list[str]) -> list[dict[str, Any]]:
     select_columns = ["id"] + fields
     return request_json(
         base_url,
-        service_role_key,
+        api_key,
+        auth_token,
         table,
         query={
             "select": ",".join(select_columns),
@@ -244,10 +278,11 @@ def build_sync_plan(content: dict[str, list[dict[str, Any]]], remote_rows: dict[
     return {"tables": tables}
 
 
-def patch_row(base_url: str, service_role_key: str, table: str, row_id: int, changes: dict[str, Any]) -> None:
+def patch_row(base_url: str, api_key: str, auth_token: str, table: str, row_id: int, changes: dict[str, Any]) -> None:
     request_json(
         base_url,
-        service_role_key,
+        api_key,
+        auth_token,
         table,
         method="PATCH",
         query={"id": f"eq.{row_id}"},
@@ -256,12 +291,13 @@ def patch_row(base_url: str, service_role_key: str, table: str, row_id: int, cha
     )
 
 
-def insert_rows(base_url: str, service_role_key: str, table: str, rows: list[dict[str, Any]]) -> None:
+def insert_rows(base_url: str, api_key: str, auth_token: str, table: str, rows: list[dict[str, Any]]) -> None:
     if not rows:
         return
     request_json(
         base_url,
-        service_role_key,
+        api_key,
+        auth_token,
         table,
         method="POST",
         payload=rows,
@@ -269,16 +305,16 @@ def insert_rows(base_url: str, service_role_key: str, table: str, rows: list[dic
     )
 
 
-def apply_sync_plan(base_url: str, service_role_key: str, plan: dict[str, Any]) -> dict[str, int]:
+def apply_sync_plan(base_url: str, api_key: str, auth_token: str, plan: dict[str, Any]) -> dict[str, int]:
     totals = {"inserted": 0, "updated": 0, "deactivated": 0}
     for table, table_plan in plan["tables"].items():
-        insert_rows(base_url, service_role_key, table, table_plan["inserts"])
+        insert_rows(base_url, api_key, auth_token, table, table_plan["inserts"])
         totals["inserted"] += len(table_plan["inserts"])
         for update in table_plan["updates"]:
-            patch_row(base_url, service_role_key, table, int(update["id"]), update["changes"])
+            patch_row(base_url, api_key, auth_token, table, int(update["id"]), update["changes"])
         totals["updated"] += len(table_plan["updates"])
         for deactivate in table_plan["deactivations"]:
-            patch_row(base_url, service_role_key, table, int(deactivate["id"]), deactivate["changes"])
+            patch_row(base_url, api_key, auth_token, table, int(deactivate["id"]), deactivate["changes"])
         totals["deactivated"] += len(table_plan["deactivations"])
     return totals
 
@@ -296,7 +332,7 @@ def build_dry_run_report(
         "tables": {},
     }
     if not remote_available:
-        report["note"] = "WORKSPACE_SUPABASE_URL and WORKSPACE_SUPABASE_SERVICE_ROLE_KEY are not set; remote diff is unavailable."
+        report["note"] = "A write-capable Supabase auth path is unavailable. Set WORKSPACE_SUPABASE_SERVICE_ROLE_KEY, or set WORKSPACE_SUPABASE_ACCESS_TOKEN with an anon key available in env or assets/workspace-config.js."
         for table, rows in content.items():
             report["tables"][table] = {"desired_count": len(rows)}
         return report
@@ -325,9 +361,8 @@ def main() -> int:
     content_path = resolve_content_path(args.content)
     content = load_content(content_path)
 
-    supabase_url = os.environ.get("WORKSPACE_SUPABASE_URL", "").strip()
-    service_role_key = os.environ.get("WORKSPACE_SUPABASE_SERVICE_ROLE_KEY", "").strip()
-    has_remote_credentials = bool(supabase_url and service_role_key)
+    supabase_url, api_key, auth_token, auth_mode = resolve_supabase_auth()
+    has_remote_credentials = bool(supabase_url and api_key and auth_token)
 
     if args.dry_run and not has_remote_credentials:
         json.dump(build_dry_run_report(content_path, content, None, False), sys.stdout, indent=2)
@@ -335,10 +370,14 @@ def main() -> int:
         return 0
 
     if not has_remote_credentials:
-        raise SystemExit("WORKSPACE_SUPABASE_URL and WORKSPACE_SUPABASE_SERVICE_ROLE_KEY are required unless --dry-run is used.")
+        raise SystemExit(
+            "Supabase write auth is required unless --dry-run is used. "
+            "Set WORKSPACE_SUPABASE_SERVICE_ROLE_KEY, or set WORKSPACE_SUPABASE_ACCESS_TOKEN "
+            "with an anon key available in env or assets/workspace-config.js."
+        )
 
     remote_rows = {
-        table: fetch_existing_rows(supabase_url, service_role_key, table, spec["fields"])
+        table: fetch_existing_rows(supabase_url, api_key, auth_token, table, spec["fields"])
         for table, spec in TABLE_SPECS.items()
     }
     plan = build_sync_plan(content, remote_rows)
@@ -348,10 +387,11 @@ def main() -> int:
         sys.stdout.write("\n")
         return 0
 
-    totals = apply_sync_plan(supabase_url, service_role_key, plan)
+    totals = apply_sync_plan(supabase_url, api_key, auth_token, plan)
     print(
         "Synced workspace content from "
-        f"{content_path}: inserted {totals['inserted']}, updated {totals['updated']}, deactivated {totals['deactivated']}."
+        f"{content_path} using {auth_mode}: inserted {totals['inserted']}, "
+        f"updated {totals['updated']}, deactivated {totals['deactivated']}."
     )
     return 0
 

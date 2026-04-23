@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260423e';
+  var WORKSPACE_CONTENT_VERSION = '20260423f';
   var workspaceContentFallbackCache = null;
 
   function getConfig() {
@@ -36,6 +36,7 @@
     linksItems: [],
     opsTargets: [],
     serverItems: [],
+    serverActionMode: 'sync',
     analyticsSummary: null,
     selectedNoteId: null,
     selectedLinkId: null,
@@ -364,13 +365,30 @@
         detailSummary: 'The workspace_links table is empty or out of sync.',
         checklist: [
           'Run python tools/workspace_content_sync.py --dry-run.',
-          'Export WORKSPACE_SUPABASE_URL and WORKSPACE_SUPABASE_SERVICE_ROLE_KEY, then run the sync without --dry-run.'
+          'Then run the sync with either WORKSPACE_SUPABASE_SERVICE_ROLE_KEY or WORKSPACE_SUPABASE_ACCESS_TOKEN.'
         ]
       }
     ];
   }
 
-  function getServerActionItems() {
+  function getServerActionItems(mode) {
+    if (mode === 'schema_missing') {
+      return [
+        {
+          id: 'apply-server-schema',
+          title: 'Apply server schema',
+          badge: 'Action',
+          summary: 'Create the server tables in Supabase first.',
+          detailSummary: 'The server tables are missing from the Supabase schema cache.',
+          checklist: [
+            'Run tools/workspace_supabase_schema.sql in the Supabase SQL editor.',
+            'If PGRST205 persists, refresh the API schema cache or reopen the project API.',
+            'Run python tools/workspace_server_sync.py from the trusted machine after the schema is live.'
+          ]
+        }
+      ];
+    }
+
     return [
       {
         id: 'sync-server-targets',
@@ -390,12 +408,25 @@
         summary: 'Push CPU, memory, and GPU readings into Supabase.',
         detailSummary: 'Server snapshots are missing from workspace_server_snapshots.',
         checklist: [
-          'Export WORKSPACE_SUPABASE_URL.',
-          'Export WORKSPACE_SUPABASE_SERVICE_ROLE_KEY.',
+          'Use either WORKSPACE_SUPABASE_SERVICE_ROLE_KEY or WORKSPACE_SUPABASE_ACCESS_TOKEN.',
           'Run python tools/workspace_server_sync.py from the trusted machine after schema setup.'
         ]
       }
     ];
+  }
+
+  function isMissingTableError(error, tableName) {
+    if (!error || typeof error !== 'object') return false;
+    var code = String(error.code || '').trim();
+    var message = String(error.message || '').trim().toLowerCase();
+    var hint = String(error.hint || '').trim().toLowerCase();
+    var target = String(tableName || '').trim().toLowerCase();
+    return (
+      code === 'PGRST205' ||
+      message.indexOf('schema cache') !== -1 ||
+      (Boolean(target) && message.indexOf(target) !== -1) ||
+      (Boolean(target) && hint.indexOf(target) !== -1)
+    );
   }
 
   function getUsageTone(value) {
@@ -829,10 +860,10 @@
     );
   }
 
-  function renderServerSignals(items, selectedAlias) {
+  function renderServerSignals(items, selectedAlias, actionMode) {
     var safeItems = safeArray(items);
     if (!safeItems.length) {
-      var serverActions = getServerActionItems();
+      var serverActions = getServerActionItems(actionMode);
       var activeActionId = String(selectedAlias || '');
       var activeAction = serverActions.find(function (item) {
         return item.id === activeActionId;
@@ -1533,7 +1564,7 @@
     if (!workspaceState.opsTargets.some(function (item) { return toSelectionId(item.id) === String(workspaceState.selectedOpsId || ''); })) {
       workspaceState.selectedOpsId = null;
     }
-    var availableServerIds = (workspaceState.serverItems.length ? workspaceState.serverItems : getServerActionItems()).map(function (item) {
+    var availableServerIds = (workspaceState.serverItems.length ? workspaceState.serverItems : getServerActionItems(workspaceState.serverActionMode)).map(function (item) {
       return String(item.alias || item.id || '');
     });
     if (availableServerIds.indexOf(String(workspaceState.selectedServerAlias || '')) === -1) {
@@ -1557,7 +1588,7 @@
   }
 
   function renderWorkspaceServers() {
-    setHtml('workspace-servers', renderServerSignals(workspaceState.serverItems, workspaceState.selectedServerAlias));
+    setHtml('workspace-servers', renderServerSignals(workspaceState.serverItems, workspaceState.selectedServerAlias, workspaceState.serverActionMode));
   }
 
   function renderWorkspaceSignals() {
@@ -1742,10 +1773,15 @@
       serverTargets.error ? [] : (serverTargets.data || []),
       serverSnapshots.error ? [] : (serverSnapshots.data || [])
     );
+    var serverActionMode = (
+      isMissingTableError(serverTargets.error, 'workspace_server_targets') ||
+      isMissingTableError(serverSnapshots.error, 'workspace_server_snapshots')
+    ) ? 'schema_missing' : 'sync';
 
     workspaceState.notesItems = notesItems;
     workspaceState.linksItems = linksItems;
     workspaceState.serverItems = serverItems;
+    workspaceState.serverActionMode = serverActionMode;
     workspaceState.analyticsSummary = analyticsSummary;
     syncInteractiveSelections();
 
