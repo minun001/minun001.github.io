@@ -1,6 +1,7 @@
 (function () {
   var WORKSPACE_CONTENT_VERSION = '20260424g';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
+  var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
 
   function getConfig() {
@@ -1820,6 +1821,8 @@
     var refreshTimerId = null;
     var refreshInFlight = false;
     var privateSessionActive = false;
+    var realtimeChannels = [];
+    var realtimeDebounceId = null;
 
     function clearIdleTimer() {
       if (idleTimerId) {
@@ -1886,6 +1889,13 @@
       }
     }
 
+    function clearRealtimeDebounce() {
+      if (realtimeDebounceId) {
+        window.clearTimeout(realtimeDebounceId);
+        realtimeDebounceId = null;
+      }
+    }
+
     async function refreshWorkspaceData(options) {
       var settings = options || {};
       if (!privateSessionActive) return;
@@ -1916,12 +1926,55 @@
       refreshInFlight = false;
     }
 
+    function stopRealtimeSubscriptions() {
+      clearRealtimeDebounce();
+      if (!realtimeChannels.length) return;
+      realtimeChannels.forEach(function (channel) {
+        try {
+          client.removeChannel(channel);
+        } catch (_error) {}
+      });
+      realtimeChannels = [];
+    }
+
+    function scheduleRealtimeRefresh() {
+      clearRealtimeDebounce();
+      realtimeDebounceId = window.setTimeout(function () {
+        refreshWorkspaceData({ force: true, surfaceError: false }).catch(function () {});
+      }, WORKSPACE_REALTIME_DEBOUNCE_MS);
+    }
+
+    function startRealtimeSubscriptions() {
+      stopRealtimeSubscriptions();
+      if (!client.channel) return;
+
+      var tables = config.tables || {};
+      var realtimeTargets = [
+        tables.serverTargets || 'workspace_server_targets',
+        tables.serverSnapshots || 'workspace_server_snapshots'
+      ];
+
+      realtimeTargets.forEach(function (tableName) {
+        try {
+          var channel = client
+            .channel('workspace-realtime-' + tableName)
+            .on('postgres_changes', { event: '*', schema: 'public', table: tableName }, function () {
+              if (!privateSessionActive) return;
+              scheduleRealtimeRefresh();
+            })
+            .subscribe();
+          realtimeChannels.push(channel);
+        } catch (_error) {}
+      });
+    }
+
     async function applySession(session) {
       var user = session && session.user ? session.user : null;
       if (!user) {
         privateSessionActive = false;
         stopIdleTracking();
         stopWorkspaceRefresh();
+        stopRealtimeSubscriptions();
         setIdentity(null, config);
         setShellMode('auth');
         setView('login');
@@ -1939,6 +1992,7 @@
         privateSessionActive = false;
         stopIdleTracking();
         stopWorkspaceRefresh();
+        stopRealtimeSubscriptions();
         setIdentity(user, config);
         setShellMode('auth');
         setView('unauthorized');
@@ -1953,6 +2007,7 @@
       startIdleTracking();
       privateSessionActive = true;
       startWorkspaceRefresh();
+      startRealtimeSubscriptions();
       renderWorkspaceOps();
       await refreshWorkspaceData({ force: true, surfaceError: true });
     }
@@ -2005,6 +2060,7 @@
         privateSessionActive = false;
         stopIdleTracking();
         stopWorkspaceRefresh();
+        stopRealtimeSubscriptions();
         await client.auth.signOut();
         setStatus('Signed out.', 'neutral');
       });
@@ -2032,6 +2088,10 @@
     window.addEventListener('focus', function () {
       if (!privateSessionActive) return;
       refreshWorkspaceData({ force: true, surfaceError: false }).catch(function () {});
+    });
+    window.addEventListener('beforeunload', function () {
+      stopRealtimeSubscriptions();
+      stopWorkspaceRefresh();
     });
   }
 
