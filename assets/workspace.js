@@ -1,9 +1,10 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260424h';
+  var WORKSPACE_CONTENT_VERSION = '20260424i';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
   var workspaceServerFallbackCache = null;
+  var workspaceSignalsFallbackCache = null;
 
   function getConfig() {
     return window.WORKSPACE_AUTH_CONFIG || {};
@@ -32,6 +33,19 @@
 
   function hasSupabaseConfig(config) {
     return Boolean(config && config.supabaseUrl && config.supabaseAnonKey);
+  }
+
+  function isLocalMode(config) {
+    return String((config && config.provider) || '').trim().toLowerCase() === 'local';
+  }
+
+  function getDataFiles(config) {
+    var files = (config && config.dataFiles) || {};
+    return {
+      content: String(files.content || '/tools/workspace_content.json').trim() || '/tools/workspace_content.json',
+      serverSignals: String(files.serverSignals || '/tools/workspace_server_sync_fallback.json').trim() || '/tools/workspace_server_sync_fallback.json',
+      siteSignals: String(files.siteSignals || '/tools/workspace_site_signals.json').trim() || '/tools/workspace_site_signals.json'
+    };
   }
 
   var workspaceState = {
@@ -257,7 +271,7 @@
     };
   }
 
-  async function loadWorkspaceContentFallback() {
+  async function loadWorkspaceContentFallback(config) {
     if (workspaceContentFallbackCache) return workspaceContentFallbackCache;
     if (!window.fetch) {
       workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
@@ -265,7 +279,7 @@
     }
 
     try {
-      var response = await window.fetch('/tools/workspace_content.json?v=' + WORKSPACE_CONTENT_VERSION, {
+      var response = await window.fetch(getDataFiles(config).content + '?v=' + WORKSPACE_CONTENT_VERSION, {
         credentials: 'same-origin',
         cache: 'no-store'
       });
@@ -298,7 +312,7 @@
     }
 
     try {
-      var response = await window.fetch('/tools/workspace_server_sync_fallback.json?v=' + WORKSPACE_CONTENT_VERSION, {
+      var response = await window.fetch(getDataFiles(config).serverSignals + '?v=' + WORKSPACE_CONTENT_VERSION, {
         credentials: 'same-origin',
         cache: 'no-store'
       });
@@ -312,6 +326,66 @@
     } catch (_error) {
       workspaceServerFallbackCache = getServerFallback(config);
       return workspaceServerFallbackCache;
+    }
+  }
+
+  function normalizeSignalsFallback(raw, config) {
+    var safeRaw = raw && typeof raw === 'object' ? raw : {};
+    var launchDateKey = /^\d{4}-\d{2}-\d{2}$/.test(String(safeRaw.launchDateKey || '').trim())
+      ? String(safeRaw.launchDateKey).trim()
+      : getAnalyticsLaunchDate(config);
+    var monthlySeries = safeArray(safeRaw.monthlySeries).map(function (item) {
+      return {
+        monthKey: String((item && item.monthKey) || '').trim(),
+        visitors: Math.max(0, Math.round(toFiniteNumber(item && item.visitors, 0))),
+        hits: Math.max(0, Math.round(toFiniteNumber(item && item.hits, 0)))
+      };
+    }).filter(function (item) {
+      return /^\d{4}-\d{2}$/.test(item.monthKey);
+    });
+    var topPages = safeArray(safeRaw.topPages).map(function (item) {
+      return {
+        path: normalizePath(item && item.path),
+        hits: Math.max(0, Math.round(toFiniteNumber(item && item.hits, 0)))
+      };
+    }).filter(function (item) {
+      return Boolean(item.path);
+    });
+
+    return {
+      todayVisitors: Math.max(0, Math.round(toFiniteNumber(safeRaw.todayVisitors, 0))),
+      last30Visitors: Math.max(0, Math.round(toFiniteNumber(safeRaw.last30Visitors, 0))),
+      lifetimeVisitors: Math.max(0, Math.round(toFiniteNumber(safeRaw.lifetimeVisitors, 0))),
+      trackedPages: Math.max(0, Math.round(toFiniteNumber(safeRaw.trackedPages, topPages.length))),
+      launchDateKey: launchDateKey,
+      monthlySeries: monthlySeries.length ? monthlySeries : buildZeroAnalyticsState(config).monthlySeries,
+      topPages: topPages.length ? topPages : buildZeroAnalyticsState(config).topPages,
+      updatedAt: String((safeRaw.updated_at || safeRaw.updatedAt) || '').trim()
+    };
+  }
+
+  async function loadWorkspaceSignalsFallback(config) {
+    if (workspaceSignalsFallbackCache) return workspaceSignalsFallbackCache;
+    if (!window.fetch) {
+      workspaceSignalsFallbackCache = buildZeroAnalyticsState(config);
+      return workspaceSignalsFallbackCache;
+    }
+
+    try {
+      var response = await window.fetch(getDataFiles(config).siteSignals + '?v=' + WORKSPACE_CONTENT_VERSION, {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+      if (!response.ok) {
+        workspaceSignalsFallbackCache = buildZeroAnalyticsState(config);
+        return workspaceSignalsFallbackCache;
+      }
+      var payload = await response.json();
+      workspaceSignalsFallbackCache = normalizeSignalsFallback(payload, config);
+      return workspaceSignalsFallbackCache;
+    } catch (_error) {
+      workspaceSignalsFallbackCache = buildZeroAnalyticsState(config);
+      return workspaceSignalsFallbackCache;
     }
   }
 
@@ -406,57 +480,40 @@
     return [
       {
         id: 'restore-private-links',
-        title: 'Restore private links',
+        title: 'Restore workspace files',
         badge: 'Action',
-        summary: 'Run content sync to restore repo-managed links.',
-        detailSummary: 'The workspace_links table is empty or out of sync.',
+        summary: 'Check the repo JSON that powers the workspace file list.',
+        detailSummary: 'The local workspace link list is missing or empty.',
         checklist: [
-          'Run python tools/workspace_content_sync.py --dry-run.',
-          'Then run the sync with either WORKSPACE_SUPABASE_SERVICE_ROLE_KEY or WORKSPACE_SUPABASE_ACCESS_TOKEN.'
+          'Confirm the canonical rows in tools/workspace_content.json.',
+          'Reload the workspace after updating the file.'
         ]
       }
     ];
   }
 
   function getServerActionItems(mode) {
-    if (mode === 'schema_missing') {
-      return [
-        {
-          id: 'apply-server-schema',
-          title: 'Apply server schema',
-          badge: 'Action',
-          summary: 'Create the server tables in Supabase first.',
-          detailSummary: 'The server tables are missing from the Supabase schema cache.',
-          checklist: [
-            'Run tools/workspace_supabase_schema.sql in the Supabase SQL editor.',
-            'If PGRST205 persists, refresh the API schema cache or reopen the project API.',
-            'Run python tools/workspace_server_sync.py from the trusted machine after the schema is live.'
-          ]
-        }
-      ];
-    }
-
     return [
       {
         id: 'sync-server-targets',
-        title: 'Sync server targets',
+        title: 'Restore server targets',
         badge: 'Action',
-        summary: 'Add the private server inventory first.',
-        detailSummary: 'Server target rows are missing from workspace_server_targets.',
+        summary: 'Check the repo server snapshot file and target list.',
+        detailSummary: 'No repo-backed server target rows are available yet.',
         checklist: [
-          'Create tools/workspace_servers.local.json on a trusted machine.',
-          'Run python tools/workspace_server_sync.py --dry-run to verify the payload.'
+          'Confirm tools/workspace_server_sync_fallback.json exists in the repo.',
+          'Check aliases, labels, and root labels in that snapshot file.'
         ]
       },
       {
         id: 'run-first-snapshot',
-        title: 'Run first snapshot',
+        title: 'Refresh server snapshot',
         badge: 'Action',
-        summary: 'Push CPU, memory, and GPU readings into Supabase.',
-        detailSummary: 'Server snapshots are missing from workspace_server_snapshots.',
+        summary: 'Generate a new repo snapshot from the trusted machine.',
+        detailSummary: 'The workspace cannot find a repo-backed server snapshot yet.',
         checklist: [
-          'Use either WORKSPACE_SUPABASE_SERVICE_ROLE_KEY or WORKSPACE_SUPABASE_ACCESS_TOKEN.',
-          'Run python tools/workspace_server_sync.py from the trusted machine after schema setup.'
+          'Run python tools/workspace_server_sync.py --dry-run from the trusted machine.',
+          'Write the updated payload back into tools/workspace_server_sync_fallback.json and push the repo.'
         ]
       }
     ];
@@ -555,7 +612,7 @@
   function renderLinks(items, selectedId) {
     var safeItems = Array.isArray(items) ? items : [];
     if (!safeItems.length) {
-      return '<div class="workspace-empty">No private links yet.</div>';
+      return '<div class="workspace-empty">No workspace files yet.</div>';
     }
 
     return (
@@ -1644,6 +1701,37 @@
     setHtml('workspace-signals', renderSignals(workspaceState.analyticsSummary || buildZeroAnalyticsState(getConfig()), workspaceState.selectedSignalKey));
   }
 
+  function applyLocalWorkspaceIdentity() {
+    var contentNode = byId('workspace-user-email');
+    var serverNode = byId('workspace-user-role');
+    var refreshNode = byId('workspace-session-timeout');
+    if (contentNode) contentNode.textContent = 'tools/workspace_content.json';
+    if (serverNode) serverNode.textContent = 'tools/workspace_server_sync_fallback.json';
+    if (refreshNode) refreshNode.textContent = '30s + focus refresh';
+  }
+
+  async function loadWorkspaceLocalData(config) {
+    var contentFallback = await loadWorkspaceContentFallback(config);
+    var serverFallback = await loadServerFallback(config);
+    var analyticsSummary = await loadWorkspaceSignalsFallback(config);
+    var metricsItems = contentFallback.metrics.slice();
+    var linksItems = contentFallback.links.slice();
+    var serverItems = buildServerItems(serverFallback.targets, serverFallback.snapshots);
+
+    workspaceState.notesItems = [];
+    workspaceState.linksItems = linksItems;
+    workspaceState.opsTargets = getOpsTargets(config);
+    workspaceState.serverItems = serverItems;
+    workspaceState.serverActionMode = serverItems.length ? 'live' : 'sync';
+    workspaceState.analyticsSummary = analyticsSummary;
+    syncInteractiveSelections();
+
+    setHtml('workspace-metrics', renderMetricCards(metricsItems, analyticsSummary));
+    renderWorkspaceLinks();
+    renderWorkspaceServers();
+    renderWorkspaceSignals();
+  }
+
   function bindInteractiveSections() {
     var notesRoot = byId('workspace-notes');
     if (notesRoot && !notesRoot.dataset.bound) {
@@ -1747,7 +1835,7 @@
   }
 
   async function loadWorkspaceData(client, config) {
-    var contentFallback = await loadWorkspaceContentFallback();
+    var contentFallback = await loadWorkspaceContentFallback(config);
     var serverFallback = await loadServerFallback(config);
     var tables = config.tables || {};
     var limits = config.limits || {};
@@ -1850,6 +1938,52 @@
     var resendConfirmation = byId('workspace-resend-confirmation');
     var emailInput = byId('workspace-email');
     var passwordInput = byId('workspace-password');
+
+    if (isLocalMode(config)) {
+      workspaceState.opsTargets = [];
+      syncInteractiveSelections();
+      bindInteractiveSections();
+      setShellMode('private');
+      setView('dashboard');
+      applyLocalWorkspaceIdentity();
+      await loadWorkspaceLocalData(config);
+
+      var localRefreshInFlight = false;
+      var localRefreshTimerId = null;
+
+      async function refreshLocalWorkspace(options) {
+        var settings = options || {};
+        if (document.hidden && !settings.force) return;
+        if (localRefreshInFlight) return;
+        localRefreshInFlight = true;
+        try {
+          workspaceContentFallbackCache = null;
+          workspaceServerFallbackCache = null;
+          workspaceSignalsFallbackCache = null;
+          await loadWorkspaceLocalData(config);
+        } finally {
+          localRefreshInFlight = false;
+        }
+      }
+
+      localRefreshTimerId = window.setInterval(function () {
+        refreshLocalWorkspace({ force: false }).catch(function () {});
+      }, WORKSPACE_AUTO_REFRESH_MS);
+
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) return;
+        refreshLocalWorkspace({ force: true }).catch(function () {});
+      });
+      window.addEventListener('focus', function () {
+        refreshLocalWorkspace({ force: true }).catch(function () {});
+      });
+      window.addEventListener('beforeunload', function () {
+        if (localRefreshTimerId) {
+          window.clearInterval(localRefreshTimerId);
+        }
+      });
+      return;
+    }
 
     if (!hasSupabaseConfig(config)) {
       setShellMode('auth');

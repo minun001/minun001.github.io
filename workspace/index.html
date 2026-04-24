@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Workspace
-description: Private workspace access for Hyunsik Min.
+description: Repo-backed workspace console for Hyunsik Min.
 body_class: page-workspace
 robots: noindex,nofollow
 show_footer: false
@@ -198,42 +198,21 @@ script_bundle: workspace
     @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list,.workspace-summary-grid,.workspace-signal-grid,.workspace-signal-stats,.workspace-server-detail-grid,.workspace-server-hero-grid{grid-template-columns:1fr}.workspace-shell[data-mode="private"]>aside.workspace-panel{position:static;top:auto}.workspace-detail-head{grid-template-columns:1fr;display:grid}}
   </style>
 
-<div class="workspace-page" data-workspace-page data-mode="auth">
+<div class="workspace-page" data-workspace-page data-mode="private">
         <section class="page-lead workspace-lead">
           <div class="page-lead-copy">
             <div class="eyebrow">Workspace</div>
             <h1>Workspace</h1>
-            <p>Private links, server load, and site traffic.</p>
+            <p>Repo-backed links, server load, and site snapshots.</p>
           </div>
         </section>
 
-        <section class="workspace-shell" data-workspace-shell data-mode="auth">
-          <article class="workspace-panel" data-workspace-view="login">
-            <div class="eyebrow">Login</div>
-            <h2>Workspace Login</h2>
-            <p>Sign in with the master workspace account.</p>
-            <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true">Checking workspace access...</div>
-            <form id="workspace-login-form" class="workspace-form">
-              <label class="workspace-field">
-                <span>Email</span>
-                <input id="workspace-email" type="email" autocomplete="username" value="" placeholder="Enter your email" required>
-              </label>
-              <label class="workspace-field">
-                <span>Password</span>
-                <input id="workspace-password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
-              </label>
-              <div class="workspace-actions">
-                <button class="workspace-button" type="submit">Sign In</button>
-                <button id="workspace-resend-confirmation" class="workspace-button secondary" type="button" hidden>Resend Verification</button>
-              </div>
-            </form>
-          </article>
-
-          <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private hidden>
+        <section class="workspace-shell" data-workspace-shell data-mode="private">
+          <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private>
             <div class="workspace-dashboard-head">
               <div class="workspace-dashboard-copy">
                 <h2>Workspace</h2>
-                <p>Private links, server load, and site traffic.</p>
+                <p>Repo-backed links, server load, and site snapshots.</p>
               </div>
             </div>
             <div class="workspace-stack">
@@ -266,78 +245,39 @@ script_bundle: workspace
 
               <section class="workspace-section" aria-labelledby="workspace-library-title">
                 <div class="workspace-section-head">
-                  <h3 id="workspace-library-title">Private Library</h3>
+                  <h3 id="workspace-library-title">Workspace Files</h3>
                 </div>
                 <div class="workspace-links" id="workspace-links">
-                  <div class="workspace-empty">No private library links yet.</div>
+                  <div class="workspace-empty">No workspace files yet.</div>
                 </div>
               </section>
             </div>
           </article>
 
-          <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
-            <div class="eyebrow">Access Restricted</div>
-            <h2>Not Authorized</h2>
-            <p>This account does not have workspace access.</p>
-          </article>
-
-          <article class="workspace-panel" data-workspace-view="setup" hidden>
-            <div class="eyebrow">Setup Required</div>
-            <h2>Connect Workspace Auth</h2>
-            <p class="workspace-setup-copy">Add Supabase auth, run the SQL setup, then sync private server snapshots from a trusted machine.</p>
-            <div class="workspace-list workspace-setup-list">
-              <div class="workspace-card">
-                <span class="workspace-card-step">Step 1</span>
-                <h3>What stays private</h3>
-                <p>Never commit passwords or service-role keys.</p>
-              </div>
-              <div class="workspace-card">
-                <span class="workspace-card-step">Step 2</span>
-                <h3>What is public</h3>
-                <p>The Supabase URL and anon key are safe in the client.</p>
-              </div>
-              <div class="workspace-card">
-                <span class="workspace-card-step">Step 3</span>
-                <h3>Run the SQL setup</h3>
-                <p>Run <code>tools/workspace_supabase_schema.sql</code> in Supabase.</p>
-              </div>
-              <div class="workspace-card">
-                <span class="workspace-card-step">Step 4</span>
-                <h3>Sync workspace content</h3>
-                <p>Run <code>tools/workspace_content_sync.py</code> after the schema setup.</p>
-              </div>
-              <div class="workspace-card">
-                <span class="workspace-card-step">Step 5</span>
-                <h3>Sync server snapshots</h3>
-                <p>Run <code>tools/workspace_server_sync.py</code> from a trusted machine.</p>
-              </div>
-            </div>
-          </article>
-
-          <aside class="workspace-panel" data-workspace-private hidden>
+          <aside class="workspace-panel" data-workspace-private>
             <div class="workspace-account-head">
-              <h2>Account</h2>
+              <h2>Sources</h2>
             </div>
             <div class="workspace-meta">
               <div class="workspace-meta-row">
-                <div class="workspace-meta-label">Email</div>
-                <div class="workspace-meta-value" id="workspace-user-email">-</div>
+                <div class="workspace-meta-label">Content</div>
+                <div class="workspace-meta-value" id="workspace-user-email">tools/workspace_content.json</div>
               </div>
               <div class="workspace-meta-row">
-                <div class="workspace-meta-label">Access</div>
-                <div class="workspace-meta-value" id="workspace-user-role">-</div>
+                <div class="workspace-meta-label">Servers</div>
+                <div class="workspace-meta-value" id="workspace-user-role">tools/workspace_server_sync_fallback.json</div>
               </div>
               <div class="workspace-meta-row">
-                <div class="workspace-meta-label">Rule</div>
-                <div class="workspace-meta-value">Master account only</div>
+                <div class="workspace-meta-label">Signals</div>
+                <div class="workspace-meta-value">tools/workspace_site_signals.json</div>
               </div>
               <div class="workspace-meta-row">
-                <div class="workspace-meta-label">Timeout</div>
-                <div class="workspace-meta-value" id="workspace-session-timeout">3 min idle</div>
+                <div class="workspace-meta-label">Refresh</div>
+                <div class="workspace-meta-value" id="workspace-session-timeout">30s + focus refresh</div>
               </div>
             </div>
             <div class="workspace-actions" style="margin-top:1rem">
-              <button id="workspace-signout" class="workspace-button secondary" type="button">Sign Out</button>
+              <a class="workspace-button secondary" href="https://github.com/minun001/minun001.github.io" target="_blank" rel="noreferrer">Open Repository</a>
             </div>
           </aside>
         </section>
