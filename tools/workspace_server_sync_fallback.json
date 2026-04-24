@@ -1,0 +1,391 @@
+{
+  "targets": [
+    {
+      "alias": "sch-gpu-9",
+      "label": "GPU Server 9",
+      "ssh_alias": "sch-gpu-9",
+      "root_label": "min_hs",
+      "sort_order": 10,
+      "is_active": true
+    },
+    {
+      "alias": "sch-gpu-15",
+      "label": "GPU Server 15",
+      "ssh_alias": "sch-gpu-15",
+      "root_label": "min_hs_aibig15",
+      "sort_order": 20,
+      "is_active": true
+    },
+    {
+      "alias": "sch-gpu-30",
+      "label": "GPU Server 30",
+      "ssh_alias": "sch-gpu-30",
+      "root_label": "aibig30",
+      "sort_order": 30,
+      "is_active": true
+    },
+    {
+      "alias": "sch-user-71",
+      "label": "Server 71",
+      "ssh_alias": "sch-user-71",
+      "root_label": "user",
+      "sort_order": 40,
+      "is_active": true
+    },
+    {
+      "alias": "sch-user-72",
+      "label": "Server 72",
+      "ssh_alias": "sch-user-72",
+      "root_label": "user",
+      "sort_order": 50,
+      "is_active": true
+    },
+    {
+      "alias": "sch-gpu-sail",
+      "label": "GPU Server SAIL",
+      "ssh_alias": "sch-min-hs",
+      "root_label": "min_hs",
+      "sort_order": 60,
+      "is_active": true
+    },
+    {
+      "alias": "sch-min-hs-74",
+      "label": "GPU Server 74",
+      "ssh_alias": "sch-min-hs-74",
+      "root_label": "min_hs",
+      "sort_order": 70,
+      "is_active": true
+    },
+    {
+      "alias": "sch-user-135",
+      "label": "GPU Server 135",
+      "ssh_alias": "114.71.219.135",
+      "root_label": "user",
+      "sort_order": 80,
+      "is_active": true
+    }
+  ],
+  "snapshots": [
+    {
+      "server_alias": "sch-gpu-9",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:30:58.577901Z",
+      "uptime": "up 17 weeks, 3 days, 17 hours, 22 minutes",
+      "cpu_usage_percent": 0.0,
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
+      "logical_cores": 20,
+      "load_average": {
+        "one": 0.05,
+        "five": 0.04,
+        "fifteen": 0.0
+      },
+      "memory_used_mb": 4786.7,
+      "memory_total_mb": 31930.9,
+      "memory_usage_percent": 15.0,
+      "disk_used_text": "143G used of 457G (33%)",
+      "disk_percent": 33.0,
+      "gpu_count": 1,
+      "gpu_avg_usage_percent": 0.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA GeForce RTX 4070",
+          "temperature_c": "45",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 12282.0,
+          "memory_used_mb": 112.0,
+          "memory_percent": 0.9,
+          "power_draw_w": "10.94",
+          "power_limit_w": "200.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:30:58.174165Z"
+    },
+    {
+      "server_alias": "sch-gpu-15",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:30:59.114863Z",
+      "uptime": "up 20 weeks, 1 day, 20 hours, 5 minutes",
+      "cpu_usage_percent": 0.2,
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
+      "logical_cores": 20,
+      "load_average": {
+        "one": 0.14,
+        "five": 0.11,
+        "fifteen": 0.12
+      },
+      "memory_used_mb": 4558.4,
+      "memory_total_mb": 31930.9,
+      "memory_usage_percent": 14.3,
+      "disk_used_text": "149G used of 457G (35%)",
+      "disk_percent": 35.0,
+      "gpu_count": 1,
+      "gpu_avg_usage_percent": 0.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA GeForce RTX 4070",
+          "temperature_c": "43",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 12282.0,
+          "memory_used_mb": 12.0,
+          "memory_percent": 0.1,
+          "power_draw_w": "17.56",
+          "power_limit_w": "200.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:30:58.707060Z"
+    },
+    {
+      "server_alias": "sch-gpu-30",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:30:59.671246Z",
+      "uptime": "up 13 weeks, 19 hours, 11 minutes",
+      "cpu_usage_percent": 0.0,
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
+      "logical_cores": 20,
+      "load_average": {
+        "one": 0.02,
+        "five": 0.01,
+        "fifteen": 0.0
+      },
+      "memory_used_mb": 2181.1,
+      "memory_total_mb": 31930.9,
+      "memory_usage_percent": 6.8,
+      "disk_used_text": "52G used of 457G (12%)",
+      "disk_percent": 12.0,
+      "gpu_count": 1,
+      "gpu_avg_usage_percent": 0.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA GeForce RTX 4070",
+          "temperature_c": "39",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 12282.0,
+          "memory_used_mb": 63.0,
+          "memory_percent": 0.5,
+          "power_draw_w": "12.25",
+          "power_limit_w": "200.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:30:59.270348Z"
+    },
+    {
+      "server_alias": "sch-user-71",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:31:00.207662Z",
+      "uptime": "up 2 weeks, 3 days, 20 hours, 28 minutes",
+      "cpu_usage_percent": 0.0,
+      "cpu_model": "AMD Ryzen Threadripper PRO 5995WX 64-Cores",
+      "logical_cores": 128,
+      "load_average": {
+        "one": 0.02,
+        "five": 0.02,
+        "fifteen": 0.0
+      },
+      "memory_used_mb": 8189.3,
+      "memory_total_mb": 515579.7,
+      "memory_usage_percent": 1.6,
+      "disk_used_text": "1.6T used of 1.8T (91%)",
+      "disk_percent": 91.0,
+      "gpu_count": 1,
+      "gpu_avg_usage_percent": 0.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA GeForce RTX 4090",
+          "temperature_c": "27",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 24564.0,
+          "memory_used_mb": 115.0,
+          "memory_percent": 0.5,
+          "power_draw_w": "16.00",
+          "power_limit_w": "450.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:30:59.821109Z"
+    },
+    {
+      "server_alias": "sch-user-72",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:31:00.713559Z",
+      "uptime": "up 4 weeks, 12 hours, 26 minutes",
+      "cpu_usage_percent": 0.0,
+      "cpu_model": "AMD Ryzen Threadripper PRO 5965WX 24-Cores",
+      "logical_cores": 48,
+      "load_average": {
+        "one": 0.01,
+        "five": 0.01,
+        "fifteen": 0.0
+      },
+      "memory_used_mb": 7376.5,
+      "memory_total_mb": 257573.7,
+      "memory_usage_percent": 2.9,
+      "disk_used_text": "1.3T used of 1.8T (72%)",
+      "disk_percent": 72.0,
+      "gpu_count": 1,
+      "gpu_avg_usage_percent": 0.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA GeForce RTX 4090",
+          "temperature_c": "31",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 24564.0,
+          "memory_used_mb": 164.0,
+          "memory_percent": 0.7,
+          "power_draw_w": "24.02",
+          "power_limit_w": "450.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:31:00.315238Z"
+    },
+    {
+      "server_alias": "sch-gpu-sail",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:31:01.321748Z",
+      "uptime": "up 1 day, 12 hours, 37 minutes",
+      "cpu_usage_percent": 4.8,
+      "cpu_model": "AMD Ryzen Threadripper PRO 5955WX 16-Cores",
+      "logical_cores": 32,
+      "load_average": {
+        "one": 1.41,
+        "five": 1.22,
+        "fifteen": 1.14
+      },
+      "memory_used_mb": 11190.3,
+      "memory_total_mb": 64090.7,
+      "memory_usage_percent": 17.5,
+      "disk_used_text": "856G used of 938G (97%)",
+      "disk_percent": 97.0,
+      "gpu_count": 1,
+      "gpu_avg_usage_percent": 89.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA GeForce RTX 4090",
+          "temperature_c": "61",
+          "utilization_percent": 89.0,
+          "memory_total_mb": 24564.0,
+          "memory_used_mb": 19172.0,
+          "memory_percent": 78.0,
+          "power_draw_w": "259.78",
+          "power_limit_w": "450.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:31:00.911315Z"
+    },
+    {
+      "server_alias": "sch-min-hs-74",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:31:01.820421Z",
+      "uptime": "up 3 weeks, 3 days, 15 hours, 22 minutes",
+      "cpu_usage_percent": 0.8,
+      "cpu_model": "AMD Ryzen Threadripper PRO 7985WX 64-Cores",
+      "logical_cores": 128,
+      "load_average": {
+        "one": 1.0,
+        "five": 1.04,
+        "fifteen": 1.05
+      },
+      "memory_used_mb": 30912.0,
+      "memory_total_mb": 257182.1,
+      "memory_usage_percent": 12.0,
+      "disk_used_text": "1.7T used of 1.8T (100%)",
+      "disk_percent": 100.0,
+      "gpu_count": 1,
+      "gpu_avg_usage_percent": 100.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA H200 NVL",
+          "temperature_c": "49",
+          "utilization_percent": 100.0,
+          "memory_total_mb": 143771.0,
+          "memory_used_mb": 54437.0,
+          "memory_percent": 37.9,
+          "power_draw_w": "564.35",
+          "power_limit_w": "600.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:31:01.433771Z"
+    },
+    {
+      "server_alias": "sch-user-135",
+      "status": "live",
+      "error_message": null,
+      "generated_at": "2026-04-24T02:31:02.571660Z",
+      "uptime": "up 22 weeks, 2 days, 21 hours, 41 minutes",
+      "cpu_usage_percent": 0.1,
+      "cpu_model": "Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz",
+      "logical_cores": 80,
+      "load_average": {
+        "one": 0.11,
+        "five": 0.14,
+        "fifteen": 0.16
+      },
+      "memory_used_mb": 15835.8,
+      "memory_total_mb": 772641.2,
+      "memory_usage_percent": 2.0,
+      "disk_used_text": "831G used of 879G (100%)",
+      "disk_percent": 100.0,
+      "gpu_count": 4,
+      "gpu_avg_usage_percent": 0.0,
+      "gpu_payload": [
+        {
+          "index": "0",
+          "name": "NVIDIA A100-PCIE-40GB",
+          "temperature_c": "29",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 40960.0,
+          "memory_used_mb": 13.0,
+          "memory_percent": 0.0,
+          "power_draw_w": "32.80",
+          "power_limit_w": "250.00"
+        },
+        {
+          "index": "1",
+          "name": "NVIDIA A100-PCIE-40GB",
+          "temperature_c": "28",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 40960.0,
+          "memory_used_mb": 13.0,
+          "memory_percent": 0.0,
+          "power_draw_w": "33.22",
+          "power_limit_w": "250.00"
+        },
+        {
+          "index": "2",
+          "name": "NVIDIA A100-PCIE-40GB",
+          "temperature_c": "28",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 40960.0,
+          "memory_used_mb": 13.0,
+          "memory_percent": 0.0,
+          "power_draw_w": "32.23",
+          "power_limit_w": "250.00"
+        },
+        {
+          "index": "3",
+          "name": "NVIDIA A100-PCIE-40GB",
+          "temperature_c": "31",
+          "utilization_percent": 0.0,
+          "memory_total_mb": 40960.0,
+          "memory_used_mb": 13.0,
+          "memory_percent": 0.0,
+          "power_draw_w": "37.06",
+          "power_limit_w": "250.00"
+        }
+      ],
+      "updated_at": "2026-04-24T02:31:02.265080Z"
+    }
+  ]
+}

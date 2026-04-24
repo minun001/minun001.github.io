@@ -1,8 +1,9 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260424g';
+  var WORKSPACE_CONTENT_VERSION = '20260424h';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
+  var workspaceServerFallbackCache = null;
 
   function getConfig() {
     return window.WORKSPACE_AUTH_CONFIG || {};
@@ -278,6 +279,39 @@
     } catch (_error) {
       workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
       return workspaceContentFallbackCache;
+    }
+  }
+
+  function normalizeServerFallback(raw) {
+    var safeRaw = raw && typeof raw === 'object' ? raw : {};
+    return {
+      targets: safeArray(safeRaw.targets),
+      snapshots: safeArray(safeRaw.snapshots)
+    };
+  }
+
+  async function loadServerFallback(config) {
+    if (workspaceServerFallbackCache) return workspaceServerFallbackCache;
+    if (!window.fetch) {
+      workspaceServerFallbackCache = getServerFallback(config);
+      return workspaceServerFallbackCache;
+    }
+
+    try {
+      var response = await window.fetch('/tools/workspace_server_sync_fallback.json?v=' + WORKSPACE_CONTENT_VERSION, {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+      if (!response.ok) {
+        workspaceServerFallbackCache = getServerFallback(config);
+        return workspaceServerFallbackCache;
+      }
+      var payload = await response.json();
+      workspaceServerFallbackCache = normalizeServerFallback(payload);
+      return workspaceServerFallbackCache;
+    } catch (_error) {
+      workspaceServerFallbackCache = getServerFallback(config);
+      return workspaceServerFallbackCache;
     }
   }
 
@@ -650,6 +684,11 @@
     return label ? label + ' root' : 'Workspace root';
   }
 
+  function getServerItemTimestamp(item) {
+    var raw = item && item.generatedAt ? Date.parse(item.generatedAt) : NaN;
+    return Number.isFinite(raw) ? raw : 0;
+  }
+
   function buildServerItems(targets, snapshots) {
     var snapshotMap = {};
     safeArray(snapshots).forEach(function (snapshot) {
@@ -701,6 +740,30 @@
         };
       })
       .filter(Boolean)
+      .sort(function (left, right) {
+        if (left.sortOrder !== right.sortOrder) return left.sortOrder - right.sortOrder;
+        return left.label.localeCompare(right.label);
+      });
+  }
+
+  function mergeServerItems(primaryItems, secondaryItems) {
+    var merged = {};
+
+    safeArray(secondaryItems).forEach(function (item) {
+      if (!item || !item.alias) return;
+      merged[item.alias] = item;
+    });
+
+    safeArray(primaryItems).forEach(function (item) {
+      if (!item || !item.alias) return;
+      var existing = merged[item.alias];
+      if (!existing || getServerItemTimestamp(item) >= getServerItemTimestamp(existing)) {
+        merged[item.alias] = item;
+      }
+    });
+
+    return Object.keys(merged)
+      .map(function (alias) { return merged[alias]; })
       .sort(function (left, right) {
         if (left.sortOrder !== right.sortOrder) return left.sortOrder - right.sortOrder;
         return left.label.localeCompare(right.label);
@@ -1685,7 +1748,7 @@
 
   async function loadWorkspaceData(client, config) {
     var contentFallback = await loadWorkspaceContentFallback();
-    var serverFallback = getServerFallback(config);
+    var serverFallback = await loadServerFallback(config);
     var tables = config.tables || {};
     var limits = config.limits || {};
     var analytics = config.analytics || {};
@@ -1759,7 +1822,7 @@
       serverSnapshots.error ? [] : (serverSnapshots.data || [])
     );
     var fallbackServerItems = buildServerItems(serverFallback.targets, serverFallback.snapshots);
-    var serverItems = liveServerItems.length ? liveServerItems : fallbackServerItems;
+    var serverItems = mergeServerItems(liveServerItems, fallbackServerItems);
     var serverActionMode = (
       isMissingTableError(serverTargets.error, 'workspace_server_targets') ||
       isMissingTableError(serverSnapshots.error, 'workspace_server_snapshots')
