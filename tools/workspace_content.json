@@ -39,27 +39,35 @@
       "is_active": true
     },
     {
-      "title": "Supabase Console",
-      "description": "Workspace auth, private content tables, and server snapshot data all connect here. Open this when the workspace state or server sync needs a direct fix.",
-      "url": "https://supabase.com/dashboard/project/brwilcezyrtlpmcokmlo",
-      "tag": "Open Console",
+      "title": "Workspace Content",
+      "description": "Canonical repo file for overview cards and library links. Edit this first when the workspace copy or quick links need to change.",
+      "url": "/tools/workspace_content.json",
+      "tag": "Open JSON",
       "sort_order": 20,
       "is_active": true
     },
     {
-      "title": "Scholar Checks",
-      "description": "Fast verification surface for citations, h-index, venue details, and publication metadata before changing the Publications page.",
-      "url": "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en",
-      "tag": "Open Scholar",
+      "title": "Server Snapshot Data",
+      "description": "Latest repo-backed CPU, memory, disk, and GPU snapshot payload for the workspace server cards.",
+      "url": "/tools/workspace_server_sync_fallback.json",
+      "tag": "Open JSON",
       "sort_order": 30,
       "is_active": true
     },
     {
+      "title": "Site Signals Data",
+      "description": "Repo snapshot for traffic summary, monthly trend, and top-page ranking shown in the workspace charts.",
+      "url": "/tools/workspace_site_signals.json",
+      "tag": "Open JSON",
+      "sort_order": 40,
+      "is_active": true
+    },
+    {
       "title": "Live Site Check",
-      "description": "Production site entry point for final copy, layout, and deployment verification. Use this as the last check after a push reaches GitHub Pages.",
+      "description": "Production entry point for final layout and deployment verification after a push reaches GitHub Pages.",
       "url": "https://minun001.github.io/",
       "tag": "Open Site",
-      "sort_order": 40,
+      "sort_order": 50,
       "is_active": true
     }
   ],

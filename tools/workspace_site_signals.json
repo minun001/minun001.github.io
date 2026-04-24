@@ -1,0 +1,22 @@
+{
+  "updated_at": "2026-04-24T02:40:00Z",
+  "todayVisitors": 2,
+  "last30Visitors": 4,
+  "lifetimeVisitors": 4,
+  "trackedPages": 4,
+  "launchDateKey": "2025-11-14",
+  "monthlySeries": [
+    { "monthKey": "2025-11", "visitors": 0, "hits": 0 },
+    { "monthKey": "2025-12", "visitors": 0, "hits": 0 },
+    { "monthKey": "2026-01", "visitors": 0, "hits": 0 },
+    { "monthKey": "2026-02", "visitors": 1, "hits": 3 },
+    { "monthKey": "2026-03", "visitors": 2, "hits": 8 },
+    { "monthKey": "2026-04", "visitors": 4, "hits": 22 }
+  ],
+  "topPages": [
+    { "path": "/", "hits": 8 },
+    { "path": "/publications/", "hits": 7 },
+    { "path": "/profile/", "hits": 7 },
+    { "path": "/news/", "hits": 4 }
+  ]
+}
