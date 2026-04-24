@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260424i';
+  var WORKSPACE_CONTENT_VERSION = '20260424j';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
@@ -1702,11 +1702,7 @@
   }
 
   function applyLocalWorkspaceIdentity() {
-    var contentNode = byId('workspace-user-email');
-    var serverNode = byId('workspace-user-role');
     var refreshNode = byId('workspace-session-timeout');
-    if (contentNode) contentNode.textContent = 'tools/workspace_content.json';
-    if (serverNode) serverNode.textContent = 'tools/workspace_server_sync_fallback.json';
     if (refreshNode) refreshNode.textContent = '30s + focus refresh';
   }
 
