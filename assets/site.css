@@ -1246,6 +1246,7 @@ body.theme-night .photo-note {
 
   .page-index a,
   .news-filter button {
+    flex: 0 0 auto;
     min-height: 38px;
     padding: 0.5rem 0.82rem;
     font-size: 0.82rem;
