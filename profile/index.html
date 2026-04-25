@@ -13,8 +13,8 @@ footer_content: >-
     .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.1rem;margin-top:.3rem}
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700}
-    .about-email-copy{padding:0;border:0;background:none;color:inherit;font:inherit;font-weight:inherit;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(29,78,216,.32);text-underline-offset:.16em;transition:color .2s ease,text-decoration-color .2s ease}
+    .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700;word-break:break-word}
+    .about-email-copy{padding:0;border:0;background:none;color:inherit;font:inherit;font-weight:inherit;text-align:left;line-height:1.42;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(29,78,216,.32);text-underline-offset:.16em;transition:color .2s ease,text-decoration-color .2s ease}
     .about-email-copy:hover,.about-email-copy:focus-visible{color:var(--accent);text-decoration-color:currentColor;outline:none}
     .about-jump{margin-top:-.15rem}
     .about-interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:.35rem}
@@ -48,8 +48,43 @@ footer_content: >-
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
     .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
     .about-actions > *{width:100%}
+    @media (min-width:981px){.photo-card img{min-height:468px}}
     @media (max-width:1024px){.about-meta,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.4rem,6vw,3.6rem)}}
-    @media (max-width:760px){.about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid,.about-actions{grid-template-columns:1fr}.about-name{font-size:clamp(2.1rem,10vw,3rem)}}
+    @media (max-width:760px){
+      .about-page{gap:1.3rem}
+      .photo-layout{gap:.72rem}
+      .photo-card{order:2}
+      .identity-card{order:1}
+      .photo-card img{min-height:300px;max-height:360px;object-position:center 74%}
+      .about-hero-copy{gap:.95rem;padding-top:0}
+      .about-name{font-size:clamp(1.95rem,9vw,2.6rem);line-height:.94}
+      .hero-intro{margin:0;font-size:.97rem;line-height:1.58}
+      .about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid{grid-template-columns:1fr}
+      .about-meta{gap:.72rem .85rem;margin-top:.1rem}
+      .about-meta div{padding-top:.58rem}
+      .about-meta dt{font-size:.72rem}
+      .about-meta dd{font-size:.93rem}
+      .about-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:.58rem}
+      .about-actions > :last-child{grid-column:1 / -1}
+      .about-actions .btn-soft{min-height:42px;padding:.68rem .75rem;font-size:.84rem}
+      .about-jump{margin-top:-.3rem;scroll-snap-type:x proximity}
+      .about-jump a{scroll-snap-align:start}
+      .about-page .section-grid{margin-top:.25rem;gap:.82rem}
+      .about-stack{gap:.75rem}
+      .about-entry{padding-top:.75rem}
+      .about-entry h3,.about-project h3{font-size:1rem}
+      #profile-education .about-entry h3,
+      #profile-experience .about-entry h3{min-height:0}
+    }
+    @media (max-width:420px){
+      .about-page{gap:1.15rem}
+      .photo-card img{min-height:270px;max-height:320px}
+      .about-name{font-size:clamp(1.82rem,10vw,2.2rem)}
+      .about-actions{grid-template-columns:1fr}
+      .about-actions > :last-child{grid-column:auto}
+      .about-jump{margin-top:-.22rem}
+      .about-meta dd{font-size:.9rem}
+    }
   </style>
 
 <div class="about-page">
