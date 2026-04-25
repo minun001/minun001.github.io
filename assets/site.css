@@ -352,6 +352,7 @@ body.mobile-nav-open .nav-toggle span:nth-child(3) {
 
 body.mobile-nav-open {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body.mobile-nav-open .mobile-nav {
@@ -1112,19 +1113,26 @@ body.theme-night .photo-note {
 
 @media (max-width: 720px) {
   :root {
-    --header-height: 60px;
+    --header-safe-top: env(safe-area-inset-top, 0px);
+    --header-height: calc(60px + var(--header-safe-top));
     --page-index-offset: calc(var(--header-height) + 0.15rem);
     --section-anchor-offset: calc(var(--page-index-offset) + 3.35rem);
+  }
+
+  .site-header {
+    padding-top: var(--header-safe-top);
   }
 
   .site-header__inner {
     align-items: center;
     min-height: 60px;
     gap: 0.8rem;
+    padding-left: max(0px, env(safe-area-inset-left, 0px));
+    padding-right: max(0px, env(safe-area-inset-right, 0px));
   }
 
   .brand {
-    max-width: calc(100vw - 6.5rem);
+    max-width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 6.5rem);
     font-size: 1.28rem;
   }
 
@@ -1139,6 +1147,19 @@ body.theme-night .photo-note {
   .nav-toggle,
   .mobile-nav {
     display: block;
+  }
+
+  .mobile-nav__panel {
+    left: max(0.85rem, calc(env(safe-area-inset-left, 0px) + 0.5rem));
+    right: max(0.85rem, calc(env(safe-area-inset-right, 0px) + 0.5rem));
+    max-height: calc(100dvh - var(--header-height) - env(safe-area-inset-bottom, 0px) - 0.85rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-nav__links a {
+    min-height: 48px;
   }
 
   .page-lead {
@@ -1192,12 +1213,12 @@ body.theme-night .photo-note {
   }
 
   .nav-toggle {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
   }
 
   .brand {
-    max-width: calc(100vw - 6rem);
+    max-width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 6rem);
     font-size: 1.18rem;
   }
 
@@ -1233,8 +1254,8 @@ body.theme-night .photo-note {
 
   .mobile-nav__panel {
     top: calc(var(--header-height) + 0.35rem);
-    right: 0.62rem;
-    left: 0.62rem;
+    right: max(0.62rem, calc(env(safe-area-inset-right, 0px) + 0.4rem));
+    left: max(0.62rem, calc(env(safe-area-inset-left, 0px) + 0.4rem));
     padding: 0.92rem;
   }
 }
