@@ -17,6 +17,7 @@ footer_content: >-
     .about-email-copy{padding:0;border:0;background:none;color:inherit;font:inherit;font-weight:inherit;text-align:left;line-height:1.42;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(29,78,216,.32);text-underline-offset:.16em;transition:color .2s ease,text-decoration-color .2s ease}
     .about-email-copy:hover,.about-email-copy:focus-visible{color:var(--accent);text-decoration-color:currentColor;outline:none}
     .about-jump{margin-top:-.15rem}
+    .about-jump-label-short{display:none}
     .about-interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:.35rem}
     .about-interest{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
     .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
@@ -67,8 +68,11 @@ footer_content: >-
       .about-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:.58rem}
       .about-actions > :last-child{grid-column:1 / -1}
       .about-actions .btn-soft{min-height:42px;padding:.68rem .75rem;font-size:.84rem}
-      .about-jump{margin-top:-.3rem;scroll-snap-type:x proximity}
+      .about-jump{margin-top:-.3rem;scroll-snap-type:x proximity;scroll-padding-inline:.2rem}
       .about-jump a{scroll-snap-align:start}
+      .about-jump a{padding-inline:.74rem;font-size:.8rem}
+      .about-jump-label-full{display:none}
+      .about-jump-label-short{display:inline}
       .about-page .section-grid{margin-top:.25rem;gap:.82rem}
       .about-stack{gap:.75rem}
       .about-entry{padding-top:.75rem}
@@ -121,12 +125,12 @@ footer_content: >-
         </section>
 
         <nav class="about-jump page-index" aria-label="Jump to profile section">
-          <a href="#profile-research">Research Focus</a>
-          <a href="#profile-education">Education</a>
-          <a href="#profile-experience">Experience</a>
-          <a href="#profile-projects">Projects &amp; Grants</a>
-          <a href="#profile-awards">Honors &amp; Awards</a>
-          <a href="#profile-stack">Technical Toolkit</a>
+          <a href="#profile-research"><span class="about-jump-label-full">Research Focus</span><span class="about-jump-label-short">Research</span></a>
+          <a href="#profile-education"><span class="about-jump-label-full">Education</span><span class="about-jump-label-short">Education</span></a>
+          <a href="#profile-experience"><span class="about-jump-label-full">Experience</span><span class="about-jump-label-short">Experience</span></a>
+          <a href="#profile-projects"><span class="about-jump-label-full">Projects &amp; Grants</span><span class="about-jump-label-short">Projects</span></a>
+          <a href="#profile-awards"><span class="about-jump-label-full">Honors &amp; Awards</span><span class="about-jump-label-short">Awards</span></a>
+          <a href="#profile-stack"><span class="about-jump-label-full">Technical Toolkit</span><span class="about-jump-label-short">Toolkit</span></a>
         </nav>
 
         <section class="section-grid">
