@@ -31,6 +31,8 @@ html {
   font-size: 16px;
   scroll-behavior: smooth;
   color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body,
@@ -990,6 +992,15 @@ body.theme-night .photo-note {
     padding-top: 1.25rem;
   }
 
+  .page-lead {
+    gap: 1rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .page-lead-copy h1 {
+    font-size: clamp(2.3rem, 11vw, 3.5rem);
+  }
+
   .stats {
     grid-template-columns: 1fr;
   }
@@ -1001,5 +1012,62 @@ body.theme-night .photo-note {
 
   .photo-card img {
     min-height: 440px;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-shell {
+    width: min(100%, calc(100% - 1.25rem));
+  }
+
+  .page {
+    padding: 1rem 0 2.2rem;
+  }
+
+  .page-lead {
+    gap: 0.85rem;
+    padding-bottom: 1rem;
+  }
+
+  .page-lead-copy h1 {
+    font-size: clamp(2.05rem, 11vw, 2.9rem);
+  }
+
+  .page-lead-copy p {
+    font-size: 0.95rem;
+    line-height: 1.62;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+  }
+
+  .hero-copy,
+  .hero-visual,
+  .page-title,
+  .section-card,
+  .identity-card,
+  .mini-card,
+  .timeline-item {
+    padding: 1.05rem;
+  }
+
+  .section-card h2 {
+    font-size: 1.45rem;
+  }
+
+  .page-index {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.9rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .page-index a,
+  .news-filter button {
+    min-height: 40px;
+    padding: 0.58rem 0.88rem;
+    font-size: 0.84rem;
+    white-space: nowrap;
   }
 }
