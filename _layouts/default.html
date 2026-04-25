@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260425a">
+  <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260425c">
 </head>
 {% assign current_url = page.url | replace: 'index.html', '' %}
 {% if current_url == '' %}
@@ -26,6 +26,18 @@
       <div class="brand-lockup">
         <a class="brand" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
       </div>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-site-nav"
+        aria-label="Open navigation menu"
+        data-mobile-nav-toggle
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <nav class="nav" aria-label="Primary">
         {% for item in site.nav %}
           {% assign item_link = item.link | replace: 'index.html', '' %}
@@ -35,6 +47,22 @@
           {% endif %}
           <a{% if item_class != '' %} class="{{ item_class }}"{% endif %} href="{{ item.link | relative_url }}">{{ item.name | escape }}</a>
         {% endfor %}
+      </nav>
+    </div>
+    <div class="mobile-nav" data-mobile-nav>
+      <button class="mobile-nav__overlay" type="button" aria-label="Close navigation menu" data-mobile-nav-close tabindex="-1"></button>
+      <nav class="mobile-nav__panel" id="mobile-site-nav" aria-label="Mobile primary">
+        <div class="mobile-nav__eyebrow">Navigation</div>
+        <div class="mobile-nav__links">
+          {% for item in site.nav %}
+            {% assign item_link = item.link | replace: 'index.html', '' %}
+            {% assign item_class = '' %}
+            {% if current_url == item_link %}
+              {% assign item_class = 'is-active' %}
+            {% endif %}
+            <a{% if item_class != '' %} class="{{ item_class }}"{% endif %} href="{{ item.link | relative_url }}">{{ item.name | escape }}</a>
+          {% endfor %}
+        </div>
       </nav>
     </div>
   </header>
@@ -60,10 +88,10 @@
     {% if page.include_public_analytics != false %}
     <script src="{{ "/assets/site-analytics-config.js" | relative_url }}?v=20260420c"></script>
     {% endif %}
-  <script src="{{ "/assets/site.js" | relative_url }}?v=20260421a"></script>
     {% if page.include_public_analytics != false %}
     <script src="{{ "/assets/visitor-tracker.js" | relative_url }}?v=20260420c"></script>
     {% endif %}
   {% endif %}
+  <script src="{{ "/assets/site.js" | relative_url }}?v=20260425c"></script>
 </body>
 </html>

@@ -663,6 +663,60 @@
     });
   }
 
+  function bindMobileNav() {
+    var toggle = document.querySelector('[data-mobile-nav-toggle]');
+    var navRoot = document.querySelector('[data-mobile-nav]');
+    if (!toggle || !navRoot) return;
+
+    var closeButton = navRoot.querySelector('[data-mobile-nav-close]');
+    var panel = navRoot.querySelector('.mobile-nav__panel');
+    var links = Array.prototype.slice.call(navRoot.querySelectorAll('.mobile-nav__links a'));
+    var lastFocused = null;
+
+    function setState(isOpen) {
+      document.body.classList.toggle('mobile-nav-open', isOpen);
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+      if (panel) panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+
+      if (isOpen) {
+        lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : toggle;
+        window.setTimeout(function () {
+          if (links[0]) links[0].focus();
+        }, 20);
+      } else if (lastFocused && typeof lastFocused.focus === 'function') {
+        lastFocused.focus();
+      }
+    }
+
+    function closeNav() {
+      if (!document.body.classList.contains('mobile-nav-open')) return;
+      setState(false);
+    }
+
+    toggle.addEventListener('click', function () {
+      setState(!document.body.classList.contains('mobile-nav-open'));
+    });
+
+    if (closeButton) {
+      closeButton.addEventListener('click', closeNav);
+    }
+
+    links.forEach(function (link) {
+      link.addEventListener('click', closeNav);
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') closeNav();
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 720) closeNav();
+    });
+
+    setState(false);
+  }
+
   function createCelebrationBurst(rect, palette, options) {
     if (!rect || !rect.width || !rect.height) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -812,6 +866,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     applyTheme();
+    bindMobileNav();
     bindCopyButtons();
     installTopButton();
     bindNewsBadgeEffects();
