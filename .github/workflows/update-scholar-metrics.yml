@@ -1,7 +1,16 @@
 name: Update Google Scholar Data
 
 on:
+  push:
+    paths:
+      - ".github/workflows/update-scholar-metrics.yml"
+      - "tools/update_scholar_metrics.py"
+      - "tools/scholar_publication_overrides.json"
+      - "_data/google-scholar-metrics.json"
+      - "_data/google-scholar-publications.json"
   workflow_dispatch:
+  schedule:
+    - cron: "15 15 * * *"
 
 permissions:
   contents: write

@@ -565,7 +565,8 @@ def main() -> None:
         )
     except (HTTPError, URLError, RuntimeError) as error:
         if os.environ.get("GITHUB_ACTIONS") == "true":
-            raise RuntimeError(f"Google Scholar refresh failed in GitHub Actions: {error}") from error
+            print(f"Skipping Google Scholar refresh in GitHub Actions: {error}")
+            return
         raise
 
 
