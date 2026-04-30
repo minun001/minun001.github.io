@@ -1,0 +1,11 @@
+{
+  "sessions": {
+    "019d608d-ab63-7273-b0d5-5ba01980947b": {
+      "slack_channel_id": "D0B0BLR7LK1",
+      "vla_bot_user_id": "U0B0LNZ7QBD",
+      "target_user_id": "U0ALWBGLSBH",
+      "last_processed_user_message_ts": "1777525545.404359",
+      "last_bridge_update_kst": "2026-04-30 14:05:45 KST"
+    }
+  }
+}
