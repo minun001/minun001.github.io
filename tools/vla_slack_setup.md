@@ -24,6 +24,12 @@ Recommended target user:
 
 - `SLACK_VLA_TARGET_USER=U0ALWBGLSBH`
 
+Fastest way:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/set_vla_slack_env.ps1 -BotToken "xoxb-..." -Persist
+```
+
 ### 4. Verify the connection
 
 Run this command from the website repo:
@@ -55,6 +61,20 @@ Or use the completion helper:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File tools/send_vla_completion_notice.ps1 -TaskSummary "<task summary>"
+```
+
+### 6. Wrap a task and notify automatically
+
+If you want a command to send a VLA DM automatically when it succeeds:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/run_with_vla_notice.ps1 -TaskSummary "VLA batch inference finished" -CommandLine "python run_vla_job.py"
+```
+
+Optional failure notice:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/run_with_vla_notice.ps1 -TaskSummary "VLA batch inference finished" -NotifyOnFailure -CommandLine "python run_vla_job.py"
 ```
 
 ### Notes
