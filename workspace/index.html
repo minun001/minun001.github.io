@@ -33,8 +33,12 @@ script_bundle: workspace
     .workspace-section-head h3{margin:0;color:var(--text-title);font-size:1.15rem}
     .workspace-section-head p{color:var(--text-soft);font-size:.92rem;line-height:1.5}
     .workspace-refresh-note{margin:0;color:var(--text-soft);font-size:.82rem;line-height:1.45}
-    .workspace-refresh-button{min-height:36px;padding:.55rem .9rem;font-size:.82rem;box-shadow:inset 0 0 0 1px rgba(17,32,51,.09)}
-    .workspace-refresh-button[disabled]{cursor:wait;opacity:.7}
+    .workspace-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    .workspace-refresh-button{width:42px;min-width:42px;min-height:42px;padding:0;display:inline-grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(17,32,51,.09)}
+    .workspace-refresh-button[disabled]{cursor:wait;opacity:.78}
+    .workspace-refresh-emoji{display:block;font-size:1.05rem;line-height:1;transform-origin:center center}
+    .workspace-refresh-button.is-loading .workspace-refresh-emoji{animation:workspace-refresh-spin .8s linear infinite}
+    @keyframes workspace-refresh-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
     .workspace-account-head{display:grid;gap:.3rem}
     .workspace-account-head h2{margin:0;color:var(--text-title);font-size:clamp(1.35rem,2vw,1.75rem);line-height:1.05}
     .workspace-status{margin-top:1rem;padding:.92rem 1rem;border-radius:14px;background:#edf3f8;color:var(--text-title);font-weight:700;box-shadow:inset 0 0 0 1px rgba(17,32,51,.05)}
@@ -241,7 +245,10 @@ script_bundle: workspace
                     <h3 id="workspace-servers-title">Server Signals</h3>
                     <p class="workspace-refresh-note" id="workspace-server-refresh-note">Loads the latest published snapshot on demand.</p>
                   </div>
-                  <button class="workspace-button secondary workspace-refresh-button" id="workspace-server-refresh" type="button">Refresh</button>
+                  <button class="workspace-button secondary workspace-refresh-button" id="workspace-server-refresh" type="button" aria-label="Refresh server signals" title="Refresh server signals">
+                    <span class="workspace-refresh-emoji" aria-hidden="true">🔄</span>
+                    <span class="workspace-visually-hidden">Refresh server signals</span>
+                  </button>
                 </div>
                 <div class="workspace-servers" id="workspace-servers">
                   <div class="workspace-empty">No server snapshot yet.</div>

@@ -1722,8 +1722,12 @@
   function setServerRefreshButtonState(isLoading) {
     var button = byId('workspace-server-refresh');
     if (!button) return;
-    button.disabled = Boolean(isLoading);
-    button.textContent = isLoading ? 'Refreshing...' : 'Refresh';
+    var loading = Boolean(isLoading);
+    button.disabled = loading;
+    button.classList.toggle('is-loading', loading);
+    button.setAttribute('aria-busy', loading ? 'true' : 'false');
+    button.setAttribute('aria-label', loading ? 'Refreshing server signals' : 'Refresh server signals');
+    button.setAttribute('title', loading ? 'Refreshing server signals' : 'Refresh server signals');
   }
 
   function applyLocalWorkspaceIdentity() {
