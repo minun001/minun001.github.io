@@ -1701,9 +1701,45 @@
     setHtml('workspace-signals', renderSignals(workspaceState.analyticsSummary || buildZeroAnalyticsState(getConfig()), workspaceState.selectedSignalKey));
   }
 
+  function getLatestServerSnapshotTimestamp(items) {
+    return safeArray(items).reduce(function (latest, item) {
+      var timestamp = item && item.generatedAt ? Date.parse(item.generatedAt) : NaN;
+      if (!Number.isFinite(timestamp)) return latest;
+      return Math.max(latest, timestamp);
+    }, 0);
+  }
+
+  function renderServerRefreshNote(items, prefix) {
+    var note = byId('workspace-server-refresh-note');
+    if (!note) return;
+    var latestTimestamp = getLatestServerSnapshotTimestamp(items);
+    var baseMessage = latestTimestamp
+      ? ('Latest published snapshot ' + formatRelativeAge(new Date(latestTimestamp).toISOString()) + '.')
+      : 'No published snapshot yet.';
+    note.textContent = prefix ? (prefix + ' ' + baseMessage) : baseMessage;
+  }
+
+  function setServerRefreshButtonState(isLoading) {
+    var button = byId('workspace-server-refresh');
+    if (!button) return;
+    button.disabled = Boolean(isLoading);
+    button.textContent = isLoading ? 'Refreshing...' : 'Refresh';
+  }
+
   function applyLocalWorkspaceIdentity() {
     var refreshNode = byId('workspace-session-timeout');
-    if (refreshNode) refreshNode.textContent = '30s + focus refresh';
+    if (refreshNode) refreshNode.textContent = 'Manual + focus refresh';
+  }
+
+  async function refreshLocalServerSignals(config) {
+    workspaceServerFallbackCache = null;
+    var serverFallback = await loadServerFallback(config);
+    var serverItems = buildServerItems(serverFallback.targets, serverFallback.snapshots);
+    workspaceState.serverItems = serverItems;
+    workspaceState.serverActionMode = serverItems.length ? 'live' : 'sync';
+    syncInteractiveSelections();
+    renderWorkspaceServers();
+    renderServerRefreshNote(serverItems, '');
   }
 
   async function loadWorkspaceLocalData(config) {
@@ -1726,6 +1762,7 @@
     renderWorkspaceLinks();
     renderWorkspaceServers();
     renderWorkspaceSignals();
+    renderServerRefreshNote(serverItems, '');
   }
 
   function bindInteractiveSections() {
@@ -1945,7 +1982,6 @@
       await loadWorkspaceLocalData(config);
 
       var localRefreshInFlight = false;
-      var localRefreshTimerId = null;
 
       async function refreshLocalWorkspace(options) {
         var settings = options || {};
@@ -1962,9 +1998,24 @@
         }
       }
 
-      localRefreshTimerId = window.setInterval(function () {
-        refreshLocalWorkspace({ force: false }).catch(function () {});
-      }, WORKSPACE_AUTO_REFRESH_MS);
+      var serverRefreshButton = byId('workspace-server-refresh');
+      if (serverRefreshButton && !serverRefreshButton.dataset.bound) {
+        serverRefreshButton.dataset.bound = 'true';
+        serverRefreshButton.addEventListener('click', function () {
+          if (localRefreshInFlight) return;
+          localRefreshInFlight = true;
+          setServerRefreshButtonState(true);
+          renderServerRefreshNote(workspaceState.serverItems, 'Refreshing published snapshot.');
+          refreshLocalServerSignals(config)
+            .catch(function () {
+              renderServerRefreshNote(workspaceState.serverItems, 'Unable to refresh the published snapshot right now.');
+            })
+            .finally(function () {
+              localRefreshInFlight = false;
+              setServerRefreshButtonState(false);
+            });
+        });
+      }
 
       document.addEventListener('visibilitychange', function () {
         if (document.hidden) return;
@@ -1972,11 +2023,6 @@
       });
       window.addEventListener('focus', function () {
         refreshLocalWorkspace({ force: true }).catch(function () {});
-      });
-      window.addEventListener('beforeunload', function () {
-        if (localRefreshTimerId) {
-          window.clearInterval(localRefreshTimerId);
-        }
       });
       return;
     }
