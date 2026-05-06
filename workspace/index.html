@@ -35,9 +35,11 @@ script_bundle: workspace
     .workspace-refresh-note{margin:0;color:var(--text-soft);font-size:.82rem;line-height:1.45}
     .workspace-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
     .workspace-refresh-button{width:42px;min-width:42px;min-height:42px;padding:0;display:inline-grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(17,32,51,.09)}
+    .workspace-refresh-button:hover{box-shadow:inset 0 0 0 1px rgba(29,78,216,.18),0 10px 22px rgba(15,23,42,.06)}
     .workspace-refresh-button[disabled]{cursor:wait;opacity:.78}
-    .workspace-refresh-emoji{display:block;font-size:1.05rem;line-height:1;transform-origin:center center}
-    .workspace-refresh-button.is-loading .workspace-refresh-emoji{animation:workspace-refresh-spin .8s linear infinite}
+    .workspace-refresh-icon{display:block;width:18px;height:18px;color:var(--accent);transform-origin:center center}
+    .workspace-refresh-icon path{stroke:currentColor}
+    .workspace-refresh-button.is-loading .workspace-refresh-icon{animation:workspace-refresh-spin .8s linear infinite}
     @keyframes workspace-refresh-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
     .workspace-account-head{display:grid;gap:.3rem}
     .workspace-account-head h2{margin:0;color:var(--text-title);font-size:clamp(1.35rem,2vw,1.75rem);line-height:1.05}
@@ -246,7 +248,12 @@ script_bundle: workspace
                     <p class="workspace-refresh-note" id="workspace-server-refresh-note">Loads the latest published snapshot on demand.</p>
                   </div>
                   <button class="workspace-button secondary workspace-refresh-button" id="workspace-server-refresh" type="button" aria-label="Refresh server signals" title="Refresh server signals">
-                    <span class="workspace-refresh-emoji" aria-hidden="true">🔄</span>
+                    <svg class="workspace-refresh-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M20 6v5h-5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M4 18v-5h5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M18.4 9A7 7 0 0 0 6.2 6.6L4 9" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M5.6 15A7 7 0 0 0 17.8 17.4L20 15" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
                     <span class="workspace-visually-hidden">Refresh server signals</span>
                   </button>
                 </div>
