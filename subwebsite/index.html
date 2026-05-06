@@ -1,0 +1,145 @@
+---
+layout: default
+title: Subwebsite Design Study
+description: A private design study for Hyunsik Min's research website.
+body_class: page-subwebsite
+robots: noindex,nofollow
+show_footer: false
+include_public_analytics: false
+---
+<style>
+  .subwebsite{--ink:#111827;--paper:#fbfbf7;--line:rgba(17,24,39,.14);--blue:#1f5eff;--green:#0f8a70;--red:#c92c2c;--panel:#fff;display:grid;gap:0;margin-inline:calc(50% - 50vw);background:var(--paper);color:#243044}
+  .subwebsite a{color:inherit}
+  .sub-hero{min-height:calc(100svh - var(--header-height));display:grid;align-items:end;padding:clamp(4rem,8vw,7.5rem) max(1.25rem,calc((100vw - 1180px)/2)) clamp(2rem,4vw,3rem);border-bottom:1px solid var(--line);background:linear-gradient(180deg,#ffffff 0%,#fbfbf7 52%,#f1f5f2 100%)}
+  .sub-hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(280px,.55fr);gap:clamp(2rem,5vw,4.5rem);align-items:end}
+  .sub-kicker{display:flex;align-items:center;gap:.65rem;margin-bottom:1rem;color:#526070;font-size:.78rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .sub-kicker:before{content:"";width:2.25rem;height:2px;background:linear-gradient(90deg,var(--blue),var(--green))}
+  .sub-title{max-width:11ch;margin:0;color:var(--ink);font-family:var(--font-display);font-size:clamp(4.2rem,13vw,11.6rem);font-weight:700;line-height:.78;letter-spacing:0}
+  .sub-hero-copy{max-width:42rem;margin-top:1.25rem;color:#3b4658;font-size:clamp(1rem,1.7vw,1.18rem);font-weight:650;line-height:1.55}
+  .sub-hero-meta{display:grid;gap:.75rem;padding-top:1rem;border-top:2px solid var(--ink)}
+  .sub-hero-meta-row{display:grid;grid-template-columns:minmax(88px,max-content) minmax(0,1fr);gap:1rem;align-items:baseline}
+  .sub-hero-meta span{color:#6c7888;font-size:.72rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase}
+  .sub-hero-meta strong{color:var(--ink);font-size:.98rem;line-height:1.35}
+  .sub-band{padding:clamp(2.2rem,5vw,4.4rem) max(1.25rem,calc((100vw - 1180px)/2));border-bottom:1px solid var(--line)}
+  .sub-section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.35fr);gap:1.5rem;align-items:end;margin-bottom:1.6rem}
+  .sub-section-head h2{margin:0;color:var(--ink);font-family:var(--font-display);font-size:clamp(2.4rem,5.8vw,5.4rem);line-height:.9}
+  .sub-section-head p{margin:0;color:#536071;font-weight:650;line-height:1.55}
+  .sub-archive{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink);border-left:1px solid var(--line)}
+  .sub-archive-card{display:grid;gap:.9rem;min-height:190px;padding:1rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.68)}
+  .sub-archive-card span{color:#667386;font-size:.68rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+  .sub-archive-card strong{align-self:end;color:var(--ink);font-size:2.55rem;line-height:.92}
+  .sub-archive-card p{margin:0;color:#536071;font-size:.9rem;font-weight:750;line-height:1.42}
+  .sub-layout{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:2rem;align-items:start}
+  .sub-note{position:sticky;top:calc(var(--header-height) + 1rem);display:grid;gap:1rem;padding:1rem 0;border-top:2px solid var(--ink)}
+  .sub-note h3{margin:0;color:var(--ink);font-family:var(--font-display);font-size:2rem;line-height:1}
+  .sub-note p{margin:0;color:#536071;line-height:1.62}
+  .sub-table{display:grid;border-top:2px solid var(--ink)}
+  .sub-row{display:grid;grid-template-columns:96px minmax(0,1fr) minmax(140px,.35fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line);align-items:start}
+  .sub-row time{color:#6c7888;font-size:.78rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .sub-row h3{margin:0 0 .28rem;color:var(--ink);font-size:1.08rem;line-height:1.35}
+  .sub-row p{margin:0;color:#536071;font-size:.94rem;line-height:1.55}
+  .sub-tag{justify-self:start;padding:.28rem .5rem;border:1px solid var(--line);border-radius:999px;color:#253044;font-size:.68rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;background:#fff}
+  .sub-console{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.45fr);gap:1rem}
+  .sub-console-main,.sub-console-side{display:grid;gap:1rem}
+  .sub-panel{display:grid;gap:.85rem;padding:1rem;border:1px solid var(--line);background:#fff}
+  .sub-panel h3{margin:0;color:var(--ink);font-size:1rem}
+  .sub-meter{display:grid;gap:.35rem}
+  .sub-meter-head{display:flex;justify-content:space-between;gap:1rem;color:#526070;font-size:.76rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
+  .sub-meter-track{height:9px;background:#e8edf0}
+  .sub-meter-fill{height:100%;width:var(--value);background:linear-gradient(90deg,var(--green),var(--blue))}
+  .sub-chip-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+  .sub-chip{display:grid;gap:.18rem;padding:.8rem;border:1px solid var(--line);background:#fbfbf7}
+  .sub-chip span{color:#6c7888;font-size:.68rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .sub-chip strong{color:var(--ink);font-size:1.35rem;line-height:1}
+  .sub-principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+  .sub-principle{display:grid;gap:.8rem;min-height:190px;padding:1rem;background:#fff}
+  .sub-principle span{width:max-content;padding:.24rem .45rem;background:var(--ink);color:#fff;font-size:.68rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .sub-principle h3{margin:0;color:var(--ink);font-size:1.2rem}
+  .sub-principle p{margin:0;color:#536071;line-height:1.55}
+  @media (max-width:920px){.sub-hero-grid,.sub-section-head,.sub-layout,.sub-console{grid-template-columns:1fr}.sub-note{position:static}.sub-archive{grid-template-columns:repeat(2,minmax(0,1fr))}.sub-row{grid-template-columns:1fr}.sub-tag{justify-self:start}.sub-title{font-size:clamp(3.5rem,18vw,7rem)}}
+  @media (max-width:560px){.sub-archive,.sub-principles,.sub-chip-grid{grid-template-columns:1fr}.sub-archive-card{min-height:150px}.sub-hero{min-height:auto;padding-top:4.5rem}.sub-title{font-size:3.5rem}.sub-section-head h2{font-size:2.5rem}}
+</style>
+
+<div class="subwebsite">
+  <section class="sub-hero">
+    <div class="sub-hero-grid">
+      <div>
+        <div class="sub-kicker">Design study</div>
+        <h1 class="sub-title">Research Editorial System</h1>
+        <p class="sub-hero-copy">A possible visual direction for a personal research site: magazine-like publication hierarchy, calm documentation spacing, and data panels that feel built for repeated use.</p>
+      </div>
+      <aside class="sub-hero-meta" aria-label="Design ingredients">
+        <div class="sub-hero-meta-row"><span>Editorial</span><strong>Large serif headlines, strong rules, readable archive rows.</strong></div>
+        <div class="sub-hero-meta-row"><span>Docs</span><strong>Quiet spacing and compact explanatory copy.</strong></div>
+        <div class="sub-hero-meta-row"><span>Data</span><strong>Structured status panels for Workspace signals.</strong></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sub-band">
+    <div class="sub-section-head">
+      <h2>Publication Archive</h2>
+      <p>WIRED-inspired density for papers, with Mintlify-style spacing so long titles and metadata do not feel crowded.</p>
+    </div>
+    <div class="sub-archive" aria-label="Publication summary design sample">
+      <article class="sub-archive-card"><span>International Journals</span><strong>4</strong><p>Q1 records and high-impact venues.</p></article>
+      <article class="sub-archive-card"><span>Domestic Journals</span><strong>2</strong><p>Autonomous driving and legal AI.</p></article>
+      <article class="sub-archive-card"><span>International Conferences</span><strong>2</strong><p>Trajectory prediction and safety monitoring.</p></article>
+      <article class="sub-archive-card"><span>Domestic Conferences</span><strong>5</strong><p>Five papers across four themes.</p></article>
+    </div>
+  </section>
+
+  <section class="sub-band">
+    <div class="sub-layout">
+      <aside class="sub-note">
+        <h3>News as a research timeline</h3>
+        <p>The current timeline can become more article-like without adding decorative effects. Dates, category tags, and titles become the main rhythm.</p>
+      </aside>
+      <div class="sub-table" aria-label="News timeline design sample">
+        <article class="sub-row"><time>Apr. 2026</time><div><h3>Multi-domain Safety Monitoring</h3><p>Safety-critical AI coordination framed as a concise research milestone.</p></div><span class="sub-tag">Project</span></article>
+        <article class="sub-row"><time>Oct. 2026</time><div><h3>ITS World Congress 2026</h3><p>TGCA trajectory prediction presented as a conference record.</p></div><span class="sub-tag">Conference</span></article>
+        <article class="sub-row"><time>Aug. 2025</time><div><h3>SolarNexus in Applied Energy</h3><p>PV forecasting work highlighted as a journal milestone.</p></div><span class="sub-tag">Journal</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sub-band">
+    <div class="sub-section-head">
+      <h2>Workspace Console</h2>
+      <p>IBM and Airtable references fit best here: restrained panels, clear labels, and data that scans quickly.</p>
+    </div>
+    <div class="sub-console" aria-label="Workspace data console design sample">
+      <div class="sub-console-main">
+        <article class="sub-panel">
+          <h3>Server Signals</h3>
+          <div class="sub-meter"><div class="sub-meter-head"><span>GPU Load</span><strong>68%</strong></div><div class="sub-meter-track"><div class="sub-meter-fill" style="--value:68%"></div></div></div>
+          <div class="sub-meter"><div class="sub-meter-head"><span>Memory</span><strong>42%</strong></div><div class="sub-meter-track"><div class="sub-meter-fill" style="--value:42%"></div></div></div>
+          <div class="sub-meter"><div class="sub-meter-head"><span>Disk</span><strong>57%</strong></div><div class="sub-meter-track"><div class="sub-meter-fill" style="--value:57%"></div></div></div>
+        </article>
+      </div>
+      <aside class="sub-console-side">
+        <article class="sub-panel">
+          <h3>Site Signals</h3>
+          <div class="sub-chip-grid">
+            <div class="sub-chip"><span>Today</span><strong>18</strong></div>
+            <div class="sub-chip"><span>30 days</span><strong>412</strong></div>
+            <div class="sub-chip"><span>Pages</span><strong>5</strong></div>
+            <div class="sub-chip"><span>Updated</span><strong>5m</strong></div>
+          </div>
+        </article>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sub-band">
+    <div class="sub-section-head">
+      <h2>What Would Transfer</h2>
+      <p>This page is a style sample, not a replacement. These are the pieces that could be applied without changing the site's content model.</p>
+    </div>
+    <div class="sub-principles">
+      <article class="sub-principle"><span>Publications</span><h3>Archive rules</h3><p>Use stronger horizontal rules and cleaner metadata rows for papers.</p></article>
+      <article class="sub-principle"><span>News</span><h3>Editorial timeline</h3><p>Keep the timeline, but make dates and categories behave like article furniture.</p></article>
+      <article class="sub-principle"><span>Workspace</span><h3>Data console</h3><p>Use tighter status panels and table-like grouping for repeated monitoring.</p></article>
+    </div>
+  </section>
+</div>
