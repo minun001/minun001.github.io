@@ -1,4 +1,6 @@
 {
+  "generated_at": "2026-05-06T09:56:30.149762Z",
+  "config_path": "C:\\Users\\user\\minun001.github.io\\tools\\workspace_servers.local.json",
   "targets": [
     {
       "alias": "sch-gpu-9",
@@ -70,19 +72,20 @@
       "server_alias": "sch-gpu-9",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:30:58.577901Z",
-      "uptime": "up 17 weeks, 3 days, 17 hours, 22 minutes",
+      "generated_at": "2026-05-06T09:56:16.302700Z",
+      "host": "workstation",
+      "uptime": "up 19 weeks, 2 days, 47 minutes",
       "cpu_usage_percent": 0.0,
       "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
       "logical_cores": 20,
       "load_average": {
-        "one": 0.05,
+        "one": 0.08,
         "five": 0.04,
         "fifteen": 0.0
       },
-      "memory_used_mb": 4786.7,
+      "memory_used_mb": 2055.1,
       "memory_total_mb": 31930.9,
-      "memory_usage_percent": 15.0,
+      "memory_usage_percent": 6.4,
       "disk_used_text": "143G used of 457G (33%)",
       "disk_percent": 33.0,
       "gpu_count": 1,
@@ -91,35 +94,111 @@
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4070",
-          "temperature_c": "45",
+          "temperature_c": "44",
           "utilization_percent": 0.0,
           "memory_total_mb": 12282.0,
-          "memory_used_mb": 112.0,
+          "memory_used_mb": 116.0,
           "memory_percent": 0.9,
-          "power_draw_w": "10.94",
+          "power_draw_w": "10.76",
           "power_limit_w": "200.00"
         }
       ],
-      "updated_at": "2026-04-24T02:30:58.174165Z"
+      "gpu_processes": [],
+      "top_processes": [
+        {
+          "user": "aibig9",
+          "pid": "161115",
+          "cpu_percent": 2.4,
+          "mem_percent": 0.1,
+          "elapsed": "104-05:43:00",
+          "command": "gnome-control-c",
+          "args": "gnome-control-center network"
+        },
+        {
+          "user": "root",
+          "pid": "743",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "135-00:47:20",
+          "command": "NetworkManager",
+          "args": "/usr/sbin/NetworkManager --no-daemon"
+        },
+        {
+          "user": "root",
+          "pid": "1",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "135-00:47:27",
+          "command": "systemd",
+          "args": "/lib/systemd/systemd --system --deserialize 65 splash"
+        },
+        {
+          "user": "root",
+          "pid": "2",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "135-00:47:27",
+          "command": "kthreadd",
+          "args": "[kthreadd]"
+        },
+        {
+          "user": "root",
+          "pid": "3",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "135-00:47:27",
+          "command": "pool_workqueue_",
+          "args": "[pool_workqueue_release]"
+        },
+        {
+          "user": "root",
+          "pid": "4",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "135-00:47:27",
+          "command": "kworker/R-rcu_g",
+          "args": "[kworker/R-rcu_g]"
+        },
+        {
+          "user": "root",
+          "pid": "5",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "135-00:47:27",
+          "command": "kworker/R-rcu_p",
+          "args": "[kworker/R-rcu_p]"
+        },
+        {
+          "user": "root",
+          "pid": "6",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "135-00:47:27",
+          "command": "kworker/R-slub_",
+          "args": "[kworker/R-slub_]"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:15.376843Z"
     },
     {
       "server_alias": "sch-gpu-15",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:30:59.114863Z",
-      "uptime": "up 20 weeks, 1 day, 20 hours, 5 minutes",
+      "generated_at": "2026-05-06T09:56:16.862175Z",
+      "host": "workstation",
+      "uptime": "up 22 weeks, 3 hours, 30 minutes",
       "cpu_usage_percent": 0.2,
       "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
       "logical_cores": 20,
       "load_average": {
-        "one": 0.14,
-        "five": 0.11,
+        "one": 0.3,
+        "five": 0.21,
         "fifteen": 0.12
       },
-      "memory_used_mb": 4558.4,
+      "memory_used_mb": 4878.2,
       "memory_total_mb": 31930.9,
-      "memory_usage_percent": 14.3,
-      "disk_used_text": "149G used of 457G (35%)",
+      "memory_usage_percent": 15.3,
+      "disk_used_text": "148G used of 457G (35%)",
       "disk_percent": 35.0,
       "gpu_count": 1,
       "gpu_avg_usage_percent": 0.0,
@@ -127,68 +206,220 @@
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4070",
-          "temperature_c": "43",
+          "temperature_c": "42",
           "utilization_percent": 0.0,
           "memory_total_mb": 12282.0,
           "memory_used_mb": 12.0,
           "memory_percent": 0.1,
-          "power_draw_w": "17.56",
+          "power_draw_w": "17.38",
           "power_limit_w": "200.00"
         }
       ],
-      "updated_at": "2026-04-24T02:30:58.707060Z"
+      "gpu_processes": [],
+      "top_processes": [
+        {
+          "user": "aibig15",
+          "pid": "75703",
+          "cpu_percent": 11.5,
+          "mem_percent": 8.0,
+          "elapsed": "153-06:48:33",
+          "command": "firefox",
+          "args": "/snap/firefox/7423/usr/lib/firefox/firefox"
+        },
+        {
+          "user": "aibig15",
+          "pid": "76734",
+          "cpu_percent": 7.1,
+          "mem_percent": 1.4,
+          "elapsed": "153-06:48:30",
+          "command": "Isolated",
+          "args": "Web Co /snap/firefox/7423/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:42724 -prefMapHandle 1:273426 -jsInitHandle 2:224660 -parentBuildID 20251125000153 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {a441a5c1-8067-49c8-b736-1ef081890a34} -parentPid 75703 -crashReporter 6 -crashHelper 7 -greomni /snap/firefox/7423/usr/lib/firefox/omni.ja -appomni /snap/firefox/7423/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/7423/usr/lib/firefox/browser 8 tab"
+        },
+        {
+          "user": "root",
+          "pid": "1910676",
+          "cpu_percent": 3.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "sshd",
+          "args": "sshd: aibig15 [priv]"
+        },
+        {
+          "user": "aibig15",
+          "pid": "752657",
+          "cpu_percent": 2.4,
+          "mem_percent": 0.4,
+          "elapsed": "104-05:24:15",
+          "command": "gnome-control-c",
+          "args": "gnome-control-center network"
+        },
+        {
+          "user": "aibig15",
+          "pid": "1910716",
+          "cpu_percent": 2.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "python3",
+          "args": "python3 -"
+        },
+        {
+          "user": "aibig15",
+          "pid": "1791",
+          "cpu_percent": 0.6,
+          "mem_percent": 0.3,
+          "elapsed": "154-03:30:27",
+          "command": "Xorg",
+          "args": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1001/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3"
+        },
+        {
+          "user": "root",
+          "pid": "65",
+          "cpu_percent": 0.2,
+          "mem_percent": 0.0,
+          "elapsed": "154-03:31:00",
+          "command": "migration/16",
+          "args": "[migration/16]"
+        },
+        {
+          "user": "root",
+          "pid": "71",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "154-03:31:00",
+          "command": "migration/17",
+          "args": "[migration/17]"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:15.951742Z"
     },
     {
       "server_alias": "sch-gpu-30",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:30:59.671246Z",
-      "uptime": "up 13 weeks, 19 hours, 11 minutes",
+      "generated_at": "2026-05-06T09:56:17.453574Z",
+      "host": "server",
+      "uptime": "up 14 weeks, 6 days, 2 hours, 36 minutes",
       "cpu_usage_percent": 0.0,
       "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
       "logical_cores": 20,
       "load_average": {
-        "one": 0.02,
-        "five": 0.01,
+        "one": 0.0,
+        "five": 0.0,
         "fifteen": 0.0
       },
-      "memory_used_mb": 2181.1,
+      "memory_used_mb": 2207.2,
       "memory_total_mb": 31930.9,
-      "memory_usage_percent": 6.8,
-      "disk_used_text": "52G used of 457G (12%)",
-      "disk_percent": 12.0,
+      "memory_usage_percent": 6.9,
+      "disk_used_text": "53G used of 457G (13%)",
+      "disk_percent": 13.0,
       "gpu_count": 1,
       "gpu_avg_usage_percent": 0.0,
       "gpu_payload": [
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4070",
-          "temperature_c": "39",
+          "temperature_c": "38",
           "utilization_percent": 0.0,
           "memory_total_mb": 12282.0,
           "memory_used_mb": 63.0,
           "memory_percent": 0.5,
-          "power_draw_w": "12.25",
+          "power_draw_w": "12.13",
           "power_limit_w": "200.00"
         }
       ],
-      "updated_at": "2026-04-24T02:30:59.270348Z"
+      "gpu_processes": [],
+      "top_processes": [
+        {
+          "user": "aibig30",
+          "pid": "652188",
+          "cpu_percent": 100.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:00",
+          "command": "ps",
+          "args": "ps -eo user,pid,pcpu,pmem,etime,comm,args --no-headers --sort=-pcpu"
+        },
+        {
+          "user": "aibig30",
+          "pid": "652174",
+          "cpu_percent": 6.6,
+          "mem_percent": 0.0,
+          "elapsed": "00:00",
+          "command": "python3",
+          "args": "python3 -"
+        },
+        {
+          "user": "root",
+          "pid": "652129",
+          "cpu_percent": 3.5,
+          "mem_percent": 0.0,
+          "elapsed": "00:00",
+          "command": "sshd",
+          "args": "sshd: aibig30 [priv]"
+        },
+        {
+          "user": "root",
+          "pid": "1189",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "104-02:36:37",
+          "command": "NetworkManager",
+          "args": "/usr/sbin/NetworkManager --no-daemon"
+        },
+        {
+          "user": "root",
+          "pid": "18",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "104-02:36:45",
+          "command": "rcu_preempt",
+          "args": "[rcu_preempt]"
+        },
+        {
+          "user": "aibig30",
+          "pid": "2447",
+          "cpu_percent": 0.0,
+          "mem_percent": 1.2,
+          "elapsed": "104-02:35:42",
+          "command": "gnome-shell",
+          "args": "/usr/bin/gnome-shell"
+        },
+        {
+          "user": "systemd+",
+          "pid": "380115",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "41-12:04:04",
+          "command": "systemd-oomd",
+          "args": "/usr/lib/systemd/systemd-oomd"
+        },
+        {
+          "user": "root",
+          "pid": "651794",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "25:45",
+          "command": "kworker/u80:0-f",
+          "args": "[kworker/u80:0-flush-259:0]"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:16.538558Z"
     },
     {
       "server_alias": "sch-user-71",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:31:00.207662Z",
-      "uptime": "up 2 weeks, 3 days, 20 hours, 28 minutes",
+      "generated_at": "2026-05-06T09:56:28.448506Z",
+      "host": "workstation",
+      "uptime": "up 4 weeks, 2 days, 3 hours, 54 minutes",
       "cpu_usage_percent": 0.0,
       "cpu_model": "AMD Ryzen Threadripper PRO 5995WX 64-Cores",
       "logical_cores": 128,
       "load_average": {
-        "one": 0.02,
-        "five": 0.02,
-        "fifteen": 0.0
+        "one": 3.0,
+        "five": 3.0,
+        "fifteen": 3.0
       },
-      "memory_used_mb": 8189.3,
+      "memory_used_mb": 8173.7,
       "memory_total_mb": 515579.7,
       "memory_usage_percent": 1.6,
       "disk_used_text": "1.6T used of 1.8T (91%)",
@@ -199,36 +430,119 @@
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4090",
-          "temperature_c": "27",
+          "temperature_c": "[GPU requires reset]",
           "utilization_percent": 0.0,
           "memory_total_mb": 24564.0,
-          "memory_used_mb": 115.0,
-          "memory_percent": 0.5,
-          "power_draw_w": "16.00",
-          "power_limit_w": "450.00"
+          "memory_used_mb": 48.0,
+          "memory_percent": 0.2,
+          "power_draw_w": null,
+          "power_limit_w": null
         }
       ],
-      "updated_at": "2026-04-24T02:30:59.821109Z"
+      "gpu_processes": [
+        {
+          "gpu_uuid": "GPU-921f28f4-9b62-293d-b1dd-74d1286a1b8c",
+          "pid": "[N/A]",
+          "process_name": "[N/A]",
+          "used_memory_mb": 0.0
+        }
+      ],
+      "top_processes": [
+        {
+          "user": "user",
+          "pid": "286547",
+          "cpu_percent": 1.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "python3",
+          "args": "python3 -"
+        },
+        {
+          "user": "systemd+",
+          "pid": "1977",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "30-03:54:00",
+          "command": "systemd-oomd",
+          "args": "/lib/systemd/systemd-oomd"
+        },
+        {
+          "user": "root",
+          "pid": "2119",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "30-03:53:59",
+          "command": "NetworkManager",
+          "args": "/usr/sbin/NetworkManager --no-daemon"
+        },
+        {
+          "user": "root",
+          "pid": "2129",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "30-03:53:59",
+          "command": "irqbalance",
+          "args": "/usr/sbin/irqbalance --foreground"
+        },
+        {
+          "user": "root",
+          "pid": "2277",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "30-03:53:59",
+          "command": "containerd",
+          "args": "/usr/bin/containerd"
+        },
+        {
+          "user": "root",
+          "pid": "1",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "30-03:54:08",
+          "command": "systemd",
+          "args": "/sbin/init splash"
+        },
+        {
+          "user": "root",
+          "pid": "2",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "30-03:54:08",
+          "command": "kthreadd",
+          "args": "[kthreadd]"
+        },
+        {
+          "user": "root",
+          "pid": "3",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "30-03:54:08",
+          "command": "pool_workqueue_",
+          "args": "[pool_workqueue_release]"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:27.533444Z"
     },
     {
       "server_alias": "sch-user-72",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:31:00.713559Z",
-      "uptime": "up 4 weeks, 12 hours, 26 minutes",
-      "cpu_usage_percent": 0.0,
+      "generated_at": "2026-05-06T09:56:28.948943Z",
+      "host": "workstation",
+      "uptime": "up 5 weeks, 5 days, 19 hours, 52 minutes",
+      "cpu_usage_percent": 0.4,
       "cpu_model": "AMD Ryzen Threadripper PRO 5965WX 24-Cores",
       "logical_cores": 48,
       "load_average": {
-        "one": 0.01,
+        "one": 0.0,
         "five": 0.01,
         "fifteen": 0.0
       },
-      "memory_used_mb": 7376.5,
+      "memory_used_mb": 5473.5,
       "memory_total_mb": 257573.7,
-      "memory_usage_percent": 2.9,
-      "disk_used_text": "1.3T used of 1.8T (72%)",
-      "disk_percent": 72.0,
+      "memory_usage_percent": 2.1,
+      "disk_used_text": "1.4T used of 1.8T (81%)",
+      "disk_percent": 81.0,
       "gpu_count": 1,
       "gpu_avg_usage_percent": 0.0,
       "gpu_payload": [
@@ -238,154 +552,483 @@
           "temperature_c": "31",
           "utilization_percent": 0.0,
           "memory_total_mb": 24564.0,
-          "memory_used_mb": 164.0,
+          "memory_used_mb": 160.0,
           "memory_percent": 0.7,
-          "power_draw_w": "24.02",
+          "power_draw_w": "23.90",
           "power_limit_w": "450.00"
         }
       ],
-      "updated_at": "2026-04-24T02:31:00.315238Z"
+      "gpu_processes": [],
+      "top_processes": [
+        {
+          "user": "systemd+",
+          "pid": "1082",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:03",
+          "command": "systemd-oomd",
+          "args": "/lib/systemd/systemd-oomd"
+        },
+        {
+          "user": "root",
+          "pid": "1136",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:02",
+          "command": "NetworkManager",
+          "args": "/usr/sbin/NetworkManager --no-daemon"
+        },
+        {
+          "user": "root",
+          "pid": "1290",
+          "cpu_percent": 0.1,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:02",
+          "command": "containerd",
+          "args": "/usr/bin/containerd"
+        },
+        {
+          "user": "root",
+          "pid": "1",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:10",
+          "command": "systemd",
+          "args": "/sbin/init splash"
+        },
+        {
+          "user": "root",
+          "pid": "2",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:10",
+          "command": "kthreadd",
+          "args": "[kthreadd]"
+        },
+        {
+          "user": "root",
+          "pid": "3",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:10",
+          "command": "pool_workqueue_",
+          "args": "[pool_workqueue_release]"
+        },
+        {
+          "user": "root",
+          "pid": "4",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:10",
+          "command": "kworker/R-rcu_g",
+          "args": "[kworker/R-rcu_g]"
+        },
+        {
+          "user": "root",
+          "pid": "5",
+          "cpu_percent": 0.0,
+          "mem_percent": 0.0,
+          "elapsed": "40-19:52:10",
+          "command": "kworker/R-rcu_p",
+          "args": "[kworker/R-rcu_p]"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:28.035930Z"
     },
     {
       "server_alias": "sch-gpu-sail",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:31:01.321748Z",
-      "uptime": "up 1 day, 12 hours, 37 minutes",
-      "cpu_usage_percent": 4.8,
+      "generated_at": "2026-05-06T09:56:29.565694Z",
+      "host": "user-System-Product-Name",
+      "uptime": "up 5 days, 4 hours, 55 minutes",
+      "cpu_usage_percent": 1.6,
       "cpu_model": "AMD Ryzen Threadripper PRO 5955WX 16-Cores",
       "logical_cores": 32,
       "load_average": {
-        "one": 1.41,
-        "five": 1.22,
-        "fifteen": 1.14
+        "one": 0.03,
+        "five": 0.05,
+        "fifteen": 0.06
       },
-      "memory_used_mb": 11190.3,
+      "memory_used_mb": 6112.9,
       "memory_total_mb": 64090.7,
-      "memory_usage_percent": 17.5,
-      "disk_used_text": "856G used of 938G (97%)",
-      "disk_percent": 97.0,
+      "memory_usage_percent": 9.5,
+      "disk_used_text": "864G used of 938G (98%)",
+      "disk_percent": 98.0,
       "gpu_count": 1,
-      "gpu_avg_usage_percent": 89.0,
+      "gpu_avg_usage_percent": 0.0,
       "gpu_payload": [
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4090",
-          "temperature_c": "61",
-          "utilization_percent": 89.0,
+          "temperature_c": "47",
+          "utilization_percent": 0.0,
           "memory_total_mb": 24564.0,
-          "memory_used_mb": 19172.0,
-          "memory_percent": 78.0,
-          "power_draw_w": "259.78",
+          "memory_used_mb": 101.0,
+          "memory_percent": 0.4,
+          "power_draw_w": "24.56",
           "power_limit_w": "450.00"
         }
       ],
-      "updated_at": "2026-04-24T02:31:00.911315Z"
+      "gpu_processes": [],
+      "top_processes": [
+        {
+          "user": "min_hs",
+          "pid": "538779",
+          "cpu_percent": 10.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "snapd-desktop-i",
+          "args": "/snap/snapd-desktop-integration/361/usr/bin/snapd-desktop-integration"
+        },
+        {
+          "user": "min_hs",
+          "pid": "538767",
+          "cpu_percent": 8.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "systemd",
+          "args": "/lib/systemd/systemd --user"
+        },
+        {
+          "user": "min_hs",
+          "pid": "538778",
+          "cpu_percent": 2.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "pulseaudio",
+          "args": "/usr/bin/pulseaudio --daemonize=no --log-target=journal"
+        },
+        {
+          "user": "min_hs",
+          "pid": "538913",
+          "cpu_percent": 2.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "snapd-desktop-i",
+          "args": "/snap/snapd-desktop-integration/361/usr/bin/snapd-desktop-integration"
+        },
+        {
+          "user": "user",
+          "pid": "7501",
+          "cpu_percent": 1.8,
+          "mem_percent": 0.1,
+          "elapsed": "5-04:54:19",
+          "command": "zellij",
+          "args": "/snap/zellij/65/bin/zellij --server /run/user/1000/zellij/contract_version_1/proj2-bobedream"
+        },
+        {
+          "user": "user",
+          "pid": "18816",
+          "cpu_percent": 1.8,
+          "mem_percent": 0.2,
+          "elapsed": "4-23:36:31",
+          "command": "zellij",
+          "args": "/snap/zellij/65/bin/zellij --server /run/user/1000/zellij/contract_version_1/proj1-lab-homepage"
+        },
+        {
+          "user": "user",
+          "pid": "19439",
+          "cpu_percent": 1.1,
+          "mem_percent": 1.1,
+          "elapsed": "4-23:35:58",
+          "command": "claude",
+          "args": "claude"
+        },
+        {
+          "user": "root",
+          "pid": "538764",
+          "cpu_percent": 1.0,
+          "mem_percent": 0.0,
+          "elapsed": "00:01",
+          "command": "sshd",
+          "args": "sshd: min_hs [priv]"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:28.640063Z"
     },
     {
       "server_alias": "sch-min-hs-74",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:31:01.820421Z",
-      "uptime": "up 3 weeks, 3 days, 15 hours, 22 minutes",
-      "cpu_usage_percent": 0.8,
+      "generated_at": "2026-05-06T09:56:30.109116Z",
+      "host": "server",
+      "uptime": "up 5 weeks, 1 day, 22 hours, 47 minutes",
+      "cpu_usage_percent": 14.3,
       "cpu_model": "AMD Ryzen Threadripper PRO 7985WX 64-Cores",
       "logical_cores": 128,
       "load_average": {
-        "one": 1.0,
-        "five": 1.04,
-        "fifteen": 1.05
+        "one": 19.7,
+        "five": 16.62,
+        "fifteen": 14.0
       },
-      "memory_used_mb": 30912.0,
+      "memory_used_mb": 77661.5,
       "memory_total_mb": 257182.1,
-      "memory_usage_percent": 12.0,
+      "memory_usage_percent": 30.2,
       "disk_used_text": "1.7T used of 1.8T (100%)",
       "disk_percent": 100.0,
       "gpu_count": 1,
-      "gpu_avg_usage_percent": 100.0,
+      "gpu_avg_usage_percent": 40.0,
       "gpu_payload": [
         {
           "index": "0",
           "name": "NVIDIA H200 NVL",
-          "temperature_c": "49",
-          "utilization_percent": 100.0,
+          "temperature_c": "34",
+          "utilization_percent": 40.0,
           "memory_total_mb": 143771.0,
-          "memory_used_mb": 54437.0,
-          "memory_percent": 37.9,
-          "power_draw_w": "564.35",
+          "memory_used_mb": 46644.0,
+          "memory_percent": 32.4,
+          "power_draw_w": "144.00",
           "power_limit_w": "600.00"
         }
       ],
-      "updated_at": "2026-04-24T02:31:01.433771Z"
+      "gpu_processes": [
+        {
+          "gpu_uuid": "GPU-23f1f5be-692a-aba7-d2ec-966e81e16366",
+          "pid": "1911727",
+          "process_name": "/home/mh_cho/anaconda3/envs/Mincv/bin/python",
+          "used_memory_mb": 13954.0
+        },
+        {
+          "gpu_uuid": "GPU-23f1f5be-692a-aba7-d2ec-966e81e16366",
+          "pid": "2044827",
+          "process_name": "/home/baek_gs/anaconda3/envs/baek_gs/bin/python",
+          "used_memory_mb": 32650.0
+        }
+      ],
+      "top_processes": [
+        {
+          "user": "min_hs",
+          "pid": "886417",
+          "cpu_percent": 494.0,
+          "mem_percent": 1.1,
+          "elapsed": "36:59",
+          "command": "python",
+          "args": "/home/min_hs/GUIDANCE/main/.venv/bin/python scripts/build_covla_raw_frame_assets.py --dataset-root /home/data1/min_hs/GUIDANCE_per_LoRA/GUIDANCE_CoVLA_full10k_anchor10_20260506_175006/runs/GUIDANCE_CoVLA_full10k_anchor10_dataset --output-root /home/data1/min_hs/GUIDANCE_per_LoRA/GUIDANCE_CoVLA_full10k_anchor10_20260506_175006/frame_assets --manifest-path /home/data1/min_hs/GUIDANCE_per_LoRA/GUIDANCE_CoVLA_full10k_anchor10_20260506_175006/media_manifest.json --splits train val test --history-frame-count 4 --max-width 640 --jpeg-quality 82 --resume"
+        },
+        {
+          "user": "baek_gs",
+          "pid": "2044827",
+          "cpu_percent": 110.0,
+          "mem_percent": 3.6,
+          "elapsed": "08:56",
+          "command": "python",
+          "args": "/home/baek_gs/anaconda3/envs/baek_gs/bin/python /home/baek_gs/sumo_generation/text/codex/agentic/wrappers/lora1_wrapper.py --prompt-file /home/baek_gs/sumo_generation/text/codex/agentic/Output/20260506_try/try4/log/try4_prompts1_v2/prompt.txt --output-dir /home/baek_gs/sumo_generation/text/codex/agentic/Output/20260506_try/try4/log/try4_prompts1_v2"
+        },
+        {
+          "user": "mh_cho",
+          "pid": "1924966",
+          "cpu_percent": 84.2,
+          "mem_percent": 1.1,
+          "elapsed": "11:53",
+          "command": "pt_data_worker",
+          "args": "/home/mh_cho/anaconda3/envs/Mincv/bin/python scripts/train_openlane_topoguidance.py --config configs/openlane_full_highperf_topoguidance.yaml --epochs 15 --resume outputs/checkpoints/cavis_topo_best.pt"
+        },
+        {
+          "user": "mh_cho",
+          "pid": "1925115",
+          "cpu_percent": 83.6,
+          "mem_percent": 1.1,
+          "elapsed": "11:53",
+          "command": "pt_data_worker",
+          "args": "/home/mh_cho/anaconda3/envs/Mincv/bin/python scripts/train_openlane_topoguidance.py --config configs/openlane_full_highperf_topoguidance.yaml --epochs 15 --resume outputs/checkpoints/cavis_topo_best.pt"
+        },
+        {
+          "user": "mh_cho",
+          "pid": "1925114",
+          "cpu_percent": 83.4,
+          "mem_percent": 1.1,
+          "elapsed": "11:53",
+          "command": "pt_data_worker",
+          "args": "/home/mh_cho/anaconda3/envs/Mincv/bin/python scripts/train_openlane_topoguidance.py --config configs/openlane_full_highperf_topoguidance.yaml --epochs 15 --resume outputs/checkpoints/cavis_topo_best.pt"
+        },
+        {
+          "user": "mh_cho",
+          "pid": "1924965",
+          "cpu_percent": 83.0,
+          "mem_percent": 1.1,
+          "elapsed": "11:53",
+          "command": "pt_data_worker",
+          "args": "/home/mh_cho/anaconda3/envs/Mincv/bin/python scripts/train_openlane_topoguidance.py --config configs/openlane_full_highperf_topoguidance.yaml --epochs 15 --resume outputs/checkpoints/cavis_topo_best.pt"
+        },
+        {
+          "user": "mh_cho",
+          "pid": "1925066",
+          "cpu_percent": 75.9,
+          "mem_percent": 1.1,
+          "elapsed": "11:53",
+          "command": "pt_data_worker",
+          "args": "/home/mh_cho/anaconda3/envs/Mincv/bin/python scripts/train_openlane_topoguidance.py --config configs/openlane_full_highperf_topoguidance.yaml --epochs 15 --resume outputs/checkpoints/cavis_topo_best.pt"
+        },
+        {
+          "user": "mh_cho",
+          "pid": "1924820",
+          "cpu_percent": 75.3,
+          "mem_percent": 1.1,
+          "elapsed": "11:53",
+          "command": "pt_data_worker",
+          "args": "/home/mh_cho/anaconda3/envs/Mincv/bin/python scripts/train_openlane_topoguidance.py --config configs/openlane_full_highperf_topoguidance.yaml --epochs 15 --resume outputs/checkpoints/cavis_topo_best.pt"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:29.237973Z"
     },
     {
       "server_alias": "sch-user-135",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-04-24T02:31:02.571660Z",
-      "uptime": "up 22 weeks, 2 days, 21 hours, 41 minutes",
-      "cpu_usage_percent": 0.1,
+      "generated_at": "2026-05-06T09:56:30.940116Z",
+      "host": "workstation",
+      "uptime": "up 24 weeks, 1 day, 5 hours, 7 minutes",
+      "cpu_usage_percent": 87.6,
       "cpu_model": "Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz",
       "logical_cores": 80,
       "load_average": {
-        "one": 0.11,
-        "five": 0.14,
-        "fifteen": 0.16
+        "one": 104.8,
+        "five": 72.45,
+        "fifteen": 37.79
       },
-      "memory_used_mb": 15835.8,
+      "memory_used_mb": 46304.1,
       "memory_total_mb": 772641.2,
-      "memory_usage_percent": 2.0,
-      "disk_used_text": "831G used of 879G (100%)",
-      "disk_percent": 100.0,
+      "memory_usage_percent": 6.0,
+      "disk_used_text": "817G used of 879G (98%)",
+      "disk_percent": 98.0,
       "gpu_count": 4,
-      "gpu_avg_usage_percent": 0.0,
+      "gpu_avg_usage_percent": 48.8,
       "gpu_payload": [
         {
           "index": "0",
           "name": "NVIDIA A100-PCIE-40GB",
-          "temperature_c": "29",
-          "utilization_percent": 0.0,
+          "temperature_c": "65",
+          "utilization_percent": 100.0,
           "memory_total_mb": 40960.0,
-          "memory_used_mb": 13.0,
-          "memory_percent": 0.0,
-          "power_draw_w": "32.80",
+          "memory_used_mb": 10140.0,
+          "memory_percent": 24.8,
+          "power_draw_w": "250.71",
           "power_limit_w": "250.00"
         },
         {
           "index": "1",
           "name": "NVIDIA A100-PCIE-40GB",
-          "temperature_c": "28",
-          "utilization_percent": 0.0,
+          "temperature_c": "53",
+          "utilization_percent": 95.0,
           "memory_total_mb": 40960.0,
-          "memory_used_mb": 13.0,
-          "memory_percent": 0.0,
-          "power_draw_w": "33.22",
+          "memory_used_mb": 30496.0,
+          "memory_percent": 74.5,
+          "power_draw_w": "258.49",
           "power_limit_w": "250.00"
         },
         {
           "index": "2",
           "name": "NVIDIA A100-PCIE-40GB",
-          "temperature_c": "28",
+          "temperature_c": "26",
           "utilization_percent": 0.0,
           "memory_total_mb": 40960.0,
-          "memory_used_mb": 13.0,
+          "memory_used_mb": 16.0,
           "memory_percent": 0.0,
-          "power_draw_w": "32.23",
+          "power_draw_w": "31.98",
           "power_limit_w": "250.00"
         },
         {
           "index": "3",
           "name": "NVIDIA A100-PCIE-40GB",
-          "temperature_c": "31",
+          "temperature_c": "28",
           "utilization_percent": 0.0,
           "memory_total_mb": 40960.0,
-          "memory_used_mb": 13.0,
+          "memory_used_mb": 16.0,
           "memory_percent": 0.0,
-          "power_draw_w": "37.06",
+          "power_draw_w": "35.90",
           "power_limit_w": "250.00"
         }
       ],
-      "updated_at": "2026-04-24T02:31:02.265080Z"
+      "gpu_processes": [
+        {
+          "gpu_uuid": "GPU-f9225f12-a961-cad2-0044-6b8bd0dffd10",
+          "pid": "1139347",
+          "process_name": "/home/servas/Servas_2025/MDS_v2/.venv/bin/python3",
+          "used_memory_mb": 10118.0
+        },
+        {
+          "gpu_uuid": "GPU-e8f29f5f-7697-0147-11d2-25324790b0eb",
+          "pid": "1916059",
+          "process_name": "python",
+          "used_memory_mb": 30474.0
+        }
+      ],
+      "top_processes": [
+        {
+          "user": "s202041+",
+          "pid": "1912805",
+          "cpu_percent": 6913.0,
+          "mem_percent": 0.0,
+          "elapsed": "06:33",
+          "command": "python3",
+          "args": "/home/s20204116/GEN_AI_GTG/.venv/bin/python3 step1_crop.py"
+        },
+        {
+          "user": "user",
+          "pid": "1916059",
+          "cpu_percent": 418.0,
+          "mem_percent": 0.2,
+          "elapsed": "04:36",
+          "command": "pt_main_thread",
+          "args": "python scripts/train_qwen3_vl_guidance_lora_full.py --train-jsonl /dev/shm/min_hs_qwen3_lora_data/guidance_lora_full_covla_raw_frames_20260504/train_sft.jsonl --val-jsonl /dev/shm/min_hs_qwen3_lora_data/guidance_lora_full_covla_raw_frames_20260504/val_sft.jsonl --output-root /dev/shm/min_hs_qwen3_lora_runs/qwen3_vl_guidance_lora_full_raw_covla_20260506_total30_from10epoch --init-lora-adapter /dev/shm/min_hs_qwen3_lora_runs/qwen3_vl_guidance_lora_full_raw_covla_20260506_total10_from3epoch/best_adapter/adapter --epochs 20 --lr 2e-5 --grad-accum-steps 4 --log-every 25"
+        },
+        {
+          "user": "servas",
+          "pid": "1139347",
+          "cpu_percent": 102.0,
+          "mem_percent": 0.3,
+          "elapsed": "07:18:30",
+          "command": "python3",
+          "args": "/home/servas/Servas_2025/MDS_v2/.venv/bin/python3 train_03_vitl16_kfold.py"
+        },
+        {
+          "user": "servas",
+          "pid": "998100",
+          "cpu_percent": 49.9,
+          "mem_percent": 0.1,
+          "elapsed": "2-01:25:48",
+          "command": "node",
+          "args": "/home/servas/.vscode-server/cli/servers/Stable-cfbea10c5ffb233ea9177d34726e6056e89913dc/server/node --dns-result-order=ipv4first /home/servas/.vscode-server/cli/servers/Stable-cfbea10c5ffb233ea9177d34726e6056e89913dc/server/out/bootstrap-fork --type=extensionHost --transformURIs --useHostProxy=false"
+        },
+        {
+          "user": "servas",
+          "pid": "1919971",
+          "cpu_percent": 8.8,
+          "mem_percent": 0.0,
+          "elapsed": "01:30",
+          "command": "pt_data_worker",
+          "args": "/home/servas/Servas_2025/MDS_v2/.venv/bin/python3 -c from multiprocessing.forkserver import main; main(61, 62, ['__main__'], **{'sys_path': ['/home/servas/Servas_2025/MDS_v2/stage_03_crop_image', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python314.zip', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/lib-dynload', '/home/servas/Servas_2025/MDS_v2/.venv/lib/python3.14/site-packages'], 'main_path': '/home/servas/Servas_2025/MDS_v2/stage_03_crop_image/train_03_vitl16_kfold.py', 'sys_argv': ['train_03_vitl16_kfold.py'], 'authkey_r': 64})"
+        },
+        {
+          "user": "servas",
+          "pid": "1919963",
+          "cpu_percent": 8.5,
+          "mem_percent": 0.0,
+          "elapsed": "01:30",
+          "command": "pt_data_worker",
+          "args": "/home/servas/Servas_2025/MDS_v2/.venv/bin/python3 -c from multiprocessing.forkserver import main; main(61, 62, ['__main__'], **{'sys_path': ['/home/servas/Servas_2025/MDS_v2/stage_03_crop_image', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python314.zip', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/lib-dynload', '/home/servas/Servas_2025/MDS_v2/.venv/lib/python3.14/site-packages'], 'main_path': '/home/servas/Servas_2025/MDS_v2/stage_03_crop_image/train_03_vitl16_kfold.py', 'sys_argv': ['train_03_vitl16_kfold.py'], 'authkey_r': 64})"
+        },
+        {
+          "user": "servas",
+          "pid": "1919961",
+          "cpu_percent": 8.4,
+          "mem_percent": 0.0,
+          "elapsed": "01:30",
+          "command": "pt_data_worker",
+          "args": "/home/servas/Servas_2025/MDS_v2/.venv/bin/python3 -c from multiprocessing.forkserver import main; main(61, 62, ['__main__'], **{'sys_path': ['/home/servas/Servas_2025/MDS_v2/stage_03_crop_image', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python314.zip', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/lib-dynload', '/home/servas/Servas_2025/MDS_v2/.venv/lib/python3.14/site-packages'], 'main_path': '/home/servas/Servas_2025/MDS_v2/stage_03_crop_image/train_03_vitl16_kfold.py', 'sys_argv': ['train_03_vitl16_kfold.py'], 'authkey_r': 64})"
+        },
+        {
+          "user": "servas",
+          "pid": "1919958",
+          "cpu_percent": 8.2,
+          "mem_percent": 0.0,
+          "elapsed": "01:30",
+          "command": "pt_data_worker",
+          "args": "/home/servas/Servas_2025/MDS_v2/.venv/bin/python3 -c from multiprocessing.forkserver import main; main(61, 62, ['__main__'], **{'sys_path': ['/home/servas/Servas_2025/MDS_v2/stage_03_crop_image', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python314.zip', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14', '/home/servas/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/lib-dynload', '/home/servas/Servas_2025/MDS_v2/.venv/lib/python3.14/site-packages'], 'main_path': '/home/servas/Servas_2025/MDS_v2/stage_03_crop_image/train_03_vitl16_kfold.py', 'sys_argv': ['train_03_vitl16_kfold.py'], 'authkey_r': 64})"
+        }
+      ],
+      "updated_at": "2026-05-06T09:56:30.149762Z"
     }
   ]
 }

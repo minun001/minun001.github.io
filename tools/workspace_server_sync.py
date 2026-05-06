@@ -438,11 +438,20 @@ def collect_payload(config_path: Path, alias_filter: str | None) -> dict[str, An
     }
 
 
+def write_payload_file(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(f"{json.dumps(payload, indent=2)}\n", encoding="utf-8")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Sync private workspace server snapshots into Supabase.")
     parser.add_argument("--config", help="Optional path to workspace server config JSON.")
     parser.add_argument("--alias", help="Only collect one server alias.")
     parser.add_argument("--dry-run", action="store_true", help="Print the payload without writing to Supabase.")
+    parser.add_argument(
+        "--fallback-output",
+        help="Optional path to write the collected payload as a repo-backed fallback JSON file.",
+    )
     return parser.parse_args()
 
 
@@ -450,14 +459,26 @@ def main() -> int:
     args = parse_args()
     config_path = resolve_config_path(args.config)
     payload = collect_payload(config_path, args.alias)
+    fallback_output = Path(args.fallback_output).expanduser().resolve() if args.fallback_output else None
 
     if args.dry_run:
+        if fallback_output:
+            write_payload_file(fallback_output, payload)
         json.dump(payload, sys.stdout, indent=2)
         sys.stdout.write("\n")
         return 0
 
+    if fallback_output:
+        write_payload_file(fallback_output, payload)
+
     supabase_url, api_key, auth_token, auth_mode = resolve_supabase_auth()
     if not supabase_url or not api_key or not auth_token:
+        if fallback_output:
+            print(
+                f"Wrote fallback payload to {fallback_output} from {config_path}. "
+                "Supabase auth is unavailable, so no table sync was attempted."
+            )
+            return 0
         raise SystemExit(
             "Supabase write auth is required unless --dry-run is used. "
             "Set WORKSPACE_SUPABASE_SERVICE_ROLE_KEY, or set WORKSPACE_SUPABASE_ACCESS_TOKEN "
