@@ -438,9 +438,76 @@ def collect_payload(config_path: Path, alias_filter: str | None) -> dict[str, An
     }
 
 
+def build_public_target_row(target: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "alias": target.get("alias"),
+        "label": target.get("label"),
+        "sort_order": target.get("sort_order"),
+        "is_active": bool(target.get("is_active", True)),
+    }
+
+
+def build_public_gpu_payload(devices: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    public_devices: list[dict[str, Any]] = []
+    for index, raw in enumerate(devices):
+        if not isinstance(raw, dict):
+            continue
+        public_devices.append(
+            {
+                "index": raw.get("index", str(index)),
+                "name": raw.get("name"),
+                "temperature_c": raw.get("temperature_c"),
+                "utilization_percent": raw.get("utilization_percent"),
+                "memory_total_mb": raw.get("memory_total_mb"),
+                "memory_used_mb": raw.get("memory_used_mb"),
+                "memory_percent": raw.get("memory_percent"),
+            }
+        )
+    return public_devices
+
+
+def build_public_snapshot_row(snapshot: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "server_alias": snapshot.get("server_alias"),
+        "status": snapshot.get("status"),
+        "error_message": snapshot.get("error_message"),
+        "generated_at": snapshot.get("generated_at"),
+        "uptime": snapshot.get("uptime"),
+        "cpu_usage_percent": snapshot.get("cpu_usage_percent"),
+        "cpu_model": snapshot.get("cpu_model"),
+        "logical_cores": snapshot.get("logical_cores"),
+        "load_average": snapshot.get("load_average"),
+        "memory_used_mb": snapshot.get("memory_used_mb"),
+        "memory_total_mb": snapshot.get("memory_total_mb"),
+        "memory_usage_percent": snapshot.get("memory_usage_percent"),
+        "disk_used_text": snapshot.get("disk_used_text"),
+        "disk_percent": snapshot.get("disk_percent"),
+        "gpu_count": snapshot.get("gpu_count"),
+        "gpu_avg_usage_percent": snapshot.get("gpu_avg_usage_percent"),
+        "gpu_payload": build_public_gpu_payload(snapshot.get("gpu_payload") or []),
+    }
+
+
+def build_public_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "generated_at": payload.get("generated_at"),
+        "targets": [
+            build_public_target_row(target)
+            for target in payload.get("targets", [])
+            if isinstance(target, dict)
+        ],
+        "snapshots": [
+            build_public_snapshot_row(snapshot)
+            for snapshot in payload.get("snapshots", [])
+            if isinstance(snapshot, dict)
+        ],
+    }
+
+
 def write_payload_file(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(f"{json.dumps(payload, indent=2)}\n", encoding="utf-8")
+    public_payload = build_public_payload(payload)
+    path.write_text(f"{json.dumps(public_payload, indent=2)}\n", encoding="utf-8")
 
 
 def parse_args() -> argparse.Namespace:
