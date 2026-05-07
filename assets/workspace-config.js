@@ -8,5 +8,8 @@ window.WORKSPACE_AUTH_CONFIG = {
     content: '/tools/workspace_content.json',
     serverSignals: '/tools/workspace_server_sync_fallback.json',
     siteSignals: '/tools/workspace_site_signals.json'
+  },
+  serverRefresh: {
+    endpoint: 'http://127.0.0.1:8765/refresh'
   }
 };

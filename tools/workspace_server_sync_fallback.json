@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06T11:44:34.345288Z",
+  "generated_at": "2026-05-07T02:05:33.892636Z",
   "targets": [
     {
       "alias": "sch-gpu-9",
@@ -55,17 +55,17 @@
       "server_alias": "sch-gpu-9",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:20.458081Z",
-      "uptime": "up 19 weeks, 2 days, 2 hours, 35 minutes",
-      "cpu_usage_percent": 0.0,
+      "generated_at": "2026-05-07T02:05:19.116605Z",
+      "uptime": "up 19 weeks, 2 days, 16 hours, 56 minutes",
+      "cpu_usage_percent": 0.2,
       "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
       "logical_cores": 20,
       "load_average": {
-        "one": 0.0,
-        "five": 0.01,
+        "one": 0.03,
+        "five": 0.02,
         "fifteen": 0.0
       },
-      "memory_used_mb": 2045.0,
+      "memory_used_mb": 2059.5,
       "memory_total_mb": 31930.9,
       "memory_usage_percent": 6.4,
       "disk_used_text": "143G used of 457G (33%)",
@@ -76,11 +76,11 @@
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4070",
-          "temperature_c": "44",
+          "temperature_c": "45",
           "utilization_percent": 0.0,
           "memory_total_mb": 12282.0,
-          "memory_used_mb": 117.0,
-          "memory_percent": 1.0
+          "memory_used_mb": 116.0,
+          "memory_percent": 0.9
         }
       ]
     },
@@ -88,28 +88,28 @@
       "server_alias": "sch-gpu-15",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:21.003312Z",
-      "uptime": "up 22 weeks, 5 hours, 19 minutes",
+      "generated_at": "2026-05-07T02:05:19.632882Z",
+      "uptime": "up 22 weeks, 19 hours, 40 minutes",
       "cpu_usage_percent": 0.5,
       "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
       "logical_cores": 20,
       "load_average": {
-        "one": 0.12,
-        "five": 0.17,
-        "fifteen": 0.15
+        "one": 0.07,
+        "five": 0.11,
+        "fifteen": 0.11
       },
-      "memory_used_mb": 4893.1,
+      "memory_used_mb": 4932.7,
       "memory_total_mb": 31930.9,
-      "memory_usage_percent": 15.3,
-      "disk_used_text": "148G used of 457G (35%)",
-      "disk_percent": 35.0,
+      "memory_usage_percent": 15.4,
+      "disk_used_text": "148G used of 457G (34%)",
+      "disk_percent": 34.0,
       "gpu_count": 1,
       "gpu_avg_usage_percent": 0.0,
       "gpu_payload": [
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4070",
-          "temperature_c": "42",
+          "temperature_c": "43",
           "utilization_percent": 0.0,
           "memory_total_mb": 12282.0,
           "memory_used_mb": 12.0,
@@ -121,19 +121,19 @@
       "server_alias": "sch-gpu-30",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:21.618773Z",
-      "uptime": "up 14 weeks, 6 days, 4 hours, 24 minutes",
-      "cpu_usage_percent": 0.0,
+      "generated_at": "2026-05-07T02:05:20.313857Z",
+      "uptime": "up 14 weeks, 6 days, 18 hours, 45 minutes",
+      "cpu_usage_percent": 0.2,
       "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700F",
       "logical_cores": 20,
       "load_average": {
-        "one": 0.06,
-        "five": 0.01,
+        "one": 0.0,
+        "five": 0.0,
         "fifteen": 0.0
       },
-      "memory_used_mb": 2200.7,
+      "memory_used_mb": 2181.0,
       "memory_total_mb": 31930.9,
-      "memory_usage_percent": 6.9,
+      "memory_usage_percent": 6.8,
       "disk_used_text": "53G used of 457G (13%)",
       "disk_percent": 13.0,
       "gpu_count": 1,
@@ -142,7 +142,7 @@
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4070",
-          "temperature_c": "38",
+          "temperature_c": "39",
           "utilization_percent": 0.0,
           "memory_total_mb": 12282.0,
           "memory_used_mb": 63.0,
@@ -154,8 +154,8 @@
       "server_alias": "sch-user-71",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:32.717831Z",
-      "uptime": "up 4 weeks, 2 days, 5 hours, 42 minutes",
+      "generated_at": "2026-05-07T02:05:31.237510Z",
+      "uptime": "up 4 weeks, 2 days, 20 hours, 3 minutes",
       "cpu_usage_percent": 0.0,
       "cpu_model": "AMD Ryzen Threadripper PRO 5995WX 64-Cores",
       "logical_cores": 128,
@@ -164,7 +164,7 @@
         "five": 3.0,
         "fifteen": 3.0
       },
-      "memory_used_mb": 8185.8,
+      "memory_used_mb": 8211.0,
       "memory_total_mb": 515579.7,
       "memory_usage_percent": 1.6,
       "disk_used_text": "1.6T used of 1.8T (91%)",
@@ -187,32 +187,32 @@
       "server_alias": "sch-user-72",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:33.232486Z",
-      "uptime": "up 5 weeks, 5 days, 21 hours, 40 minutes",
-      "cpu_usage_percent": 2.1,
+      "generated_at": "2026-05-07T02:05:31.788240Z",
+      "uptime": "up 5 weeks, 6 days, 12 hours, 1 minute",
+      "cpu_usage_percent": 0.1,
       "cpu_model": "AMD Ryzen Threadripper PRO 5965WX 24-Cores",
       "logical_cores": 48,
       "load_average": {
-        "one": 0.85,
-        "five": 0.52,
-        "fifteen": 0.37
+        "one": 0.05,
+        "five": 0.03,
+        "fifteen": 0.0
       },
-      "memory_used_mb": 10525.9,
+      "memory_used_mb": 7477.3,
       "memory_total_mb": 257573.7,
-      "memory_usage_percent": 4.1,
+      "memory_usage_percent": 2.9,
       "disk_used_text": "1.4T used of 1.8T (81%)",
       "disk_percent": 81.0,
       "gpu_count": 1,
-      "gpu_avg_usage_percent": 43.0,
+      "gpu_avg_usage_percent": 0.0,
       "gpu_payload": [
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4090",
-          "temperature_c": "46",
-          "utilization_percent": 43.0,
+          "temperature_c": "31",
+          "utilization_percent": 0.0,
           "memory_total_mb": 24564.0,
-          "memory_used_mb": 16444.0,
-          "memory_percent": 66.9
+          "memory_used_mb": 160.0,
+          "memory_percent": 0.7
         }
       ]
     },
@@ -220,20 +220,20 @@
       "server_alias": "sch-gpu-sail",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:33.844194Z",
-      "uptime": "up 5 days, 6 hours, 43 minutes",
-      "cpu_usage_percent": 1.9,
+      "generated_at": "2026-05-07T02:05:32.477766Z",
+      "uptime": "up 5 days, 21 hours, 4 minutes",
+      "cpu_usage_percent": 1.6,
       "cpu_model": "AMD Ryzen Threadripper PRO 5955WX 16-Cores",
       "logical_cores": 32,
       "load_average": {
-        "one": 0.01,
-        "five": 0.07,
-        "fifteen": 0.12
+        "one": 0.37,
+        "five": 0.23,
+        "fifteen": 0.19
       },
-      "memory_used_mb": 6548.0,
+      "memory_used_mb": 8246.0,
       "memory_total_mb": 64090.7,
-      "memory_usage_percent": 10.2,
-      "disk_used_text": "865G used of 938G (98%)",
+      "memory_usage_percent": 12.9,
+      "disk_used_text": "867G used of 938G (98%)",
       "disk_percent": 98.0,
       "gpu_count": 1,
       "gpu_avg_usage_percent": 0.0,
@@ -241,10 +241,10 @@
         {
           "index": "0",
           "name": "NVIDIA GeForce RTX 4090",
-          "temperature_c": "41",
+          "temperature_c": "48",
           "utilization_percent": 0.0,
           "memory_total_mb": 24564.0,
-          "memory_used_mb": 101.0,
+          "memory_used_mb": 102.0,
           "memory_percent": 0.4
         }
       ]
@@ -253,32 +253,32 @@
       "server_alias": "sch-min-hs-74",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:34.349458Z",
-      "uptime": "up 5 weeks, 2 days, 36 minutes",
-      "cpu_usage_percent": 13.2,
+      "generated_at": "2026-05-07T02:05:32.956355Z",
+      "uptime": "up 5 weeks, 2 days, 14 hours, 57 minutes",
+      "cpu_usage_percent": 0.8,
       "cpu_model": "AMD Ryzen Threadripper PRO 7985WX 64-Cores",
       "logical_cores": 128,
       "load_average": {
-        "one": 21.08,
-        "five": 17.41,
-        "fifteen": 16.18
+        "one": 1.28,
+        "five": 2.09,
+        "fifteen": 3.45
       },
-      "memory_used_mb": 76469.9,
+      "memory_used_mb": 22190.5,
       "memory_total_mb": 257182.1,
-      "memory_usage_percent": 29.7,
+      "memory_usage_percent": 8.6,
       "disk_used_text": "1.7T used of 1.8T (100%)",
       "disk_percent": 100.0,
       "gpu_count": 1,
-      "gpu_avg_usage_percent": 32.0,
+      "gpu_avg_usage_percent": 100.0,
       "gpu_payload": [
         {
           "index": "0",
           "name": "NVIDIA H200 NVL",
-          "temperature_c": "36",
-          "utilization_percent": 32.0,
+          "temperature_c": "49",
+          "utilization_percent": 100.0,
           "memory_total_mb": 143771.0,
-          "memory_used_mb": 47622.0,
-          "memory_percent": 33.1
+          "memory_used_mb": 75959.0,
+          "memory_percent": 52.8
         }
       ]
     },
@@ -286,20 +286,20 @@
       "server_alias": "sch-user-135",
       "status": "live",
       "error_message": null,
-      "generated_at": "2026-05-06T11:44:35.171493Z",
-      "uptime": "up 24 weeks, 1 day, 6 hours, 55 minutes",
-      "cpu_usage_percent": 6.0,
+      "generated_at": "2026-05-07T02:05:33.726698Z",
+      "uptime": "up 24 weeks, 1 day, 21 hours, 16 minutes",
+      "cpu_usage_percent": 6.2,
       "cpu_model": "Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz",
       "logical_cores": 80,
       "load_average": {
-        "one": 8.65,
-        "five": 6.61,
-        "fifteen": 13.51
+        "one": 5.0,
+        "five": 6.48,
+        "fifteen": 6.53
       },
-      "memory_used_mb": 47714.4,
+      "memory_used_mb": 48424.8,
       "memory_total_mb": 772641.2,
-      "memory_usage_percent": 6.2,
-      "disk_used_text": "818G used of 879G (99%)",
+      "memory_usage_percent": 6.3,
+      "disk_used_text": "821G used of 879G (99%)",
       "disk_percent": 99.0,
       "gpu_count": 4,
       "gpu_avg_usage_percent": 50.0,
@@ -307,7 +307,7 @@
         {
           "index": "0",
           "name": "NVIDIA A100-PCIE-40GB",
-          "temperature_c": "65",
+          "temperature_c": "64",
           "utilization_percent": 100.0,
           "memory_total_mb": 40960.0,
           "memory_used_mb": 13402.0,
@@ -316,7 +316,7 @@
         {
           "index": "1",
           "name": "NVIDIA A100-PCIE-40GB",
-          "temperature_c": "62",
+          "temperature_c": "63",
           "utilization_percent": 100.0,
           "memory_total_mb": 40960.0,
           "memory_used_mb": 36898.0,
@@ -325,7 +325,7 @@
         {
           "index": "2",
           "name": "NVIDIA A100-PCIE-40GB",
-          "temperature_c": "25",
+          "temperature_c": "26",
           "utilization_percent": 0.0,
           "memory_total_mb": 40960.0,
           "memory_used_mb": 16.0,

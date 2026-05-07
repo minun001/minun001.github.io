@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260424j';
+  var WORKSPACE_CONTENT_VERSION = '20260507b';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
@@ -37,6 +37,11 @@
 
   function isLocalMode(config) {
     return String((config && config.provider) || '').trim().toLowerCase() === 'local';
+  }
+
+  function getServerRefreshEndpoint(config) {
+    var refresh = (config && config.serverRefresh) || {};
+    return String(refresh.endpoint || '').trim();
   }
 
   function getDataFiles(config) {
@@ -1714,8 +1719,8 @@
     if (!note) return;
     var latestTimestamp = getLatestServerSnapshotTimestamp(items);
     var baseMessage = latestTimestamp
-      ? ('Latest published snapshot ' + formatRelativeAge(new Date(latestTimestamp).toISOString()) + '.')
-      : 'No published snapshot yet.';
+      ? ('Latest server snapshot ' + formatRelativeAge(new Date(latestTimestamp).toISOString()) + '.')
+      : 'No server snapshot yet.';
     note.textContent = prefix ? (prefix + ' ' + baseMessage) : baseMessage;
   }
 
@@ -1735,9 +1740,32 @@
     if (refreshNode) refreshNode.textContent = 'Manual only';
   }
 
+  async function loadServerSignalsFromRefreshHelper(config) {
+    var endpoint = getServerRefreshEndpoint(config);
+    if (!endpoint || !window.fetch) return null;
+
+    var response = await window.fetch(endpoint, {
+      method: 'POST',
+      cache: 'no-store'
+    });
+    if (!response.ok) {
+      throw new Error('Local server refresh helper returned ' + response.status + '.');
+    }
+    var payload = await response.json();
+    if (!payload || payload.ok === false) {
+      throw new Error((payload && payload.error) || 'Local server refresh helper failed.');
+    }
+    return normalizeServerFallback(payload);
+  }
+
   async function refreshLocalServerSignals(config) {
-    workspaceServerFallbackCache = null;
-    var serverFallback = await loadServerFallback(config);
+    var helperFallback = await loadServerSignalsFromRefreshHelper(config);
+    if (helperFallback) {
+      workspaceServerFallbackCache = helperFallback;
+    } else {
+      workspaceServerFallbackCache = null;
+    }
+    var serverFallback = helperFallback || await loadServerFallback(config);
     var serverItems = buildServerItems(serverFallback.targets, serverFallback.snapshots);
     workspaceState.serverItems = serverItems;
     workspaceState.serverActionMode = serverItems.length ? 'live' : 'sync';
@@ -1994,10 +2022,10 @@
           if (localRefreshInFlight) return;
           localRefreshInFlight = true;
           setServerRefreshButtonState(true);
-          renderServerRefreshNote(workspaceState.serverItems, 'Refreshing published snapshot.');
+          renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
           refreshLocalServerSignals(config)
             .catch(function () {
-              renderServerRefreshNote(workspaceState.serverItems, 'Unable to refresh the published snapshot right now.');
+              renderServerRefreshNote(workspaceState.serverItems, 'Local refresh helper is not running or the probe failed.');
             })
             .finally(function () {
               localRefreshInFlight = false;
