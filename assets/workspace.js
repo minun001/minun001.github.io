@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260507c';
+  var WORKSPACE_CONTENT_VERSION = '20260507d';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
@@ -1745,9 +1745,9 @@
     return url + separator + 't=' + Date.now();
   }
 
-  async function requestServerSignalRefresh(endpoint, method) {
-    var response = await window.fetch(method === 'GET' ? appendCacheBust(endpoint) : endpoint, {
-      method: method,
+  async function requestServerSignalRefresh(endpoint) {
+    var response = await window.fetch(appendCacheBust(endpoint), {
+      method: 'GET',
       cache: 'no-store'
     });
     if (!response.ok) {
@@ -1763,12 +1763,7 @@
   async function loadServerSignalsFromRefreshHelper(config) {
     var endpoint = getServerRefreshEndpoint(config);
     if (!endpoint || !window.fetch) return null;
-
-    try {
-      return await requestServerSignalRefresh(endpoint, 'POST');
-    } catch (_postError) {
-      return await requestServerSignalRefresh(endpoint, 'GET');
-    }
+    return await requestServerSignalRefresh(endpoint);
   }
 
   async function refreshLocalServerSignals(config) {
@@ -2038,7 +2033,7 @@
           renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
           refreshLocalServerSignals(config)
             .catch(function () {
-              renderServerRefreshNote(workspaceState.serverItems, 'Helper unavailable. Start the local helper, then press refresh again.');
+              renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
             })
             .finally(function () {
               localRefreshInFlight = false;
