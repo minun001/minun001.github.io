@@ -1732,7 +1732,7 @@
 
   function applyLocalWorkspaceIdentity() {
     var refreshNode = byId('workspace-session-timeout');
-    if (refreshNode) refreshNode.textContent = 'Manual + focus refresh';
+    if (refreshNode) refreshNode.textContent = 'Manual only';
   }
 
   async function refreshLocalServerSignals(config) {
@@ -1987,21 +1987,6 @@
 
       var localRefreshInFlight = false;
 
-      async function refreshLocalWorkspace(options) {
-        var settings = options || {};
-        if (document.hidden && !settings.force) return;
-        if (localRefreshInFlight) return;
-        localRefreshInFlight = true;
-        try {
-          workspaceContentFallbackCache = null;
-          workspaceServerFallbackCache = null;
-          workspaceSignalsFallbackCache = null;
-          await loadWorkspaceLocalData(config);
-        } finally {
-          localRefreshInFlight = false;
-        }
-      }
-
       var serverRefreshButton = byId('workspace-server-refresh');
       if (serverRefreshButton && !serverRefreshButton.dataset.bound) {
         serverRefreshButton.dataset.bound = 'true';
@@ -2020,14 +2005,6 @@
             });
         });
       }
-
-      document.addEventListener('visibilitychange', function () {
-        if (document.hidden) return;
-        refreshLocalWorkspace({ force: true }).catch(function () {});
-      });
-      window.addEventListener('focus', function () {
-        refreshLocalWorkspace({ force: true }).catch(function () {});
-      });
       return;
     }
 
