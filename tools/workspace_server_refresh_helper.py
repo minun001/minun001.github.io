@@ -82,7 +82,11 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         if self.reject_non_loopback():
             return
-        path = urlparse(self.path).path
+        parsed = urlparse(self.path)
+        path = parsed.path
+        if path == "/refresh":
+            self.handle_refresh(parsed.query)
+            return
         if path not in {"/", "/health"}:
             self.write_json(404, {"ok": False, "error": "Not found."})
             return
@@ -104,12 +108,15 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
             self.write_json(404, {"ok": False, "error": "Not found."})
             return
 
-        query = parse_qs(parsed.query)
+        self.handle_refresh(parsed.query)
+
+    def handle_refresh(self, raw_query: str) -> None:
+        query = parse_qs(raw_query)
         alias = (query.get("alias") or [""])[0].strip() or None
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
 
-        if not state.lock.acquire(blocking=False):
-            self.write_json(409, {"ok": False, "error": "A server refresh is already running."})
+        if not state.lock.acquire(timeout=240):
+            self.write_json(503, {"ok": False, "error": "A server refresh is already running."})
             return
 
         try:

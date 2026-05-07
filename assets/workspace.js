@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260507b';
+  var WORKSPACE_CONTENT_VERSION = '20260507c';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
@@ -1740,12 +1740,14 @@
     if (refreshNode) refreshNode.textContent = 'Manual only';
   }
 
-  async function loadServerSignalsFromRefreshHelper(config) {
-    var endpoint = getServerRefreshEndpoint(config);
-    if (!endpoint || !window.fetch) return null;
+  function appendCacheBust(url) {
+    var separator = url.indexOf('?') === -1 ? '?' : '&';
+    return url + separator + 't=' + Date.now();
+  }
 
-    var response = await window.fetch(endpoint, {
-      method: 'POST',
+  async function requestServerSignalRefresh(endpoint, method) {
+    var response = await window.fetch(method === 'GET' ? appendCacheBust(endpoint) : endpoint, {
+      method: method,
       cache: 'no-store'
     });
     if (!response.ok) {
@@ -1756,6 +1758,17 @@
       throw new Error((payload && payload.error) || 'Local server refresh helper failed.');
     }
     return normalizeServerFallback(payload);
+  }
+
+  async function loadServerSignalsFromRefreshHelper(config) {
+    var endpoint = getServerRefreshEndpoint(config);
+    if (!endpoint || !window.fetch) return null;
+
+    try {
+      return await requestServerSignalRefresh(endpoint, 'POST');
+    } catch (_postError) {
+      return await requestServerSignalRefresh(endpoint, 'GET');
+    }
   }
 
   async function refreshLocalServerSignals(config) {
