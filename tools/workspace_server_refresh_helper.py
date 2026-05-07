@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import mimetypes
 import os
 import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 import workspace_server_sync
 
@@ -17,6 +18,7 @@ TOOLS_DIR = Path(__file__).resolve().parent
 SYNC_ROOT = TOOLS_DIR.parent
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
+DEFAULT_STATIC_ROOT = SYNC_ROOT / "_site"
 
 
 def resolve_default_config_path() -> Path:
@@ -40,9 +42,10 @@ def json_bytes(payload: dict[str, Any]) -> bytes:
 
 
 class RefreshState:
-    def __init__(self, config_path: Path, fallback_output: Path | None) -> None:
+    def __init__(self, config_path: Path, fallback_output: Path | None, static_root: Path) -> None:
         self.config_path = config_path
         self.fallback_output = fallback_output
+        self.static_root = static_root
         self.lock = threading.Lock()
 
 
@@ -87,9 +90,12 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
         if path == "/refresh":
             self.handle_refresh(parsed.query)
             return
-        if path not in {"/", "/health"}:
-            self.write_json(404, {"ok": False, "error": "Not found."})
+        if path == "/health":
+            self.handle_health()
             return
+        self.serve_static(path)
+
+    def handle_health(self) -> None:
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
         self.write_json(
             200,
@@ -97,8 +103,38 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
                 "ok": True,
                 "config_path": str(state.config_path),
                 "fallback_output": str(state.fallback_output) if state.fallback_output else "",
+                "static_root": str(state.static_root),
             },
         )
+
+    def resolve_static_path(self, path: str) -> Path | None:
+        state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
+        static_root = state.static_root
+        clean_path = unquote(path.split("?", 1)[0]).replace("\\", "/").lstrip("/")
+        if not clean_path:
+            clean_path = "index.html"
+        candidate = (static_root / clean_path).resolve()
+        if candidate.is_dir():
+            candidate = candidate / "index.html"
+        try:
+            candidate.relative_to(static_root)
+        except ValueError:
+            return None
+        return candidate
+
+    def serve_static(self, path: str) -> None:
+        candidate = self.resolve_static_path(path)
+        if not candidate or not candidate.exists() or not candidate.is_file():
+            self.write_json(404, {"ok": False, "error": "Not found."})
+            return
+
+        data = candidate.read_bytes()
+        content_type = mimetypes.guess_type(str(candidate))[0] or "application/octet-stream"
+        self.send_response(200)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     def do_POST(self) -> None:
         if self.reject_non_loopback():
@@ -142,6 +178,11 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="Optional public fallback JSON path to update after a successful refresh.",
     )
+    parser.add_argument(
+        "--static-root",
+        default=str(DEFAULT_STATIC_ROOT),
+        help="Optional built-site directory to serve from the same local helper.",
+    )
     return parser.parse_args()
 
 
@@ -153,13 +194,21 @@ def main() -> int:
 
     config_path = Path(args.config).expanduser().resolve() if args.config else resolve_default_config_path()
     fallback_output = Path(args.fallback_output).expanduser().resolve() if str(args.fallback_output).strip() else None
+    static_root = Path(args.static_root).expanduser().resolve()
     if not config_path.exists():
         raise SystemExit(f"Workspace server config not found: {config_path}")
+    if not static_root.exists():
+        raise SystemExit(f"Built site directory not found: {static_root}. Run `bundle exec jekyll build` first.")
 
     server = ThreadingHTTPServer((host, args.port), WorkspaceRefreshHandler)
-    server.refresh_state = RefreshState(config_path=config_path, fallback_output=fallback_output)  # type: ignore[attr-defined]
+    server.refresh_state = RefreshState(  # type: ignore[attr-defined]
+        config_path=config_path,
+        fallback_output=fallback_output,
+        static_root=static_root,
+    )
     print(f"Workspace refresh helper listening on http://{host}:{args.port}")
     print(f"Config: {config_path}")
+    print(f"Static site: {static_root}")
     if fallback_output:
         print(f"Fallback output: {fallback_output}")
     server.serve_forever()

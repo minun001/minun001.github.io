@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260507d';
+  var WORKSPACE_CONTENT_VERSION = '20260507e';
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
@@ -2019,7 +2019,6 @@
       setShellMode('private');
       setView('dashboard');
       applyLocalWorkspaceIdentity();
-      await loadWorkspaceLocalData(config);
 
       var localRefreshInFlight = false;
 
@@ -2041,6 +2040,9 @@
             });
         });
       }
+      setServerRefreshButtonState(true);
+      await loadWorkspaceLocalData(config);
+      setServerRefreshButtonState(false);
       return;
     }
 
