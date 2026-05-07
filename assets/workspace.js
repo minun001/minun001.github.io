@@ -1,5 +1,6 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260507e';
+  var WORKSPACE_CONTENT_VERSION = '20260507f';
+  var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var workspaceContentFallbackCache = null;
@@ -1745,6 +1746,12 @@
     return url + separator + 't=' + Date.now();
   }
 
+  function delay(ms) {
+    return new Promise(function (resolve) {
+      window.setTimeout(resolve, ms);
+    });
+  }
+
   async function requestServerSignalRefresh(endpoint) {
     var response = await window.fetch(appendCacheBust(endpoint), {
       method: 'GET',
@@ -2028,13 +2035,16 @@
         serverRefreshButton.addEventListener('click', function () {
           if (localRefreshInFlight) return;
           localRefreshInFlight = true;
+          var refreshStartedAt = Date.now();
           setServerRefreshButtonState(true);
           renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
           refreshLocalServerSignals(config)
             .catch(function () {
               renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
             })
-            .finally(function () {
+            .finally(async function () {
+              var remainingLoadingTime = WORKSPACE_REFRESH_MIN_LOADING_MS - (Date.now() - refreshStartedAt);
+              if (remainingLoadingTime > 0) await delay(remainingLoadingTime);
               localRefreshInFlight = false;
               setServerRefreshButtonState(false);
             });
