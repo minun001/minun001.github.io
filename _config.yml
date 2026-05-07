@@ -50,3 +50,7 @@ exclude:
   - Gemfile.lock
   - node_modules/
   - vendor/
+  - tools/workspace_content.json
+  - tools/workspace_server_sync_fallback.json
+  - tools/workspace_site_signals.json
+  - tools/workspace_supabase_seed.sql

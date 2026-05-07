@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260507f';
+  var WORKSPACE_CONTENT_VERSION = '20260507g';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -38,6 +38,10 @@
 
   function isLocalMode(config) {
     return String((config && config.provider) || '').trim().toLowerCase() === 'local';
+  }
+
+  function allowsPublicFallbacks(config) {
+    return isLocalMode(config) || (config && config.publicFallbacks === true);
   }
 
   function getServerRefreshEndpoint(config) {
@@ -279,6 +283,10 @@
 
   async function loadWorkspaceContentFallback(config) {
     if (workspaceContentFallbackCache) return workspaceContentFallbackCache;
+    if (!allowsPublicFallbacks(config)) {
+      workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
+      return workspaceContentFallbackCache;
+    }
     if (!window.fetch) {
       workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
       return workspaceContentFallbackCache;
@@ -312,6 +320,10 @@
 
   async function loadServerFallback(config) {
     if (workspaceServerFallbackCache) return workspaceServerFallbackCache;
+    if (!allowsPublicFallbacks(config)) {
+      workspaceServerFallbackCache = getServerFallback(config);
+      return workspaceServerFallbackCache;
+    }
     if (!window.fetch) {
       workspaceServerFallbackCache = getServerFallback(config);
       return workspaceServerFallbackCache;
@@ -372,6 +384,10 @@
 
   async function loadWorkspaceSignalsFallback(config) {
     if (workspaceSignalsFallbackCache) return workspaceSignalsFallbackCache;
+    if (!allowsPublicFallbacks(config)) {
+      workspaceSignalsFallbackCache = buildZeroAnalyticsState(config);
+      return workspaceSignalsFallbackCache;
+    }
     if (!window.fetch) {
       workspaceSignalsFallbackCache = buildZeroAnalyticsState(config);
       return workspaceSignalsFallbackCache;
@@ -2015,9 +2031,38 @@
     var config = getConfig();
     var form = byId('workspace-login-form');
     var signOut = byId('workspace-signout');
+    var unauthorizedSignOut = byId('workspace-signout-unauthorized');
     var resendConfirmation = byId('workspace-resend-confirmation');
     var emailInput = byId('workspace-email');
     var passwordInput = byId('workspace-password');
+    var serverRefreshInFlight = false;
+
+    function bindServerRefreshButton() {
+      var serverRefreshButton = byId('workspace-server-refresh');
+      if (!serverRefreshButton || serverRefreshButton.dataset.bound) return;
+      if (!getServerRefreshEndpoint(config)) {
+        serverRefreshButton.hidden = true;
+        return;
+      }
+      serverRefreshButton.dataset.bound = 'true';
+      serverRefreshButton.addEventListener('click', function () {
+        if (serverRefreshInFlight) return;
+        serverRefreshInFlight = true;
+        var refreshStartedAt = Date.now();
+        setServerRefreshButtonState(true);
+        renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
+        refreshLocalServerSignals(config)
+          .catch(function () {
+            renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
+          })
+          .finally(async function () {
+            var remainingLoadingTime = WORKSPACE_REFRESH_MIN_LOADING_MS - (Date.now() - refreshStartedAt);
+            if (remainingLoadingTime > 0) await delay(remainingLoadingTime);
+            serverRefreshInFlight = false;
+            setServerRefreshButtonState(false);
+          });
+      });
+    }
 
     if (isLocalMode(config)) {
       workspaceState.opsTargets = [];
@@ -2026,30 +2071,7 @@
       setShellMode('private');
       setView('dashboard');
       applyLocalWorkspaceIdentity();
-
-      var localRefreshInFlight = false;
-
-      var serverRefreshButton = byId('workspace-server-refresh');
-      if (serverRefreshButton && !serverRefreshButton.dataset.bound) {
-        serverRefreshButton.dataset.bound = 'true';
-        serverRefreshButton.addEventListener('click', function () {
-          if (localRefreshInFlight) return;
-          localRefreshInFlight = true;
-          var refreshStartedAt = Date.now();
-          setServerRefreshButtonState(true);
-          renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
-          refreshLocalServerSignals(config)
-            .catch(function () {
-              renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
-            })
-            .finally(async function () {
-              var remainingLoadingTime = WORKSPACE_REFRESH_MIN_LOADING_MS - (Date.now() - refreshStartedAt);
-              if (remainingLoadingTime > 0) await delay(remainingLoadingTime);
-              localRefreshInFlight = false;
-              setServerRefreshButtonState(false);
-            });
-        });
-      }
+      bindServerRefreshButton();
       setServerRefreshButtonState(true);
       await loadWorkspaceLocalData(config);
       setServerRefreshButtonState(false);
@@ -2276,6 +2298,7 @@
       privateSessionActive = true;
       startWorkspaceRefresh();
       startRealtimeSubscriptions();
+      bindServerRefreshButton();
       renderWorkspaceOps();
       await refreshWorkspaceData({ force: true, surfaceError: true });
     }
@@ -2323,15 +2346,21 @@
       });
     }
 
-    if (signOut) {
-      signOut.addEventListener('click', async function () {
+    async function signOutFromWorkspace() {
         privateSessionActive = false;
         stopIdleTracking();
         stopWorkspaceRefresh();
         stopRealtimeSubscriptions();
         await client.auth.signOut();
         setStatus('Signed out.', 'neutral');
-      });
+    }
+
+    if (signOut) {
+      signOut.addEventListener('click', signOutFromWorkspace);
+    }
+
+    if (unauthorizedSignOut) {
+      unauthorizedSignOut.addEventListener('click', signOutFromWorkspace);
     }
 
     if (resendConfirmation) {

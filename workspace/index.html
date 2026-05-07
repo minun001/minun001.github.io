@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Workspace
-description: Repo-backed workspace console for Hyunsik Min.
+description: Private workspace access for Hyunsik Min.
 body_class: page-workspace
 robots: noindex,nofollow
 show_footer: false
@@ -215,21 +215,42 @@ script_bundle: workspace
     @media (max-width:360px){.workspace-metrics,.workspace-signal-stats{grid-template-columns:1fr}.workspace-button{font-size:.86rem}}
   </style>
 
-<div class="workspace-page" data-workspace-page data-mode="private">
+<div class="workspace-page" data-workspace-page data-mode="auth">
         <section class="page-lead workspace-lead">
           <div class="page-lead-copy">
             <div class="eyebrow">Workspace</div>
             <h1>Workspace</h1>
-            <p>Repo-backed links, server load, and site snapshots.</p>
+            <p>Private links, server load, and site traffic.</p>
           </div>
         </section>
 
-        <section class="workspace-shell" data-workspace-shell data-mode="private">
-          <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private>
+        <section class="workspace-shell" data-workspace-shell data-mode="auth">
+          <article class="workspace-panel" data-workspace-view="login">
+            <div class="eyebrow">Login</div>
+            <h2>Workspace Login</h2>
+            <p>Sign in with the master workspace account.</p>
+            <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true">Checking workspace access...</div>
+            <form id="workspace-login-form" class="workspace-form">
+              <label class="workspace-field">
+                <span>Email</span>
+                <input id="workspace-email" type="email" autocomplete="username" value="" placeholder="Enter your email" required>
+              </label>
+              <label class="workspace-field">
+                <span>Password</span>
+                <input id="workspace-password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+              </label>
+              <div class="workspace-actions">
+                <button class="workspace-button" type="submit">Sign In</button>
+                <button id="workspace-resend-confirmation" class="workspace-button secondary" type="button" hidden>Resend Verification</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private hidden>
             <div class="workspace-dashboard-head">
               <div class="workspace-dashboard-copy">
                 <h2>Workspace</h2>
-                <p>Repo-backed links, server load, and site snapshots.</p>
+                <p>Private links, server load, and site traffic.</p>
               </div>
             </div>
             <div class="workspace-stack">
@@ -283,18 +304,65 @@ script_bundle: workspace
             </div>
           </article>
 
-            <aside class="workspace-panel" data-workspace-private>
+          <article class="workspace-panel" data-workspace-view="unauthorized" hidden>
+            <div class="eyebrow">Restricted</div>
+            <h2>Access Not Granted</h2>
+            <p>This account is signed in, but it is not allowed to open the private workspace.</p>
+            <div class="workspace-actions" style="margin-top:1rem">
+              <button id="workspace-signout-unauthorized" class="workspace-button secondary" type="button">Sign Out</button>
+            </div>
+          </article>
+
+          <article class="workspace-panel" data-workspace-view="setup" hidden>
+            <div class="eyebrow">Setup</div>
+            <h2>Workspace Auth Setup</h2>
+            <p class="workspace-setup-copy">The workspace is private. Configure Supabase Auth and the workspace tables before using the dashboard.</p>
+            <div class="workspace-list">
+              <div class="workspace-card">
+                <span class="workspace-card-step">Step 1</span>
+                <h3>Auth Project</h3>
+                <p>Add the Supabase URL and publishable anon key in the workspace config.</p>
+              </div>
+              <div class="workspace-card">
+                <span class="workspace-card-step">Step 2</span>
+                <h3>Master User</h3>
+                <p>Create the allowed account and keep the configured master user id aligned.</p>
+              </div>
+              <div class="workspace-card">
+                <span class="workspace-card-step">Step 3</span>
+                <h3>Private Tables</h3>
+                <p>Apply the workspace schema and RLS policies before loading private dashboard data.</p>
+              </div>
+              <div class="workspace-card">
+                <span class="workspace-card-step">Step 4</span>
+                <h3>Verify</h3>
+                <p>Sign in, confirm the dashboard unlocks, then check that public visitors only see the login panel.</p>
+              </div>
+            </div>
+          </article>
+
+            <aside class="workspace-panel" data-workspace-private hidden>
               <div class="workspace-account-head">
-                <h2>Quick Access</h2>
+                <div class="eyebrow">Account</div>
+                <h2>Workspace Access</h2>
               </div>
               <div class="workspace-meta">
                 <div class="workspace-meta-row">
-                  <div class="workspace-meta-label">Refresh</div>
-                  <div class="workspace-meta-value" id="workspace-session-timeout">Manual only</div>
+                  <div class="workspace-meta-label">Email</div>
+                  <div class="workspace-meta-value" id="workspace-user-email">-</div>
+                </div>
+                <div class="workspace-meta-row">
+                  <div class="workspace-meta-label">Role</div>
+                  <div class="workspace-meta-value" id="workspace-user-role">-</div>
+                </div>
+                <div class="workspace-meta-row">
+                  <div class="workspace-meta-label">Timeout</div>
+                  <div class="workspace-meta-value" id="workspace-session-timeout">-</div>
                 </div>
             </div>
             <div class="workspace-actions workspace-quick-access-actions">
               <a class="workspace-button secondary" href="https://github.com/minun001/minun001.github.io" target="_blank" rel="noreferrer">Open Repository</a>
+              <button id="workspace-signout" class="workspace-button secondary" type="button">Sign Out</button>
             </div>
           </aside>
         </section>
