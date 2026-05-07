@@ -2025,7 +2025,7 @@
           renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
           refreshLocalServerSignals(config)
             .catch(function () {
-              renderServerRefreshNote(workspaceState.serverItems, 'Local refresh helper is not running or the probe failed.');
+              renderServerRefreshNote(workspaceState.serverItems, 'Helper unavailable. Start the local helper, then press refresh again.');
             })
             .finally(function () {
               localRefreshInFlight = false;

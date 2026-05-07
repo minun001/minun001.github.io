@@ -17,7 +17,6 @@ TOOLS_DIR = Path(__file__).resolve().parent
 SYNC_ROOT = TOOLS_DIR.parent
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
-DEFAULT_FALLBACK_OUTPUT = TOOLS_DIR / "workspace_server_sync_fallback.json"
 
 
 def resolve_default_config_path() -> Path:
@@ -133,8 +132,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", help="Path to the private workspace server config JSON.")
     parser.add_argument(
         "--fallback-output",
-        default=str(DEFAULT_FALLBACK_OUTPUT),
-        help="Public fallback JSON path to update after a successful refresh. Use an empty value to disable writing.",
+        default="",
+        help="Optional public fallback JSON path to update after a successful refresh.",
     )
     return parser.parse_args()
 
