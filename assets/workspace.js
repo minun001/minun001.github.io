@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260507g';
+  var WORKSPACE_CONTENT_VERSION = '20260507h';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -14,6 +14,10 @@
   function getWorkspaceEmail() {
     var emailInput = byId('workspace-email');
     return emailInput && emailInput.value ? String(emailInput.value).trim() : '';
+  }
+
+  function getMasterEmail(config) {
+    return String((config && config.masterEmail) || '').trim().toLowerCase();
   }
 
   function getMasterUserId(config) {
@@ -142,9 +146,11 @@
   function isAuthorized(user, config) {
     var requiredRole = String((config && config.requiredRole) || 'master').toLowerCase();
     var role = String(resolveRole(user) || '').toLowerCase();
+    var email = user && user.email ? String(user.email).trim().toLowerCase() : '';
     var userId = user && user.id ? String(user.id).trim().toLowerCase() : '';
+    var masterEmail = getMasterEmail(config);
     var masterUserId = getMasterUserId(config);
-    return (Boolean(role) && role === requiredRole) || (Boolean(userId) && userId === masterUserId);
+    return (Boolean(role) && role === requiredRole) || (Boolean(email) && email === masterEmail) || (Boolean(userId) && userId === masterUserId);
   }
 
   function setHtml(id, html) {
