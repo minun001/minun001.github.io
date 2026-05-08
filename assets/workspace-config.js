@@ -13,7 +13,7 @@ window.WORKSPACE_AUTH_CONFIG = {
     endpoint: '/refresh'
   },
   localAuth: {
-    helperBaseUrl: '',
+    helperBaseUrl: 'https://tobacco-tournament-growth-revision.trycloudflare.com',
     sessionEndpoint: '/local-auth/session',
     loginEndpoint: '/local-auth/login',
     logoutEndpoint: '/local-auth/logout'

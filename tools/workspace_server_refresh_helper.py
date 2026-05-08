@@ -22,6 +22,8 @@ SYNC_ROOT = TOOLS_DIR.parent
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
 DEFAULT_STATIC_ROOT = SYNC_ROOT / "_site"
+LOGIN_FAILURE_LIMIT = 8
+LOGIN_FAILURE_WINDOW_SECONDS = 10 * 60
 SESSION_COOKIE_NAME = "workspace_local_session"
 PRIVATE_TOOL_FILES = {
     "/tools/workspace_content.json": TOOLS_DIR / "workspace_content.json",
@@ -79,6 +81,8 @@ class RefreshState:
         self.lock = threading.Lock()
         self.session_lock = threading.Lock()
         self.sessions: dict[str, dict[str, Any]] = {}
+        self.login_attempts_lock = threading.Lock()
+        self.login_attempts: dict[str, list[float]] = {}
 
     def load_auth_config(self) -> dict[str, Any]:
         if not self.auth_config_path.exists():
@@ -157,6 +161,30 @@ class RefreshState:
         if not session:
             return ""
         return str(session.get("email") or "").strip().lower()
+
+    def login_attempt_key(self, client_host: str, email: str) -> str:
+        normalized_email = str(email or "").strip().lower() or "<blank>"
+        return f"{client_host}|{normalized_email}"
+
+    def is_login_limited(self, key: str) -> bool:
+        now = time.time()
+        cutoff = now - LOGIN_FAILURE_WINDOW_SECONDS
+        with self.login_attempts_lock:
+            attempts = [timestamp for timestamp in self.login_attempts.get(key, []) if timestamp >= cutoff]
+            self.login_attempts[key] = attempts
+            return len(attempts) >= LOGIN_FAILURE_LIMIT
+
+    def record_login_failure(self, key: str) -> None:
+        now = time.time()
+        cutoff = now - LOGIN_FAILURE_WINDOW_SECONDS
+        with self.login_attempts_lock:
+            attempts = [timestamp for timestamp in self.login_attempts.get(key, []) if timestamp >= cutoff]
+            attempts.append(now)
+            self.login_attempts[key] = attempts
+
+    def clear_login_failures(self, key: str) -> None:
+        with self.login_attempts_lock:
+            self.login_attempts.pop(key, None)
 
 
 class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
@@ -401,13 +429,19 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
         payload = self.read_json_body()
         email = str(payload.get("email") or "").strip()
         password = str(payload.get("password") or "")
+        login_key = state.login_attempt_key(self.client_address[0], email)
         if not state.auth_configured():
             self.write_json(503, {"ok": False, "error": "Local workspace password is not configured."})
             return
+        if state.is_login_limited(login_key):
+            self.write_json(429, {"ok": False, "error": "Too many login attempts. Wait a few minutes, then try again."})
+            return
         if not state.verify_password(email, password):
+            state.record_login_failure(login_key)
             self.write_json(401, {"ok": False, "error": "Invalid local workspace credentials."})
             return
 
+        state.clear_login_failures(login_key)
         session_email = email if state.allows_any_email() else state.auth_email()
         token = state.create_session(session_email)
         data = json_bytes(
