@@ -5,6 +5,7 @@ _site
 vendor
 assets/private/
 tools/workspace_servers.local.json
+tools/workspace_auth.local.json
 tools/workspace_content.json
 tools/workspace_server_sync_fallback.json
 tools/workspace_site_signals.json

@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260507h';
+  var WORKSPACE_CONTENT_VERSION = '20260508a';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -44,8 +44,21 @@
     return String((config && config.provider) || '').trim().toLowerCase() === 'local';
   }
 
+  function isLocalHelperMode(config) {
+    return String((config && config.provider) || '').trim().toLowerCase() === 'local-helper';
+  }
+
   function allowsPublicFallbacks(config) {
-    return isLocalMode(config) || (config && config.publicFallbacks === true);
+    return isLocalMode(config) || isLocalHelperMode(config) || (config && config.publicFallbacks === true);
+  }
+
+  function getLocalAuthEndpoints(config) {
+    var auth = (config && config.localAuth) || {};
+    return {
+      session: String(auth.sessionEndpoint || '/local-auth/session').trim() || '/local-auth/session',
+      login: String(auth.loginEndpoint || '/local-auth/login').trim() || '/local-auth/login',
+      logout: String(auth.logoutEndpoint || '/local-auth/logout').trim() || '/local-auth/logout'
+    };
   }
 
   function getServerRefreshEndpoint(config) {
@@ -1777,7 +1790,8 @@
   async function requestServerSignalRefresh(endpoint) {
     var response = await window.fetch(appendCacheBust(endpoint), {
       method: 'GET',
-      cache: 'no-store'
+      cache: 'no-store',
+      credentials: 'same-origin'
     });
     if (!response.ok) {
       throw new Error('Local server refresh helper returned ' + response.status + '.');
@@ -2070,6 +2084,39 @@
       });
     }
 
+    function getLocalHelperUser() {
+      return {
+        email: getMasterEmail(config) || getWorkspaceEmail(),
+        user_metadata: { role: 'Local helper' }
+      };
+    }
+
+    async function requestLocalHelperJson(endpoint, options) {
+      var response = await window.fetch(endpoint, Object.assign({
+        credentials: 'same-origin',
+        cache: 'no-store'
+      }, options || {}));
+      var payload = {};
+      try {
+        payload = await response.json();
+      } catch (_error) {}
+      if (!response.ok || payload.ok === false) {
+        throw new Error((payload && payload.error) || 'Local helper request failed.');
+      }
+      return payload;
+    }
+
+    async function unlockLocalHelperWorkspace() {
+      setIdentity(getLocalHelperUser(), config);
+      setShellMode('private');
+      setView('dashboard');
+      setStatus('Workspace unlocked locally.', 'success');
+      bindServerRefreshButton();
+      setServerRefreshButtonState(true);
+      await loadWorkspaceLocalData(config);
+      setServerRefreshButtonState(false);
+    }
+
     if (isLocalMode(config)) {
       workspaceState.opsTargets = [];
       syncInteractiveSelections();
@@ -2081,6 +2128,73 @@
       setServerRefreshButtonState(true);
       await loadWorkspaceLocalData(config);
       setServerRefreshButtonState(false);
+      return;
+    }
+
+    if (isLocalHelperMode(config)) {
+      workspaceState.opsTargets = [];
+      syncInteractiveSelections();
+      bindInteractiveSections();
+      var localAuthEndpoints = getLocalAuthEndpoints(config);
+
+      try {
+        var session = await requestLocalHelperJson(localAuthEndpoints.session);
+        if (!session.configured) {
+          setShellMode('auth');
+          setView('login');
+          setStatus('Local workspace password is not configured. Run tools/set_workspace_local_auth.ps1, restart the helper, then sign in.', 'warn');
+        } else if (session.authenticated) {
+          await unlockLocalHelperWorkspace();
+        } else {
+          setIdentity(null, config);
+          setShellMode('auth');
+          setView('login');
+          setStatus('Sign in with your local workspace password.', 'neutral');
+        }
+      } catch (error) {
+        setShellMode('auth');
+        setView('login');
+        setStatus(error && error.message ? error.message : 'Local helper auth failed.', 'error');
+      }
+
+      if (form) {
+        form.addEventListener('submit', async function (event) {
+          event.preventDefault();
+          setStatus('Signing in locally...', 'neutral');
+          try {
+            await requestLocalHelperJson(localAuthEndpoints.login, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: getWorkspaceEmail(),
+                password: passwordInput ? passwordInput.value : ''
+              })
+            });
+            if (passwordInput) passwordInput.value = '';
+            await unlockLocalHelperWorkspace();
+          } catch (error) {
+            setStatus(error && error.message ? error.message : 'Local login failed.', 'error');
+          }
+        });
+      }
+
+      async function signOutFromLocalHelper() {
+        try {
+          await requestLocalHelperJson(localAuthEndpoints.logout, { method: 'POST' });
+        } catch (_error) {}
+        setIdentity(null, config);
+        setShellMode('auth');
+        setView('login');
+        setStatus('Signed out locally.', 'neutral');
+      }
+
+      if (signOut) {
+        signOut.addEventListener('click', signOutFromLocalHelper);
+      }
+      if (unauthorizedSignOut) {
+        unauthorizedSignOut.addEventListener('click', signOutFromLocalHelper);
+      }
+
       return;
     }
 

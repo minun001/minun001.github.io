@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import mimetypes
 import os
+import secrets
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -19,6 +22,13 @@ SYNC_ROOT = TOOLS_DIR.parent
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
 DEFAULT_STATIC_ROOT = SYNC_ROOT / "_site"
+DEFAULT_WORKSPACE_EMAIL = "minun001@naver.com"
+SESSION_COOKIE_NAME = "workspace_local_session"
+PRIVATE_TOOL_FILES = {
+    "/tools/workspace_content.json": TOOLS_DIR / "workspace_content.json",
+    "/tools/workspace_server_sync_fallback.json": TOOLS_DIR / "workspace_server_sync_fallback.json",
+    "/tools/workspace_site_signals.json": TOOLS_DIR / "workspace_site_signals.json",
+}
 
 
 def resolve_default_config_path() -> Path:
@@ -37,16 +47,103 @@ def resolve_default_config_path() -> Path:
     return TOOLS_DIR / "workspace_servers.example.json"
 
 
+def resolve_default_auth_config_path() -> Path:
+    env_path = os.environ.get("WORKSPACE_AUTH_CONFIG_PATH", "").strip()
+    if env_path:
+        return Path(env_path).expanduser().resolve()
+
+    local_config = TOOLS_DIR / "workspace_auth.local.json"
+    if local_config.exists():
+        return local_config
+
+    parent_config = SYNC_ROOT.parent / "tools" / "workspace_auth.local.json"
+    if parent_config.exists():
+        return parent_config
+
+    return TOOLS_DIR / "workspace_auth.local.json"
+
+
 def json_bytes(payload: dict[str, Any]) -> bytes:
     return json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
 
 
+def js_bytes(source: str) -> bytes:
+    return source.encode("utf-8")
+
+
 class RefreshState:
-    def __init__(self, config_path: Path, fallback_output: Path | None, static_root: Path) -> None:
+    def __init__(self, config_path: Path, auth_config_path: Path, fallback_output: Path | None, static_root: Path) -> None:
         self.config_path = config_path
+        self.auth_config_path = auth_config_path
         self.fallback_output = fallback_output
         self.static_root = static_root
         self.lock = threading.Lock()
+        self.session_lock = threading.Lock()
+        self.sessions: dict[str, float] = {}
+
+    def load_auth_config(self) -> dict[str, Any]:
+        if not self.auth_config_path.exists():
+            return {}
+        try:
+            payload = json.loads(self.auth_config_path.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError):
+            return {}
+        return payload if isinstance(payload, dict) else {}
+
+    def auth_email(self) -> str:
+        config = self.load_auth_config()
+        email = str(config.get("email") or DEFAULT_WORKSPACE_EMAIL).strip().lower()
+        return email or DEFAULT_WORKSPACE_EMAIL
+
+    def auth_configured(self) -> bool:
+        config = self.load_auth_config()
+        digest = str(config.get("password_sha256") or "").strip().lower()
+        return len(digest) == 64 and all(character in "0123456789abcdef" for character in digest)
+
+    def session_seconds(self) -> int:
+        config = self.load_auth_config()
+        try:
+            minutes = int(config.get("session_minutes") or 180)
+        except (TypeError, ValueError):
+            minutes = 180
+        return max(5, min(minutes, 24 * 60)) * 60
+
+    def verify_password(self, email: str, password: str) -> bool:
+        config = self.load_auth_config()
+        expected_email = self.auth_email()
+        expected_digest = str(config.get("password_sha256") or "").strip().lower()
+        if not self.auth_configured():
+            return False
+        if str(email or "").strip().lower() != expected_email:
+            return False
+        password_digest = hashlib.sha256(str(password or "").encode("utf-8")).hexdigest()
+        return secrets.compare_digest(password_digest, expected_digest)
+
+    def create_session(self) -> str:
+        token = secrets.token_urlsafe(32)
+        expires_at = time.time() + self.session_seconds()
+        with self.session_lock:
+            self.sessions[token] = expires_at
+        return token
+
+    def destroy_session(self, token: str) -> None:
+        if not token:
+            return
+        with self.session_lock:
+            self.sessions.pop(token, None)
+
+    def is_valid_session(self, token: str) -> bool:
+        if not token:
+            return False
+        now = time.time()
+        with self.session_lock:
+            expires_at = self.sessions.get(token)
+            if not expires_at:
+                return False
+            if expires_at <= now:
+                self.sessions.pop(token, None)
+                return False
+            return True
 
 
 class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
@@ -71,6 +168,55 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def write_javascript(self, status: int, source: str) -> None:
+        data = js_bytes(source)
+        self.send_response(status)
+        self.send_header("Content-Type", "application/javascript; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def read_json_body(self) -> dict[str, Any]:
+        length = int(self.headers.get("Content-Length") or "0")
+        if length <= 0:
+            return {}
+        raw = self.rfile.read(min(length, 1024 * 32))
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return {}
+        return payload if isinstance(payload, dict) else {}
+
+    def get_cookie_value(self, name: str) -> str:
+        cookie_header = self.headers.get("Cookie") or ""
+        for part in cookie_header.split(";"):
+            key, separator, value = part.strip().partition("=")
+            if separator and key == name:
+                return value.strip()
+        return ""
+
+    def is_authenticated(self) -> bool:
+        state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
+        return state.is_valid_session(self.get_cookie_value(SESSION_COOKIE_NAME))
+
+    def require_authenticated(self) -> bool:
+        if self.is_authenticated():
+            return True
+        self.write_json(401, {"ok": False, "error": "Local workspace login required."})
+        return False
+
+    def write_session_cookie(self, token: str, max_age: int) -> None:
+        self.send_header(
+            "Set-Cookie",
+            f"{SESSION_COOKIE_NAME}={token}; Path=/; Max-Age={max_age}; HttpOnly; SameSite=Lax",
+        )
+
+    def write_clear_session_cookie(self) -> None:
+        self.send_header(
+            "Set-Cookie",
+            f"{SESSION_COOKIE_NAME}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax",
+        )
+
     def reject_non_loopback(self) -> bool:
         host = self.client_address[0]
         if host in {"127.0.0.1", "::1", "localhost"}:
@@ -93,6 +239,9 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
         if path == "/health":
             self.handle_health()
             return
+        if path == "/local-auth/session":
+            self.handle_auth_session()
+            return
         self.serve_static(path)
 
     def handle_health(self) -> None:
@@ -102,10 +251,39 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
             {
                 "ok": True,
                 "config_path": str(state.config_path),
+                "auth_config_path": str(state.auth_config_path),
+                "auth_configured": state.auth_configured(),
+                "authenticated": self.is_authenticated(),
                 "fallback_output": str(state.fallback_output) if state.fallback_output else "",
                 "static_root": str(state.static_root),
             },
         )
+
+    def local_workspace_config_source(self) -> str:
+        state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
+        config = {
+            "provider": "local-helper",
+            "sectionName": "Workspace",
+            "masterEmail": state.auth_email(),
+            "session": {"idleMinutes": max(1, state.session_seconds() // 60)},
+            "analytics": {
+                "visitsTable": "site_visits",
+                "days": 14,
+                "launchDate": "2025-11-14",
+            },
+            "dataFiles": {
+                "content": "/tools/workspace_content.json",
+                "serverSignals": "/tools/workspace_server_sync_fallback.json",
+                "siteSignals": "/tools/workspace_site_signals.json",
+            },
+            "serverRefresh": {"endpoint": "/refresh"},
+            "localAuth": {
+                "sessionEndpoint": "/local-auth/session",
+                "loginEndpoint": "/local-auth/login",
+                "logoutEndpoint": "/local-auth/logout",
+            },
+        }
+        return "window.WORKSPACE_AUTH_CONFIG = " + json.dumps(config, ensure_ascii=False, indent=2) + ";\n"
 
     def resolve_static_path(self, path: str) -> Path | None:
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
@@ -123,6 +301,14 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
         return candidate
 
     def serve_static(self, path: str) -> None:
+        clean_path = urlparse(path).path
+        if clean_path == "/assets/workspace-config.js":
+            self.write_javascript(200, self.local_workspace_config_source())
+            return
+        if clean_path in PRIVATE_TOOL_FILES:
+            self.serve_private_tool_file(clean_path)
+            return
+
         candidate = self.resolve_static_path(path)
         if not candidate or not candidate.exists() or not candidate.is_file():
             self.write_json(404, {"ok": False, "error": "Not found."})
@@ -136,17 +322,89 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
+    def serve_private_tool_file(self, path: str) -> None:
+        if not self.require_authenticated():
+            return
+        state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
+        candidate = PRIVATE_TOOL_FILES[path]
+        if path == "/tools/workspace_server_sync_fallback.json" and state.fallback_output and state.fallback_output.exists():
+            candidate = state.fallback_output
+        if not candidate.exists() or not candidate.is_file():
+            self.write_json(404, {"ok": False, "error": "Private local file not found."})
+            return
+
+        data = candidate.read_bytes()
+        content_type = mimetypes.guess_type(str(candidate))[0] or "application/json"
+        self.send_response(200)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
     def do_POST(self) -> None:
         if self.reject_non_loopback():
             return
         parsed = urlparse(self.path)
-        if parsed.path != "/refresh":
-            self.write_json(404, {"ok": False, "error": "Not found."})
+        if parsed.path == "/refresh":
+            self.handle_refresh(parsed.query)
+            return
+        if parsed.path == "/local-auth/login":
+            self.handle_auth_login()
+            return
+        if parsed.path == "/local-auth/logout":
+            self.handle_auth_logout()
+            return
+        self.write_json(404, {"ok": False, "error": "Not found."})
+
+    def handle_auth_session(self) -> None:
+        state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
+        authenticated = self.is_authenticated()
+        self.write_json(
+            200,
+            {
+                "ok": True,
+                "configured": state.auth_configured(),
+                "authenticated": authenticated,
+                "email": state.auth_email() if authenticated else "",
+                "sessionMinutes": max(1, state.session_seconds() // 60),
+            },
+        )
+
+    def handle_auth_login(self) -> None:
+        state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
+        payload = self.read_json_body()
+        email = str(payload.get("email") or "").strip()
+        password = str(payload.get("password") or "")
+        if not state.auth_configured():
+            self.write_json(503, {"ok": False, "error": "Local workspace password is not configured."})
+            return
+        if not state.verify_password(email, password):
+            self.write_json(401, {"ok": False, "error": "Invalid local workspace credentials."})
             return
 
-        self.handle_refresh(parsed.query)
+        token = state.create_session()
+        data = json_bytes({"ok": True, "email": state.auth_email(), "sessionMinutes": max(1, state.session_seconds() // 60)})
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self.write_session_cookie(token, state.session_seconds())
+        self.end_headers()
+        self.wfile.write(data)
+
+    def handle_auth_logout(self) -> None:
+        state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
+        state.destroy_session(self.get_cookie_value(SESSION_COOKIE_NAME))
+        data = json_bytes({"ok": True})
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self.write_clear_session_cookie()
+        self.end_headers()
+        self.wfile.write(data)
 
     def handle_refresh(self, raw_query: str) -> None:
+        if not self.require_authenticated():
+            return
         query = parse_qs(raw_query)
         alias = (query.get("alias") or [""])[0].strip() or None
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
@@ -173,6 +431,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--host", default=DEFAULT_HOST, help="Bind host. Keep this on 127.0.0.1 for local-only use.")
     parser.add_argument("--port", type=int, default=DEFAULT_PORT, help="Bind port.")
     parser.add_argument("--config", help="Path to the private workspace server config JSON.")
+    parser.add_argument("--auth-config", help="Path to the private local workspace auth JSON.")
     parser.add_argument(
         "--fallback-output",
         default="",
@@ -193,6 +452,7 @@ def main() -> int:
         raise SystemExit("Refusing to bind outside loopback. Use 127.0.0.1, localhost, or ::1.")
 
     config_path = Path(args.config).expanduser().resolve() if args.config else resolve_default_config_path()
+    auth_config_path = Path(args.auth_config).expanduser().resolve() if args.auth_config else resolve_default_auth_config_path()
     fallback_output = Path(args.fallback_output).expanduser().resolve() if str(args.fallback_output).strip() else None
     static_root = Path(args.static_root).expanduser().resolve()
     if not config_path.exists():
@@ -203,11 +463,13 @@ def main() -> int:
     server = ThreadingHTTPServer((host, args.port), WorkspaceRefreshHandler)
     server.refresh_state = RefreshState(  # type: ignore[attr-defined]
         config_path=config_path,
+        auth_config_path=auth_config_path,
         fallback_output=fallback_output,
         static_root=static_root,
     )
     print(f"Workspace refresh helper listening on http://{host}:{args.port}")
     print(f"Config: {config_path}")
+    print(f"Auth config: {auth_config_path}")
     print(f"Static site: {static_root}")
     if fallback_output:
         print(f"Fallback output: {fallback_output}")
