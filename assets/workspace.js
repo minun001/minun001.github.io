@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260508a';
+  var WORKSPACE_CONTENT_VERSION = '20260508b';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -175,6 +175,9 @@
   function getLoginErrorMessage(error) {
     var message = error && error.message ? String(error.message) : '';
     var code = error && error.code ? String(error.code) : '';
+    if (/failed to fetch|networkerror|load failed/i.test(message)) {
+      return 'Supabase is currently unavailable. For local access, open http://127.0.0.1:8765/workspace/ while the local helper is running.';
+    }
     if (message === 'Invalid login credentials') {
       return 'Login failed. This usually means the Supabase Auth user does not exist yet or the password does not match.';
     }
@@ -182,6 +185,14 @@
       return 'Login failed because the email address has not been confirmed yet. Check your inbox for the Supabase confirmation email, then try again.';
     }
     return message || 'Unable to sign in.';
+  }
+
+  function getLocalHelperErrorMessage(error) {
+    var message = error && error.message ? String(error.message) : '';
+    if (/failed to fetch|networkerror|load failed/i.test(message)) {
+      return 'Local helper connection failed. Open http://127.0.0.1:8765/workspace/ and confirm the helper is running.';
+    }
+    return message || 'Local helper request failed.';
   }
 
   function isEmailNotConfirmedError(error) {
@@ -2154,7 +2165,7 @@
       } catch (error) {
         setShellMode('auth');
         setView('login');
-        setStatus(error && error.message ? error.message : 'Local helper auth failed.', 'error');
+        setStatus(getLocalHelperErrorMessage(error), 'error');
       }
 
       if (form) {
@@ -2173,7 +2184,7 @@
             if (passwordInput) passwordInput.value = '';
             await unlockLocalHelperWorkspace();
           } catch (error) {
-            setStatus(error && error.message ? error.message : 'Local login failed.', 'error');
+            setStatus(getLocalHelperErrorMessage(error), 'error');
           }
         });
       }
@@ -2438,10 +2449,17 @@
         var email = getWorkspaceEmail();
         var password = passwordInput ? passwordInput.value : '';
 
-        var result = await client.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
+        var result;
+        try {
+          result = await client.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+        } catch (error) {
+          setConfirmationAction(false);
+          setStatus(getLoginErrorMessage(error), 'error');
+          return;
+        }
 
         if (result.error) {
           if (isEmailNotConfirmedError(result.error)) {
