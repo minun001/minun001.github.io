@@ -5,8 +5,8 @@ stable
 as $$
   select
     coalesce((auth.jwt() -> 'app_metadata' ->> 'role') = 'master', false)
-    or lower(coalesce(auth.jwt() ->> 'email', '')) = 'minun001@naver.com'
-    or lower(coalesce(auth.jwt() ->> 'sub', '')) = '75145b9d-eece-4dc5-9d50-f5cf92e0eaf2';
+    or lower(coalesce(auth.jwt() ->> 'email', '')) = '<workspace-master-email>'
+    or lower(coalesce(auth.jwt() ->> 'sub', '')) = '<workspace-master-user-id>';
 $$;
 
 create table if not exists public.workspace_dashboard_metrics (
