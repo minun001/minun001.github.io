@@ -1,14 +1,16 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260508b';
+  var WORKSPACE_CONTENT_VERSION = '20260508c';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
+  var WORKSPACE_HELPER_STORAGE_KEY = 'workspace.helperBaseUrl';
+  var WORKSPACE_HELPER_TOKEN_PREFIX = 'workspace.helperSessionToken:';
   var workspaceContentFallbackCache = null;
   var workspaceServerFallbackCache = null;
   var workspaceSignalsFallbackCache = null;
 
   function getConfig() {
-    return window.WORKSPACE_AUTH_CONFIG || {};
+    return prepareWorkspaceConfig(window.WORKSPACE_AUTH_CONFIG || {});
   }
 
   function getWorkspaceEmail() {
@@ -48,8 +50,90 @@
     return String((config && config.provider) || '').trim().toLowerCase() === 'local-helper';
   }
 
+  function isRemoteHelperMode(config) {
+    return String((config && config.provider) || '').trim().toLowerCase() === 'remote-helper';
+  }
+
   function allowsPublicFallbacks(config) {
-    return isLocalMode(config) || isLocalHelperMode(config) || (config && config.publicFallbacks === true);
+    return isLocalMode(config) || isLocalHelperMode(config) || isRemoteHelperMode(config) || (config && config.publicFallbacks === true);
+  }
+
+  function normalizeHelperBaseUrl(value) {
+    var raw = String(value || '').trim();
+    if (!raw) return '';
+    try {
+      var parsed = new URL(raw, window.location.href);
+      var isLoopback = parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost' || parsed.hostname === '::1';
+      if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && isLoopback)) return '';
+      if (window.location.protocol === 'https:' && parsed.protocol !== 'https:') return '';
+      parsed.hash = '';
+      parsed.search = '';
+      return parsed.toString().replace(/\/+$/, '');
+    } catch (_error) {
+      return '';
+    }
+  }
+
+  function getStoredHelperBaseUrl() {
+    try {
+      return normalizeHelperBaseUrl(window.localStorage.getItem(WORKSPACE_HELPER_STORAGE_KEY));
+    } catch (_error) {
+      return '';
+    }
+  }
+
+  function setStoredHelperBaseUrl(value) {
+    try {
+      if (value) {
+        window.localStorage.setItem(WORKSPACE_HELPER_STORAGE_KEY, value);
+      } else {
+        window.localStorage.removeItem(WORKSPACE_HELPER_STORAGE_KEY);
+      }
+    } catch (_error) {}
+  }
+
+  function getUrlHelperBaseUrl() {
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      if (params.get('clearWorkspaceHelper') === '1') {
+        setStoredHelperBaseUrl('');
+        return '';
+      }
+      var candidate = normalizeHelperBaseUrl(params.get('workspaceHelper') || params.get('helper'));
+      if (candidate) setStoredHelperBaseUrl(candidate);
+      return candidate;
+    } catch (_error) {
+      return '';
+    }
+  }
+
+  function joinHelperUrl(baseUrl, path) {
+    var cleanPath = String(path || '').trim() || '/';
+    if (!baseUrl) return cleanPath;
+    if (/^https?:\/\//i.test(cleanPath)) return cleanPath;
+    return baseUrl.replace(/\/+$/, '') + '/' + cleanPath.replace(/^\/+/, '');
+  }
+
+  function prepareWorkspaceConfig(rawConfig) {
+    var config = Object.assign({}, rawConfig || {});
+    config.localAuth = Object.assign({}, (rawConfig && rawConfig.localAuth) || {});
+    config.dataFiles = Object.assign({}, (rawConfig && rawConfig.dataFiles) || {});
+    config.serverRefresh = Object.assign({}, (rawConfig && rawConfig.serverRefresh) || {});
+    var helperBase = getUrlHelperBaseUrl() || normalizeHelperBaseUrl(config.localAuth.helperBaseUrl) || getStoredHelperBaseUrl();
+    if (!helperBase) return config;
+
+    config.provider = 'local-helper';
+    config.publicFallbacks = true;
+    config.masterEmail = '';
+    config.localAuth.helperBaseUrl = helperBase;
+    config.localAuth.sessionEndpoint = joinHelperUrl(helperBase, config.localAuth.sessionEndpoint || '/local-auth/session');
+    config.localAuth.loginEndpoint = joinHelperUrl(helperBase, config.localAuth.loginEndpoint || '/local-auth/login');
+    config.localAuth.logoutEndpoint = joinHelperUrl(helperBase, config.localAuth.logoutEndpoint || '/local-auth/logout');
+    config.dataFiles.content = joinHelperUrl(helperBase, config.dataFiles.content || '/tools/workspace_content.json');
+    config.dataFiles.serverSignals = joinHelperUrl(helperBase, config.dataFiles.serverSignals || '/tools/workspace_server_sync_fallback.json');
+    config.dataFiles.siteSignals = joinHelperUrl(helperBase, config.dataFiles.siteSignals || '/tools/workspace_site_signals.json');
+    config.serverRefresh.endpoint = joinHelperUrl(helperBase, config.serverRefresh.endpoint || '/refresh');
+    return config;
   }
 
   function getLocalAuthEndpoints(config) {
@@ -59,6 +143,31 @@
       login: String(auth.loginEndpoint || '/local-auth/login').trim() || '/local-auth/login',
       logout: String(auth.logoutEndpoint || '/local-auth/logout').trim() || '/local-auth/logout'
     };
+  }
+
+  function getHelperTokenStorageKey(config) {
+    var auth = (config && config.localAuth) || {};
+    var base = normalizeHelperBaseUrl(auth.helperBaseUrl) || window.location.origin;
+    return WORKSPACE_HELPER_TOKEN_PREFIX + base;
+  }
+
+  function getHelperSessionToken(config) {
+    try {
+      return window.sessionStorage.getItem(getHelperTokenStorageKey(config)) || '';
+    } catch (_error) {
+      return '';
+    }
+  }
+
+  function setHelperSessionToken(config, token) {
+    try {
+      var key = getHelperTokenStorageKey(config);
+      if (token) {
+        window.sessionStorage.setItem(key, token);
+      } else {
+        window.sessionStorage.removeItem(key);
+      }
+    } catch (_error) {}
   }
 
   function getServerRefreshEndpoint(config) {
@@ -190,7 +299,7 @@
   function getLocalHelperErrorMessage(error) {
     var message = error && error.message ? String(error.message) : '';
     if (/failed to fetch|networkerror|load failed/i.test(message)) {
-      return 'Local helper connection failed. Open http://127.0.0.1:8765/workspace/ and confirm the helper is running.';
+      return 'Workspace helper connection failed. Start the helper tunnel, then open this page with ?workspaceHelper=https://your-helper-url.';
     }
     return message || 'Local helper request failed.';
   }
@@ -311,6 +420,17 @@
     };
   }
 
+  async function fetchWorkspaceJsonFile(url, config) {
+    var headers = {};
+    var sessionToken = getHelperSessionToken(config);
+    if (sessionToken) headers.Authorization = 'Bearer ' + sessionToken;
+    return await window.fetch(url + '?v=' + WORKSPACE_CONTENT_VERSION, {
+      headers: headers,
+      credentials: /^https?:\/\//i.test(url) ? 'omit' : 'same-origin',
+      cache: 'no-store'
+    });
+  }
+
   async function loadWorkspaceContentFallback(config) {
     if (workspaceContentFallbackCache) return workspaceContentFallbackCache;
     if (!allowsPublicFallbacks(config)) {
@@ -323,10 +443,7 @@
     }
 
     try {
-      var response = await window.fetch(getDataFiles(config).content + '?v=' + WORKSPACE_CONTENT_VERSION, {
-        credentials: 'same-origin',
-        cache: 'no-store'
-      });
+      var response = await fetchWorkspaceJsonFile(getDataFiles(config).content, config);
       if (!response.ok) {
         workspaceContentFallbackCache = { metrics: [], links: [], notes: [] };
         return workspaceContentFallbackCache;
@@ -360,10 +477,7 @@
     }
 
     try {
-      var response = await window.fetch(getDataFiles(config).serverSignals + '?v=' + WORKSPACE_CONTENT_VERSION, {
-        credentials: 'same-origin',
-        cache: 'no-store'
-      });
+      var response = await fetchWorkspaceJsonFile(getDataFiles(config).serverSignals, config);
       if (!response.ok) {
         workspaceServerFallbackCache = getServerFallback(config);
         return workspaceServerFallbackCache;
@@ -424,10 +538,7 @@
     }
 
     try {
-      var response = await window.fetch(getDataFiles(config).siteSignals + '?v=' + WORKSPACE_CONTENT_VERSION, {
-        credentials: 'same-origin',
-        cache: 'no-store'
-      });
+      var response = await fetchWorkspaceJsonFile(getDataFiles(config).siteSignals, config);
       if (!response.ok) {
         workspaceSignalsFallbackCache = buildZeroAnalyticsState(config);
         return workspaceSignalsFallbackCache;
@@ -1798,11 +1909,15 @@
     });
   }
 
-  async function requestServerSignalRefresh(endpoint) {
+  async function requestServerSignalRefresh(endpoint, config) {
+    var headers = {};
+    var sessionToken = getHelperSessionToken(config);
+    if (sessionToken) headers.Authorization = 'Bearer ' + sessionToken;
     var response = await window.fetch(appendCacheBust(endpoint), {
       method: 'GET',
+      headers: headers,
       cache: 'no-store',
-      credentials: 'same-origin'
+      credentials: /^https?:\/\//i.test(endpoint) ? 'omit' : 'same-origin'
     });
     if (!response.ok) {
       throw new Error('Local server refresh helper returned ' + response.status + '.');
@@ -1817,7 +1932,7 @@
   async function loadServerSignalsFromRefreshHelper(config) {
     var endpoint = getServerRefreshEndpoint(config);
     if (!endpoint || !window.fetch) return null;
-    return await requestServerSignalRefresh(endpoint);
+    return await requestServerSignalRefresh(endpoint, config);
   }
 
   async function refreshLocalServerSignals(config) {
@@ -2067,6 +2182,19 @@
     var emailInput = byId('workspace-email');
     var passwordInput = byId('workspace-password');
     var serverRefreshInFlight = false;
+    var localHelperIdentityEmail = '';
+
+    if (emailInput) {
+      var lockedEmail = getMasterEmail(config);
+      if (lockedEmail) {
+        emailInput.value = lockedEmail;
+        emailInput.readOnly = true;
+        emailInput.setAttribute('aria-readonly', 'true');
+      } else {
+        emailInput.readOnly = false;
+        emailInput.removeAttribute('aria-readonly');
+      }
+    }
 
     function bindServerRefreshButton() {
       var serverRefreshButton = byId('workspace-server-refresh');
@@ -2097,16 +2225,21 @@
 
     function getLocalHelperUser() {
       return {
-        email: getMasterEmail(config) || getWorkspaceEmail(),
+        email: localHelperIdentityEmail || getWorkspaceEmail() || getMasterEmail(config) || 'workspace-user',
         user_metadata: { role: 'Local helper' }
       };
     }
 
     async function requestLocalHelperJson(endpoint, options) {
-      var response = await window.fetch(endpoint, Object.assign({
-        credentials: 'same-origin',
+      var requestOptions = Object.assign({
         cache: 'no-store'
-      }, options || {}));
+      }, options || {});
+      var headers = Object.assign({}, requestOptions.headers || {});
+      var sessionToken = getHelperSessionToken(config);
+      if (sessionToken) headers.Authorization = 'Bearer ' + sessionToken;
+      requestOptions.headers = headers;
+      requestOptions.credentials = /^https?:\/\//i.test(endpoint) ? 'omit' : 'same-origin';
+      var response = await window.fetch(endpoint, requestOptions);
       var payload = {};
       try {
         payload = await response.json();
@@ -2117,7 +2250,8 @@
       return payload;
     }
 
-    async function unlockLocalHelperWorkspace() {
+    async function unlockLocalHelperWorkspace(email) {
+      localHelperIdentityEmail = String(email || localHelperIdentityEmail || getWorkspaceEmail() || '').trim().toLowerCase();
       setIdentity(getLocalHelperUser(), config);
       setShellMode('private');
       setView('dashboard');
@@ -2142,6 +2276,23 @@
       return;
     }
 
+    if (isRemoteHelperMode(config)) {
+      workspaceState.opsTargets = [];
+      syncInteractiveSelections();
+      bindInteractiveSections();
+      setIdentity(null, config);
+      setShellMode('auth');
+      setView('login');
+      setStatus('Start a private helper tunnel, then open this page with ?workspaceHelper=https://your-helper-url. Credentials stay on the helper, not GitHub Pages.', 'warn');
+      if (form) {
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          setStatus('Workspace helper URL is not configured yet. Reopen with ?workspaceHelper=https://your-helper-url.', 'warn');
+        });
+      }
+      return;
+    }
+
     if (isLocalHelperMode(config)) {
       workspaceState.opsTargets = [];
       syncInteractiveSelections();
@@ -2153,14 +2304,14 @@
         if (!session.configured) {
           setShellMode('auth');
           setView('login');
-          setStatus('Local workspace password is not configured. Run tools/set_workspace_local_auth.ps1, restart the helper, then sign in.', 'warn');
+          setStatus('Workspace password is not configured. Run tools/set_workspace_local_auth.ps1, restart the helper, then sign in.', 'warn');
         } else if (session.authenticated) {
-          await unlockLocalHelperWorkspace();
+          await unlockLocalHelperWorkspace(session.email);
         } else {
           setIdentity(null, config);
           setShellMode('auth');
           setView('login');
-          setStatus('Sign in with your local workspace password.', 'neutral');
+          setStatus('Sign in with your workspace password.', 'neutral');
         }
       } catch (error) {
         setShellMode('auth');
@@ -2173,7 +2324,7 @@
           event.preventDefault();
           setStatus('Signing in locally...', 'neutral');
           try {
-            await requestLocalHelperJson(localAuthEndpoints.login, {
+            var loginPayload = await requestLocalHelperJson(localAuthEndpoints.login, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -2181,8 +2332,9 @@
                 password: passwordInput ? passwordInput.value : ''
               })
             });
+            setHelperSessionToken(config, loginPayload.sessionToken || '');
             if (passwordInput) passwordInput.value = '';
-            await unlockLocalHelperWorkspace();
+            await unlockLocalHelperWorkspace(loginPayload.email);
           } catch (error) {
             setStatus(getLocalHelperErrorMessage(error), 'error');
           }
@@ -2193,6 +2345,8 @@
         try {
           await requestLocalHelperJson(localAuthEndpoints.logout, { method: 'POST' });
         } catch (_error) {}
+        setHelperSessionToken(config, '');
+        localHelperIdentityEmail = '';
         setIdentity(null, config);
         setShellMode('auth');
         setView('login');

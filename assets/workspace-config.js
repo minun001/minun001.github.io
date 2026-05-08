@@ -1,13 +1,8 @@
 window.WORKSPACE_AUTH_CONFIG = {
-  provider: 'supabase',
-  supabaseUrl: 'https://brwilcezyrtlpmcokmlo.supabase.co',
-  supabaseAnonKey: 'sb_publishable_eEjPLgWLIYFIOf7C4HUgxg_LPcFvPKx',
-  requiredRole: 'master',
-  masterEmail: 'minun001@naver.com',
-  masterUserId: '75145b9d-eece-4dc5-9d50-f5cf92e0eaf2',
+  provider: 'remote-helper',
   sectionName: 'Workspace',
   session: {
-    idleMinutes: 3
+    idleMinutes: 180
   },
   analytics: {
     visitsTable: 'site_visits',
@@ -15,7 +10,18 @@ window.WORKSPACE_AUTH_CONFIG = {
     launchDate: '2025-11-14'
   },
   serverRefresh: {
-    endpoint: 'http://127.0.0.1:8765/refresh'
+    endpoint: '/refresh'
+  },
+  localAuth: {
+    helperBaseUrl: '',
+    sessionEndpoint: '/local-auth/session',
+    loginEndpoint: '/local-auth/login',
+    logoutEndpoint: '/local-auth/logout'
+  },
+  dataFiles: {
+    content: '/tools/workspace_content.json',
+    serverSignals: '/tools/workspace_server_sync_fallback.json',
+    siteSignals: '/tools/workspace_site_signals.json'
   },
   tables: {
     dashboard: 'workspace_dashboard_metrics',

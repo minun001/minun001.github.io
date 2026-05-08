@@ -1,5 +1,5 @@
 param(
-    [string]$Email = 'minun001@naver.com',
+    [string]$Email = '',
     [int]$SessionMinutes = 180
 )
 
@@ -8,7 +8,15 @@ $ErrorActionPreference = 'Stop'
 $toolsRoot = $PSScriptRoot
 $authPath = Join-Path $toolsRoot 'workspace_auth.local.json'
 
-$securePassword = Read-Host -Prompt "Local Workspace password for $Email" -AsSecureString
+$normalizedEmail = $Email.Trim().ToLowerInvariant()
+$promptLabel = if ([string]::IsNullOrWhiteSpace($normalizedEmail)) {
+    'Local Workspace password'
+}
+else {
+    "Local Workspace password for $normalizedEmail"
+}
+
+$securePassword = Read-Host -Prompt $promptLabel -AsSecureString
 $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword)
 
 try {
@@ -28,7 +36,8 @@ try {
     }
 
     $payload = [ordered]@{
-        email = $Email.Trim().ToLowerInvariant()
+        email = $normalizedEmail
+        allow_any_email = [string]::IsNullOrWhiteSpace($normalizedEmail)
         password_sha256 = $hash
         session_minutes = [Math]::Max(5, [Math]::Min($SessionMinutes, 1440))
     }

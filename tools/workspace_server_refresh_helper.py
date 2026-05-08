@@ -22,7 +22,6 @@ SYNC_ROOT = TOOLS_DIR.parent
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 8765
 DEFAULT_STATIC_ROOT = SYNC_ROOT / "_site"
-DEFAULT_WORKSPACE_EMAIL = "minun001@naver.com"
 SESSION_COOKIE_NAME = "workspace_local_session"
 PRIVATE_TOOL_FILES = {
     "/tools/workspace_content.json": TOOLS_DIR / "workspace_content.json",
@@ -79,7 +78,7 @@ class RefreshState:
         self.static_root = static_root
         self.lock = threading.Lock()
         self.session_lock = threading.Lock()
-        self.sessions: dict[str, float] = {}
+        self.sessions: dict[str, dict[str, Any]] = {}
 
     def load_auth_config(self) -> dict[str, Any]:
         if not self.auth_config_path.exists():
@@ -92,8 +91,11 @@ class RefreshState:
 
     def auth_email(self) -> str:
         config = self.load_auth_config()
-        email = str(config.get("email") or DEFAULT_WORKSPACE_EMAIL).strip().lower()
-        return email or DEFAULT_WORKSPACE_EMAIL
+        return str(config.get("email") or "").strip().lower()
+
+    def allows_any_email(self) -> bool:
+        config = self.load_auth_config()
+        return bool(config.get("allow_any_email")) or not self.auth_email()
 
     def auth_configured(self) -> bool:
         config = self.load_auth_config()
@@ -114,16 +116,17 @@ class RefreshState:
         expected_digest = str(config.get("password_sha256") or "").strip().lower()
         if not self.auth_configured():
             return False
-        if str(email or "").strip().lower() != expected_email:
+        if not self.allows_any_email() and str(email or "").strip().lower() != expected_email:
             return False
         password_digest = hashlib.sha256(str(password or "").encode("utf-8")).hexdigest()
         return secrets.compare_digest(password_digest, expected_digest)
 
-    def create_session(self) -> str:
+    def create_session(self, email: str) -> str:
         token = secrets.token_urlsafe(32)
         expires_at = time.time() + self.session_seconds()
+        session_email = str(email or self.auth_email() or "workspace-user").strip().lower()
         with self.session_lock:
-            self.sessions[token] = expires_at
+            self.sessions[token] = {"expires_at": expires_at, "email": session_email}
         return token
 
     def destroy_session(self, token: str) -> None:
@@ -132,18 +135,28 @@ class RefreshState:
         with self.session_lock:
             self.sessions.pop(token, None)
 
-    def is_valid_session(self, token: str) -> bool:
+    def get_session(self, token: str) -> dict[str, Any] | None:
         if not token:
-            return False
+            return None
         now = time.time()
         with self.session_lock:
-            expires_at = self.sessions.get(token)
-            if not expires_at:
-                return False
+            session = self.sessions.get(token)
+            if not session:
+                return None
+            expires_at = float(session.get("expires_at") or 0)
             if expires_at <= now:
                 self.sessions.pop(token, None)
-                return False
-            return True
+                return None
+            return session
+
+    def is_valid_session(self, token: str) -> bool:
+        return self.get_session(token) is not None
+
+    def session_email(self, token: str) -> str:
+        session = self.get_session(token)
+        if not session:
+            return ""
+        return str(session.get("email") or "").strip().lower()
 
 
 class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
@@ -152,7 +165,7 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
     def end_headers(self) -> None:
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.send_header("Access-Control-Allow-Private-Network", "true")
         self.send_header("Cache-Control", "no-store")
         super().end_headers()
@@ -195,9 +208,19 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
                 return value.strip()
         return ""
 
+    def get_bearer_token(self) -> str:
+        header = self.headers.get("Authorization") or ""
+        scheme, separator, value = header.partition(" ")
+        if separator and scheme.lower() == "bearer":
+            return value.strip()
+        return ""
+
+    def get_session_token(self) -> str:
+        return self.get_bearer_token() or self.get_cookie_value(SESSION_COOKIE_NAME)
+
     def is_authenticated(self) -> bool:
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
-        return state.is_valid_session(self.get_cookie_value(SESSION_COOKIE_NAME))
+        return state.is_valid_session(self.get_session_token())
 
     def require_authenticated(self) -> bool:
         if self.is_authenticated():
@@ -254,6 +277,7 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
                 "auth_config_path": str(state.auth_config_path),
                 "auth_configured": state.auth_configured(),
                 "authenticated": self.is_authenticated(),
+                "allow_any_email": state.allows_any_email(),
                 "fallback_output": str(state.fallback_output) if state.fallback_output else "",
                 "static_root": str(state.static_root),
             },
@@ -359,13 +383,15 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
     def handle_auth_session(self) -> None:
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
         authenticated = self.is_authenticated()
+        token = self.get_session_token()
         self.write_json(
             200,
             {
                 "ok": True,
                 "configured": state.auth_configured(),
                 "authenticated": authenticated,
-                "email": state.auth_email() if authenticated else "",
+                "email": state.session_email(token) if authenticated else "",
+                "allowAnyEmail": state.allows_any_email(),
                 "sessionMinutes": max(1, state.session_seconds() // 60),
             },
         )
@@ -382,8 +408,16 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
             self.write_json(401, {"ok": False, "error": "Invalid local workspace credentials."})
             return
 
-        token = state.create_session()
-        data = json_bytes({"ok": True, "email": state.auth_email(), "sessionMinutes": max(1, state.session_seconds() // 60)})
+        session_email = email if state.allows_any_email() else state.auth_email()
+        token = state.create_session(session_email)
+        data = json_bytes(
+            {
+                "ok": True,
+                "email": session_email,
+                "sessionToken": token,
+                "sessionMinutes": max(1, state.session_seconds() // 60),
+            }
+        )
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(data)))
@@ -393,7 +427,7 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
 
     def handle_auth_logout(self) -> None:
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]
-        state.destroy_session(self.get_cookie_value(SESSION_COOKIE_NAME))
+        state.destroy_session(self.get_session_token())
         data = json_bytes({"ok": True})
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
