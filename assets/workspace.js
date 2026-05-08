@@ -1,10 +1,11 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260508d';
+  var WORKSPACE_CONTENT_VERSION = '20260508e';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var WORKSPACE_HELPER_STORAGE_KEY = 'workspace.helperBaseUrl';
   var WORKSPACE_HELPER_TOKEN_PREFIX = 'workspace.helperSessionToken:';
+  var WORKSPACE_DEFAULT_HELPER_BASE_URL = 'https://tobacco-tournament-growth-revision.trycloudflare.com';
   var workspaceContentFallbackCache = null;
   var workspaceServerFallbackCache = null;
   var workspaceSignalsFallbackCache = null;
@@ -120,6 +121,9 @@
     config.dataFiles = Object.assign({}, (rawConfig && rawConfig.dataFiles) || {});
     config.serverRefresh = Object.assign({}, (rawConfig && rawConfig.serverRefresh) || {});
     var helperBase = getUrlHelperBaseUrl() || normalizeHelperBaseUrl(config.localAuth.helperBaseUrl) || getStoredHelperBaseUrl();
+    if (!helperBase && isRemoteHelperMode(config)) {
+      helperBase = normalizeHelperBaseUrl(WORKSPACE_DEFAULT_HELPER_BASE_URL);
+    }
     if (!helperBase) return config;
 
     config.provider = 'local-helper';
