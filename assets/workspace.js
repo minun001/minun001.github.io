@@ -1,11 +1,13 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260508e';
+  var WORKSPACE_CONTENT_VERSION = '20260509a';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var WORKSPACE_HELPER_STORAGE_KEY = 'workspace.helperBaseUrl';
   var WORKSPACE_HELPER_TOKEN_PREFIX = 'workspace.helperSessionToken:';
   var WORKSPACE_DEFAULT_HELPER_BASE_URL = 'https://tobacco-tournament-growth-revision.trycloudflare.com';
+  var WORKSPACE_SERVER_DISK_ALERT_PERCENT = 90;
+  var WORKSPACE_SERVER_GPU_ALERT_PERCENT = 80;
   var workspaceContentFallbackCache = null;
   var workspaceServerFallbackCache = null;
   var workspaceSignalsFallbackCache = null;
@@ -1006,6 +1008,114 @@
     return { key: 'live', label: 'Live' };
   }
 
+  function getServerMaxGpuUsagePercent(item) {
+    var values = safeArray(item && item.gpuPayload).map(function (device) {
+      return toFiniteNumber(device && device.utilization_percent, 0);
+    });
+    if (!values.length && item && item.gpuCount) {
+      values.push(toFiniteNumber(item.gpuAvgUsagePercent, 0));
+    }
+    if (!values.length) return 0;
+    return Math.max.apply(null, values);
+  }
+
+  function buildServerAlerts(items) {
+    var alerts = [];
+    safeArray(items).forEach(function (item) {
+      if (!item || !item.alias) return;
+      var status = getServerStatusInfo(item);
+      var hasSnapshot = Boolean(item.generatedAt);
+      var diskPercent = toFiniteNumber(item.diskPercent, 0);
+      var gpuPercent = getServerMaxGpuUsagePercent(item);
+
+      if (status.key === 'stale') {
+        alerts.push({
+          type: 'stale',
+          priority: 2,
+          label: item.label,
+          detail: 'Snapshot ' + formatRelativeAge(item.generatedAt),
+          sortValue: getRelativeAgeMinutes(item.generatedAt) || 0
+        });
+      }
+
+      if (hasSnapshot && diskPercent >= WORKSPACE_SERVER_DISK_ALERT_PERCENT) {
+        alerts.push({
+          type: 'disk',
+          priority: diskPercent >= 95 ? 3 : 2,
+          label: item.label,
+          detail: 'Disk ' + formatPercent(diskPercent, 0),
+          sortValue: diskPercent
+        });
+      }
+
+      if (hasSnapshot && item.gpuCount && gpuPercent >= WORKSPACE_SERVER_GPU_ALERT_PERCENT) {
+        alerts.push({
+          type: 'gpu',
+          priority: gpuPercent >= 95 ? 3 : 2,
+          label: item.label,
+          detail: 'GPU ' + formatPercent(gpuPercent, 0),
+          sortValue: gpuPercent
+        });
+      }
+    });
+
+    return alerts.sort(function (left, right) {
+      if (right.priority !== left.priority) return right.priority - left.priority;
+      if (right.sortValue !== left.sortValue) return right.sortValue - left.sortValue;
+      return String(left.label || '').localeCompare(String(right.label || ''));
+    });
+  }
+
+  function renderServerAlertSummary(items) {
+    var safeItems = safeArray(items);
+    if (!safeItems.length) return '';
+
+    var alerts = buildServerAlerts(safeItems);
+    if (!alerts.length) {
+      return (
+        '<section class="workspace-server-alert-summary" data-state="clear" aria-label="Server alerts summary">' +
+          '<div class="workspace-server-alert-head">' +
+            '<div>' +
+              '<span class="workspace-server-alert-kicker">Server Alerts</span>' +
+              '<strong>All monitored servers look clear.</strong>' +
+            '</div>' +
+            '<span class="workspace-server-alert-total">No active alerts</span>' +
+          '</div>' +
+          '<p>Disk, GPU, and snapshot freshness are within the current alert thresholds.</p>' +
+        '</section>'
+      );
+    }
+
+    var diskCount = alerts.filter(function (alert) { return alert.type === 'disk'; }).length;
+    var gpuCount = alerts.filter(function (alert) { return alert.type === 'gpu'; }).length;
+    var staleCount = alerts.filter(function (alert) { return alert.type === 'stale'; }).length;
+    var visibleAlerts = alerts.slice(0, 8);
+    var hiddenCount = Math.max(0, alerts.length - visibleAlerts.length);
+
+    return (
+      '<section class="workspace-server-alert-summary" data-state="alert" aria-label="Server alerts summary">' +
+        '<div class="workspace-server-alert-head">' +
+          '<div>' +
+            '<span class="workspace-server-alert-kicker">Server Alerts</span>' +
+            '<strong>' + escapeHtml(alerts.length + ' active alert' + (alerts.length === 1 ? '' : 's')) + '</strong>' +
+          '</div>' +
+          '<span class="workspace-server-alert-total">' + escapeHtml(diskCount + ' disk | ' + gpuCount + ' GPU | ' + staleCount + ' stale') + '</span>' +
+        '</div>' +
+        '<div class="workspace-server-alert-list">' +
+          visibleAlerts.map(function (alert) {
+            return (
+              '<span class="workspace-server-alert-pill" data-type="' + escapeHtml(alert.type) + '">' +
+                '<strong>' + escapeHtml(alert.type === 'disk' ? 'Disk 90%+' : (alert.type === 'gpu' ? 'High GPU' : 'Stale')) + '</strong>' +
+                '<span>' + escapeHtml(alert.label + ' - ' + alert.detail) + '</span>' +
+              '</span>'
+            );
+          }).join('') +
+          (hiddenCount ? '<span class="workspace-server-alert-pill" data-type="more"><strong>More</strong><span>' + escapeHtml(hiddenCount + ' additional alert' + (hiddenCount === 1 ? '' : 's')) + '</span></span>' : '') +
+        '</div>' +
+      '</section>'
+    );
+  }
+
   function formatPercent(value, decimals) {
     var precision = Number.isFinite(Number(decimals)) ? Number(decimals) : 0;
     return toFiniteNumber(value, 0).toFixed(precision) + '%';
@@ -1861,6 +1971,7 @@
   }
 
   function renderWorkspaceServers() {
+    setHtml('workspace-server-alerts', renderServerAlertSummary(workspaceState.serverItems));
     setHtml('workspace-servers', renderServerSignals(workspaceState.serverItems, workspaceState.selectedServerAlias, workspaceState.serverActionMode));
   }
 
