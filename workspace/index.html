@@ -354,9 +354,20 @@ script_bundle: workspace
             </div>
             <div class="workspace-stack">
               <section class="workspace-section" aria-labelledby="workspace-minhs-title">
-                <div class="workspace-section-head">
-                  <h3 id="workspace-minhs-title">min_hs Work Monitor</h3>
-                  <p class="workspace-refresh-note">Tracks active processes, recent files, runtime duration, and ETA availability inside each server's min_hs folder.</p>
+                <div class="workspace-section-head workspace-section-head--split">
+                  <div class="workspace-section-head-copy">
+                    <h3 id="workspace-minhs-title">min_hs Work Monitor</h3>
+                    <p class="workspace-refresh-note" id="workspace-minhs-refresh-note" aria-live="polite">Press refresh to scan current min_hs tasks and runtime duration.</p>
+                  </div>
+                  <button class="workspace-button secondary workspace-refresh-button" id="workspace-minhs-refresh" data-workspace-refresh-source="minhs" type="button" aria-label="Refresh min_hs tasks" title="Refresh min_hs tasks">
+                    <svg class="workspace-refresh-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M20 6v5h-5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M4 18v-5h5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M18.4 9A7 7 0 0 0 6.2 6.6L4 9" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      <path d="M5.6 15A7 7 0 0 0 17.8 17.4L20 15" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="workspace-visually-hidden">Refresh min_hs tasks</span>
+                  </button>
                 </div>
                 <div class="workspace-minhs" id="workspace-minhs-work">
                   <div class="workspace-empty">No min_hs work snapshot yet.</div>
@@ -369,7 +380,7 @@ script_bundle: workspace
                     <h3 id="workspace-servers-title">Server Signals</h3>
                     <p class="workspace-refresh-note" id="workspace-server-refresh-note" aria-live="polite">Press refresh to run the local server probe.</p>
                   </div>
-                  <button class="workspace-button secondary workspace-refresh-button" id="workspace-server-refresh" type="button" aria-label="Refresh server signals" title="Refresh server signals">
+                  <button class="workspace-button secondary workspace-refresh-button" id="workspace-server-refresh" data-workspace-refresh-source="servers" type="button" aria-label="Refresh server signals" title="Refresh server signals">
                     <svg class="workspace-refresh-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                       <path d="M20 6v5h-5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                       <path d="M4 18v-5h5" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>

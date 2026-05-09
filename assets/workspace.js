@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260509c';
+  var WORKSPACE_CONTENT_VERSION = '20260509d';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -1319,23 +1319,33 @@
     return Math.max(0, Math.min(100, Math.round((toFiniteNumber(seconds, 0) / twelveHours) * 100)));
   }
 
-  function renderMinHsSummary(items) {
+  function getMinHsSnapshotStats(items) {
     var normalized = safeArray(items).map(function (item) {
       return normalizeMinHsWork(item && item.minHsWork);
     });
-    var activeProcesses = normalized.reduce(function (sum, work) { return sum + work.activeProcessCount; }, 0);
-    var recentFiles = normalized.reduce(function (sum, work) { return sum + work.recentFileCount; }, 0);
-    var longestSeconds = normalized.reduce(function (maxValue, work) {
-      return Math.max(maxValue, work.longestProcessSeconds);
-    }, 0);
-    var monitoredServers = normalized.filter(function (work) { return work.exists; }).length;
+    return {
+      hasWorkSnapshot: safeArray(items).some(function (item) {
+        return Boolean(item && item.minHsWork && typeof item.minHsWork === 'object');
+      }),
+      activeProcesses: normalized.reduce(function (sum, work) { return sum + work.activeProcessCount; }, 0),
+      recentFiles: normalized.reduce(function (sum, work) { return sum + work.recentFileCount; }, 0),
+      longestSeconds: normalized.reduce(function (maxValue, work) {
+        return Math.max(maxValue, work.longestProcessSeconds);
+      }, 0),
+      monitoredServers: normalized.filter(function (work) { return work.exists; }).length,
+      totalServers: normalized.length
+    };
+  }
+
+  function renderMinHsSummary(items) {
+    var stats = getMinHsSnapshotStats(items);
 
     return (
       '<div class="workspace-minhs-summary" aria-label="min_hs work summary">' +
-        '<div class="workspace-minhs-stat"><span>Active Processes</span><strong>' + escapeHtml(String(activeProcesses)) + '</strong></div>' +
-        '<div class="workspace-minhs-stat"><span>Recent Files</span><strong>' + escapeHtml(String(recentFiles)) + '</strong></div>' +
-        '<div class="workspace-minhs-stat"><span>Longest Runtime</span><strong>' + escapeHtml(formatDurationCompact(longestSeconds)) + '</strong></div>' +
-        '<div class="workspace-minhs-stat"><span>Detected Folders</span><strong>' + escapeHtml(monitoredServers + '/' + normalized.length) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Current Tasks</span><strong>' + escapeHtml(String(stats.activeProcesses)) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Recent Files</span><strong>' + escapeHtml(String(stats.recentFiles)) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Longest Runtime</span><strong>' + escapeHtml(formatDurationCompact(stats.longestSeconds)) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Detected Folders</span><strong>' + escapeHtml(stats.monitoredServers + '/' + stats.totalServers) + '</strong></div>' +
       '</div>'
     );
   }
@@ -1344,7 +1354,8 @@
     if (detailsRedacted) {
       return '<div class="workspace-minhs-empty">Process details are hidden in the public fallback. Refresh from the private helper to view them.</div>';
     }
-    var visibleProcesses = safeArray(processes).slice(0, 3);
+    var processItems = safeArray(processes);
+    var visibleProcesses = processItems.slice(0, 5);
     if (!visibleProcesses.length) {
       return '<div class="workspace-minhs-empty">No active min_hs process detected.</div>';
     }
@@ -1353,15 +1364,26 @@
         visibleProcesses.map(function (process) {
           var duration = formatDurationCompact(process && process.elapsed_seconds);
           var gpuMemory = toFiniteNumber(process && process.gpu_memory_mb, 0);
-          var resourceLabel = formatPercent(process && process.cpu_percent, 1) + ' CPU' + (gpuMemory ? ' | GPU ' + formatStorageValue(gpuMemory) : '');
+          var command = String((process && process.command) || 'task').trim() || 'task';
+          var pid = String((process && process.pid) || '').trim();
+          var user = String((process && process.user) || '').trim();
+          var resourceLabel = [
+            pid ? ('PID ' + pid) : '',
+            user ? ('User ' + user) : '',
+            formatPercent(process && process.cpu_percent, 1) + ' CPU',
+            gpuMemory ? ('GPU ' + formatStorageValue(gpuMemory)) : ''
+          ].filter(Boolean).join(' | ');
           return (
             '<li>' +
-              '<strong>' + escapeHtml(((process && process.command) || 'process') + ' | ' + duration) + '</strong>' +
+              '<strong>' + escapeHtml(command + ' - running for ' + duration) + '</strong>' +
               '<span>' + escapeHtml(resourceLabel) + '</span>' +
               '<span>' + escapeHtml(truncateText((process && process.args) || '', 116)) + '</span>' +
             '</li>'
           );
         }).join('') +
+        (processItems.length > visibleProcesses.length
+          ? '<li><strong>' + escapeHtml('+' + (processItems.length - visibleProcesses.length) + ' more current tasks') + '</strong><span>Summary count includes every detected min_hs process.</span></li>'
+          : '') +
       '</ul>'
     );
   }
@@ -1403,7 +1425,7 @@
       return Boolean(item && item.minHsWork && typeof item.minHsWork === 'object');
     });
     if (!hasWorkSnapshot) {
-      return '<div class="workspace-empty">No min_hs work snapshot yet. Press refresh to collect folder activity and process duration.</div>';
+      return '<div class="workspace-empty">No min_hs work snapshot yet. Press the refresh button above to scan current tasks and runtime duration.</div>';
     }
 
     return (
@@ -1428,7 +1450,7 @@
               '</div>' +
               '<div class="workspace-minhs-rail">' +
                 '<div class="workspace-minhs-rail-head">' +
-                  '<strong>Runtime so far</strong>' +
+                  '<strong>Longest task runtime</strong>' +
                   '<span>' + escapeHtml(formatDurationCompact(work.longestProcessSeconds)) + '</span>' +
                 '</div>' +
                 '<div class="workspace-minhs-rail-track" aria-hidden="true">' +
@@ -2271,6 +2293,7 @@
     setHtml('workspace-server-alerts', renderServerAlertSummary(workspaceState.serverItems));
     setHtml('workspace-servers', renderServerSignals(workspaceState.serverItems, workspaceState.selectedServerAlias, workspaceState.serverActionMode));
     setHtml('workspace-minhs-work', renderMinHsWorkMonitor(workspaceState.serverItems));
+    renderMinHsRefreshNote(workspaceState.serverItems, '');
   }
 
   function renderWorkspaceSignals() {
@@ -2295,15 +2318,44 @@
     note.textContent = prefix ? (prefix + ' ' + baseMessage) : baseMessage;
   }
 
+  function renderMinHsRefreshNote(items, prefix) {
+    var note = byId('workspace-minhs-refresh-note');
+    if (!note) return;
+    var safeItems = safeArray(items);
+    var stats = getMinHsSnapshotStats(safeItems);
+    var latestTimestamp = getLatestServerSnapshotTimestamp(safeItems);
+    var baseMessage = '';
+
+    if (!safeItems.length) {
+      baseMessage = 'No server snapshot yet. Press refresh to scan current min_hs tasks.';
+    } else if (!stats.hasWorkSnapshot) {
+      baseMessage = 'No min_hs work snapshot yet. Press refresh to scan current tasks and runtime duration.';
+    } else {
+      var taskText = stats.activeProcesses
+        ? ('Detected ' + stats.activeProcesses + ' current task' + (stats.activeProcesses === 1 ? '' : 's') + '; longest runtime ' + formatDurationCompact(stats.longestSeconds) + '.')
+        : 'No active min_hs task detected.';
+      var folderText = stats.monitoredServers + '/' + stats.totalServers + ' folders detected.';
+      var scanText = latestTimestamp ? (' Latest scan ' + formatRelativeAge(new Date(latestTimestamp).toISOString()) + '.') : '';
+      baseMessage = taskText + ' ' + folderText + scanText;
+    }
+
+    note.textContent = prefix ? (prefix + ' ' + baseMessage) : baseMessage;
+  }
+
   function setServerRefreshButtonState(isLoading) {
-    var button = byId('workspace-server-refresh');
-    if (!button) return;
     var loading = Boolean(isLoading);
-    button.disabled = loading;
-    button.classList.toggle('is-loading', loading);
-    button.setAttribute('aria-busy', loading ? 'true' : 'false');
-    button.setAttribute('aria-label', loading ? 'Refreshing server signals' : 'Refresh server signals');
-    button.setAttribute('title', loading ? 'Refreshing server signals' : 'Refresh server signals');
+    ['workspace-server-refresh', 'workspace-minhs-refresh'].forEach(function (buttonId) {
+      var button = byId(buttonId);
+      if (!button) return;
+      var isMinHsButton = buttonId === 'workspace-minhs-refresh';
+      var idleLabel = isMinHsButton ? 'Refresh min_hs tasks' : 'Refresh server signals';
+      var loadingLabel = isMinHsButton ? 'Refreshing min_hs tasks' : 'Refreshing server signals';
+      button.disabled = loading;
+      button.classList.toggle('is-loading', loading);
+      button.setAttribute('aria-busy', loading ? 'true' : 'false');
+      button.setAttribute('aria-label', loading ? loadingLabel : idleLabel);
+      button.setAttribute('title', loading ? loadingLabel : idleLabel);
+    });
   }
 
   function applyLocalWorkspaceIdentity() {
@@ -2362,6 +2414,7 @@
     syncInteractiveSelections();
     renderWorkspaceServers();
     renderServerRefreshNote(serverItems, '');
+    renderMinHsRefreshNote(serverItems, '');
   }
 
   async function loadWorkspaceLocalData(config) {
@@ -2385,6 +2438,7 @@
     renderWorkspaceServers();
     renderWorkspaceSignals();
     renderServerRefreshNote(serverItems, '');
+    renderMinHsRefreshNote(serverItems, '');
   }
 
   function bindInteractiveSections() {
@@ -2628,29 +2682,38 @@
     }
 
     function bindServerRefreshButton() {
-      var serverRefreshButton = byId('workspace-server-refresh');
-      if (!serverRefreshButton || serverRefreshButton.dataset.bound) return;
+      var refreshButtons = ['workspace-server-refresh', 'workspace-minhs-refresh'].map(function (buttonId) {
+        return byId(buttonId);
+      }).filter(Boolean);
+      if (!refreshButtons.length) return;
       if (!getServerRefreshEndpoint(config)) {
-        serverRefreshButton.hidden = true;
+        refreshButtons.forEach(function (button) {
+          button.hidden = true;
+        });
         return;
       }
-      serverRefreshButton.dataset.bound = 'true';
-      serverRefreshButton.addEventListener('click', function () {
-        if (serverRefreshInFlight) return;
-        serverRefreshInFlight = true;
-        var refreshStartedAt = Date.now();
-        setServerRefreshButtonState(true);
-        renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
-        refreshLocalServerSignals(config)
-          .catch(function () {
-            renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
-          })
-          .finally(async function () {
-            var remainingLoadingTime = WORKSPACE_REFRESH_MIN_LOADING_MS - (Date.now() - refreshStartedAt);
-            if (remainingLoadingTime > 0) await delay(remainingLoadingTime);
-            serverRefreshInFlight = false;
-            setServerRefreshButtonState(false);
-          });
+      refreshButtons.forEach(function (refreshButton) {
+        if (refreshButton.dataset.bound) return;
+        refreshButton.dataset.bound = 'true';
+        refreshButton.addEventListener('click', function () {
+          if (serverRefreshInFlight) return;
+          serverRefreshInFlight = true;
+          var refreshStartedAt = Date.now();
+          setServerRefreshButtonState(true);
+          renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
+          renderMinHsRefreshNote(workspaceState.serverItems, 'Scanning current min_hs tasks.');
+          refreshLocalServerSignals(config)
+            .catch(function () {
+              renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
+              renderMinHsRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
+            })
+            .finally(async function () {
+              var remainingLoadingTime = WORKSPACE_REFRESH_MIN_LOADING_MS - (Date.now() - refreshStartedAt);
+              if (remainingLoadingTime > 0) await delay(remainingLoadingTime);
+              serverRefreshInFlight = false;
+              setServerRefreshButtonState(false);
+            });
+        });
       });
     }
 
