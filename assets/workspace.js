@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260509e';
+  var WORKSPACE_CONTENT_VERSION = '20260509f';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -2300,11 +2300,19 @@
     setHtml('workspace-ops', renderOps(workspaceState.opsTargets, workspaceState.selectedOpsId));
   }
 
-  function renderWorkspaceServers() {
+  function renderWorkspaceServerSignals() {
     setHtml('workspace-server-alerts', renderServerAlertSummary(workspaceState.serverItems));
     setHtml('workspace-servers', renderServerSignals(workspaceState.serverItems, workspaceState.selectedServerAlias, workspaceState.serverActionMode));
+  }
+
+  function renderWorkspaceMinHsWork() {
     setHtml('workspace-minhs-work', renderMinHsWorkMonitor(workspaceState.serverItems));
     renderMinHsRefreshNote(workspaceState.serverItems, '');
+  }
+
+  function renderWorkspaceServers() {
+    renderWorkspaceServerSignals();
+    renderWorkspaceMinHsWork();
   }
 
   function renderWorkspaceSignals() {
@@ -2353,19 +2361,28 @@
     note.textContent = prefix ? (prefix + ' ' + baseMessage) : baseMessage;
   }
 
-  function setServerRefreshButtonState(isLoading) {
+  function getWorkspaceRefreshButtonLabels(source) {
+    var isMinHsButton = source === 'minhs';
+    return {
+      idle: isMinHsButton ? 'Refresh min_hs tasks' : 'Refresh server signals',
+      loading: isMinHsButton ? 'Refreshing min_hs tasks' : 'Refreshing server signals'
+    };
+  }
+
+  function setWorkspaceRefreshButtonState(source, isLoading) {
     var loading = Boolean(isLoading);
-    ['workspace-server-refresh', 'workspace-minhs-refresh'].forEach(function (buttonId) {
+    var buttonIds = source === 'all'
+      ? ['workspace-server-refresh', 'workspace-minhs-refresh']
+      : [source === 'minhs' ? 'workspace-minhs-refresh' : 'workspace-server-refresh'];
+    buttonIds.forEach(function (buttonId) {
       var button = byId(buttonId);
       if (!button) return;
-      var isMinHsButton = buttonId === 'workspace-minhs-refresh';
-      var idleLabel = isMinHsButton ? 'Refresh min_hs tasks' : 'Refresh server signals';
-      var loadingLabel = isMinHsButton ? 'Refreshing min_hs tasks' : 'Refreshing server signals';
+      var labels = getWorkspaceRefreshButtonLabels(buttonId === 'workspace-minhs-refresh' ? 'minhs' : 'servers');
       button.disabled = loading;
       button.classList.toggle('is-loading', loading);
       button.setAttribute('aria-busy', loading ? 'true' : 'false');
-      button.setAttribute('aria-label', loading ? loadingLabel : idleLabel);
-      button.setAttribute('title', loading ? loadingLabel : idleLabel);
+      button.setAttribute('aria-label', loading ? labels.loading : labels.idle);
+      button.setAttribute('title', loading ? labels.loading : labels.idle);
     });
   }
 
@@ -2411,7 +2428,7 @@
     return await requestServerSignalRefresh(endpoint, config);
   }
 
-  async function refreshLocalServerSignals(config) {
+  async function refreshLocalServerSignals(config, surface) {
     var helperFallback = await loadServerSignalsFromRefreshHelper(config);
     if (helperFallback) {
       workspaceServerFallbackCache = helperFallback;
@@ -2423,9 +2440,15 @@
     workspaceState.serverItems = serverItems;
     workspaceState.serverActionMode = serverItems.length ? 'live' : 'sync';
     syncInteractiveSelections();
-    renderWorkspaceServers();
-    renderServerRefreshNote(serverItems, '');
-    renderMinHsRefreshNote(serverItems, '');
+    if (surface === 'minhs') {
+      renderWorkspaceMinHsWork();
+    } else if (surface === 'servers') {
+      renderWorkspaceServerSignals();
+      renderServerRefreshNote(serverItems, '');
+    } else {
+      renderWorkspaceServers();
+      renderServerRefreshNote(serverItems, '');
+    }
   }
 
   async function loadWorkspaceLocalData(config) {
@@ -2538,7 +2561,7 @@
         var closeButton = event.target.closest('[data-workspace-server-close]');
         if (closeButton) {
           workspaceState.selectedServerAlias = null;
-          renderWorkspaceServers();
+          renderWorkspaceServerSignals();
           return;
         }
         var trigger = event.target.closest('[data-workspace-server-trigger]');
@@ -2546,7 +2569,7 @@
         var serverAlias = String(trigger.getAttribute('data-workspace-server-trigger') || '');
         var nextAlias = workspaceState.selectedServerAlias === serverAlias ? null : serverAlias;
         workspaceState.selectedServerAlias = nextAlias;
-        renderWorkspaceServers();
+        renderWorkspaceServerSignals();
         if (nextAlias) revealSectionDetail('workspace-server-detail');
       });
     }
@@ -2677,7 +2700,10 @@
     var resendConfirmation = byId('workspace-resend-confirmation');
     var emailInput = byId('workspace-email');
     var passwordInput = byId('workspace-password');
-    var serverRefreshInFlight = false;
+    var refreshInFlightBySource = {
+      servers: false,
+      minhs: false
+    };
     var localHelperIdentityEmail = '';
 
     if (emailInput) {
@@ -2692,7 +2718,7 @@
       }
     }
 
-    function bindServerRefreshButton() {
+    function bindWorkspaceRefreshButtons() {
       var refreshButtons = ['workspace-server-refresh', 'workspace-minhs-refresh'].map(function (buttonId) {
         return byId(buttonId);
       }).filter(Boolean);
@@ -2707,22 +2733,29 @@
         if (refreshButton.dataset.bound) return;
         refreshButton.dataset.bound = 'true';
         refreshButton.addEventListener('click', function () {
-          if (serverRefreshInFlight) return;
-          serverRefreshInFlight = true;
+          var source = refreshButton.getAttribute('data-workspace-refresh-source') === 'minhs' ? 'minhs' : 'servers';
+          if (refreshInFlightBySource[source]) return;
+          refreshInFlightBySource[source] = true;
           var refreshStartedAt = Date.now();
-          setServerRefreshButtonState(true);
-          renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
-          renderMinHsRefreshNote(workspaceState.serverItems, 'Scanning current min_hs tasks.');
-          refreshLocalServerSignals(config)
+          setWorkspaceRefreshButtonState(source, true);
+          if (source === 'minhs') {
+            renderMinHsRefreshNote(workspaceState.serverItems, 'Scanning current min_hs tasks.');
+          } else {
+            renderServerRefreshNote(workspaceState.serverItems, 'Running local server probe.');
+          }
+          refreshLocalServerSignals(config, source)
             .catch(function () {
-              renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
-              renderMinHsRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
+              if (source === 'minhs') {
+                renderMinHsRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
+              } else {
+                renderServerRefreshNote(workspaceState.serverItems, 'Refresh did not complete.');
+              }
             })
             .finally(async function () {
               var remainingLoadingTime = WORKSPACE_REFRESH_MIN_LOADING_MS - (Date.now() - refreshStartedAt);
               if (remainingLoadingTime > 0) await delay(remainingLoadingTime);
-              serverRefreshInFlight = false;
-              setServerRefreshButtonState(false);
+              refreshInFlightBySource[source] = false;
+              setWorkspaceRefreshButtonState(source, false);
             });
         });
       });
@@ -2762,10 +2795,10 @@
       setShellMode('private');
       setView('dashboard');
       setStatus('Workspace unlocked locally.', 'success');
-      bindServerRefreshButton();
-      setServerRefreshButtonState(true);
+      bindWorkspaceRefreshButtons();
+      setWorkspaceRefreshButtonState('all', true);
       await loadWorkspaceLocalData(config);
-      setServerRefreshButtonState(false);
+      setWorkspaceRefreshButtonState('all', false);
     }
 
     if (isLocalMode(config)) {
@@ -2775,10 +2808,10 @@
       setShellMode('private');
       setView('dashboard');
       applyLocalWorkspaceIdentity();
-      bindServerRefreshButton();
-      setServerRefreshButtonState(true);
+      bindWorkspaceRefreshButtons();
+      setWorkspaceRefreshButtonState('all', true);
       await loadWorkspaceLocalData(config);
-      setServerRefreshButtonState(false);
+      setWorkspaceRefreshButtonState('all', false);
       return;
     }
 
@@ -3089,7 +3122,7 @@
       privateSessionActive = true;
       startWorkspaceRefresh();
       startRealtimeSubscriptions();
-      bindServerRefreshButton();
+      bindWorkspaceRefreshButtons();
       renderWorkspaceOps();
       await refreshWorkspaceData({ force: true, surfaceError: true });
     }
