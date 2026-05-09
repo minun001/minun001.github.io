@@ -304,10 +304,63 @@
       payload = await response.json();
     } catch (_error) {}
     if (!response.ok || payload.ok === false) {
-      var message = (payload && (payload.detail || payload.error || payload.message)) || 'Request failed.';
-      throw new Error(typeof message === 'string' ? message : JSON.stringify(message));
+      var message = (payload && (payload.detail || payload.error || payload.message)) || 'Request failed with status ' + response.status + '.';
+      var error = new Error(typeof message === 'string' ? message : JSON.stringify(message));
+      error.status = response.status;
+      throw error;
     }
     return payload;
+  }
+
+  function classifyBridgeError(error) {
+    var status = error && error.status;
+    var message = error && error.message ? error.message : '';
+    var lower = message.toLowerCase();
+
+    if (status === 401 || status === 403 || lower.indexOf('login required') !== -1 || lower.indexOf('unauthorized') !== -1) {
+      return {
+        label: 'Auth required',
+        tone: 'auth',
+        message: 'Your Workspace session is not active for the helper. Sign in from /workspace/ first, then return here.'
+      };
+    }
+
+    if (status === 404 || lower.indexOf('not found') !== -1) {
+      return {
+        label: 'Helper update needed',
+        tone: 'warn',
+        message: 'The Workspace helper is reachable, but it does not expose the TimesFM bridge yet. Restart the helper with the latest repository code.'
+      };
+    }
+
+    if (lower.indexOf('not configured') !== -1 || (lower.indexOf('timesfm api') !== -1 && lower.indexOf('configured') !== -1)) {
+      return {
+        label: 'GPU bridge setup needed',
+        tone: 'warn',
+        message: 'Workspace is signed in, but the helper has not been started with TimesFM API settings yet. Configure TIMESFM_API_BASE_URL and TIMESFM_API_TOKEN on the helper.'
+      };
+    }
+
+    if (status === 502 || status === 504 || lower.indexOf('cannot reach') !== -1 || lower.indexOf('connection') !== -1 || lower.indexOf('timeout') !== -1) {
+      return {
+        label: 'aibig9 offline',
+        tone: 'warn',
+        message: 'The Workspace helper is ready, but it cannot reach the aibig9 TimesFM backend. Check the GPU server process or tunnel.'
+      };
+    }
+
+    return {
+      label: 'GPU bridge unavailable',
+      tone: 'warn',
+      message: message || 'Cannot reach the aibig9 TimesFM backend through the Workspace helper yet.'
+    };
+  }
+
+  function showBridgeError(error) {
+    var info = classifyBridgeError(error);
+    setStatus(info.label, info.tone);
+    setMessage(info.message, info.tone === 'auth' ? 'error' : 'warn');
+    return info;
   }
 
   function buildHelperAuthHeaders() {
@@ -325,7 +378,7 @@
   async function checkApiHealth() {
     var config = getConfig();
     if (!state.apiBaseUrl) {
-      setStatus('API disconnected', 'error');
+      setStatus('Workspace helper unavailable', 'error');
       setMessage('Cannot reach the Workspace helper. Sign in from /workspace/ again, then reopen this tool.', 'error');
       return null;
     }
@@ -339,13 +392,14 @@
       });
       if (payload.cuda_available === false || payload.device === 'cpu') {
         setStatus('GPU unavailable', 'warn');
+        setMessage('The TimesFM backend responded, but CUDA is not available. Forecasts may be slow until aibig9 is using GPU.', 'warn');
       } else {
-        setStatus('aibig9 API connected', 'ok');
+        setStatus('aibig9 GPU ready', 'ok');
+        setMessage('aibig9 TimesFM backend is reachable through the Workspace helper.', 'neutral');
       }
       return payload;
     } catch (error) {
-      setStatus('API disconnected', 'error');
-      setMessage(error.message || 'Cannot reach the aibig9 TimesFM API through the Workspace helper.', 'error');
+      showBridgeError(error);
       return null;
     }
   }
@@ -358,7 +412,8 @@
       return;
     }
     if (!state.apiBaseUrl) {
-      setMessage('Cannot reach the aibig9 TimesFM API through the Workspace helper. Check the helper process and its TimesFM settings.', 'error');
+      setStatus('Workspace helper unavailable', 'error');
+      setMessage('Cannot reach the Workspace helper. Sign in from /workspace/ again, then reopen this tool.', 'error');
       return;
     }
     var form = new FormData();
@@ -376,7 +431,7 @@
       renderPreview(payload);
       setMessage('Preview loaded. Select columns and forecast windows next.', 'neutral');
     } catch (error) {
-      setMessage(error.message || 'Could not parse the file. Use CSV/TSV with one timestamp column and one numeric target column.', 'error');
+      showBridgeError(error);
     } finally {
       setBusy(button, false, 'Preview columns');
     }
@@ -545,6 +600,11 @@
       setMessage('Could not parse the file. Use CSV/TSV with one timestamp column and one numeric target column.', 'error');
       return;
     }
+    if (!state.apiBaseUrl) {
+      setStatus('Workspace helper unavailable', 'error');
+      setMessage('Cannot reach the Workspace helper. Sign in from /workspace/ again, then reopen this tool.', 'error');
+      return;
+    }
     setBusy(button, true, 'Running on aibig9...');
     setMessage('Submitting forecast request to aibig9. Large models can take a moment.', 'neutral');
     try {
@@ -558,7 +618,7 @@
       });
       renderResult(payload);
     } catch (error) {
-      setMessage(error.message || 'Forecast failed. Check the Workspace helper, aibig9 API process, CUDA, and input windows.', 'error');
+      showBridgeError(error);
     } finally {
       setBusy(button, false, 'Run TimesFM forecast on aibig9');
     }

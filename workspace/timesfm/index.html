@@ -12,175 +12,196 @@ script_bundle: timesfm
 <section class="timesfm-page" data-timesfm-page>
   <div class="timesfm-topbar">
     <a class="timesfm-back-link" href="{{ "/workspace/" | relative_url }}">Back to Workspace</a>
-    <span class="timesfm-status-chip" id="timesfm-api-status" data-tone="neutral" role="status" aria-live="polite">Checking API...</span>
+    <span class="timesfm-status-chip" id="timesfm-api-status" data-tone="neutral" role="status" aria-live="polite">Checking workspace...</span>
   </div>
 
   <header class="timesfm-hero">
     <div>
       <p class="eyebrow">Private Workspace Tool</p>
       <h1>TimesFM Forecaster</h1>
-      <p class="timesfm-hero-copy">Upload a time-series CSV, choose forecast windows, and run zero-shot TimesFM inference through your authenticated Workspace helper and the aibig9 GPU API.</p>
+      <p class="timesfm-hero-copy">Drop a time-series file, map columns, set forecast windows, and send a zero-shot TimesFM job through your Workspace helper to aibig9.</p>
     </div>
     <aside class="timesfm-note" aria-label="TimesFM safety note">
       <strong>No fine-tuning</strong>
-      <span>The selected train window is used as TimesFM context; validation is used only for zero-shot backtesting.</span>
+      <span>Train is historical context. Validation is only a zero-shot backtest. Model weights are never updated.</span>
     </aside>
   </header>
 
   <article class="timesfm-panel timesfm-auth-gate" id="timesfm-auth-gate" hidden>
     <p class="eyebrow">Workspace session required</p>
-    <h2>Please sign in from /workspace/ first.</h2>
-    <p>This forecasting UI is only visible after the existing Workspace helper session is valid.</p>
+    <h2>Sign in once, then return here automatically.</h2>
+    <p>This page uses the same Workspace helper login. After sign-in, you will be sent back to the TimesFM forecaster.</p>
     <a class="timesfm-button" href="{{ "/workspace/?next=/workspace/timesfm/" | relative_url }}">Open Workspace Login</a>
   </article>
 
   <div class="timesfm-app" id="timesfm-app" hidden>
-    <section class="timesfm-grid timesfm-grid--setup" aria-label="TimesFM setup">
-      <article class="timesfm-panel">
-        <div class="timesfm-panel-head">
-          <div>
-            <p class="eyebrow">1. Workspace-authenticated API</p>
-            <h2>aibig9 GPU connection</h2>
+    <section class="timesfm-workbench" aria-label="TimesFM forecasting workbench">
+      <aside class="timesfm-rail" aria-label="Workspace and model status">
+        <article class="timesfm-panel timesfm-rail-card">
+          <p class="eyebrow">Secure path</p>
+          <h2>Workspace session</h2>
+          <div class="timesfm-trust-card">
+            <strong>Already authenticated</strong>
+            <span>The browser sends only your Workspace helper session. The aibig9 token stays on the helper/server side.</span>
           </div>
-          <button class="timesfm-button timesfm-button--soft" id="timesfm-health-button" type="button">Check GPU API</button>
-        </div>
-        <div class="timesfm-trust-card">
-          <strong>Uses your existing Workspace session</strong>
-          <span>The browser sends only the Workspace helper session. The aibig9 API token stays on the helper/server side and is never typed into or stored by this page.</span>
-        </div>
-        <p class="timesfm-help">If the status is disconnected, restart the Workspace helper with `TIMESFM_API_BASE_URL` and `TIMESFM_API_TOKEN` configured.</p>
-      </article>
+          <button class="timesfm-button timesfm-button--soft" id="timesfm-health-button" type="button">Check GPU bridge</button>
+          <p class="timesfm-help">If the GPU bridge is not ready, you can still prepare the job. Preview and forecast require the helper/backend to be running.</p>
+        </article>
 
-      <article class="timesfm-panel">
-        <div class="timesfm-panel-head">
-          <div>
-            <p class="eyebrow">2. Data</p>
-            <h2>Upload time-series file</h2>
-          </div>
-          <span class="timesfm-pill">Max 25 MB</span>
-        </div>
-        <label class="timesfm-dropzone" id="timesfm-dropzone" for="timesfm-file-input">
-          <input id="timesfm-file-input" type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values">
-          <span class="timesfm-drop-title">Drop CSV here</span>
-          <span class="timesfm-drop-copy">CSV and TSV files are accepted. The file is not uploaded until you preview or forecast.</span>
-        </label>
-        <div class="timesfm-file-meta" id="timesfm-file-meta">No file selected.</div>
-        <div class="timesfm-actions">
-          <button class="timesfm-button" id="timesfm-preview-button" type="button">Preview columns</button>
-        </div>
-      </article>
-    </section>
+        <article class="timesfm-panel timesfm-rail-card">
+          <p class="eyebrow">Workflow</p>
+          <ol class="timesfm-steps">
+            <li><span>1</span><strong>Drop data</strong><small>CSV or TSV, up to 25 MB</small></li>
+            <li><span>2</span><strong>Map columns</strong><small>Timestamp, target, optional series</small></li>
+            <li><span>3</span><strong>Set windows</strong><small>Train context, validation, test</small></li>
+            <li><span>4</span><strong>Run on aibig9</strong><small>Zero-shot TimesFM inference</small></li>
+          </ol>
+        </article>
 
-    <section class="timesfm-grid timesfm-grid--controls" aria-label="TimesFM controls">
-      <article class="timesfm-panel">
-        <div class="timesfm-panel-head">
-          <div>
-            <p class="eyebrow">3. Columns</p>
-            <h2>Preview and select fields</h2>
+        <article class="timesfm-panel timesfm-rail-card">
+          <p class="eyebrow">Model contract</p>
+          <div class="timesfm-definition-stack">
+            <span>No fine-tuning</span>
+            <span>Train = historical context</span>
+            <span>Validation = zero-shot backtest</span>
+            <span>Test = requested forecast window</span>
           </div>
-        </div>
-        <div class="timesfm-preview-summary" id="timesfm-preview-summary">Preview a file to detect columns and sample rows.</div>
-        <div class="timesfm-form-grid">
-          <label class="timesfm-field">
-            <span>Timestamp column</span>
-            <select id="timesfm-timestamp-col"></select>
-          </label>
-          <label class="timesfm-field">
-            <span>Target column</span>
-            <select id="timesfm-target-col"></select>
-          </label>
-          <label class="timesfm-field">
-            <span>Series ID column optional</span>
-            <select id="timesfm-series-col"></select>
-          </label>
-          <label class="timesfm-field">
-            <span>Selected series ID optional</span>
-            <select id="timesfm-series-id"></select>
-          </label>
-        </div>
-        <div class="timesfm-table-wrap" id="timesfm-sample-table" aria-live="polite"></div>
-      </article>
+        </article>
+      </aside>
 
-      <article class="timesfm-panel">
-        <div class="timesfm-panel-head">
-          <div>
-            <p class="eyebrow">4. Windows</p>
-            <h2>Train, validation, and test</h2>
+      <div class="timesfm-main">
+        <section class="timesfm-panel timesfm-upload-panel" aria-label="Upload data">
+          <div class="timesfm-panel-head">
+            <div>
+              <p class="eyebrow">Start here</p>
+              <h2>Upload your time-series file</h2>
+            </div>
+            <span class="timesfm-pill">CSV / TSV</span>
           </div>
-        </div>
-        <div class="timesfm-definition-row">
-          <span>Train = historical context</span>
-          <span>Validation = zero-shot backtest</span>
-          <span>Test = requested forecast window</span>
-        </div>
-        <div class="timesfm-form-grid">
-          <label class="timesfm-field">
-            <span>Train start</span>
-            <input id="timesfm-train-start" type="datetime-local">
+          <label class="timesfm-dropzone" id="timesfm-dropzone" for="timesfm-file-input">
+            <input id="timesfm-file-input" type="file" accept=".csv,.tsv,text/csv,text/tab-separated-values">
+            <span class="timesfm-drop-title">Drop CSV here</span>
+            <span class="timesfm-drop-copy">The file is held locally until you click Preview or Forecast.</span>
           </label>
-          <label class="timesfm-field">
-            <span>Train end</span>
-            <input id="timesfm-train-end" type="datetime-local">
-          </label>
-          <label class="timesfm-field">
-            <span>Test start</span>
-            <input id="timesfm-test-start" type="datetime-local">
-          </label>
-          <label class="timesfm-field">
-            <span>Test end</span>
-            <input id="timesfm-test-end" type="datetime-local">
-          </label>
-          <label class="timesfm-field">
-            <span>Validation mode</span>
-            <select id="timesfm-validation-mode">
-              <option value="auto" selected>Auto</option>
-              <option value="manual">Manual validation ratio</option>
-            </select>
-          </label>
-          <label class="timesfm-field">
-            <span>Validation ratio</span>
-            <input id="timesfm-validation-ratio" type="number" min="0.05" max="0.5" step="0.05" value="0.2">
-          </label>
-          <label class="timesfm-field">
-            <span>Context mode</span>
-            <select id="timesfm-context-mode">
-              <option value="auto" selected>Auto</option>
-              <option value="manual">Manual candidates</option>
-            </select>
-          </label>
-        </div>
-        <fieldset class="timesfm-context-candidates">
-          <legend>Context length candidates</legend>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="128">128</label>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="256">256</label>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="512">512</label>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="1024" checked>1024</label>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="2048">2048</label>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="4096">4096</label>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="8192">8192</label>
-          <label><input type="checkbox" name="timesfm-context-candidate" value="16384">16384</label>
-        </fieldset>
-        <div class="timesfm-actions">
+          <div class="timesfm-upload-footer">
+            <div class="timesfm-file-meta" id="timesfm-file-meta">No file selected.</div>
+            <button class="timesfm-button" id="timesfm-preview-button" type="button">Preview columns</button>
+          </div>
+        </section>
+
+        <section class="timesfm-grid timesfm-grid--controls" aria-label="TimesFM controls">
+          <article class="timesfm-panel">
+            <div class="timesfm-panel-head">
+              <div>
+                <p class="eyebrow">Columns</p>
+                <h2>Preview and map fields</h2>
+              </div>
+            </div>
+            <div class="timesfm-preview-summary" id="timesfm-preview-summary">Preview a file to detect columns and sample rows.</div>
+            <div class="timesfm-form-grid">
+              <label class="timesfm-field">
+                <span>Timestamp column</span>
+                <select id="timesfm-timestamp-col"></select>
+              </label>
+              <label class="timesfm-field">
+                <span>Target column</span>
+                <select id="timesfm-target-col"></select>
+              </label>
+              <label class="timesfm-field">
+                <span>Series ID column optional</span>
+                <select id="timesfm-series-col"></select>
+              </label>
+              <label class="timesfm-field">
+                <span>Selected series ID optional</span>
+                <select id="timesfm-series-id"></select>
+              </label>
+            </div>
+            <div class="timesfm-table-wrap" id="timesfm-sample-table" aria-live="polite"></div>
+          </article>
+
+          <article class="timesfm-panel">
+            <div class="timesfm-panel-head">
+              <div>
+                <p class="eyebrow">Windows</p>
+                <h2>Context and forecast range</h2>
+              </div>
+            </div>
+            <div class="timesfm-form-grid">
+              <label class="timesfm-field">
+                <span>Train start</span>
+                <input id="timesfm-train-start" type="datetime-local">
+              </label>
+              <label class="timesfm-field">
+                <span>Train end</span>
+                <input id="timesfm-train-end" type="datetime-local">
+              </label>
+              <label class="timesfm-field">
+                <span>Test start</span>
+                <input id="timesfm-test-start" type="datetime-local">
+              </label>
+              <label class="timesfm-field">
+                <span>Test end</span>
+                <input id="timesfm-test-end" type="datetime-local">
+              </label>
+              <label class="timesfm-field">
+                <span>Validation mode</span>
+                <select id="timesfm-validation-mode">
+                  <option value="auto" selected>Auto</option>
+                  <option value="manual">Manual validation ratio</option>
+                </select>
+              </label>
+              <label class="timesfm-field">
+                <span>Validation ratio</span>
+                <input id="timesfm-validation-ratio" type="number" min="0.05" max="0.5" step="0.05" value="0.2">
+              </label>
+              <label class="timesfm-field">
+                <span>Context mode</span>
+                <select id="timesfm-context-mode">
+                  <option value="auto" selected>Auto</option>
+                  <option value="manual">Manual candidates</option>
+                </select>
+              </label>
+            </div>
+            <fieldset class="timesfm-context-candidates">
+              <legend>Context length candidates</legend>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="128">128</label>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="256">256</label>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="512">512</label>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="1024" checked>1024</label>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="2048">2048</label>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="4096">4096</label>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="8192">8192</label>
+              <label><input type="checkbox" name="timesfm-context-candidate" value="16384">16384</label>
+            </fieldset>
+          </article>
+        </section>
+
+        <section class="timesfm-run-strip" aria-label="Run TimesFM forecast">
+          <div>
+            <p class="eyebrow">Ready to run</p>
+            <h2>Zero-shot forecast on aibig9</h2>
+            <p>TimesFM uses the selected train window as context. No model weights are updated.</p>
+          </div>
           <button class="timesfm-button timesfm-button--run" id="timesfm-forecast-button" type="button">Run TimesFM forecast on aibig9</button>
-        </div>
-      </article>
-    </section>
+        </section>
 
-    <section class="timesfm-panel timesfm-results" aria-label="TimesFM results">
-      <div class="timesfm-panel-head">
-        <div>
-          <p class="eyebrow">5. Results</p>
-          <h2>Forecast output</h2>
-        </div>
-        <div class="timesfm-actions">
-          <button class="timesfm-button timesfm-button--soft" id="timesfm-download-csv" type="button" disabled>Download forecast CSV</button>
-          <button class="timesfm-button timesfm-button--soft" id="timesfm-download-json" type="button" disabled>Download full result JSON</button>
-        </div>
+        <section class="timesfm-panel timesfm-results" aria-label="TimesFM results">
+          <div class="timesfm-panel-head">
+            <div>
+              <p class="eyebrow">Results</p>
+              <h2>Forecast output</h2>
+            </div>
+            <div class="timesfm-actions">
+              <button class="timesfm-button timesfm-button--soft" id="timesfm-download-csv" type="button" disabled>Download forecast CSV</button>
+              <button class="timesfm-button timesfm-button--soft" id="timesfm-download-json" type="button" disabled>Download full result JSON</button>
+            </div>
+          </div>
+          <div class="timesfm-message" id="timesfm-message" role="status" aria-live="polite">Prepare a CSV, preview columns, then run a forecast.</div>
+          <div class="timesfm-result-grid" id="timesfm-result-meta"></div>
+          <div class="timesfm-metrics-grid" id="timesfm-metrics"></div>
+          <div class="timesfm-chart" id="timesfm-chart"></div>
+        </section>
       </div>
-      <div class="timesfm-message" id="timesfm-message" role="status" aria-live="polite">Run a forecast to see model details, metrics, and the chart.</div>
-      <div class="timesfm-result-grid" id="timesfm-result-meta"></div>
-      <div class="timesfm-metrics-grid" id="timesfm-metrics"></div>
-      <div class="timesfm-chart" id="timesfm-chart"></div>
     </section>
   </div>
 </section>
