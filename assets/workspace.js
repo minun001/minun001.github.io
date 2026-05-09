@@ -158,22 +158,55 @@
   }
 
   function getHelperSessionToken(config) {
+    var key = getHelperTokenStorageKey(config);
     try {
-      return window.sessionStorage.getItem(getHelperTokenStorageKey(config)) || '';
-    } catch (_error) {
-      return '';
-    }
+      var sessionToken = window.sessionStorage.getItem(key) || '';
+      if (sessionToken) return sessionToken;
+    } catch (_error) {}
+    try {
+      return window.localStorage.getItem(key) || '';
+    } catch (_error) {}
+    return '';
   }
 
   function setHelperSessionToken(config, token) {
+    var key = getHelperTokenStorageKey(config);
     try {
-      var key = getHelperTokenStorageKey(config);
       if (token) {
         window.sessionStorage.setItem(key, token);
       } else {
         window.sessionStorage.removeItem(key);
       }
     } catch (_error) {}
+    try {
+      if (token) {
+        window.localStorage.setItem(key, token);
+      } else {
+        window.localStorage.removeItem(key);
+      }
+    } catch (_error) {}
+  }
+
+  function getWorkspaceReturnPath() {
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      var raw = String(params.get('next') || params.get('returnTo') || '').trim();
+      if (!raw) return '';
+      var target = new URL(raw, window.location.origin);
+      if (target.origin !== window.location.origin) return '';
+      if (!target.pathname || target.pathname.indexOf('/workspace/') !== 0) return '';
+      if (target.pathname === '/workspace/' || target.pathname === '/workspace/index.html') return '';
+      return target.pathname + target.search + target.hash;
+    } catch (_error) {
+      return '';
+    }
+  }
+
+  function redirectToWorkspaceReturnPath() {
+    var target = getWorkspaceReturnPath();
+    if (!target) return false;
+    window.location.assign(target);
+    return true;
   }
 
   function getServerRefreshEndpoint(config) {
@@ -2724,6 +2757,7 @@
 
     async function unlockLocalHelperWorkspace(email) {
       localHelperIdentityEmail = String(email || localHelperIdentityEmail || getWorkspaceEmail() || '').trim().toLowerCase();
+      if (redirectToWorkspaceReturnPath()) return;
       setIdentity(getLocalHelperUser(), config);
       setShellMode('private');
       setView('dashboard');

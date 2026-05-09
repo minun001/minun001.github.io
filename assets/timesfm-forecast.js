@@ -127,7 +127,8 @@
   }
 
   function getHelperToken(helperBaseUrl) {
-    return getSessionValue(WORKSPACE_HELPER_TOKEN_PREFIX + helperBaseUrl);
+    var key = WORKSPACE_HELPER_TOKEN_PREFIX + helperBaseUrl;
+    return getSessionValue(key) || getStoredValue(key);
   }
 
   async function checkWorkspaceSession() {
