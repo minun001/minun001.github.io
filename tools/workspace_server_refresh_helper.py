@@ -483,7 +483,7 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
 
         try:
             payload = workspace_server_sync.collect_payload(state.config_path, alias)
-            public_payload = workspace_server_sync.build_public_payload(payload)
+            public_payload = workspace_server_sync.build_public_payload(payload, include_private_details=True)
             if state.fallback_output:
                 workspace_server_sync.write_payload_file(state.fallback_output, payload)
             self.write_json(200, {"ok": True, **public_payload})

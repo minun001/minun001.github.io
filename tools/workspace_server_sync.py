@@ -104,6 +104,7 @@ def active_servers(config: dict[str, Any], alias_filter: str | None) -> list[dic
                 "label": label,
                 "ssh_alias": str(raw.get("ssh_alias") or alias).strip() or alias,
                 "root": str(raw.get("root") or "").strip(),
+                "min_hs_root": str(raw.get("min_hs_root") or "").strip(),
                 "root_label": derive_root_label(raw),
                 "projects": raw.get("projects") if isinstance(raw.get("projects"), list) else [],
                 "sort_order": int(raw.get("sort_order") or ((index + 1) * 10)),
@@ -115,15 +116,18 @@ def active_servers(config: dict[str, Any], alias_filter: str | None) -> list[dic
 def build_probe_script(server: dict[str, Any]) -> str:
     root = json.dumps(server.get("root") or "/")
     projects = json.dumps(server.get("projects") or [])
+    min_hs_root = json.dumps(server.get("min_hs_root") or "")
     return f"""
 import json
 import os
+import re
 import subprocess
 import time
 from datetime import datetime, timezone
 
 root = {root}
 projects = {projects}
+configured_min_hs_root = {min_hs_root}
 
 def run(cmd):
     result = subprocess.run(cmd, shell=True, text=True, capture_output=True)
@@ -204,6 +208,12 @@ def parse_optional_text(raw, default=None):
         return default
     return value
 
+def iso_from_timestamp(timestamp):
+    try:
+        return datetime.fromtimestamp(float(timestamp), timezone.utc).isoformat().replace("+00:00", "Z")
+    except Exception:
+        return None
+
 def disk_info(path):
     if not path:
         return {{"used_text": "", "percent": 0.0}}
@@ -260,6 +270,196 @@ def gpu_processes():
         )
     return rows
 
+def unique_paths(items):
+    seen = set()
+    resolved = []
+    for item in items:
+        value = str(item or "").strip()
+        if not value:
+            continue
+        value = os.path.expanduser(value)
+        normalized = os.path.normpath(value)
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        resolved.append(normalized)
+    return resolved
+
+def resolve_min_hs_root():
+    candidates = []
+    if configured_min_hs_root:
+        candidates.append(configured_min_hs_root)
+    if root:
+        candidates.append(root)
+        candidates.append(os.path.join(root, "min_hs"))
+    for project in projects:
+        if not isinstance(project, str):
+            continue
+        candidates.append(project)
+        candidates.append(os.path.join(project, "min_hs"))
+    home = os.path.expanduser("~")
+    user = os.environ.get("USER") or os.environ.get("LOGNAME") or ""
+    candidates.extend([
+        os.path.join(home, "min_hs"),
+        "/home/min_hs",
+        os.path.join("/home", user, "min_hs") if user else "",
+        "/workspace/min_hs",
+        "/data/min_hs",
+        "/mnt/data/min_hs",
+    ])
+    for candidate in unique_paths(candidates):
+        try:
+            if os.path.isdir(candidate) and os.path.basename(os.path.normpath(candidate)) == "min_hs":
+                return candidate
+        except Exception:
+            continue
+    return ""
+
+def file_kind(path):
+    suffix = os.path.splitext(path)[1].lower().lstrip(".")
+    if not suffix:
+        return "file"
+    if suffix in ("py", "ipynb", "js", "ts", "tsx", "jsx", "sh", "ps1", "sql", "r"):
+        return "code"
+    if suffix in ("log", "out", "err", "txt", "md", "csv", "json", "yaml", "yml"):
+        return suffix
+    if suffix in ("pt", "pth", "ckpt", "safetensors", "onnx", "pkl"):
+        return "model"
+    return suffix
+
+def collect_recent_min_hs_files(min_hs_path):
+    if not min_hs_path:
+        return []
+    skip_dirs = {{
+        ".git", ".hg", ".svn", "__pycache__", "node_modules", ".venv", "venv",
+        "env", ".mypy_cache", ".pytest_cache", ".ruff_cache", ".cache",
+    }}
+    now = time.time()
+    rows = []
+    visited_dirs = 0
+    visited_files = 0
+    max_dirs = 650
+    max_files = 4500
+    try:
+        for current_root, dirs, files in os.walk(min_hs_path):
+            dirs[:] = [name for name in dirs if name not in skip_dirs and not name.startswith(".")]
+            visited_dirs += 1
+            if visited_dirs > max_dirs:
+                break
+            for filename in files:
+                if filename.startswith("."):
+                    continue
+                visited_files += 1
+                if visited_files > max_files:
+                    break
+                full_path = os.path.join(current_root, filename)
+                try:
+                    stat = os.stat(full_path)
+                except OSError:
+                    continue
+                relative_path = os.path.relpath(full_path, min_hs_path)
+                if relative_path.startswith(".."):
+                    relative_path = filename
+                rows.append({{
+                    "relative_path": relative_path.replace(os.sep, "/"),
+                    "modified_at": iso_from_timestamp(stat.st_mtime),
+                    "age_seconds": max(0, int(now - stat.st_mtime)),
+                    "size_bytes": int(stat.st_size),
+                    "kind": file_kind(filename),
+                }})
+            if visited_files > max_files:
+                break
+    except Exception:
+        return []
+    rows.sort(key=lambda item: item.get("age_seconds", 10**12))
+    return rows[:10]
+
+def sanitize_process_args(raw, min_hs_path):
+    text = str(raw or "")
+    if min_hs_path:
+        text = text.replace(min_hs_path.rstrip("/"), "min_hs")
+    home = os.path.expanduser("~")
+    if home and home != "~":
+        text = text.replace(home.rstrip("/"), "~")
+    text = re.sub(r"(?i)(token|secret|password|passwd|api[_-]?key)(=|\\s+)\\S+", r"\\1\\2[redacted]", text)
+    text = re.sub(r"(?i)(--(?:token|secret|password|passwd|api-key|apikey))\\s+\\S+", r"\\1 [redacted]", text)
+    return text[:220]
+
+def collect_min_hs_processes(min_hs_path, gpu_process_rows):
+    output = run("ps -eo user,pid,pcpu,pmem,etimes,etime,comm,args --no-headers --sort=-etimes")
+    rows = []
+    min_hs_token = "min_hs"
+    path_token = str(min_hs_path or "").rstrip("/")
+    gpu_by_pid = {{
+        str(row.get("pid")): row
+        for row in gpu_process_rows
+        if isinstance(row, dict) and str(row.get("pid") or "").strip()
+    }}
+    for line in output.splitlines():
+        parts = line.split(None, 7)
+        if len(parts) < 8:
+            continue
+        args = parts[7]
+        lower_args = args.lower()
+        if path_token and path_token.lower() in lower_args:
+            is_match = True
+        else:
+            is_match = min_hs_token in lower_args
+        if not is_match:
+            continue
+        pid = parts[1]
+        gpu_process = gpu_by_pid.get(str(pid)) or {{}}
+        rows.append({{
+            "user": parts[0],
+            "pid": pid,
+            "cpu_percent": parse_optional_float(parts[2], 0.0),
+            "mem_percent": parse_optional_float(parts[3], 0.0),
+            "elapsed_seconds": int(parse_optional_float(parts[4], 0.0)),
+            "elapsed": parts[5],
+            "command": parts[6],
+            "args": sanitize_process_args(args, min_hs_path),
+            "gpu_memory_mb": parse_optional_float(gpu_process.get("used_memory_mb"), 0.0),
+        }})
+        if len(rows) >= 8:
+            break
+    return rows
+
+def min_hs_work_snapshot(gpu_process_rows):
+    min_hs_path = resolve_min_hs_root()
+    exists = bool(min_hs_path)
+    processes = collect_min_hs_processes(min_hs_path, gpu_process_rows)
+    recent_files = collect_recent_min_hs_files(min_hs_path) if exists else []
+    longest_process_seconds = max([row.get("elapsed_seconds", 0) for row in processes] or [0])
+    last_activity_at = recent_files[0].get("modified_at") if recent_files else None
+    last_activity_age_seconds = recent_files[0].get("age_seconds") if recent_files else None
+    recent_threshold = 6 * 60 * 60
+    if processes:
+        state = "active"
+    elif recent_files and (last_activity_age_seconds is not None and last_activity_age_seconds <= recent_threshold):
+        state = "recent"
+    elif exists:
+        state = "idle"
+    else:
+        state = "missing"
+    eta_label = "No ETA signal"
+    if processes:
+        eta_label = "Duration only"
+    elif recent_files:
+        eta_label = "No active process"
+    return {{
+        "exists": exists,
+        "state": state,
+        "root_label": "min_hs" if exists else "",
+        "active_process_count": len(processes),
+        "recent_file_count": len(recent_files),
+        "longest_process_seconds": longest_process_seconds,
+        "last_activity_at": last_activity_at,
+        "last_activity_age_seconds": last_activity_age_seconds,
+        "eta_label": eta_label,
+        "processes": processes,
+        "recent_files": recent_files,
+    }}
+
 def top_processes():
     output = run("ps -eo user,pid,pcpu,pmem,etime,comm,args --no-headers --sort=-pcpu | head -n 8")
     rows = []
@@ -281,6 +481,7 @@ def top_processes():
     return rows
 
 gpus = gpu_devices()
+gpu_process_rows = gpu_processes()
 memory = meminfo()
 disk = disk_info(root)
 gpu_avg = round(sum(device.get("utilization_percent", 0.0) for device in gpus) / len(gpus), 1) if gpus else 0.0
@@ -301,8 +502,9 @@ payload = {{
     "gpu_count": len(gpus),
     "gpu_avg_usage_percent": gpu_avg,
     "gpu_payload": gpus,
-    "gpu_processes": gpu_processes(),
+    "gpu_processes": gpu_process_rows,
     "top_processes": top_processes(),
+    "min_hs_work": min_hs_work_snapshot(gpu_process_rows),
 }}
 
 print(json.dumps(payload))
@@ -365,6 +567,7 @@ def build_snapshot_row(server: dict[str, Any], payload: dict[str, Any]) -> dict[
         "gpu_payload": payload.get("gpu_payload") or [],
         "gpu_processes": payload.get("gpu_processes") or [],
         "top_processes": payload.get("top_processes") or [],
+        "min_hs_work": payload.get("min_hs_work") or {},
         "updated_at": utc_now(),
     }
 
@@ -392,6 +595,19 @@ def build_error_snapshot(server: dict[str, Any], message: str) -> dict[str, Any]
         "gpu_payload": [],
         "gpu_processes": [],
         "top_processes": [],
+        "min_hs_work": {
+            "exists": False,
+            "state": "error",
+            "root_label": "",
+            "active_process_count": 0,
+            "recent_file_count": 0,
+            "longest_process_seconds": 0,
+            "last_activity_at": None,
+            "last_activity_age_seconds": None,
+            "eta_label": "Refresh failed",
+            "processes": [],
+            "recent_files": [],
+        },
         "updated_at": timestamp,
     }
 
@@ -466,7 +682,60 @@ def build_public_gpu_payload(devices: list[dict[str, Any]]) -> list[dict[str, An
     return public_devices
 
 
-def build_public_snapshot_row(snapshot: dict[str, Any]) -> dict[str, Any]:
+def build_public_min_hs_work(raw: Any, include_private_details: bool = False) -> dict[str, Any]:
+    if not isinstance(raw, dict):
+        return {}
+
+    processes: list[dict[str, Any]] = []
+    if include_private_details:
+        for process in raw.get("processes") or []:
+            if not isinstance(process, dict):
+                continue
+            processes.append(
+                {
+                    "pid": process.get("pid"),
+                    "cpu_percent": process.get("cpu_percent"),
+                    "mem_percent": process.get("mem_percent"),
+                    "elapsed_seconds": process.get("elapsed_seconds"),
+                    "elapsed": process.get("elapsed"),
+                    "command": process.get("command"),
+                    "args": process.get("args"),
+                    "gpu_memory_mb": process.get("gpu_memory_mb"),
+                }
+            )
+
+    recent_files: list[dict[str, Any]] = []
+    if include_private_details:
+        for file_item in raw.get("recent_files") or []:
+            if not isinstance(file_item, dict):
+                continue
+            recent_files.append(
+                {
+                    "relative_path": file_item.get("relative_path"),
+                    "modified_at": file_item.get("modified_at"),
+                    "age_seconds": file_item.get("age_seconds"),
+                    "size_bytes": file_item.get("size_bytes"),
+                    "kind": file_item.get("kind"),
+                }
+            )
+
+    return {
+        "exists": bool(raw.get("exists")),
+        "state": raw.get("state"),
+        "root_label": raw.get("root_label"),
+        "active_process_count": raw.get("active_process_count"),
+        "recent_file_count": raw.get("recent_file_count"),
+        "longest_process_seconds": raw.get("longest_process_seconds"),
+        "last_activity_at": raw.get("last_activity_at"),
+        "last_activity_age_seconds": raw.get("last_activity_age_seconds"),
+        "eta_label": raw.get("eta_label"),
+        "details_redacted": not include_private_details,
+        "processes": processes[:8],
+        "recent_files": recent_files[:10],
+    }
+
+
+def build_public_snapshot_row(snapshot: dict[str, Any], include_private_details: bool = False) -> dict[str, Any]:
     return {
         "server_alias": snapshot.get("server_alias"),
         "status": snapshot.get("status"),
@@ -485,10 +754,11 @@ def build_public_snapshot_row(snapshot: dict[str, Any]) -> dict[str, Any]:
         "gpu_count": snapshot.get("gpu_count"),
         "gpu_avg_usage_percent": snapshot.get("gpu_avg_usage_percent"),
         "gpu_payload": build_public_gpu_payload(snapshot.get("gpu_payload") or []),
+        "min_hs_work": build_public_min_hs_work(snapshot.get("min_hs_work"), include_private_details),
     }
 
 
-def build_public_payload(payload: dict[str, Any]) -> dict[str, Any]:
+def build_public_payload(payload: dict[str, Any], include_private_details: bool = False) -> dict[str, Any]:
     return {
         "generated_at": payload.get("generated_at"),
         "targets": [
@@ -497,7 +767,7 @@ def build_public_payload(payload: dict[str, Any]) -> dict[str, Any]:
             if isinstance(target, dict)
         ],
         "snapshots": [
-            build_public_snapshot_row(snapshot)
+            build_public_snapshot_row(snapshot, include_private_details)
             for snapshot in payload.get("snapshots", [])
             if isinstance(snapshot, dict)
         ],

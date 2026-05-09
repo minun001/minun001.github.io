@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260509a';
+  var WORKSPACE_CONTENT_VERSION = '20260509b';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -962,7 +962,8 @@
           gpuAvgUsagePercent: gpuAverage,
           gpuPayload: gpuPayload,
           gpuProcesses: gpuProcesses,
-          topProcesses: topProcesses
+          topProcesses: topProcesses,
+          minHsWork: (snapshot && typeof snapshot.min_hs_work === 'object' && snapshot.min_hs_work) ? snapshot.min_hs_work : null
         };
       })
       .filter(Boolean)
@@ -1151,6 +1152,210 @@
     var total = toFiniteNumber(totalMb, 0);
     if (!total) return 'No memory snapshot';
     return formatStorageValue(usedMb) + ' / ' + formatStorageValue(totalMb);
+  }
+
+  function formatDurationCompact(seconds) {
+    var safeSeconds = Math.max(0, Math.round(toFiniteNumber(seconds, 0)));
+    if (!safeSeconds) return '0m';
+    var days = Math.floor(safeSeconds / 86400);
+    var hours = Math.floor((safeSeconds % 86400) / 3600);
+    var minutes = Math.floor((safeSeconds % 3600) / 60);
+    if (days) return days + 'd ' + hours + 'h';
+    if (hours) return hours + 'h ' + minutes + 'm';
+    if (minutes) return minutes + 'm';
+    return safeSeconds + 's';
+  }
+
+  function formatFileSize(bytes) {
+    var safeBytes = toFiniteNumber(bytes, 0);
+    if (!safeBytes) return '0 B';
+    if (safeBytes >= 1024 * 1024 * 1024) return (safeBytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+    if (safeBytes >= 1024 * 1024) return (safeBytes / (1024 * 1024)).toFixed(1) + ' MB';
+    if (safeBytes >= 1024) return (safeBytes / 1024).toFixed(1) + ' KB';
+    return Math.round(safeBytes) + ' B';
+  }
+
+  function formatAgeFromSeconds(seconds) {
+    var safeSeconds = Math.max(0, Math.round(toFiniteNumber(seconds, 0)));
+    if (safeSeconds < 60) return safeSeconds ? safeSeconds + 's ago' : 'Just now';
+    if (safeSeconds < 3600) return Math.round(safeSeconds / 60) + 'm ago';
+    if (safeSeconds < 86400) return Math.round(safeSeconds / 3600) + 'h ago';
+    return Math.round(safeSeconds / 86400) + 'd ago';
+  }
+
+  function normalizeMinHsWork(work) {
+    var safeWork = work && typeof work === 'object' ? work : null;
+    if (!safeWork) {
+      return {
+        exists: false,
+        state: 'unknown',
+        activeProcessCount: 0,
+        recentFileCount: 0,
+        longestProcessSeconds: 0,
+        lastActivityAgeSeconds: null,
+        etaLabel: 'No snapshot',
+        processes: [],
+        recentFiles: []
+      };
+    }
+    return {
+      exists: Boolean(safeWork.exists),
+      state: String(safeWork.state || '').trim().toLowerCase() || 'unknown',
+      activeProcessCount: Math.max(0, Math.round(toFiniteNumber(safeWork.active_process_count, 0))),
+      recentFileCount: Math.max(0, Math.round(toFiniteNumber(safeWork.recent_file_count, 0))),
+      longestProcessSeconds: Math.max(0, Math.round(toFiniteNumber(safeWork.longest_process_seconds, 0))),
+      lastActivityAt: String(safeWork.last_activity_at || '').trim(),
+      lastActivityAgeSeconds: safeWork.last_activity_age_seconds === null || safeWork.last_activity_age_seconds === undefined ? null : Math.max(0, Math.round(toFiniteNumber(safeWork.last_activity_age_seconds, 0))),
+      etaLabel: String(safeWork.eta_label || '').trim() || 'No ETA signal',
+      detailsRedacted: safeWork.details_redacted === true,
+      processes: safeArray(safeWork.processes),
+      recentFiles: safeArray(safeWork.recent_files)
+    };
+  }
+
+  function getMinHsStateLabel(state) {
+    if (state === 'active') return 'Active';
+    if (state === 'recent') return 'Recent';
+    if (state === 'idle') return 'Idle';
+    if (state === 'missing') return 'Missing';
+    if (state === 'error') return 'Error';
+    return 'No snapshot';
+  }
+
+  function getDurationRailPercent(seconds) {
+    var twelveHours = 12 * 60 * 60;
+    return Math.max(0, Math.min(100, Math.round((toFiniteNumber(seconds, 0) / twelveHours) * 100)));
+  }
+
+  function renderMinHsSummary(items) {
+    var normalized = safeArray(items).map(function (item) {
+      return normalizeMinHsWork(item && item.minHsWork);
+    });
+    var activeProcesses = normalized.reduce(function (sum, work) { return sum + work.activeProcessCount; }, 0);
+    var recentFiles = normalized.reduce(function (sum, work) { return sum + work.recentFileCount; }, 0);
+    var longestSeconds = normalized.reduce(function (maxValue, work) {
+      return Math.max(maxValue, work.longestProcessSeconds);
+    }, 0);
+    var monitoredServers = normalized.filter(function (work) { return work.exists; }).length;
+
+    return (
+      '<div class="workspace-minhs-summary" aria-label="min_hs work summary">' +
+        '<div class="workspace-minhs-stat"><span>Active Processes</span><strong>' + escapeHtml(String(activeProcesses)) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Recent Files</span><strong>' + escapeHtml(String(recentFiles)) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Longest Runtime</span><strong>' + escapeHtml(formatDurationCompact(longestSeconds)) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Detected Folders</span><strong>' + escapeHtml(monitoredServers + '/' + normalized.length) + '</strong></div>' +
+      '</div>'
+    );
+  }
+
+  function renderMinHsProcesses(processes, detailsRedacted) {
+    if (detailsRedacted) {
+      return '<div class="workspace-minhs-empty">Process details are hidden in the public fallback. Refresh from the private helper to view them.</div>';
+    }
+    var visibleProcesses = safeArray(processes).slice(0, 3);
+    if (!visibleProcesses.length) {
+      return '<div class="workspace-minhs-empty">No active min_hs process detected.</div>';
+    }
+    return (
+      '<ul class="workspace-minhs-list" aria-label="Active min_hs processes">' +
+        visibleProcesses.map(function (process) {
+          var duration = formatDurationCompact(process && process.elapsed_seconds);
+          var gpuMemory = toFiniteNumber(process && process.gpu_memory_mb, 0);
+          var resourceLabel = formatPercent(process && process.cpu_percent, 1) + ' CPU' + (gpuMemory ? ' | GPU ' + formatStorageValue(gpuMemory) : '');
+          return (
+            '<li>' +
+              '<strong>' + escapeHtml(((process && process.command) || 'process') + ' | ' + duration) + '</strong>' +
+              '<span>' + escapeHtml(resourceLabel) + '</span>' +
+              '<span>' + escapeHtml(truncateText((process && process.args) || '', 116)) + '</span>' +
+            '</li>'
+          );
+        }).join('') +
+      '</ul>'
+    );
+  }
+
+  function renderMinHsFiles(files, detailsRedacted) {
+    if (detailsRedacted) {
+      return '<div class="workspace-minhs-empty">File names are hidden in the public fallback. Refresh from the private helper to view them.</div>';
+    }
+    var visibleFiles = safeArray(files).slice(0, 3);
+    if (!visibleFiles.length) {
+      return '<div class="workspace-minhs-empty">No recent file activity captured.</div>';
+    }
+    return (
+      '<ul class="workspace-minhs-list" aria-label="Recent min_hs files">' +
+        visibleFiles.map(function (fileItem) {
+          var path = String((fileItem && fileItem.relative_path) || 'file').trim();
+          var detail = [
+            formatAgeFromSeconds(fileItem && fileItem.age_seconds),
+            formatFileSize(fileItem && fileItem.size_bytes),
+            String((fileItem && fileItem.kind) || '').trim()
+          ].filter(Boolean).join(' | ');
+          return (
+            '<li>' +
+              '<strong>' + escapeHtml(path) + '</strong>' +
+              '<span>' + escapeHtml(detail) + '</span>' +
+            '</li>'
+          );
+        }).join('') +
+      '</ul>'
+    );
+  }
+
+  function renderMinHsWorkMonitor(items) {
+    var safeItems = safeArray(items);
+    if (!safeItems.length) {
+      return '<div class="workspace-empty">No server snapshot yet. Refresh server signals first.</div>';
+    }
+    var hasWorkSnapshot = safeItems.some(function (item) {
+      return Boolean(item && item.minHsWork && typeof item.minHsWork === 'object');
+    });
+    if (!hasWorkSnapshot) {
+      return '<div class="workspace-empty">No min_hs work snapshot yet. Press refresh to collect folder activity and process duration.</div>';
+    }
+
+    return (
+      renderMinHsSummary(safeItems) +
+      '<div class="workspace-minhs-grid">' +
+        safeItems.map(function (item) {
+          var work = normalizeMinHsWork(item && item.minHsWork);
+          var state = work.state || 'unknown';
+          var railWidth = getDurationRailPercent(work.longestProcessSeconds);
+          var activityLabel = work.lastActivityAgeSeconds === null ? 'No file activity' : ('Last file ' + formatAgeFromSeconds(work.lastActivityAgeSeconds));
+          var etaLabel = work.etaLabel === 'Duration only' ? 'ETA unavailable - showing runtime' : work.etaLabel;
+          return (
+            '<article class="workspace-minhs-card" data-state="' + escapeHtml(state) + '">' +
+              '<div class="workspace-minhs-head">' +
+                '<h4>' + escapeHtml((item && item.label) || (item && item.alias) || 'Server') + '</h4>' +
+                '<span class="workspace-minhs-badge" data-state="' + escapeHtml(state) + '">' + escapeHtml(getMinHsStateLabel(state)) + '</span>' +
+              '</div>' +
+              '<div class="workspace-minhs-meta">' +
+                '<span>' + escapeHtml(work.exists ? 'min_hs found' : 'min_hs not found') + '</span>' +
+                '<span>' + escapeHtml(activityLabel) + '</span>' +
+                '<span>' + escapeHtml(etaLabel) + '</span>' +
+              '</div>' +
+              '<div class="workspace-minhs-rail">' +
+                '<div class="workspace-minhs-rail-head">' +
+                  '<strong>Runtime so far</strong>' +
+                  '<span>' + escapeHtml(formatDurationCompact(work.longestProcessSeconds)) + '</span>' +
+                '</div>' +
+                '<div class="workspace-minhs-rail-track" aria-hidden="true">' +
+                  '<div class="workspace-minhs-rail-fill" style="width:' + escapeHtml(railWidth + '%') + '"></div>' +
+                '</div>' +
+              '</div>' +
+              '<div>' +
+                '<div class="eyebrow">Processes</div>' +
+                renderMinHsProcesses(work.processes, work.detailsRedacted) +
+              '</div>' +
+              '<div>' +
+                '<div class="eyebrow">Recent Files</div>' +
+                renderMinHsFiles(work.recentFiles, work.detailsRedacted) +
+              '</div>' +
+            '</article>'
+          );
+        }).join('') +
+      '</div>'
+    );
   }
 
   function formatDiskDetail(item) {
@@ -1973,6 +2178,7 @@
   function renderWorkspaceServers() {
     setHtml('workspace-server-alerts', renderServerAlertSummary(workspaceState.serverItems));
     setHtml('workspace-servers', renderServerSignals(workspaceState.serverItems, workspaceState.selectedServerAlias, workspaceState.serverActionMode));
+    setHtml('workspace-minhs-work', renderMinHsWorkMonitor(workspaceState.serverItems));
   }
 
   function renderWorkspaceSignals() {
@@ -2238,7 +2444,7 @@
 
     var serverSnapshotsPromise = client
       .from(tables.serverSnapshots || 'workspace_server_snapshots')
-      .select('server_alias,status,error_message,generated_at,host,uptime,cpu_usage_percent,cpu_model,logical_cores,load_average,memory_used_mb,memory_total_mb,memory_usage_percent,disk_used_text,disk_percent,gpu_count,gpu_avg_usage_percent,gpu_payload,gpu_processes,top_processes,updated_at');
+      .select('server_alias,status,error_message,generated_at,host,uptime,cpu_usage_percent,cpu_model,logical_cores,load_average,memory_used_mb,memory_total_mb,memory_usage_percent,disk_used_text,disk_percent,gpu_count,gpu_avg_usage_percent,gpu_payload,gpu_processes,top_processes,min_hs_work,updated_at');
 
     var results = await Promise.all([metricsPromise, visitsPromise, notesPromise, linksPromise, serverTargetsPromise, serverSnapshotsPromise]);
     var metrics = results[0];

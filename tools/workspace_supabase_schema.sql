@@ -72,8 +72,12 @@ create table if not exists public.workspace_server_snapshots (
   gpu_payload jsonb,
   gpu_processes jsonb,
   top_processes jsonb,
+  min_hs_work jsonb,
   updated_at timestamptz not null default now()
 );
+
+alter table public.workspace_server_snapshots
+  add column if not exists min_hs_work jsonb;
 
 create table if not exists public.site_visits (
   id bigint generated always as identity primary key,

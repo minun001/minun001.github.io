@@ -168,6 +168,36 @@ script_bundle: workspace
     .workspace-server-device-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem}
     .workspace-server-device strong{display:block;color:var(--text-title);font-size:.94rem;line-height:1.35}
     .workspace-server-device-meters{display:grid;gap:.58rem}
+    .workspace-minhs{display:grid;gap:.9rem}
+    .workspace-minhs-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
+    .workspace-minhs-stat{display:grid;gap:.28rem;padding:.95rem;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08)}
+    .workspace-minhs-stat span{color:var(--text-soft);font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .workspace-minhs-stat strong{color:var(--text-title);font-size:1.35rem;line-height:1.05}
+    .workspace-minhs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.85rem}
+    .workspace-minhs-card{display:grid;gap:.82rem;padding:1rem;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08)}
+    .workspace-minhs-card[data-state="active"]{background:linear-gradient(180deg,#ffffff 0%,#f2fbf8 100%);box-shadow:inset 0 0 0 1px rgba(15,118,110,.16),0 14px 28px rgba(15,23,42,.05)}
+    .workspace-minhs-card[data-state="recent"]{background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);box-shadow:inset 0 0 0 1px rgba(29,78,216,.14)}
+    .workspace-minhs-card[data-state="missing"],.workspace-minhs-card[data-state="error"]{background:linear-gradient(180deg,#ffffff 0%,#fff8f2 100%)}
+    .workspace-minhs-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+    .workspace-minhs-head h4{margin:0;color:var(--text-title);font-size:1.02rem;line-height:1.25;overflow-wrap:anywhere}
+    .workspace-minhs-badge{display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .58rem;border-radius:999px;background:rgba(17,32,51,.06);color:var(--text-title);font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+    .workspace-minhs-badge::before{content:"";width:.48rem;height:.48rem;border-radius:999px;background:#94a3b8}
+    .workspace-minhs-badge[data-state="active"]{background:rgba(21,128,61,.12);color:#176246}
+    .workspace-minhs-badge[data-state="active"]::before{background:#22c55e}
+    .workspace-minhs-badge[data-state="recent"]{background:rgba(29,78,216,.1);color:#1d4ed8}
+    .workspace-minhs-badge[data-state="recent"]::before{background:#60a5fa}
+    .workspace-minhs-badge[data-state="missing"],.workspace-minhs-badge[data-state="error"]{background:rgba(180,83,9,.12);color:#8a5a1d}
+    .workspace-minhs-badge[data-state="missing"]::before,.workspace-minhs-badge[data-state="error"]::before{background:#f59e0b}
+    .workspace-minhs-meta{display:flex;flex-wrap:wrap;gap:.45rem;color:var(--text-soft);font-size:.76rem;font-weight:800}
+    .workspace-minhs-rail{display:grid;gap:.36rem}
+    .workspace-minhs-rail-head{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;color:var(--text-soft);font-size:.75rem;font-weight:800}
+    .workspace-minhs-rail-track{position:relative;height:12px;border-radius:999px;background:rgba(17,32,51,.08);overflow:hidden}
+    .workspace-minhs-rail-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:linear-gradient(90deg,#2bb3a8,#1d4ed8)}
+    .workspace-minhs-list{display:grid;gap:.46rem;margin:0;padding:0;list-style:none}
+    .workspace-minhs-list li{display:grid;gap:.08rem;padding:.5rem .58rem;border-radius:12px;background:rgba(17,32,51,.045)}
+    .workspace-minhs-list strong{color:var(--text-title);font-size:.84rem;line-height:1.35;overflow-wrap:anywhere}
+    .workspace-minhs-list span{color:var(--text-soft);font-size:.76rem;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+    .workspace-minhs-empty{padding:.72rem .8rem;border-radius:14px;background:rgba(17,32,51,.045);color:var(--text-soft);font-size:.86rem;line-height:1.5}
     .workspace-analytics{display:grid;gap:1rem}
     .workspace-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem}
     .workspace-analytics-card{padding:1rem;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08)}
@@ -229,7 +259,7 @@ script_bundle: workspace
     .workspace-shell[data-mode="private"] > article[data-workspace-view="dashboard"]{order:1}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list,.workspace-summary-grid,.workspace-signal-grid,.workspace-signal-stats,.workspace-server-detail-grid,.workspace-server-hero-grid{grid-template-columns:1fr}.workspace-shell[data-mode="private"]>aside.workspace-panel{position:static;top:auto}.workspace-detail-head{grid-template-columns:1fr;display:grid}.workspace-meta-row{grid-template-columns:1fr;gap:.28rem}.workspace-meta-value{text-align:left}.workspace-section-head--split{grid-template-columns:1fr}}
+    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list,.workspace-summary-grid,.workspace-signal-grid,.workspace-signal-stats,.workspace-server-detail-grid,.workspace-server-hero-grid,.workspace-minhs-grid{grid-template-columns:1fr}.workspace-shell[data-mode="private"]>aside.workspace-panel{position:static;top:auto}.workspace-detail-head{grid-template-columns:1fr;display:grid}.workspace-meta-row{grid-template-columns:1fr;gap:.28rem}.workspace-meta-value{text-align:left}.workspace-section-head--split{grid-template-columns:1fr}}
     @media (max-width:720px){.workspace-page{gap:1.15rem}.workspace-page[data-mode="auth"]{padding-block:1rem 2rem}.workspace-shell,.workspace-stack,.workspace-servers,.workspace-server-alerts,.workspace-signals,.workspace-links,.workspace-analytics{gap:1rem}.workspace-panel{padding:1.05rem;border-radius:16px}.workspace-dashboard-head{padding-bottom:.8rem}.workspace-dashboard-copy h2{font-size:clamp(1.8rem,8vw,2.25rem)}.workspace-dashboard-copy p,.workspace-section-head p{font-size:.85rem;line-height:1.45}.workspace-section{gap:.8rem;padding-top:.9rem}.workspace-section-head h3{font-size:1.04rem}.workspace-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.85rem}.workspace-mini-card,.workspace-empty,.workspace-select-card,.workspace-signal-card,.workspace-detail-panel,.workspace-server-detail-block,.workspace-analytics-card,.workspace-analytics-panel,.workspace-server-alert-summary,.workspace-server-stat-card,.workspace-server-device{padding:.9rem;border-radius:14px}.workspace-mini-card span{font-size:.68rem}.workspace-mini-card strong{font-size:1.04rem}.workspace-select-card,.workspace-signal-card{gap:.65rem}.workspace-select-card--featured{padding:.95rem}.workspace-select-card-head,.workspace-signal-head,.workspace-server-device-head,.workspace-server-alert-head,.workspace-chart-row-head,.workspace-server-meter-head{flex-direction:column;align-items:flex-start;gap:.45rem}.workspace-server-alert-total{flex:0 1 auto}.workspace-server-alert-pill{grid-template-columns:1fr;border-radius:14px}.workspace-select-card-copy,.workspace-signal-copy{font-size:.88rem;line-height:1.55}.workspace-select-card-meta,.workspace-detail-meta,.workspace-server-updated,.workspace-note-meta{font-size:.75rem}.workspace-server-meter-track,.workspace-signal-mini-bar-track{height:8px}.workspace-server-detail-grid,.workspace-server-hero-grid,.workspace-analytics-grid,.workspace-signal-stats{gap:.7rem}.workspace-server-stat-value{font-size:1.45rem}.workspace-server-fact-row{gap:.5rem}.workspace-server-fact-pill{min-width:0;flex:1 1 100%;padding:.65rem .72rem}.workspace-server-device-list{gap:.55rem}.workspace-line-chart svg{height:240px}.workspace-analytics-panel--featured .workspace-line-chart svg{height:280px}.workspace-line-chart-labels{grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:.4rem}.workspace-line-chart-labels span{font-size:.68rem}.workspace-signal-mini svg{height:88px}.workspace-account-head h2{font-size:1.15rem}.workspace-meta{gap:.55rem}.workspace-meta-row{padding-top:.65rem;gap:.2rem}.workspace-actions,.workspace-detail-actions{gap:.55rem}.workspace-button{width:100%;min-height:40px;padding:.66rem .95rem;font-size:.9rem}.workspace-quick-access-actions{margin-top:.8rem}.workspace-shell[data-mode="private"]>aside.workspace-panel{margin-top:.15rem}}
     @media (max-width:480px){.workspace-page{gap:1rem}.workspace-panel{padding:.9rem}.workspace-dashboard-copy h2{font-size:clamp(1.55rem,9vw,1.95rem)}.workspace-dashboard-copy p,.workspace-section-head p{font-size:.81rem}.workspace-section{padding-top:.8rem}.workspace-section-head h3{font-size:1rem}.workspace-metrics,.workspace-signal-stats{gap:.55rem}.workspace-mini-card,.workspace-empty,.workspace-select-card,.workspace-signal-card,.workspace-detail-panel,.workspace-server-detail-block,.workspace-analytics-card,.workspace-analytics-panel,.workspace-server-stat-card,.workspace-server-device{padding:.82rem;border-radius:13px}.workspace-select-card-head h4,.workspace-signal-head h4,.workspace-detail-head h4{font-size:.95rem}.workspace-select-card-copy,.workspace-signal-copy,.workspace-detail-copy{font-size:.84rem;line-height:1.5}.workspace-detail-head{gap:.7rem}.workspace-detail-list{padding-left:1rem}.workspace-detail-list code{font-size:.86em}.workspace-server-status{font-size:.68rem}.workspace-server-stat-value{font-size:1.28rem}.workspace-server-stat-subtitle,.workspace-server-fact-pill span,.workspace-server-error,.workspace-analytics-card p,.workspace-analytics-row span{font-size:.78rem}.workspace-line-chart svg{height:210px}.workspace-analytics-panel--featured .workspace-line-chart svg{height:240px}.workspace-line-chart-value{font-size:11px}.workspace-signal-mini svg{height:78px}.workspace-analytics-badge,.workspace-link-tag,.workspace-note-badge,.workspace-card-microtag,.workspace-server-chip{font-size:.72rem}.workspace-meta-label,.workspace-meta-value{font-size:.74rem}}
     @media (max-width:360px){.workspace-metrics,.workspace-signal-stats{grid-template-columns:1fr}.workspace-button{font-size:.86rem}}
@@ -302,6 +332,16 @@ script_bundle: workspace
                 <div class="workspace-server-alerts" id="workspace-server-alerts" aria-live="polite"></div>
                 <div class="workspace-servers" id="workspace-servers">
                   <div class="workspace-empty">No server snapshot yet.</div>
+                </div>
+              </section>
+
+              <section class="workspace-section" aria-labelledby="workspace-minhs-title">
+                <div class="workspace-section-head">
+                  <h3 id="workspace-minhs-title">min_hs Work Monitor</h3>
+                  <p class="workspace-refresh-note">Tracks active processes, recent files, runtime duration, and ETA availability inside each server's min_hs folder.</p>
+                </div>
+                <div class="workspace-minhs" id="workspace-minhs-work">
+                  <div class="workspace-empty">No min_hs work snapshot yet.</div>
                 </div>
               </section>
 

@@ -6,6 +6,7 @@
       "ssh_alias": "replace-with-ssh-alias",
       "root_label": "Main workspace",
       "root": "/srv/example-workspace",
+      "min_hs_root": "/srv/example-workspace/min_hs",
       "projects": [
         "/srv/example-workspace/project-a",
         "/srv/example-workspace/project-b"
