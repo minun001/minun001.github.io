@@ -285,31 +285,50 @@ def unique_paths(items):
         resolved.append(normalized)
     return resolved
 
+def looks_like_min_hs_path(path):
+    name = os.path.basename(os.path.normpath(str(path or ""))).lower().replace("-", "_")
+    compact = name.replace("_", "")
+    return name == "min_hs" or compact == "minhs" or "min_hs" in name or "minhs" in compact
+
 def resolve_min_hs_root():
+    configured_candidates = []
     candidates = []
     if configured_min_hs_root:
-        candidates.append(configured_min_hs_root)
+        configured_candidates.append(configured_min_hs_root)
     if root:
         candidates.append(root)
         candidates.append(os.path.join(root, "min_hs"))
+        candidates.append(os.path.join(root, "minhs"))
     for project in projects:
         if not isinstance(project, str):
             continue
         candidates.append(project)
         candidates.append(os.path.join(project, "min_hs"))
+        candidates.append(os.path.join(project, "minhs"))
     home = os.path.expanduser("~")
     user = os.environ.get("USER") or os.environ.get("LOGNAME") or ""
     candidates.extend([
         os.path.join(home, "min_hs"),
+        os.path.join(home, "minhs"),
         "/home/min_hs",
         os.path.join("/home", user, "min_hs") if user else "",
+        os.path.join("/home", user, "minhs") if user else "",
         "/workspace/min_hs",
+        "/workspace/minhs",
         "/data/min_hs",
+        "/data/minhs",
         "/mnt/data/min_hs",
+        "/mnt/data/minhs",
     ])
+    for candidate in unique_paths(configured_candidates):
+        try:
+            if os.path.isdir(candidate):
+                return candidate
+        except Exception:
+            continue
     for candidate in unique_paths(candidates):
         try:
-            if os.path.isdir(candidate) and os.path.basename(os.path.normpath(candidate)) == "min_hs":
+            if os.path.isdir(candidate) and looks_like_min_hs_path(candidate):
                 return candidate
         except Exception:
             continue
