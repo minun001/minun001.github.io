@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260509d';
+  var WORKSPACE_CONTENT_VERSION = '20260509e';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -1319,21 +1319,28 @@
     return Math.max(0, Math.min(100, Math.round((toFiniteNumber(seconds, 0) / twelveHours) * 100)));
   }
 
+  function getActiveMinHsItems(items) {
+    return safeArray(items).filter(function (item) {
+      var work = normalizeMinHsWork(item && item.minHsWork);
+      return work.activeProcessCount > 0;
+    });
+  }
+
   function getMinHsSnapshotStats(items) {
-    var normalized = safeArray(items).map(function (item) {
+    var safeItems = safeArray(items);
+    var activeItems = getActiveMinHsItems(safeItems);
+    var normalized = activeItems.map(function (item) {
       return normalizeMinHsWork(item && item.minHsWork);
     });
     return {
-      hasWorkSnapshot: safeArray(items).some(function (item) {
+      hasWorkSnapshot: safeItems.some(function (item) {
         return Boolean(item && item.minHsWork && typeof item.minHsWork === 'object');
       }),
       activeProcesses: normalized.reduce(function (sum, work) { return sum + work.activeProcessCount; }, 0),
-      recentFiles: normalized.reduce(function (sum, work) { return sum + work.recentFileCount; }, 0),
       longestSeconds: normalized.reduce(function (maxValue, work) {
         return Math.max(maxValue, work.longestProcessSeconds);
       }, 0),
-      monitoredServers: normalized.filter(function (work) { return work.exists; }).length,
-      totalServers: normalized.length
+      activeServers: activeItems.length
     };
   }
 
@@ -1343,16 +1350,17 @@
     return (
       '<div class="workspace-minhs-summary" aria-label="min_hs work summary">' +
         '<div class="workspace-minhs-stat"><span>Current Tasks</span><strong>' + escapeHtml(String(stats.activeProcesses)) + '</strong></div>' +
-        '<div class="workspace-minhs-stat"><span>Recent Files</span><strong>' + escapeHtml(String(stats.recentFiles)) + '</strong></div>' +
+        '<div class="workspace-minhs-stat"><span>Active Servers</span><strong>' + escapeHtml(String(stats.activeServers)) + '</strong></div>' +
         '<div class="workspace-minhs-stat"><span>Longest Runtime</span><strong>' + escapeHtml(formatDurationCompact(stats.longestSeconds)) + '</strong></div>' +
-        '<div class="workspace-minhs-stat"><span>Detected Folders</span><strong>' + escapeHtml(stats.monitoredServers + '/' + stats.totalServers) + '</strong></div>' +
       '</div>'
     );
   }
 
-  function renderMinHsProcesses(processes, detailsRedacted) {
+  function renderMinHsProcesses(processes, detailsRedacted, activeProcessCount) {
     if (detailsRedacted) {
-      return '<div class="workspace-minhs-empty">Process details are hidden in the public fallback. Refresh from the private helper to view them.</div>';
+      var redactedCount = Math.max(0, Math.round(toFiniteNumber(activeProcessCount, safeArray(processes).length)));
+      var countLabel = redactedCount ? (redactedCount + ' current ' + (redactedCount === 1 ? 'task' : 'tasks') + ' detected. ') : '';
+      return '<div class="workspace-minhs-empty">' + escapeHtml(countLabel) + 'Process details are hidden in the public fallback. Refresh from the private helper to view them.</div>';
     }
     var processItems = safeArray(processes);
     var visibleProcesses = processItems.slice(0, 5);
@@ -1388,34 +1396,6 @@
     );
   }
 
-  function renderMinHsFiles(files, detailsRedacted) {
-    if (detailsRedacted) {
-      return '<div class="workspace-minhs-empty">File names are hidden in the public fallback. Refresh from the private helper to view them.</div>';
-    }
-    var visibleFiles = safeArray(files).slice(0, 3);
-    if (!visibleFiles.length) {
-      return '<div class="workspace-minhs-empty">No recent file activity captured.</div>';
-    }
-    return (
-      '<ul class="workspace-minhs-list" aria-label="Recent min_hs files">' +
-        visibleFiles.map(function (fileItem) {
-          var path = String((fileItem && fileItem.relative_path) || 'file').trim();
-          var detail = [
-            formatAgeFromSeconds(fileItem && fileItem.age_seconds),
-            formatFileSize(fileItem && fileItem.size_bytes),
-            String((fileItem && fileItem.kind) || '').trim()
-          ].filter(Boolean).join(' | ');
-          return (
-            '<li>' +
-              '<strong>' + escapeHtml(path) + '</strong>' +
-              '<span>' + escapeHtml(detail) + '</span>' +
-            '</li>'
-          );
-        }).join('') +
-      '</ul>'
-    );
-  }
-
   function renderMinHsWorkMonitor(items) {
     var safeItems = safeArray(items);
     if (!safeItems.length) {
@@ -1427,15 +1407,18 @@
     if (!hasWorkSnapshot) {
       return '<div class="workspace-empty">No min_hs work snapshot yet. Press the refresh button above to scan current tasks and runtime duration.</div>';
     }
+    var activeItems = getActiveMinHsItems(safeItems);
+    if (!activeItems.length) {
+      return '<div class="workspace-empty">No current min_hs task is running. Press refresh again when a task starts.</div>';
+    }
 
     return (
-      renderMinHsSummary(safeItems) +
+      renderMinHsSummary(activeItems) +
       '<div class="workspace-minhs-grid">' +
-        safeItems.map(function (item) {
+        activeItems.map(function (item) {
           var work = normalizeMinHsWork(item && item.minHsWork);
           var state = work.state || 'unknown';
           var railWidth = getDurationRailPercent(work.longestProcessSeconds);
-          var activityLabel = work.lastActivityAgeSeconds === null ? 'No file activity' : ('Last file ' + formatAgeFromSeconds(work.lastActivityAgeSeconds));
           var etaLabel = work.etaLabel === 'Duration only' ? 'ETA unavailable - showing runtime' : work.etaLabel;
           return (
             '<article class="workspace-minhs-card" data-state="' + escapeHtml(state) + '">' +
@@ -1444,8 +1427,7 @@
                 '<span class="workspace-minhs-badge" data-state="' + escapeHtml(state) + '">' + escapeHtml(getMinHsStateLabel(state)) + '</span>' +
               '</div>' +
               '<div class="workspace-minhs-meta">' +
-                '<span>' + escapeHtml(work.exists ? 'min_hs found' : 'min_hs not found') + '</span>' +
-                '<span>' + escapeHtml(activityLabel) + '</span>' +
+                '<span>' + escapeHtml(work.activeProcessCount + ' current ' + (work.activeProcessCount === 1 ? 'task' : 'tasks')) + '</span>' +
                 '<span>' + escapeHtml(etaLabel) + '</span>' +
               '</div>' +
               '<div class="workspace-minhs-rail">' +
@@ -1458,12 +1440,8 @@
                 '</div>' +
               '</div>' +
               '<div>' +
-                '<div class="eyebrow">Processes</div>' +
-                renderMinHsProcesses(work.processes, work.detailsRedacted) +
-              '</div>' +
-              '<div>' +
-                '<div class="eyebrow">Recent Files</div>' +
-                renderMinHsFiles(work.recentFiles, work.detailsRedacted) +
+                '<div class="eyebrow">Current Tasks</div>' +
+                renderMinHsProcesses(work.processes, work.detailsRedacted, work.activeProcessCount) +
               '</div>' +
             '</article>'
           );
@@ -2334,9 +2312,9 @@
       var taskText = stats.activeProcesses
         ? ('Detected ' + stats.activeProcesses + ' current task' + (stats.activeProcesses === 1 ? '' : 's') + '; longest runtime ' + formatDurationCompact(stats.longestSeconds) + '.')
         : 'No active min_hs task detected.';
-      var folderText = stats.monitoredServers + '/' + stats.totalServers + ' folders detected.';
+      var serverText = stats.activeServers ? (' Active on ' + stats.activeServers + ' ' + (stats.activeServers === 1 ? 'server.' : 'servers.')) : '';
       var scanText = latestTimestamp ? (' Latest scan ' + formatRelativeAge(new Date(latestTimestamp).toISOString()) + '.') : '';
-      baseMessage = taskText + ' ' + folderText + scanText;
+      baseMessage = taskText + serverText + scanText;
     }
 
     note.textContent = prefix ? (prefix + ' ' + baseMessage) : baseMessage;
