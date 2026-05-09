@@ -95,7 +95,7 @@ script_bundle: workspace
     .workspace-server-alerts:empty{display:none}
     .workspace-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.85rem}
     .workspace-select-card{display:grid;gap:.75rem;width:100%;padding:1.05rem;border:none;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);text-align:left;cursor:pointer;transition:transform .2s ease, box-shadow .2s ease, background .2s ease}
-    .workspace-link-card{text-decoration:none;color:inherit}
+    .workspace-link-card{text-decoration:none;color:inherit;font:inherit}
     .workspace-select-card:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08),0 10px 24px rgba(15,23,42,.06)}
     .workspace-select-card:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(29,78,216,.12),inset 0 0 0 1px rgba(29,78,216,.22)}
     .workspace-select-card.is-active{background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);box-shadow:inset 0 0 0 1px rgba(29,78,216,.18),0 14px 28px rgba(15,23,42,.06)}
@@ -118,6 +118,9 @@ script_bundle: workspace
     .workspace-detail-close{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:.5rem .82rem;border:none;border-radius:999px;background:#eef3f8;color:var(--text-title);font-size:.8rem;font-weight:800;cursor:pointer}
     .workspace-detail-actions{display:flex;flex-wrap:wrap;gap:.7rem}
     .workspace-link-action{display:inline-flex;align-items:center;gap:.4rem;font-weight:800}
+    .workspace-data-viewer{margin-top:.9rem}
+    .workspace-data-viewer pre{max-height:440px;margin:0;padding:1rem;border-radius:16px;background:#fff;color:var(--text-title);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08);font:600 .78rem/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow:auto;white-space:pre-wrap;word-break:break-word}
+    .workspace-data-viewer pre[data-tone="error"]{background:#fff7f7;color:#a23138}
     .workspace-detail-block{display:grid;gap:.38rem}
     .workspace-detail-block h5{margin:0;color:var(--text-title);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
     .workspace-detail-list{display:grid;gap:.45rem;margin:0;padding-left:1.15rem;color:var(--text-soft)}
@@ -398,6 +401,18 @@ script_bundle: workspace
                 <div class="workspace-links" id="workspace-links">
                   <div class="workspace-empty">No workspace files yet.</div>
                 </div>
+                <section class="workspace-detail-panel workspace-data-viewer" id="workspace-private-file-detail" role="region" aria-labelledby="workspace-private-file-title" hidden>
+                  <div class="workspace-detail-head">
+                    <div>
+                      <h4 id="workspace-private-file-title">Workspace Data</h4>
+                    </div>
+                    <button type="button" class="workspace-detail-close" data-workspace-private-file-close>Close</button>
+                  </div>
+                  <div class="workspace-detail-meta">
+                    <span id="workspace-private-file-meta">Opened through the authenticated helper.</span>
+                  </div>
+                  <pre id="workspace-private-file-body" data-tone="neutral"></pre>
+                </section>
               </section>
             </div>
           </article>

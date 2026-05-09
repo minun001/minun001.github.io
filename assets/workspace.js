@@ -1,5 +1,5 @@
 (function () {
-  var WORKSPACE_CONTENT_VERSION = '20260509b';
+  var WORKSPACE_CONTENT_VERSION = '20260509c';
   var WORKSPACE_REFRESH_MIN_LOADING_MS = 900;
   var WORKSPACE_AUTO_REFRESH_MS = 30 * 1000;
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
@@ -188,6 +188,84 @@
       serverSignals: String(files.serverSignals || '/tools/workspace_server_sync_fallback.json').trim() || '/tools/workspace_server_sync_fallback.json',
       siteSignals: String(files.siteSignals || '/tools/workspace_site_signals.json').trim() || '/tools/workspace_site_signals.json'
     };
+  }
+
+  function getWorkspacePrivateDataPath(value) {
+    var raw = String(value || '').trim();
+    if (!raw) return '';
+    try {
+      return new URL(raw, window.location.href).pathname;
+    } catch (_error) {
+      return raw.split('?')[0].split('#')[0];
+    }
+  }
+
+  function isWorkspacePrivateDataUrl(value) {
+    var path = getWorkspacePrivateDataPath(value);
+    return (
+      path === '/tools/workspace_content.json' ||
+      path === '/tools/workspace_server_sync_fallback.json' ||
+      path === '/tools/workspace_site_signals.json'
+    );
+  }
+
+  function resolveWorkspacePrivateDataUrl(value, config) {
+    var path = getWorkspacePrivateDataPath(value);
+    var files = getDataFiles(config);
+    if (path === '/tools/workspace_content.json') return files.content;
+    if (path === '/tools/workspace_server_sync_fallback.json') return files.serverSignals;
+    if (path === '/tools/workspace_site_signals.json') return files.siteSignals;
+    return String(value || '').trim();
+  }
+
+  function getWorkspacePrivateDataTitle(value) {
+    var path = getWorkspacePrivateDataPath(value);
+    if (path === '/tools/workspace_content.json') return 'Workspace Content';
+    if (path === '/tools/workspace_server_sync_fallback.json') return 'Server Snapshot Data';
+    if (path === '/tools/workspace_site_signals.json') return 'Site Signals Data';
+    return 'Workspace Data';
+  }
+
+  function setWorkspacePrivateDataViewer(title, body, isError) {
+    var panel = byId('workspace-private-file-detail');
+    var titleNode = byId('workspace-private-file-title');
+    var metaNode = byId('workspace-private-file-meta');
+    var bodyNode = byId('workspace-private-file-body');
+    if (!panel || !titleNode || !metaNode || !bodyNode) return;
+    titleNode.textContent = title || 'Workspace Data';
+    metaNode.textContent = isError ? 'Unable to open private workspace data.' : 'Opened through the authenticated helper.';
+    bodyNode.textContent = body || '';
+    bodyNode.setAttribute('data-tone', isError ? 'error' : 'neutral');
+    panel.hidden = false;
+    revealSectionDetail('workspace-private-file-detail');
+  }
+
+  function formatWorkspaceJsonText(text) {
+    try {
+      return JSON.stringify(JSON.parse(text), null, 2);
+    } catch (_error) {
+      return String(text || '');
+    }
+  }
+
+  async function openWorkspacePrivateDataFile(value) {
+    var config = getConfig();
+    var title = getWorkspacePrivateDataTitle(value);
+    setWorkspacePrivateDataViewer(title, 'Loading private workspace data...', false);
+
+    try {
+      var resolvedUrl = resolveWorkspacePrivateDataUrl(value, config);
+      var response = await fetchWorkspaceJsonFile(resolvedUrl, config);
+      if (!response.ok) {
+        throw new Error('Workspace helper returned ' + response.status + '.');
+      }
+      var text = formatWorkspaceJsonText(await response.text());
+      setWorkspacePrivateDataViewer(title, text, false);
+    } catch (error) {
+      var message = error && error.message ? error.message : 'Unable to open workspace data.';
+      setWorkspacePrivateDataViewer(title, message, true);
+      setStatus('Unable to open workspace data. Sign in again or check the helper connection.', 'error');
+    }
   }
 
   var workspaceState = {
@@ -788,8 +866,22 @@
       '<div class="workspace-summary-grid">' +
         safeItems.map(function (item) {
           var label = String(item.tag || 'Open').trim() || 'Open';
+          var rawUrl = String(item.url || '#').trim() || '#';
+          if (isWorkspacePrivateDataUrl(rawUrl)) {
+            return (
+              '<button type="button" class="workspace-select-card workspace-link-card" data-workspace-private-file-url="' + escapeHtml(rawUrl) + '">' +
+                '<div class="workspace-select-card-head">' +
+                  '<div>' +
+                    '<h4>' + escapeHtml(item.title || 'Resource') + '</h4>' +
+                  '</div>' +
+                  '<span class="workspace-link-tag">' + escapeHtml(label) + '</span>' +
+                '</div>' +
+                renderCardCopy(item.description, 108) +
+              '</button>'
+            );
+          }
           return (
-            '<a class="workspace-select-card workspace-link-card" href="' + escapeHtml(item.url || '#') + '" target="_blank" rel="noreferrer">' +
+            '<a class="workspace-select-card workspace-link-card" href="' + escapeHtml(rawUrl) + '" target="_blank" rel="noreferrer">' +
               '<div class="workspace-select-card-head">' +
                 '<div>' +
                   '<h4>' + escapeHtml(item.title || 'Resource') + '</h4>' +
@@ -2320,6 +2412,14 @@
     if (linksRoot && !linksRoot.dataset.bound) {
       linksRoot.dataset.bound = 'true';
       linksRoot.addEventListener('click', function (event) {
+        var privateFileTrigger = event.target.closest('[data-workspace-private-file-url]');
+        if (privateFileTrigger) {
+          event.preventDefault();
+          openWorkspacePrivateDataFile(privateFileTrigger.getAttribute('data-workspace-private-file-url')).catch(function () {
+            setStatus('Unable to open workspace data. Sign in again or check the helper connection.', 'error');
+          });
+          return;
+        }
         var closeButton = event.target.closest('[data-workspace-link-close]');
         if (closeButton) {
           workspaceState.selectedLinkId = null;
@@ -2333,6 +2433,16 @@
         workspaceState.selectedLinkId = nextId;
         renderWorkspaceLinks();
         if (nextId) revealSectionDetail('workspace-link-detail');
+      });
+    }
+
+    var privateFileDetail = byId('workspace-private-file-detail');
+    if (privateFileDetail && !privateFileDetail.dataset.bound) {
+      privateFileDetail.dataset.bound = 'true';
+      privateFileDetail.addEventListener('click', function (event) {
+        var closeButton = event.target.closest('[data-workspace-private-file-close]');
+        if (!closeButton) return;
+        privateFileDetail.hidden = true;
       });
     }
 
