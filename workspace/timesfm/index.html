@@ -19,7 +19,7 @@ script_bundle: timesfm
     <div>
       <p class="eyebrow">Private Workspace Tool</p>
       <h1>TimesFM Forecaster</h1>
-      <p class="timesfm-hero-copy">Upload a time-series CSV, choose forecast windows, and run zero-shot TimesFM inference through the aibig9 GPU API.</p>
+      <p class="timesfm-hero-copy">Upload a time-series CSV, choose forecast windows, and run zero-shot TimesFM inference through your authenticated Workspace helper and the aibig9 GPU API.</p>
     </div>
     <aside class="timesfm-note" aria-label="TimesFM safety note">
       <strong>No fine-tuning</strong>
@@ -39,24 +39,16 @@ script_bundle: timesfm
       <article class="timesfm-panel">
         <div class="timesfm-panel-head">
           <div>
-            <p class="eyebrow">1. API Access</p>
-            <h2>aibig9 API connection</h2>
+            <p class="eyebrow">1. Workspace-authenticated API</p>
+            <h2>aibig9 GPU connection</h2>
           </div>
-          <button class="timesfm-button timesfm-button--soft" id="timesfm-health-button" type="button">Check API</button>
+          <button class="timesfm-button timesfm-button--soft" id="timesfm-health-button" type="button">Check GPU API</button>
         </div>
-        <label class="timesfm-field">
-          <span>API URL for aibig9</span>
-          <input id="timesfm-api-url" type="url" inputmode="url" placeholder="https://your-aibig9-api.example.com">
-        </label>
-        <label class="timesfm-field">
-          <span>API token for aibig9</span>
-          <input id="timesfm-token" type="password" autocomplete="off" placeholder="Stored only in this browser session">
-        </label>
-        <div class="timesfm-actions">
-          <button class="timesfm-button timesfm-button--soft" id="timesfm-save-token" type="button">Use token for this session</button>
-          <button class="timesfm-button timesfm-button--ghost" id="timesfm-clear-saved" type="button">Clear saved API URL/token</button>
+        <div class="timesfm-trust-card">
+          <strong>Uses your existing Workspace session</strong>
+          <span>The browser sends only the Workspace helper session. The aibig9 API token stays on the helper/server side and is never typed into or stored by this page.</span>
         </div>
-        <p class="timesfm-help">Production must use HTTPS. A bare IP is not enough for GitHub Pages unless it is exposed through HTTPS by Cloudflare Tunnel or a reverse proxy.</p>
+        <p class="timesfm-help">If the status is disconnected, restart the Workspace helper with `TIMESFM_API_BASE_URL` and `TIMESFM_API_TOKEN` configured.</p>
       </article>
 
       <article class="timesfm-panel">

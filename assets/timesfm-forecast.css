@@ -119,6 +119,24 @@
   box-shadow: inset 0 0 0 1px rgba(14, 116, 144, .12);
 }
 
+.timesfm-trust-card {
+  display: grid;
+  gap: .45rem;
+  border-radius: 18px;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(239, 246, 255, .92), rgba(236, 253, 245, .88));
+  box-shadow: inset 0 0 0 1px rgba(29, 78, 216, .12);
+}
+
+.timesfm-trust-card strong {
+  color: var(--timesfm-ink);
+}
+
+.timesfm-trust-card span {
+  color: var(--timesfm-muted);
+  line-height: 1.55;
+}
+
 .timesfm-note span,
 .timesfm-help,
 .timesfm-drop-copy,

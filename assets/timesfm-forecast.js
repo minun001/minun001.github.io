@@ -1,5 +1,4 @@
 (function () {
-  var API_URL_STORAGE_KEY = 'timesfm.aibig9.apiBaseUrl';
   var WORKSPACE_HELPER_STORAGE_KEY = 'workspace.helperBaseUrl';
   var WORKSPACE_HELPER_TOKEN_PREFIX = 'workspace.helperSessionToken:';
   var DEFAULT_HELPER_BASE_URL = 'https://tobacco-tournament-growth-revision.trycloudflare.com';
@@ -10,7 +9,7 @@
     preview: null,
     result: null,
     apiBaseUrl: '',
-    apiToken: ''
+    helperToken: ''
   };
 
   function byId(id) {
@@ -33,11 +32,10 @@
   function getConfig() {
     var raw = window.TIMESFM_WORKSPACE_CONFIG || {};
     return Object.assign({
-      apiBaseUrl: 'AIBIG9_PUBLIC_API_URL',
-      healthEndpoint: '/health',
-      previewEndpoint: '/api/timesfm/preview',
-      forecastEndpoint: '/api/timesfm/forecast',
-      tokenStorageKey: 'timesfm.aibig9.apiToken',
+      apiMode: 'workspace-helper',
+      healthEndpoint: '/timesfm/health',
+      previewEndpoint: '/timesfm/preview',
+      forecastEndpoint: '/timesfm/forecast',
       maxUploadMb: 25
     }, raw);
   }
@@ -58,7 +56,7 @@
 
   function normalizeHttpsUrl(value, options) {
     var raw = String(value || '').trim();
-    if (!raw || raw === 'AIBIG9_PUBLIC_API_URL') return '';
+    if (!raw) return '';
     if (!/^https?:\/\//i.test(raw)) raw = 'https://' + raw;
     try {
       var parsed = new URL(raw);
@@ -104,23 +102,6 @@
     }
   }
 
-  function setSessionValue(key, value) {
-    try {
-      if (value) window.sessionStorage.setItem(key, value);
-      else window.sessionStorage.removeItem(key);
-    } catch (_error) {}
-  }
-
-  function resolveApiBaseUrl(config) {
-    var queryOverride = normalizeHttpsUrl(getQueryValue('timesfmApi'), { allowLocalHttp: true });
-    if (queryOverride) {
-      setStoredValue(API_URL_STORAGE_KEY, queryOverride);
-      return queryOverride;
-    }
-    return normalizeHttpsUrl(getStoredValue(API_URL_STORAGE_KEY), { allowLocalHttp: true }) ||
-      normalizeHttpsUrl(config.apiBaseUrl, { allowLocalHttp: false });
-  }
-
   function joinUrl(base, path) {
     var safeBase = String(base || '').replace(/\/+$/, '');
     var safePath = String(path || '').replace(/^\/?/, '/');
@@ -137,8 +118,11 @@
       setStoredValue(WORKSPACE_HELPER_STORAGE_KEY, queryOverride);
       return queryOverride;
     }
-    return normalizeHelperBaseUrl((config.localAuth || {}).helperBaseUrl) ||
-      normalizeHelperBaseUrl(getStoredValue(WORKSPACE_HELPER_STORAGE_KEY)) ||
+    var provider = String((config && config.provider) || '').toLowerCase();
+    var configuredHelper = normalizeHelperBaseUrl((config.localAuth || {}).helperBaseUrl);
+    if (configuredHelper) return configuredHelper;
+    if (provider === 'local-helper') return window.location.origin;
+    return normalizeHelperBaseUrl(getStoredValue(WORKSPACE_HELPER_STORAGE_KEY)) ||
       normalizeHelperBaseUrl(DEFAULT_HELPER_BASE_URL);
   }
 
@@ -152,20 +136,25 @@
     var sessionPath = ((config.localAuth || {}).sessionEndpoint || '/local-auth/session');
     var endpoint = /^https?:\/\//i.test(sessionPath) ? sessionPath : joinUrl(helperBaseUrl, sessionPath);
     var helperToken = getHelperToken(helperBaseUrl);
-    if (!helperBaseUrl || !helperToken) return false;
+    if (!helperBaseUrl) return { authenticated: false, helperBaseUrl: '', helperToken: '' };
+    var headers = {};
+    if (helperToken) headers.Authorization = 'Bearer ' + helperToken;
+    var sameOrigin = new URL(endpoint, window.location.href).origin === window.location.origin;
     var response = await window.fetch(endpoint, {
       method: 'GET',
       cache: 'no-store',
-      credentials: 'omit',
-      headers: {
-        Authorization: 'Bearer ' + helperToken
-      }
+      credentials: sameOrigin ? 'same-origin' : 'omit',
+      headers: headers
     });
     var payload = {};
     try {
       payload = await response.json();
     } catch (_error) {}
-    return response.ok && payload && payload.ok !== false && payload.configured !== false && payload.authenticated === true;
+    return {
+      authenticated: response.ok && payload && payload.ok !== false && payload.configured !== false && payload.authenticated === true,
+      helperBaseUrl: helperBaseUrl,
+      helperToken: helperToken
+    };
   }
 
   function setStatus(label, tone) {
@@ -320,28 +309,32 @@
     return payload;
   }
 
-  function getApiToken() {
-    var config = getConfig();
-    var input = byId('timesfm-token');
-    return String((input && input.value) || getSessionValue(config.tokenStorageKey) || '').trim();
+  function buildHelperAuthHeaders() {
+    return state.helperToken ? { Authorization: 'Bearer ' + state.helperToken } : {};
   }
 
-  function buildAuthHeaders() {
-    var token = getApiToken();
-    return token ? { Authorization: 'Bearer ' + token } : {};
+  function helperCredentials(endpoint) {
+    try {
+      return new URL(endpoint, window.location.href).origin === window.location.origin ? 'same-origin' : 'omit';
+    } catch (_error) {
+      return 'omit';
+    }
   }
 
   async function checkApiHealth() {
     var config = getConfig();
     if (!state.apiBaseUrl) {
       setStatus('API disconnected', 'error');
-      setMessage('Cannot reach the aibig9 TimesFM API. Configure an HTTPS API URL with ?timesfmApi=https://your-helper-url or the API URL field.', 'error');
+      setMessage('Cannot reach the Workspace helper. Sign in from /workspace/ again, then reopen this tool.', 'error');
       return null;
     }
     try {
-      var payload = await requestJson(joinUrl(state.apiBaseUrl, config.healthEndpoint), {
+      var endpoint = joinUrl(state.apiBaseUrl, config.healthEndpoint);
+      var payload = await requestJson(endpoint, {
         method: 'GET',
-        cache: 'no-store'
+        headers: buildHelperAuthHeaders(),
+        cache: 'no-store',
+        credentials: helperCredentials(endpoint)
       });
       if (payload.cuda_available === false || payload.device === 'cpu') {
         setStatus('GPU unavailable', 'warn');
@@ -349,8 +342,9 @@
         setStatus('aibig9 API connected', 'ok');
       }
       return payload;
-    } catch (_error) {
+    } catch (error) {
       setStatus('API disconnected', 'error');
+      setMessage(error.message || 'Cannot reach the aibig9 TimesFM API through the Workspace helper.', 'error');
       return null;
     }
   }
@@ -363,24 +357,20 @@
       return;
     }
     if (!state.apiBaseUrl) {
-      setMessage('Cannot reach the aibig9 TimesFM API. Check API URL, Cloudflare tunnel, or server process.', 'error');
-      return;
-    }
-    var token = getApiToken();
-    if (!token) {
-      setStatus('Auth required', 'auth');
-      setMessage('Missing aibig9 API token. Enter token for this browser session.', 'error');
+      setMessage('Cannot reach the aibig9 TimesFM API through the Workspace helper. Check the helper process and its TimesFM settings.', 'error');
       return;
     }
     var form = new FormData();
     form.append('file', state.file);
     setBusy(button, true, 'Previewing...');
     try {
-      var payload = await requestJson(joinUrl(state.apiBaseUrl, config.previewEndpoint), {
+      var endpoint = joinUrl(state.apiBaseUrl, config.previewEndpoint);
+      var payload = await requestJson(endpoint, {
         method: 'POST',
         body: form,
-        headers: buildAuthHeaders(),
-        cache: 'no-store'
+        headers: buildHelperAuthHeaders(),
+        cache: 'no-store',
+        credentials: helperCredentials(endpoint)
       });
       renderPreview(payload);
       setMessage('Preview loaded. Select columns and forecast windows next.', 'neutral');
@@ -554,23 +544,20 @@
       setMessage('Could not parse the file. Use CSV/TSV with one timestamp column and one numeric target column.', 'error');
       return;
     }
-    if (!getApiToken()) {
-      setStatus('Auth required', 'auth');
-      setMessage('Missing aibig9 API token. Enter token for this browser session.', 'error');
-      return;
-    }
     setBusy(button, true, 'Running on aibig9...');
     setMessage('Submitting forecast request to aibig9. Large models can take a moment.', 'neutral');
     try {
-      var payload = await requestJson(joinUrl(state.apiBaseUrl, config.forecastEndpoint), {
+      var endpoint = joinUrl(state.apiBaseUrl, config.forecastEndpoint);
+      var payload = await requestJson(endpoint, {
         method: 'POST',
         body: buildForecastForm(),
-        headers: buildAuthHeaders(),
-        cache: 'no-store'
+        headers: buildHelperAuthHeaders(),
+        cache: 'no-store',
+        credentials: helperCredentials(endpoint)
       });
       renderResult(payload);
     } catch (error) {
-      setMessage(error.message || 'Forecast failed. Check API URL, token, CUDA, and input windows.', 'error');
+      setMessage(error.message || 'Forecast failed. Check the Workspace helper, aibig9 API process, CUDA, and input windows.', 'error');
     } finally {
       setBusy(button, false, 'Run TimesFM forecast on aibig9');
     }
@@ -607,14 +594,8 @@
   }
 
   function bindEvents() {
-    var config = getConfig();
     var dropzone = byId('timesfm-dropzone');
     var fileInput = byId('timesfm-file-input');
-    var apiUrlInput = byId('timesfm-api-url');
-    var tokenInput = byId('timesfm-token');
-
-    if (apiUrlInput) apiUrlInput.value = state.apiBaseUrl || '';
-    if (tokenInput) tokenInput.value = getSessionValue(config.tokenStorageKey);
 
     if (dropzone) {
       ['dragenter', 'dragover'].forEach(function (eventName) {
@@ -641,29 +622,6 @@
       });
     }
 
-    byId('timesfm-save-token').addEventListener('click', function () {
-      var apiUrl = normalizeHttpsUrl(apiUrlInput.value, { allowLocalHttp: true });
-      if (apiUrl) {
-        state.apiBaseUrl = apiUrl;
-        setStoredValue(API_URL_STORAGE_KEY, apiUrl);
-      }
-      state.apiToken = String(tokenInput.value || '').trim();
-      setSessionValue(config.tokenStorageKey, state.apiToken);
-      checkApiHealth();
-      setMessage('API URL and token were saved for this browser session.', 'neutral');
-    });
-
-    byId('timesfm-clear-saved').addEventListener('click', function () {
-      setStoredValue(API_URL_STORAGE_KEY, '');
-      setSessionValue(config.tokenStorageKey, '');
-      state.apiBaseUrl = normalizeHttpsUrl(config.apiBaseUrl, { allowLocalHttp: false });
-      state.apiToken = '';
-      if (apiUrlInput) apiUrlInput.value = state.apiBaseUrl;
-      if (tokenInput) tokenInput.value = '';
-      setStatus('API disconnected', 'error');
-      setMessage('Saved API URL and token were cleared.', 'neutral');
-    });
-
     byId('timesfm-health-button').addEventListener('click', checkApiHealth);
     byId('timesfm-preview-button').addEventListener('click', previewColumns);
     byId('timesfm-forecast-button').addEventListener('click', runForecast);
@@ -674,20 +632,18 @@
 
   async function init() {
     if (!document.querySelector('[data-timesfm-page]')) return;
-    var config = getConfig();
-    state.apiBaseUrl = resolveApiBaseUrl(config);
-    state.apiToken = getSessionValue(config.tokenStorageKey);
-
     var authGate = byId('timesfm-auth-gate');
     var app = byId('timesfm-app');
     try {
-      var hasSession = await checkWorkspaceSession();
-      if (!hasSession) {
+      var session = await checkWorkspaceSession();
+      if (!session.authenticated) {
         if (authGate) authGate.hidden = false;
         if (app) app.hidden = true;
         setStatus('Auth required', 'auth');
         return;
       }
+      state.apiBaseUrl = session.helperBaseUrl;
+      state.helperToken = session.helperToken || '';
     } catch (_error) {
       if (authGate) authGate.hidden = false;
       if (app) app.hidden = true;

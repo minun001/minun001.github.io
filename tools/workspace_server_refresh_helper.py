@@ -12,7 +12,9 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
+from urllib import error as urlerror
 from urllib.parse import parse_qs, unquote, urlparse
+from urllib import request as urlrequest
 
 import workspace_server_sync
 
@@ -29,6 +31,11 @@ PRIVATE_TOOL_FILES = {
     "/tools/workspace_content.json": TOOLS_DIR / "workspace_content.json",
     "/tools/workspace_server_sync_fallback.json": TOOLS_DIR / "workspace_server_sync_fallback.json",
     "/tools/workspace_site_signals.json": TOOLS_DIR / "workspace_site_signals.json",
+}
+TIMESFM_PROXY_ENDPOINTS = {
+    "/timesfm/health": ("GET", "/health"),
+    "/timesfm/preview": ("POST", "/api/timesfm/preview"),
+    "/timesfm/forecast": ("POST", "/api/timesfm/forecast"),
 }
 
 
@@ -284,6 +291,9 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
             return
         parsed = urlparse(self.path)
         path = parsed.path
+        if path in TIMESFM_PROXY_ENDPOINTS:
+            self.handle_timesfm_proxy(path)
+            return
         if path == "/refresh":
             self.handle_refresh(parsed.query)
             return
@@ -308,6 +318,7 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
                 "allow_any_email": state.allows_any_email(),
                 "fallback_output": str(state.fallback_output) if state.fallback_output else "",
                 "static_root": str(state.static_root),
+                "timesfm_proxy_configured": bool(self.get_timesfm_api_base_url()),
             },
         )
 
@@ -397,6 +408,9 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
         if self.reject_non_loopback():
             return
         parsed = urlparse(self.path)
+        if parsed.path in TIMESFM_PROXY_ENDPOINTS:
+            self.handle_timesfm_proxy(parsed.path)
+            return
         if parsed.path == "/refresh":
             self.handle_refresh(parsed.query)
             return
@@ -407,6 +421,95 @@ class WorkspaceRefreshHandler(BaseHTTPRequestHandler):
             self.handle_auth_logout()
             return
         self.write_json(404, {"ok": False, "error": "Not found."})
+
+    def get_timesfm_api_base_url(self) -> str:
+        raw = os.environ.get("TIMESFM_API_BASE_URL", "").strip().rstrip("/")
+        if not raw:
+            return ""
+        parsed = urlparse(raw)
+        is_loopback = parsed.hostname in {"127.0.0.1", "localhost", "::1"}
+        if parsed.scheme == "https" or (parsed.scheme == "http" and is_loopback):
+            return raw
+        return ""
+
+    def get_timesfm_proxy_max_bytes(self) -> int:
+        try:
+            max_mb = int(os.environ.get("TIMESFM_PROXY_MAX_MB") or os.environ.get("MAX_UPLOAD_MB") or "25")
+        except ValueError:
+            max_mb = 25
+        return max(1, min(max_mb, 100)) * 1024 * 1024
+
+    def read_raw_body(self) -> bytes:
+        try:
+            length = int(self.headers.get("Content-Length") or "0")
+        except ValueError:
+            length = 0
+        if length <= 0:
+            return b""
+        if length > self.get_timesfm_proxy_max_bytes():
+            raise ValueError("TimesFM upload exceeds helper proxy size limit.")
+        return self.rfile.read(length)
+
+    def handle_timesfm_proxy(self, path: str) -> None:
+        if not self.require_authenticated():
+            return
+        expected_method, target_path = TIMESFM_PROXY_ENDPOINTS[path]
+        if self.command != expected_method:
+            self.write_json(405, {"ok": False, "error": "Method not allowed."})
+            return
+        api_base_url = self.get_timesfm_api_base_url()
+        if not api_base_url:
+            self.write_json(
+                503,
+                {
+                    "ok": False,
+                    "error": "TimesFM API is not configured on the Workspace helper.",
+                },
+            )
+            return
+        api_token = os.environ.get("TIMESFM_API_TOKEN", "").strip()
+        if target_path != "/health" and not api_token:
+            self.write_json(503, {"ok": False, "error": "TimesFM API token is not configured on the Workspace helper."})
+            return
+
+        try:
+            body = self.read_raw_body() if expected_method == "POST" else None
+        except ValueError as error:
+            self.write_json(413, {"ok": False, "error": str(error)})
+            return
+
+        headers = {"Accept": "application/json"}
+        content_type = self.headers.get("Content-Type")
+        if content_type:
+            headers["Content-Type"] = content_type
+        if api_token:
+            headers["Authorization"] = f"Bearer {api_token}"
+
+        request = urlrequest.Request(
+            api_base_url + target_path,
+            data=body,
+            headers=headers,
+            method=expected_method,
+        )
+        try:
+            with urlrequest.urlopen(request, timeout=float(os.environ.get("TIMESFM_PROXY_TIMEOUT_SECONDS", "900"))) as response:
+                data = response.read()
+                content_type = response.headers.get("Content-Type") or "application/json"
+                self.send_response(response.status)
+                self.send_header("Content-Type", content_type)
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+        except urlerror.HTTPError as error:
+            data = error.read()
+            self.send_response(error.code)
+            self.send_header("Content-Type", error.headers.get("Content-Type") or "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+        except (OSError, urlerror.URLError) as error:
+            sys.stderr.write(f"TimesFM proxy failed: {error}\n")
+            self.write_json(502, {"ok": False, "error": "Cannot reach the aibig9 TimesFM API from the Workspace helper."})
 
     def handle_auth_session(self) -> None:
         state: RefreshState = self.server.refresh_state  # type: ignore[attr-defined]

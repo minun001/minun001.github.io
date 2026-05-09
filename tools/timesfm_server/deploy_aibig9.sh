@@ -31,7 +31,8 @@ Next steps:
    set -a; [ -f .env ] && . ./.env; set +a
    "$VENV_DIR/bin/uvicorn" app:app --host 127.0.0.1 --port "$PORT"
 3. Expose 127.0.0.1:$PORT through HTTPS with Cloudflare Tunnel or Nginx.
-4. Open /workspace/timesfm/?timesfmApi=https://your-public-aibig9-api.example.com
+4. Restart the Workspace helper with TIMESFM_API_BASE_URL and TIMESFM_API_TOKEN.
+5. Open /workspace/timesfm/
 
 Do not expose /api/timesfm/* without TIMESFM_API_TOKEN.
 EOF

@@ -26,10 +26,17 @@ Run:
 cloudflared tunnel run timesfm-aibig9
 ```
 
+If the Workspace helper runs on the same server, set:
+
+```bash
+export TIMESFM_API_BASE_URL=http://127.0.0.1:8791
+export TIMESFM_API_TOKEN=CHANGE_ME
+```
+
 Then open:
 
 ```text
-https://minun001.github.io/workspace/timesfm/?timesfmApi=https://timesfm-api.example.com
+https://minun001.github.io/workspace/timesfm/
 ```
 
-Keep `/api/timesfm/*` protected with `TIMESFM_API_TOKEN`. If Cloudflare Access is added, the browser may also need Access headers or an allowed session.
+Keep `/api/timesfm/*` protected with `TIMESFM_API_TOKEN`. The browser should normally talk to the Workspace helper proxy, not directly to this TimesFM API hostname.

@@ -10,6 +10,7 @@ tools/workspace_content.json
 tools/workspace_server_sync_fallback.json
 tools/workspace_site_signals.json
 tools/workspace_supabase_seed.sql
+tools/workspace_helper.env
 .env
 .venv/
 *.pyc
