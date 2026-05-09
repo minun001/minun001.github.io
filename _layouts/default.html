@@ -13,12 +13,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260425e">
+  {% assign script_bundle = page.script_bundle | default: 'public' %}
+  {% if script_bundle == 'timesfm' %}
+  <link rel="stylesheet" href="{{ "/assets/timesfm-forecast.css" | relative_url }}?v=20260509a">
+  {% endif %}
 </head>
 {% assign current_url = page.url | replace: 'index.html', '' %}
 {% if current_url == '' %}
   {% assign current_url = '/' %}
 {% endif %}
-{% assign script_bundle = page.script_bundle | default: 'public' %}
 <body class="{{ page.body_class | default: '' }}">
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
@@ -84,6 +87,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260509d"></script>
     <script src="{{ "/assets/workspace.js" | relative_url }}?v=20260509d"></script>
+  {% elsif script_bundle == 'timesfm' %}
+    <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260509d"></script>
+    <script src="{{ "/assets/timesfm-config.js" | relative_url }}?v=20260509a"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="{{ "/assets/timesfm-forecast.js" | relative_url }}?v=20260509a"></script>
   {% else %}
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     {% if page.include_public_analytics != false %}

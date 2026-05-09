@@ -10,3 +10,13 @@ tools/workspace_content.json
 tools/workspace_server_sync_fallback.json
 tools/workspace_site_signals.json
 tools/workspace_supabase_seed.sql
+.env
+.venv/
+*.pyc
+__pycache__/
+tools/timesfm_server/.env
+tools/timesfm_server/.venv/
+tools/timesfm_server/uploads/
+tools/timesfm_server/logs/
+tools/timesfm_server/model-cache/
+tools/timesfm_server/.pytest_cache/
