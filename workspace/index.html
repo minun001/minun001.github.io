@@ -20,6 +20,23 @@ script_bundle: workspace
     .workspace-panel{padding:1.4rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(247,250,252,.96) 100%);box-shadow:0 16px 30px rgba(15,23,42,.05)}
     .workspace-panel h2{margin-bottom:.35rem}
     .workspace-panel p{margin:0}
+    .workspace-login-panel{position:relative;overflow:hidden}
+    .workspace-login-panel::before{content:"";position:absolute;inset:-90px -120px auto auto;width:240px;height:240px;border-radius:999px;background:radial-gradient(circle,rgba(43,179,168,.16) 0%,rgba(43,179,168,0) 70%);pointer-events:none}
+    .workspace-login-copy{max-width:34rem}
+    .workspace-login-preview{position:relative;display:grid;gap:.85rem;margin-top:1rem;padding:1rem;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(242,248,250,.96) 100%);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08)}
+    .workspace-login-preview-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+    .workspace-login-preview-head span{color:var(--text-soft);font-size:.72rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+    .workspace-login-preview-head strong{display:block;margin-top:.1rem;color:var(--text-title);font-size:1.02rem;line-height:1.25}
+    .workspace-login-preview-note{flex:0 0 auto;padding:.28rem .55rem;border-radius:999px;background:rgba(15,118,110,.1);color:#0f766e;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+    .workspace-login-preview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.62rem}
+    .workspace-login-preview-card{display:grid;gap:.38rem;min-height:124px;padding:.82rem;border-radius:15px;background:#fff;box-shadow:inset 0 0 0 1px rgba(17,32,51,.08)}
+    .workspace-login-preview-card span{color:var(--text-soft);font-size:.68rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+    .workspace-login-preview-card strong{color:var(--text-title);font-size:.95rem;line-height:1.25}
+    .workspace-login-preview-card p{color:var(--text-soft);font-size:.78rem;line-height:1.45}
+    .workspace-login-preview-meter{align-self:end;position:relative;height:8px;border-radius:999px;background:rgba(17,32,51,.08);overflow:hidden}
+    .workspace-login-preview-meter::after{content:"";position:absolute;inset:0 auto 0 0;width:58%;border-radius:999px;background:linear-gradient(90deg,#2bb3a8,#1d4ed8)}
+    .workspace-login-preview-card:nth-child(2) .workspace-login-preview-meter::after{width:74%;background:linear-gradient(90deg,#1d4ed8,#60a5fa)}
+    .workspace-login-preview-card:nth-child(3) .workspace-login-preview-meter::after{width:42%;background:linear-gradient(90deg,#f59e0b,#ef4444)}
     .workspace-dashboard-head{display:grid;gap:.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-soft)}
     .workspace-dashboard-copy{display:grid;gap:.2rem}
     .workspace-dashboard-copy h2{margin:0;color:var(--text-title);font-size:clamp(2.2rem,4.6vw,3.4rem);line-height:.98}
@@ -259,8 +276,8 @@ script_bundle: workspace
     .workspace-shell[data-mode="private"] > article[data-workspace-view="dashboard"]{order:1}
     [data-workspace-view][hidden]{display:none}
     [data-workspace-private][hidden]{display:none}
-    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list,.workspace-summary-grid,.workspace-signal-grid,.workspace-signal-stats,.workspace-server-detail-grid,.workspace-server-hero-grid,.workspace-minhs-grid{grid-template-columns:1fr}.workspace-shell[data-mode="private"]>aside.workspace-panel{position:static;top:auto}.workspace-detail-head{grid-template-columns:1fr;display:grid}.workspace-meta-row{grid-template-columns:1fr;gap:.28rem}.workspace-meta-value{text-align:left}.workspace-section-head--split{grid-template-columns:1fr}}
-    @media (max-width:720px){.workspace-page{gap:1.15rem}.workspace-page[data-mode="auth"]{padding-block:1rem 2rem}.workspace-shell,.workspace-stack,.workspace-servers,.workspace-server-alerts,.workspace-signals,.workspace-links,.workspace-analytics{gap:1rem}.workspace-panel{padding:1.05rem;border-radius:16px}.workspace-dashboard-head{padding-bottom:.8rem}.workspace-dashboard-copy h2{font-size:clamp(1.8rem,8vw,2.25rem)}.workspace-dashboard-copy p,.workspace-section-head p{font-size:.85rem;line-height:1.45}.workspace-section{gap:.8rem;padding-top:.9rem}.workspace-section-head h3{font-size:1.04rem}.workspace-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.85rem}.workspace-mini-card,.workspace-empty,.workspace-select-card,.workspace-signal-card,.workspace-detail-panel,.workspace-server-detail-block,.workspace-analytics-card,.workspace-analytics-panel,.workspace-server-alert-summary,.workspace-server-stat-card,.workspace-server-device{padding:.9rem;border-radius:14px}.workspace-mini-card span{font-size:.68rem}.workspace-mini-card strong{font-size:1.04rem}.workspace-select-card,.workspace-signal-card{gap:.65rem}.workspace-select-card--featured{padding:.95rem}.workspace-select-card-head,.workspace-signal-head,.workspace-server-device-head,.workspace-server-alert-head,.workspace-chart-row-head,.workspace-server-meter-head{flex-direction:column;align-items:flex-start;gap:.45rem}.workspace-server-alert-total{flex:0 1 auto}.workspace-server-alert-pill{grid-template-columns:1fr;border-radius:14px}.workspace-select-card-copy,.workspace-signal-copy{font-size:.88rem;line-height:1.55}.workspace-select-card-meta,.workspace-detail-meta,.workspace-server-updated,.workspace-note-meta{font-size:.75rem}.workspace-server-meter-track,.workspace-signal-mini-bar-track{height:8px}.workspace-server-detail-grid,.workspace-server-hero-grid,.workspace-analytics-grid,.workspace-signal-stats{gap:.7rem}.workspace-server-stat-value{font-size:1.45rem}.workspace-server-fact-row{gap:.5rem}.workspace-server-fact-pill{min-width:0;flex:1 1 100%;padding:.65rem .72rem}.workspace-server-device-list{gap:.55rem}.workspace-line-chart svg{height:240px}.workspace-analytics-panel--featured .workspace-line-chart svg{height:280px}.workspace-line-chart-labels{grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:.4rem}.workspace-line-chart-labels span{font-size:.68rem}.workspace-signal-mini svg{height:88px}.workspace-account-head h2{font-size:1.15rem}.workspace-meta{gap:.55rem}.workspace-meta-row{padding-top:.65rem;gap:.2rem}.workspace-actions,.workspace-detail-actions{gap:.55rem}.workspace-button{width:100%;min-height:40px;padding:.66rem .95rem;font-size:.9rem}.workspace-quick-access-actions{margin-top:.8rem}.workspace-shell[data-mode="private"]>aside.workspace-panel{margin-top:.15rem}}
+    @media (max-width:900px){.workspace-shell[data-mode="private"],.workspace-metrics,.workspace-analytics-panels,.workspace-list,.workspace-summary-grid,.workspace-signal-grid,.workspace-signal-stats,.workspace-server-detail-grid,.workspace-server-hero-grid,.workspace-minhs-grid{grid-template-columns:1fr}.workspace-login-preview-grid{grid-template-columns:1fr}.workspace-shell[data-mode="private"]>aside.workspace-panel{position:static;top:auto}.workspace-detail-head{grid-template-columns:1fr;display:grid}.workspace-meta-row{grid-template-columns:1fr;gap:.28rem}.workspace-meta-value{text-align:left}.workspace-section-head--split{grid-template-columns:1fr}}
+    @media (max-width:720px){.workspace-page{gap:1.15rem}.workspace-page[data-mode="auth"]{padding-block:1rem 2rem}.workspace-shell,.workspace-stack,.workspace-servers,.workspace-server-alerts,.workspace-signals,.workspace-links,.workspace-analytics{gap:1rem}.workspace-panel{padding:1.05rem;border-radius:16px}.workspace-login-preview{padding:.9rem;border-radius:15px}.workspace-login-preview-head{flex-direction:column}.workspace-login-preview-note{flex:0 1 auto}.workspace-dashboard-head{padding-bottom:.8rem}.workspace-dashboard-copy h2{font-size:clamp(1.8rem,8vw,2.25rem)}.workspace-dashboard-copy p,.workspace-section-head p{font-size:.85rem;line-height:1.45}.workspace-section{gap:.8rem;padding-top:.9rem}.workspace-section-head h3{font-size:1.04rem}.workspace-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.85rem}.workspace-mini-card,.workspace-empty,.workspace-select-card,.workspace-signal-card,.workspace-detail-panel,.workspace-server-detail-block,.workspace-analytics-card,.workspace-analytics-panel,.workspace-server-alert-summary,.workspace-server-stat-card,.workspace-server-device{padding:.9rem;border-radius:14px}.workspace-mini-card span{font-size:.68rem}.workspace-mini-card strong{font-size:1.04rem}.workspace-select-card,.workspace-signal-card{gap:.65rem}.workspace-select-card--featured{padding:.95rem}.workspace-select-card-head,.workspace-signal-head,.workspace-server-device-head,.workspace-server-alert-head,.workspace-chart-row-head,.workspace-server-meter-head{flex-direction:column;align-items:flex-start;gap:.45rem}.workspace-server-alert-total{flex:0 1 auto}.workspace-server-alert-pill{grid-template-columns:1fr;border-radius:14px}.workspace-select-card-copy,.workspace-signal-copy{font-size:.88rem;line-height:1.55}.workspace-select-card-meta,.workspace-detail-meta,.workspace-server-updated,.workspace-note-meta{font-size:.75rem}.workspace-server-meter-track,.workspace-signal-mini-bar-track{height:8px}.workspace-server-detail-grid,.workspace-server-hero-grid,.workspace-analytics-grid,.workspace-signal-stats{gap:.7rem}.workspace-server-stat-value{font-size:1.45rem}.workspace-server-fact-row{gap:.5rem}.workspace-server-fact-pill{min-width:0;flex:1 1 100%;padding:.65rem .72rem}.workspace-server-device-list{gap:.55rem}.workspace-line-chart svg{height:240px}.workspace-analytics-panel--featured .workspace-line-chart svg{height:280px}.workspace-line-chart-labels{grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:.4rem}.workspace-line-chart-labels span{font-size:.68rem}.workspace-signal-mini svg{height:88px}.workspace-account-head h2{font-size:1.15rem}.workspace-meta{gap:.55rem}.workspace-meta-row{padding-top:.65rem;gap:.2rem}.workspace-actions,.workspace-detail-actions{gap:.55rem}.workspace-button{width:100%;min-height:40px;padding:.66rem .95rem;font-size:.9rem}.workspace-quick-access-actions{margin-top:.8rem}.workspace-shell[data-mode="private"]>aside.workspace-panel{margin-top:.15rem}}
     @media (max-width:480px){.workspace-page{gap:1rem}.workspace-panel{padding:.9rem}.workspace-dashboard-copy h2{font-size:clamp(1.55rem,9vw,1.95rem)}.workspace-dashboard-copy p,.workspace-section-head p{font-size:.81rem}.workspace-section{padding-top:.8rem}.workspace-section-head h3{font-size:1rem}.workspace-metrics,.workspace-signal-stats{gap:.55rem}.workspace-mini-card,.workspace-empty,.workspace-select-card,.workspace-signal-card,.workspace-detail-panel,.workspace-server-detail-block,.workspace-analytics-card,.workspace-analytics-panel,.workspace-server-stat-card,.workspace-server-device{padding:.82rem;border-radius:13px}.workspace-select-card-head h4,.workspace-signal-head h4,.workspace-detail-head h4{font-size:.95rem}.workspace-select-card-copy,.workspace-signal-copy,.workspace-detail-copy{font-size:.84rem;line-height:1.5}.workspace-detail-head{gap:.7rem}.workspace-detail-list{padding-left:1rem}.workspace-detail-list code{font-size:.86em}.workspace-server-status{font-size:.68rem}.workspace-server-stat-value{font-size:1.28rem}.workspace-server-stat-subtitle,.workspace-server-fact-pill span,.workspace-server-error,.workspace-analytics-card p,.workspace-analytics-row span{font-size:.78rem}.workspace-line-chart svg{height:210px}.workspace-analytics-panel--featured .workspace-line-chart svg{height:240px}.workspace-line-chart-value{font-size:11px}.workspace-signal-mini svg{height:78px}.workspace-analytics-badge,.workspace-link-tag,.workspace-note-badge,.workspace-card-microtag,.workspace-server-chip{font-size:.72rem}.workspace-meta-label,.workspace-meta-value{font-size:.74rem}}
     @media (max-width:360px){.workspace-metrics,.workspace-signal-stats{grid-template-columns:1fr}.workspace-button{font-size:.86rem}}
   </style>
@@ -275,10 +292,39 @@ script_bundle: workspace
         </section>
 
         <section class="workspace-shell" data-workspace-shell data-mode="auth">
-          <article class="workspace-panel" data-workspace-view="login">
+          <article class="workspace-panel workspace-login-panel" data-workspace-view="login">
             <div class="eyebrow">Login</div>
             <h2>Workspace Login</h2>
-            <p>Sign in with your private workspace credentials.</p>
+            <p class="workspace-login-copy">Sign in with your private workspace credentials. A quick preview is shown below so the private area feels less like a blank door.</p>
+            <div class="workspace-login-preview" aria-label="Workspace preview">
+              <div class="workspace-login-preview-head">
+                <div>
+                  <span>Inside Workspace</span>
+                  <strong>Small operations cockpit after login</strong>
+                </div>
+                <div class="workspace-login-preview-note">Private data hidden</div>
+              </div>
+              <div class="workspace-login-preview-grid">
+                <div class="workspace-login-preview-card">
+                  <span>Server Usage</span>
+                  <strong>CPU, GPU, disk</strong>
+                  <p>Check server load, disk pressure, and live refresh status.</p>
+                  <div class="workspace-login-preview-meter" aria-hidden="true"></div>
+                </div>
+                <div class="workspace-login-preview-card">
+                  <span>Work Monitor</span>
+                  <strong>Active jobs</strong>
+                  <p>Review running work, recent files, and min_hs activity.</p>
+                  <div class="workspace-login-preview-meter" aria-hidden="true"></div>
+                </div>
+                <div class="workspace-login-preview-card">
+                  <span>Server Alerts</span>
+                  <strong>Needs attention</strong>
+                  <p>Surface high disk usage, busy GPU, and stale snapshots.</p>
+                  <div class="workspace-login-preview-meter" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
             <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true">Checking workspace access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
