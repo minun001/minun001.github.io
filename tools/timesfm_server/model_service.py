@@ -57,6 +57,13 @@ def smape(actual: np.ndarray, predicted: np.ndarray) -> float | None:
     return float(np.mean(np.abs(actual[mask] - predicted[mask]) / denominator[mask]) * 100.0)
 
 
+def mape(actual: np.ndarray, predicted: np.ndarray) -> float | None:
+    mask = np.abs(actual) > 1e-12
+    if not np.any(mask):
+        return None
+    return float(np.mean(np.abs((actual[mask] - predicted[mask]) / actual[mask])) * 100.0)
+
+
 def compute_metrics(
     actual: np.ndarray,
     predicted: np.ndarray,
@@ -73,6 +80,7 @@ def compute_metrics(
     metrics: dict[str, float | None] = {
         "mae": float(np.mean(np.abs(actual_valid - predicted_valid))),
         "rmse": float(np.sqrt(np.mean(np.square(actual_valid - predicted_valid)))),
+        "mape": mape(actual_valid, predicted_valid),
         "smape": smape(actual_valid, predicted_valid),
     }
     if lower is not None and upper is not None:

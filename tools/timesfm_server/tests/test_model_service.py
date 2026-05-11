@@ -13,7 +13,7 @@ def test_compute_metrics_basic() -> None:
     assert metrics is not None
     assert round(metrics["mae"], 3) == 0.5
     assert round(metrics["rmse"], 3) == 0.645
-    assert metrics["smape"] is not None
+    assert round(metrics["mape"], 3) == 30.556
 
 
 def test_mock_forecast_split_and_response(monkeypatch) -> None:

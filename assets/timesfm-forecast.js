@@ -651,8 +651,8 @@
 
   function metricCard(label, metrics) {
     if (!metrics) return '';
-    var parts = ['MAE ' + formatMetric(metrics.mae), 'RMSE ' + formatMetric(metrics.rmse), 'sMAPE ' + formatMetric(metrics.smape)];
-    if (metrics.interval_coverage_q10_q90 != null) parts.push('q10-q90 ' + formatMetric(metrics.interval_coverage_q10_q90));
+    var parts = ['MAE ' + formatMetric(metrics.mae), 'RMSE ' + formatMetric(metrics.rmse), 'MAPE ' + formatPercentMetric(metrics.mape)];
+    if (metrics.interval_coverage_q10_q90 != null) parts.push('q10-q90 ' + formatPercentMetric(metrics.interval_coverage_q10_q90));
     return '<div class="timesfm-metric-card"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(parts.join(' | ')) + '</strong></div>';
   }
 
@@ -660,6 +660,11 @@
     var numberValue = Number(value);
     if (!Number.isFinite(numberValue)) return '-';
     return Math.abs(numberValue) >= 100 ? numberValue.toFixed(1) : numberValue.toFixed(3);
+  }
+
+  function formatPercentMetric(value) {
+    var formatted = formatMetric(value);
+    return formatted === '-' ? formatted : formatted + '%';
   }
 
   function renderMeta(result) {

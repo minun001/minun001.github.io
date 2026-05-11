@@ -55,6 +55,7 @@ class ForecastPoint(BaseModel):
 class MetricSet(BaseModel):
     mae: float | None = None
     rmse: float | None = None
+    mape: float | None = None
     smape: float | None = None
     interval_coverage_q10_q90: float | None = None
 
