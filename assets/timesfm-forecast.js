@@ -9,7 +9,8 @@
     preview: null,
     result: null,
     apiBaseUrl: '',
-    helperToken: ''
+    helperToken: '',
+    bridgeReady: false
   };
 
   function byId(id) {
@@ -172,6 +173,37 @@
     node.setAttribute('data-tone', tone || 'neutral');
   }
 
+  function setBridgeDetail(message, tone) {
+    var node = byId('timesfm-bridge-detail');
+    if (!node) return;
+    node.textContent = message;
+    node.setAttribute('data-tone', tone || 'neutral');
+  }
+
+  function setDisabled(id, disabled, title) {
+    var node = byId(id);
+    if (!node) return;
+    node.disabled = Boolean(disabled);
+    if (title) node.title = title;
+    else node.removeAttribute('title');
+  }
+
+  function updateActionButtons() {
+    var bridgeMissingTitle = 'GPU bridge is not ready yet. Check the bridge status first.';
+    var fileMissingTitle = 'Select a CSV or TSV file first.';
+    var previewMissingTitle = 'Preview columns before running a forecast.';
+    var previewDisabled = !state.file;
+    var forecastDisabled = !state.bridgeReady || !state.file || !state.preview;
+    setDisabled('timesfm-preview-button', previewDisabled, state.file ? '' : fileMissingTitle);
+    setDisabled('timesfm-forecast-button', forecastDisabled, !state.bridgeReady ? bridgeMissingTitle : (!state.file ? fileMissingTitle : (state.preview ? '' : previewMissingTitle)));
+  }
+
+  function setBridgeReady(isReady, message, tone) {
+    state.bridgeReady = Boolean(isReady);
+    setBridgeDetail(message, tone);
+    updateActionButtons();
+  }
+
   function setBusy(button, isBusy, label) {
     if (!button) return;
     button.disabled = Boolean(isBusy);
@@ -209,24 +241,29 @@
   async function setFile(file) {
     var config = getConfig();
     var meta = byId('timesfm-file-meta');
+    clearPreviewAndResult();
     if (!file) {
       state.file = null;
       text(meta, 'No file selected.');
+      updateActionButtons();
       return;
     }
     if (!isAllowedFile(file)) {
       state.file = null;
       text(meta, 'Unsupported file. Use CSV or TSV.');
+      updateActionButtons();
       return;
     }
     if (file.size > config.maxUploadMb * 1024 * 1024) {
       state.file = null;
       text(meta, 'File is too large. Maximum upload size is ' + config.maxUploadMb + ' MB.');
+      updateActionButtons();
       return;
     }
     state.file = file;
     var rows = await estimateFileRows(file);
     text(meta, file.name + ' - ' + formatBytes(file.size) + ' - about ' + rows.toLocaleString() + ' rows detected client-side.');
+    updateActionButtons();
   }
 
   function populateSelect(select, options, placeholder) {
@@ -253,6 +290,99 @@
     };
   }
 
+  function parseDelimitedLine(line, delimiter) {
+    var cells = [];
+    var current = '';
+    var inQuotes = false;
+    for (var index = 0; index < line.length; index += 1) {
+      var character = line[index];
+      var nextCharacter = line[index + 1];
+      if (character === '"' && inQuotes && nextCharacter === '"') {
+        current += '"';
+        index += 1;
+      } else if (character === '"') {
+        inQuotes = !inQuotes;
+      } else if (character === delimiter && !inQuotes) {
+        cells.push(current);
+        current = '';
+      } else {
+        current += character;
+      }
+    }
+    cells.push(current);
+    return cells.map(function (cell) { return cell.trim(); });
+  }
+
+  function inferLocalColumnType(values) {
+    var nonEmpty = values.filter(function (value) { return String(value || '').trim() !== ''; });
+    if (!nonEmpty.length) return 'empty';
+    var numericCount = nonEmpty.filter(function (value) { return Number.isFinite(Number(value)); }).length;
+    if (numericCount / nonEmpty.length >= 0.85) return 'numeric';
+    var dateCount = nonEmpty.filter(function (value) {
+      var timestamp = Date.parse(value);
+      return Number.isFinite(timestamp);
+    }).length;
+    if (dateCount / nonEmpty.length >= 0.85) return 'datetime-like';
+    return 'text';
+  }
+
+  function inferTimestampRange(rows, columns) {
+    var timestampColumn = columns.find(function (column) {
+      return /date|time|timestamp|datetime/i.test(column.name) || /datetime/i.test(column.dtype || '');
+    });
+    if (!timestampColumn) return null;
+    var timestamps = rows.map(function (row) {
+      var timestamp = Date.parse(row[timestampColumn.name]);
+      return Number.isFinite(timestamp) ? timestamp : null;
+    }).filter(function (value) { return value !== null; }).sort(function (left, right) { return left - right; });
+    if (!timestamps.length) return null;
+    return {
+      start: new Date(timestamps[0]).toISOString(),
+      end: new Date(timestamps[timestamps.length - 1]).toISOString()
+    };
+  }
+
+  async function buildLocalPreviewPayload(file) {
+    var textValue = await file.text();
+    var lines = textValue.split(/\r\n|\n|\r/).filter(function (line) { return line.trim() !== ''; });
+    if (lines.length < 2) {
+      throw new Error('Could not parse the file. Use CSV/TSV with a header row and at least one data row.');
+    }
+    var delimiter = lines[0].indexOf('\t') !== -1 ? '\t' : ',';
+    var headers = parseDelimitedLine(lines[0], delimiter).map(function (header, index) {
+      return header || 'column_' + (index + 1);
+    });
+    var dataLines = lines.slice(1);
+    var parsedRows = dataLines.map(function (line) {
+      var cells = parseDelimitedLine(line, delimiter);
+      var row = {};
+      headers.forEach(function (header, index) {
+        row[header] = cells[index] == null ? '' : cells[index];
+      });
+      return row;
+    });
+    var columns = headers.map(function (header) {
+      var values = parsedRows.map(function (row) { return row[header]; });
+      return {
+        name: header,
+        dtype: inferLocalColumnType(values),
+        non_null: values.filter(function (value) { return String(value || '').trim() !== ''; }).length
+      };
+    });
+    var warnings = ['Local browser preview is active because the aibig9 bridge is not ready. Forecast still requires the Workspace helper/backend.'];
+    if (!columns.some(function (column) { return column.dtype === 'numeric'; })) {
+      warnings.push('No numeric target candidate was detected in the sampled data.');
+    }
+    return {
+      ok: true,
+      columns: columns,
+      row_count: parsedRows.length,
+      sample_rows: parsedRows.slice(0, 5),
+      timestamp_range: inferTimestampRange(parsedRows, columns),
+      warnings: warnings
+    };
+  }
+
   function renderPreview(payload) {
     state.preview = payload;
     var columns = Array.isArray(payload.columns) ? payload.columns : [];
@@ -274,6 +404,7 @@
     var tableNode = byId('timesfm-sample-table');
     if (!tableNode || !sampleRows.length) {
       if (tableNode) tableNode.innerHTML = '';
+      updateActionButtons();
       return;
     }
     var head = defaults.names.map(function (name) {
@@ -286,6 +417,7 @@
     }).join('');
     tableNode.innerHTML = '<table><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>';
     updateSeriesIdOptions();
+    updateActionButtons();
   }
 
   function updateSeriesIdOptions() {
@@ -295,6 +427,27 @@
     var column = seriesColumn.value;
     var values = (state.preview.series_values && state.preview.series_values[column]) || [];
     populateSelect(seriesSelect, values, values.length ? 'All matching rows' : 'No series filter');
+  }
+
+  function clearPreviewAndResult() {
+    state.preview = null;
+    state.result = null;
+    populateSelect(byId('timesfm-timestamp-col'), [], 'Preview columns first');
+    populateSelect(byId('timesfm-target-col'), [], 'Preview columns first');
+    populateSelect(byId('timesfm-series-col'), [], 'None');
+    populateSelect(byId('timesfm-series-id'), [], 'No series filter');
+    text(byId('timesfm-preview-summary'), 'Preview a file to detect columns and sample rows.');
+    var sampleTable = byId('timesfm-sample-table');
+    if (sampleTable) sampleTable.innerHTML = '';
+    var resultMeta = byId('timesfm-result-meta');
+    if (resultMeta) resultMeta.innerHTML = '';
+    var metrics = byId('timesfm-metrics');
+    if (metrics) metrics.innerHTML = '';
+    var chart = byId('timesfm-chart');
+    if (chart) chart.innerHTML = '';
+    setDisabled('timesfm-download-csv', true);
+    setDisabled('timesfm-download-json', true);
+    updateActionButtons();
   }
 
   async function requestJson(endpoint, options) {
@@ -321,7 +474,7 @@
       return {
         label: 'Auth required',
         tone: 'auth',
-        message: 'Your Workspace session is not active for the helper. Sign in from /workspace/ first, then return here.'
+        message: 'Your Workspace helper session is not active. Open Workspace, sign in there, then return to this tool.'
       };
     }
 
@@ -337,7 +490,7 @@
       return {
         label: 'GPU bridge setup needed',
         tone: 'warn',
-        message: 'Workspace is signed in, but the helper has not been started with TimesFM API settings yet. Configure TIMESFM_API_BASE_URL and TIMESFM_API_TOKEN on the helper.'
+        message: 'Workspace is signed in, but the helper is missing private aibig9 TimesFM bridge settings. Start the helper with the backend URL and token.'
       };
     }
 
@@ -359,6 +512,7 @@
   function showBridgeError(error) {
     var info = classifyBridgeError(error);
     setStatus(info.label, info.tone);
+    setBridgeReady(false, info.message, info.tone);
     setMessage(info.message, info.tone === 'auth' ? 'error' : 'warn');
     return info;
   }
@@ -379,10 +533,13 @@
     var config = getConfig();
     if (!state.apiBaseUrl) {
       setStatus('Workspace helper unavailable', 'error');
-      setMessage('Cannot reach the Workspace helper. Sign in from /workspace/ again, then reopen this tool.', 'error');
+      setBridgeReady(false, 'Cannot reach the Workspace helper from this browser session.', 'error');
+      setMessage('Cannot reach the Workspace helper. Open Workspace again, sign in there, then reopen this tool.', 'error');
       return null;
     }
     try {
+      setStatus('Checking bridge', 'idle');
+      setBridgeReady(false, 'Checking Workspace helper and aibig9 bridge readiness.', 'neutral');
       var endpoint = joinUrl(state.apiBaseUrl, config.healthEndpoint);
       var payload = await requestJson(endpoint, {
         method: 'GET',
@@ -392,9 +549,11 @@
       });
       if (payload.cuda_available === false || payload.device === 'cpu') {
         setStatus('GPU unavailable', 'warn');
+        setBridgeReady(true, 'The TimesFM backend responded, but CUDA is not available. You can test the flow, but forecasts may be slow.', 'warn');
         setMessage('The TimesFM backend responded, but CUDA is not available. Forecasts may be slow until aibig9 is using GPU.', 'warn');
       } else {
         setStatus('aibig9 GPU ready', 'ok');
+        setBridgeReady(true, 'aibig9 TimesFM backend is reachable through the Workspace helper.', 'ok');
         setMessage('aibig9 TimesFM backend is reachable through the Workspace helper.', 'neutral');
       }
       return payload;
@@ -413,7 +572,24 @@
     }
     if (!state.apiBaseUrl) {
       setStatus('Workspace helper unavailable', 'error');
-      setMessage('Cannot reach the Workspace helper. Sign in from /workspace/ again, then reopen this tool.', 'error');
+      setBridgeReady(false, 'Cannot reach the Workspace helper from this browser session.', 'error');
+      setMessage('Workspace helper is unavailable, so columns will be previewed locally. Forecast requires Workspace helper access.', 'warn');
+      try {
+        renderPreview(await buildLocalPreviewPayload(state.file));
+      } catch (error) {
+        setMessage(error.message || 'Could not parse the file. Use CSV/TSV with one timestamp column and one numeric target column.', 'error');
+      }
+      updateActionButtons();
+      return;
+    }
+    if (!state.bridgeReady) {
+      setMessage('GPU bridge is not ready, so columns will be previewed locally. Forecast requires the aibig9 bridge.', 'warn');
+      try {
+        renderPreview(await buildLocalPreviewPayload(state.file));
+      } catch (error) {
+        setMessage(error.message || 'Could not parse the file. Use CSV/TSV with one timestamp column and one numeric target column.', 'error');
+      }
+      updateActionButtons();
       return;
     }
     var form = new FormData();
@@ -434,6 +610,7 @@
       showBridgeError(error);
     } finally {
       setBusy(button, false, 'Preview columns');
+      updateActionButtons();
     }
   }
 
@@ -602,7 +779,20 @@
     }
     if (!state.apiBaseUrl) {
       setStatus('Workspace helper unavailable', 'error');
-      setMessage('Cannot reach the Workspace helper. Sign in from /workspace/ again, then reopen this tool.', 'error');
+      setBridgeReady(false, 'Cannot reach the Workspace helper from this browser session.', 'error');
+      setMessage('Cannot reach the Workspace helper. Open Workspace again, sign in there, then reopen this tool.', 'error');
+      return;
+    }
+    if (!state.bridgeReady) {
+      setMessage('The GPU bridge is not ready yet. Use Check GPU bridge before running a forecast.', 'warn');
+      return;
+    }
+    if (!state.preview) {
+      setMessage('Preview columns first so the timestamp and target fields are mapped before forecasting.', 'warn');
+      return;
+    }
+    if (!byId('timesfm-timestamp-col').value || !byId('timesfm-target-col').value) {
+      setMessage('Select both timestamp and target columns before running a forecast.', 'error');
       return;
     }
     setBusy(button, true, 'Running on aibig9...');
@@ -621,6 +811,7 @@
       showBridgeError(error);
     } finally {
       setBusy(button, false, 'Run TimesFM forecast on aibig9');
+      updateActionButtons();
     }
   }
 
@@ -683,12 +874,17 @@
       });
     }
 
-    byId('timesfm-health-button').addEventListener('click', checkApiHealth);
-    byId('timesfm-preview-button').addEventListener('click', previewColumns);
-    byId('timesfm-forecast-button').addEventListener('click', runForecast);
-    byId('timesfm-download-json').addEventListener('click', downloadJson);
-    byId('timesfm-download-csv').addEventListener('click', downloadCsv);
-    byId('timesfm-series-col').addEventListener('change', updateSeriesIdOptions);
+    [
+      ['timesfm-health-button', 'click', checkApiHealth],
+      ['timesfm-preview-button', 'click', previewColumns],
+      ['timesfm-forecast-button', 'click', runForecast],
+      ['timesfm-download-json', 'click', downloadJson],
+      ['timesfm-download-csv', 'click', downloadCsv],
+      ['timesfm-series-col', 'change', updateSeriesIdOptions]
+    ].forEach(function (binding) {
+      var node = byId(binding[0]);
+      if (node) node.addEventListener(binding[1], binding[2]);
+    });
   }
 
   async function init() {
@@ -714,6 +910,8 @@
 
     if (authGate) authGate.hidden = true;
     if (app) app.hidden = false;
+    setBridgeReady(false, 'Checking Workspace helper and aibig9 bridge readiness.', 'neutral');
+    clearPreviewAndResult();
     bindEvents();
     checkApiHealth();
   }

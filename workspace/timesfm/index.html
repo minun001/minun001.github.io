@@ -45,7 +45,8 @@ script_bundle: timesfm
             <span>The browser sends only your Workspace helper session. The aibig9 token stays on the helper/server side.</span>
           </div>
           <button class="timesfm-button timesfm-button--soft" id="timesfm-health-button" type="button">Check GPU bridge</button>
-          <p class="timesfm-help">If the GPU bridge is not ready, you can still prepare the job. Preview and forecast require the helper/backend to be running.</p>
+          <p class="timesfm-bridge-detail" id="timesfm-bridge-detail" aria-live="polite">Checking Workspace helper and aibig9 bridge readiness.</p>
+          <p class="timesfm-help">If the GPU bridge is not ready, you can still preview columns locally and prepare the job. Forecast requires the helper/backend to be running.</p>
         </article>
 
         <article class="timesfm-panel timesfm-rail-card">

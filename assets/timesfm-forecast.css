@@ -87,6 +87,7 @@
 .timesfm-status-chip[data-tone="warn"] { color: var(--timesfm-warn); background: #fffbeb; }
 .timesfm-status-chip[data-tone="error"] { color: var(--timesfm-error); background: #fef2f2; }
 .timesfm-status-chip[data-tone="auth"] { color: #7c3aed; background: #f5f3ff; }
+.timesfm-status-chip[data-tone="idle"] { color: #475569; background: #f8fafc; }
 
 .timesfm-hero,
 .timesfm-panel {
@@ -175,6 +176,32 @@
 .timesfm-trust-card span {
   color: var(--timesfm-muted);
   line-height: 1.55;
+}
+
+.timesfm-bridge-detail {
+  margin: 0;
+  border-radius: 16px;
+  padding: .78rem .85rem;
+  color: var(--timesfm-muted);
+  font-size: .86rem;
+  line-height: 1.5;
+  background: #f8fafc;
+  box-shadow: inset 0 0 0 1px rgba(17, 32, 51, .07);
+}
+
+.timesfm-bridge-detail[data-tone="ok"] {
+  color: var(--timesfm-success);
+  background: #ecfdf5;
+}
+
+.timesfm-bridge-detail[data-tone="warn"] {
+  color: var(--timesfm-warn);
+  background: #fffbeb;
+}
+
+.timesfm-bridge-detail[data-tone="error"] {
+  color: var(--timesfm-error);
+  background: #fef2f2;
 }
 
 .timesfm-steps {
