@@ -19,12 +19,21 @@ class TimestampRange(BaseModel):
     end: str
 
 
+class SuggestedWindow(BaseModel):
+    train_start: str
+    train_end: str
+    test_start: str
+    test_end: str
+    note: str | None = None
+
+
 class PreviewResponse(BaseModel):
     ok: bool = True
     columns: list[ColumnInfo]
     row_count: int
     sample_rows: list[dict[str, Any]]
     timestamp_range: TimestampRange | None = None
+    suggested_window: SuggestedWindow | None = None
     series_ids: list[str] = Field(default_factory=list)
     series_values: dict[str, list[str]] = Field(default_factory=dict)
     warnings: list[str] = Field(default_factory=list)

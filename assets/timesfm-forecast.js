@@ -337,9 +337,115 @@
     }).filter(function (value) { return value !== null; }).sort(function (left, right) { return left - right; });
     if (!timestamps.length) return null;
     return {
+      column: timestampColumn.name,
       start: new Date(timestamps[0]).toISOString(),
       end: new Date(timestamps[timestamps.length - 1]).toISOString()
     };
+  }
+
+  function parseTimestampMs(value) {
+    var timestamp = Date.parse(value);
+    return Number.isFinite(timestamp) ? timestamp : null;
+  }
+
+  function toDateTimeLocalValue(value) {
+    if (!value) return '';
+    var raw = String(value).trim();
+    var match = raw.match(/^(\d{4}-\d{2}-\d{2})(?:[T\s](\d{2}:\d{2}))?/);
+    if (match) return match[1] + 'T' + (match[2] || '00:00');
+    var timestamp = parseTimestampMs(value);
+    return timestamp === null ? '' : new Date(timestamp).toISOString().slice(0, 16);
+  }
+
+  function buildSuggestedWindowFromTimestamps(timestamps) {
+    var unique = timestamps
+      .filter(function (value) { return value !== null; })
+      .sort(function (left, right) { return left - right; })
+      .filter(function (value, index, values) { return index === 0 || value !== values[index - 1]; });
+    var total = unique.length;
+    if (total < 2) return null;
+    var testCount = total >= 40
+      ? Math.min(Math.max(8, Math.round(total * 0.2)), total - 32)
+      : Math.min(Math.max(1, Math.round(total * 0.2)), total - 1);
+    if (testCount < 1) return null;
+    var splitIndex = total - testCount;
+    return {
+      train_start: new Date(unique[0]).toISOString(),
+      train_end: new Date(unique[splitIndex - 1]).toISOString(),
+      test_start: new Date(unique[splitIndex]).toISOString(),
+      test_end: new Date(unique[total - 1]).toISOString(),
+      note: 'Auto-filled from detected timestamps; adjust if needed.'
+    };
+  }
+
+  function inferSuggestedWindow(rows, columns, timestampRange) {
+    var columnName = timestampRange && timestampRange.column;
+    if (!columnName) {
+      var timestampColumn = columns.find(function (column) {
+        return /date|time|timestamp|datetime/i.test(column.name) || /datetime/i.test(column.dtype || '');
+      });
+      columnName = timestampColumn && timestampColumn.name;
+    }
+    if (!columnName) return null;
+    var timestamps = rows.map(function (row) { return parseTimestampMs(row[columnName]); });
+    return buildSuggestedWindowFromTimestamps(timestamps);
+  }
+
+  function fallbackSuggestedWindow(payload) {
+    var range = payload && payload.timestamp_range;
+    if (!range || !range.start || !range.end) return null;
+    var start = parseTimestampMs(range.start);
+    var end = parseTimestampMs(range.end);
+    if (start === null || end === null || end <= start) return null;
+    var rowCount = Math.max(2, Number(payload.row_count) || 2);
+    if (rowCount < 3) return null;
+    var step = Math.max(1, Math.round((end - start) / Math.max(1, rowCount - 1)));
+    var testCount = rowCount >= 40
+      ? Math.min(Math.max(8, Math.round(rowCount * 0.2)), rowCount - 32)
+      : Math.min(Math.max(1, Math.round(rowCount * 0.2)), rowCount - 1);
+    var splitIndex = rowCount - testCount;
+    var trainEnd = Math.min(end - step, start + (step * (splitIndex - 1)));
+    var testStart = Math.min(end, start + (step * splitIndex));
+    if (trainEnd <= start || testStart > end) return null;
+    return {
+      train_start: range.start,
+      train_end: new Date(trainEnd).toISOString(),
+      test_start: new Date(testStart).toISOString(),
+      test_end: range.end,
+      note: 'Auto-filled from detected timestamp range; adjust if needed.'
+    };
+  }
+
+  function formatWindowText(windowValue) {
+    if (!windowValue) return '';
+    var trainStart = toDateTimeLocalValue(windowValue.train_start);
+    var trainEnd = toDateTimeLocalValue(windowValue.train_end);
+    var testStart = toDateTimeLocalValue(windowValue.test_start);
+    var testEnd = toDateTimeLocalValue(windowValue.test_end);
+    if (!trainStart || !trainEnd || !testStart || !testEnd) return '';
+    return ' Suggested dates: train ' + trainStart.replace('T', ' ') + ' to ' + trainEnd.replace('T', ' ')
+      + ', test ' + testStart.replace('T', ' ') + ' to ' + testEnd.replace('T', ' ') + '.';
+  }
+
+  function applySuggestedDateWindow(payload) {
+    var windowValue = (payload && (payload.suggested_window || payload.suggestedWindow)) || fallbackSuggestedWindow(payload);
+    var ids = {
+      train_start: 'timesfm-train-start',
+      train_end: 'timesfm-train-end',
+      test_start: 'timesfm-test-start',
+      test_end: 'timesfm-test-end'
+    };
+    var applied = true;
+    Object.keys(ids).forEach(function (key) {
+      var node = byId(ids[key]);
+      var value = toDateTimeLocalValue(windowValue && windowValue[key]);
+      if (!node || !value) {
+        applied = false;
+        return;
+      }
+      node.value = value;
+    });
+    return applied ? formatWindowText(windowValue) : '';
   }
 
   async function buildLocalPreviewPayload(file) {
@@ -373,12 +479,14 @@
     if (!columns.some(function (column) { return column.dtype === 'numeric'; })) {
       warnings.push('No numeric target candidate was detected in the sampled data.');
     }
+    var timestampRange = inferTimestampRange(parsedRows, columns);
     return {
       ok: true,
       columns: columns,
       row_count: parsedRows.length,
       sample_rows: parsedRows.slice(0, 5),
-      timestamp_range: inferTimestampRange(parsedRows, columns),
+      timestamp_range: timestampRange,
+      suggested_window: inferSuggestedWindow(parsedRows, columns, timestampRange),
       warnings: warnings
     };
   }
@@ -398,7 +506,8 @@
     var rangeText = payload.timestamp_range
       ? ' Timestamp range: ' + payload.timestamp_range.start + ' to ' + payload.timestamp_range.end + '.'
       : '';
-    text(byId('timesfm-preview-summary'), 'Detected ' + (payload.row_count || 0).toLocaleString() + ' rows and ' + columns.length + ' columns.' + rangeText + warningText);
+    var windowText = applySuggestedDateWindow(payload);
+    text(byId('timesfm-preview-summary'), 'Detected ' + (payload.row_count || 0).toLocaleString() + ' rows and ' + columns.length + ' columns.' + rangeText + windowText + warningText);
 
     var sampleRows = Array.isArray(payload.sample_rows) ? payload.sample_rows : [];
     var tableNode = byId('timesfm-sample-table');
@@ -436,6 +545,10 @@
     populateSelect(byId('timesfm-target-col'), [], 'Preview columns first');
     populateSelect(byId('timesfm-series-col'), [], 'None');
     populateSelect(byId('timesfm-series-id'), [], 'No series filter');
+    ['timesfm-train-start', 'timesfm-train-end', 'timesfm-test-start', 'timesfm-test-end'].forEach(function (id) {
+      var node = byId(id);
+      if (node) node.value = '';
+    });
     text(byId('timesfm-preview-summary'), 'Preview a file to detect columns and sample rows.');
     var sampleTable = byId('timesfm-sample-table');
     if (sampleTable) sampleTable.innerHTML = '';

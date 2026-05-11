@@ -9,7 +9,7 @@ from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from model_service import ForecastError, ForecastParams, TimesFMService, run_forecast
-from schemas import ColumnInfo, HealthResponse, PreviewResponse, TimestampRange
+from schemas import ColumnInfo, HealthResponse, PreviewResponse, SuggestedWindow, TimestampRange
 
 
 SERVICE_VERSION = "2026.05.09"
@@ -141,6 +141,35 @@ def infer_timestamp_range(df: pd.DataFrame, columns: list[ColumnInfo]) -> Timest
     return None
 
 
+def infer_suggested_window(df: pd.DataFrame, timestamp_range: TimestampRange | None) -> SuggestedWindow | None:
+    if timestamp_range is None:
+        return None
+    values = (
+        pd.to_datetime(df[timestamp_range.column], errors="coerce")
+        .dropna()
+        .drop_duplicates()
+        .sort_values()
+        .reset_index(drop=True)
+    )
+    total = int(len(values))
+    if total < 2:
+        return None
+    if total >= 40:
+        test_count = min(max(8, round(total * 0.2)), total - 32)
+    else:
+        test_count = min(max(1, round(total * 0.2)), total - 1)
+    if test_count < 1:
+        return None
+    split_index = total - test_count
+    return SuggestedWindow(
+        train_start=values.iloc[0].isoformat(),
+        train_end=values.iloc[split_index - 1].isoformat(),
+        test_start=values.iloc[split_index].isoformat(),
+        test_end=values.iloc[total - 1].isoformat(),
+        note="Auto-filled from detected timestamps; adjust if needed.",
+    )
+
+
 def preview_warnings(df: pd.DataFrame, columns: list[ColumnInfo]) -> list[str]:
     warnings: list[str] = []
     if df.isna().any().any():
@@ -182,11 +211,13 @@ async def preview(file: UploadFile = File(...)) -> PreviewResponse:
     content = await read_upload_bytes(file)
     df = parse_upload_dataframe(content, file.filename or "")
     columns = infer_column_info(df)
+    timestamp_range = infer_timestamp_range(df, columns)
     return PreviewResponse(
         columns=columns,
         row_count=int(len(df)),
         sample_rows=sample_rows(df),
-        timestamp_range=infer_timestamp_range(df, columns),
+        timestamp_range=timestamp_range,
+        suggested_window=infer_suggested_window(df, timestamp_range),
         series_values=infer_series_values(df),
         warnings=preview_warnings(df, columns),
     )

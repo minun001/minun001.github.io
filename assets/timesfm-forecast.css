@@ -25,6 +25,10 @@
   position: relative;
 }
 
+.page-timesfm [hidden] {
+  display: none !important;
+}
+
 .timesfm-page::before {
   content: "";
   position: absolute;
