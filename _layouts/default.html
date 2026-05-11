@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260425e">
   {% assign script_bundle = page.script_bundle | default: 'public' %}
   {% if script_bundle == 'timesfm' %}
-  <link rel="stylesheet" href="{{ "/assets/timesfm-forecast.css" | relative_url }}?v=20260511a">
+  <link rel="stylesheet" href="{{ "/assets/timesfm-forecast.css" | relative_url }}?v=20260511b">
   {% endif %}
 </head>
 {% assign current_url = page.url | replace: 'index.html', '' %}
@@ -89,9 +89,9 @@
     <script src="{{ "/assets/workspace.js" | relative_url }}?v=20260509f"></script>
   {% elsif script_bundle == 'timesfm' %}
     <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260509f"></script>
-    <script src="{{ "/assets/timesfm-config.js" | relative_url }}?v=20260511a"></script>
+    <script src="{{ "/assets/timesfm-config.js" | relative_url }}?v=20260511b"></script>
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
-    <script src="{{ "/assets/timesfm-forecast.js" | relative_url }}?v=20260511a"></script>
+    <script src="{{ "/assets/timesfm-forecast.js" | relative_url }}?v=20260511b"></script>
   {% else %}
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     {% if page.include_public_analytics != false %}

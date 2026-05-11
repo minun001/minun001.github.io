@@ -17,14 +17,10 @@ script_bundle: timesfm
 
   <header class="timesfm-hero">
     <div>
-      <p class="eyebrow">Private Workspace Tool</p>
+      <p class="eyebrow">Private Workspace</p>
       <h1>TimesFM Forecaster</h1>
-      <p class="timesfm-hero-copy">Bring a CSV or TSV time-series file, map its columns, set forecast windows, and send a zero-shot TimesFM job through your Workspace helper to aibig9.</p>
+      <p class="timesfm-hero-copy">Upload CSV/TSV data, choose columns and dates, then run a zero-shot forecast on aibig9.</p>
     </div>
-    <aside class="timesfm-note" aria-label="TimesFM safety note">
-      <strong>No fine-tuning</strong>
-      <span>Train is historical context. Validation is only a zero-shot backtest. Model weights are never updated.</span>
-    </aside>
   </header>
 
   <article class="timesfm-panel timesfm-auth-gate" id="timesfm-auth-gate" hidden>
@@ -35,47 +31,21 @@ script_bundle: timesfm
   </article>
 
   <div class="timesfm-app" id="timesfm-app" hidden>
-    <section class="timesfm-workbench" aria-label="TimesFM forecasting workbench">
-      <aside class="timesfm-rail" aria-label="Workspace and model status">
-        <article class="timesfm-panel timesfm-rail-card">
-          <p class="eyebrow">Secure path</p>
-          <h2>Workspace session</h2>
-          <div class="timesfm-trust-card">
-            <strong>Already authenticated</strong>
-            <span>The browser sends only your Workspace helper session. The aibig9 token stays on the helper/server side.</span>
+    <section class="timesfm-simple-stack" aria-label="TimesFM forecasting form">
+        <section class="timesfm-panel timesfm-compact-status" aria-label="Connection status">
+          <div>
+            <p class="eyebrow">Connection</p>
+            <h2>aibig9 bridge</h2>
           </div>
-          <button class="timesfm-button timesfm-button--soft" id="timesfm-health-button" type="button">Check GPU bridge</button>
+          <button class="timesfm-button timesfm-button--soft" id="timesfm-health-button" type="button">Check</button>
           <p class="timesfm-bridge-detail" id="timesfm-bridge-detail" aria-live="polite">Checking Workspace helper and aibig9 bridge readiness.</p>
-          <p class="timesfm-help">If the GPU bridge is not ready, you can still preview columns locally and prepare the job. Forecast requires the helper/backend to be running.</p>
-        </article>
+        </section>
 
-        <article class="timesfm-panel timesfm-rail-card">
-          <p class="eyebrow">Workflow</p>
-          <ol class="timesfm-steps">
-            <li><span>1</span><strong>Drop data</strong><small>CSV or TSV, up to 25 MB</small></li>
-            <li><span>2</span><strong>Map columns</strong><small>Timestamp, target, optional series</small></li>
-            <li><span>3</span><strong>Set windows</strong><small>Train context, validation, test</small></li>
-            <li><span>4</span><strong>Run on aibig9</strong><small>Zero-shot TimesFM inference</small></li>
-          </ol>
-        </article>
-
-        <article class="timesfm-panel timesfm-rail-card">
-          <p class="eyebrow">Model contract</p>
-          <div class="timesfm-definition-stack">
-            <span>No fine-tuning</span>
-            <span>Train = historical context</span>
-            <span>Validation = zero-shot backtest</span>
-            <span>Test = requested forecast window</span>
-          </div>
-        </article>
-      </aside>
-
-      <div class="timesfm-main">
         <section class="timesfm-panel timesfm-upload-panel" aria-label="Upload data">
           <div class="timesfm-panel-head">
             <div>
-              <p class="eyebrow">Start here</p>
-              <h2>Upload your time-series file</h2>
+              <p class="eyebrow">1. Data</p>
+              <h2>Upload file</h2>
             </div>
             <span class="timesfm-pill">CSV / TSV</span>
           </div>
@@ -94,8 +64,8 @@ script_bundle: timesfm
           <article class="timesfm-panel">
             <div class="timesfm-panel-head">
               <div>
-                <p class="eyebrow">Columns</p>
-                <h2>Preview and map fields</h2>
+                <p class="eyebrow">2. Columns</p>
+                <h2>Map fields</h2>
               </div>
             </div>
             <div class="timesfm-preview-summary" id="timesfm-preview-summary">Preview a file to detect columns and sample rows.</div>
@@ -123,8 +93,8 @@ script_bundle: timesfm
           <article class="timesfm-panel">
             <div class="timesfm-panel-head">
               <div>
-                <p class="eyebrow">Windows</p>
-                <h2>Context and forecast range</h2>
+                <p class="eyebrow">3. Window</p>
+                <h2>Set dates</h2>
               </div>
             </div>
             <div class="timesfm-form-grid">
@@ -163,25 +133,28 @@ script_bundle: timesfm
                 </select>
               </label>
             </div>
-            <fieldset class="timesfm-context-candidates">
-              <legend>Context length candidates</legend>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="128">128</label>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="256">256</label>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="512">512</label>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="1024" checked>1024</label>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="2048">2048</label>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="4096">4096</label>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="8192">8192</label>
-              <label><input type="checkbox" name="timesfm-context-candidate" value="16384">16384</label>
-            </fieldset>
+            <details class="timesfm-advanced">
+              <summary>Context candidates</summary>
+              <fieldset class="timesfm-context-candidates">
+                <legend>Context length candidates</legend>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="128">128</label>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="256">256</label>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="512">512</label>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="1024" checked>1024</label>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="2048">2048</label>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="4096">4096</label>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="8192">8192</label>
+                <label><input type="checkbox" name="timesfm-context-candidate" value="16384">16384</label>
+              </fieldset>
+            </details>
           </article>
         </section>
 
         <section class="timesfm-run-strip" aria-label="Run TimesFM forecast">
           <div>
-            <p class="eyebrow">Ready to run</p>
-            <h2>Zero-shot forecast on aibig9</h2>
-            <p>TimesFM uses the selected train window as context. No model weights are updated.</p>
+            <p class="eyebrow">4. Forecast</p>
+            <h2>Run TimesFM</h2>
+            <p>No fine-tuning. Train window is context only.</p>
           </div>
           <button class="timesfm-button timesfm-button--run" id="timesfm-forecast-button" type="button">Run TimesFM forecast on aibig9</button>
         </section>
@@ -189,8 +162,8 @@ script_bundle: timesfm
         <section class="timesfm-panel timesfm-results" aria-label="TimesFM results">
           <div class="timesfm-panel-head">
             <div>
-              <p class="eyebrow">Results</p>
-              <h2>Forecast output</h2>
+              <p class="eyebrow">5. Results</p>
+              <h2>Output</h2>
             </div>
             <div class="timesfm-actions">
               <button class="timesfm-button timesfm-button--soft" id="timesfm-download-csv" type="button" disabled>Download forecast CSV</button>
@@ -202,7 +175,6 @@ script_bundle: timesfm
           <div class="timesfm-metrics-grid" id="timesfm-metrics"></div>
           <div class="timesfm-chart" id="timesfm-chart"></div>
         </section>
-      </div>
     </section>
   </div>
 </section>
