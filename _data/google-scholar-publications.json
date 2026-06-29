@@ -1,8 +1,8 @@
 {
   "profile_name": "Hyunsik Min",
   "source_url": "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en",
-  "checked_at": "2026-06-25",
-  "checked_at_display": "June 25, 2026",
+  "checked_at": "2026-06-30",
+  "checked_at_display": "June 30, 2026",
   "total_records": 13,
   "sections": [
     {
@@ -60,7 +60,7 @@
           "topic_title": "Energy Forecasting",
           "topic_copy": "Adaptive forecasting and scalable management for photovoltaic systems.",
           "year": 2025,
-          "citation_count": 14,
+          "citation_count": 15,
           "keywords": [
             "solar",
             "photovoltaic",
@@ -134,7 +134,7 @@
           "topic_title": "Energy Forecasting",
           "topic_copy": "Deep-learning forecasting for photovoltaic power generation.",
           "year": 2024,
-          "citation_count": 25,
+          "citation_count": 24,
           "keywords": [
             "solar",
             "photovoltaic",
