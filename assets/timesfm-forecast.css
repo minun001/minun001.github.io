@@ -17,6 +17,7 @@
 .timesfm-page {
   display: grid;
   gap: 1rem;
+  width: 100%;
   max-width: 980px;
   margin-inline: auto;
   padding: clamp(1.2rem, 3vw, 2.4rem) 0 clamp(2.2rem, 5vw, 4rem);
@@ -643,6 +644,15 @@
 }
 
 @media (max-width: 640px) {
+  .timesfm-page {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .timesfm-page::before {
+    display: none;
+  }
+
   .timesfm-topbar,
   .timesfm-panel-head,
   .timesfm-actions {
