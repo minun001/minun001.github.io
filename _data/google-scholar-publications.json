@@ -1,8 +1,8 @@
 {
   "profile_name": "Hyunsik Min",
   "source_url": "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en",
-  "checked_at": "2026-06-30",
-  "checked_at_display": "June 30, 2026",
+  "checked_at": "2026-08-03",
+  "checked_at_display": "August 3, 2026",
   "total_records": 13,
   "sections": [
     {
@@ -60,7 +60,7 @@
           "topic_title": "Energy Forecasting",
           "topic_copy": "Adaptive forecasting and scalable management for photovoltaic systems.",
           "year": 2025,
-          "citation_count": 15,
+          "citation_count": 16,
           "keywords": [
             "solar",
             "photovoltaic",
@@ -97,7 +97,7 @@
           "topic_title": "Legal AI",
           "topic_copy": "Language-model reasoning for traffic-accident sentencing outcomes.",
           "year": 2025,
-          "citation_count": 3,
+          "citation_count": 4,
           "keywords": [
             "legal ai",
             "traffic accident",
