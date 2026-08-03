@@ -1,7 +1,6 @@
 (function () {
   var WORKSPACE_HELPER_STORAGE_KEY = 'workspace.helperBaseUrl';
   var WORKSPACE_HELPER_TOKEN_PREFIX = 'workspace.helperSessionToken:';
-  var DEFAULT_HELPER_BASE_URL = 'https://tobacco-tournament-growth-revision.trycloudflare.com';
   var DEFAULT_CONTEXT_CANDIDATES = [128, 256, 512, 1024, 2048, 4096, 8192, 16384];
 
   var state = {
@@ -45,7 +44,7 @@
     return Object.assign({
       provider: 'remote-helper',
       localAuth: {
-        helperBaseUrl: DEFAULT_HELPER_BASE_URL,
+        helperBaseUrl: '',
         sessionEndpoint: '/local-auth/session'
       }
     }, window.WORKSPACE_AUTH_CONFIG || {});
@@ -62,6 +61,8 @@
     try {
       var parsed = new URL(raw);
       var allowLocalHttp = options && options.allowLocalHttp && isLoopback(parsed.hostname);
+      var allowTryCloudflare = parsed.hostname === 'trycloudflare.com' || parsed.hostname.endsWith('.trycloudflare.com');
+      if (!isLoopback(parsed.hostname) && !allowTryCloudflare) return '';
       if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && allowLocalHttp)) return '';
       if (window.location.protocol === 'https:' && parsed.protocol !== 'https:') return '';
       parsed.hash = '';
@@ -77,6 +78,14 @@
       return new URLSearchParams(window.location.search).get(name) || '';
     } catch (_error) {
       return '';
+    }
+  }
+
+  function hasQueryValue(name) {
+    try {
+      return new URLSearchParams(window.location.search).has(name);
+    } catch (_error) {
+      return false;
     }
   }
 
@@ -114,17 +123,23 @@
   }
 
   function resolveHelperBaseUrl(config) {
-    var queryOverride = normalizeHelperBaseUrl(getQueryValue('workspaceHelper') || getQueryValue('helper'));
-    if (queryOverride) {
-      setStoredValue(WORKSPACE_HELPER_STORAGE_KEY, queryOverride);
-      return queryOverride;
+    if (getQueryValue('clearWorkspaceHelper') === '1') {
+      setStoredValue(WORKSPACE_HELPER_STORAGE_KEY, '');
+      return '';
+    }
+    if (hasQueryValue('workspaceHelper') || hasQueryValue('helper')) {
+      var rawOverride = getQueryValue('workspaceHelper') || getQueryValue('helper');
+      if (!rawOverride) {
+        setStoredValue(WORKSPACE_HELPER_STORAGE_KEY, '');
+        return '';
+      }
+      return normalizeHelperBaseUrl(rawOverride);
     }
     var provider = String((config && config.provider) || '').toLowerCase();
     var configuredHelper = normalizeHelperBaseUrl((config.localAuth || {}).helperBaseUrl);
     if (configuredHelper) return configuredHelper;
     if (provider === 'local-helper') return window.location.origin;
-    return normalizeHelperBaseUrl(getStoredValue(WORKSPACE_HELPER_STORAGE_KEY)) ||
-      normalizeHelperBaseUrl(DEFAULT_HELPER_BASE_URL);
+    return normalizeHelperBaseUrl(getStoredValue(WORKSPACE_HELPER_STORAGE_KEY));
   }
 
   function getHelperToken(helperBaseUrl) {
@@ -1014,7 +1029,7 @@
       if (!session.authenticated) {
         if (authGate) authGate.hidden = false;
         if (app) app.hidden = true;
-        setStatus('Auth required', 'auth');
+        setStatus(session.helperBaseUrl ? 'Auth required' : 'Helper setup needed', session.helperBaseUrl ? 'auth' : 'warn');
         return;
       }
       state.apiBaseUrl = session.helperBaseUrl;

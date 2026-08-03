@@ -5,7 +5,6 @@
   var WORKSPACE_REALTIME_DEBOUNCE_MS = 1200;
   var WORKSPACE_HELPER_STORAGE_KEY = 'workspace.helperBaseUrl';
   var WORKSPACE_HELPER_TOKEN_PREFIX = 'workspace.helperSessionToken:';
-  var WORKSPACE_DEFAULT_HELPER_BASE_URL = 'https://tobacco-tournament-growth-revision.trycloudflare.com';
   var WORKSPACE_SERVER_DISK_ALERT_PERCENT = 90;
   var WORKSPACE_SERVER_GPU_ALERT_PERCENT = 80;
   var workspaceContentFallbackCache = null;
@@ -67,6 +66,8 @@
     try {
       var parsed = new URL(raw, window.location.href);
       var isLoopback = parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost' || parsed.hostname === '::1';
+      var isTryCloudflare = parsed.hostname === 'trycloudflare.com' || parsed.hostname.endsWith('.trycloudflare.com');
+      if (!isLoopback && !isTryCloudflare) return '';
       if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && isLoopback)) return '';
       if (window.location.protocol === 'https:' && parsed.protocol !== 'https:') return '';
       parsed.hash = '';
@@ -102,9 +103,13 @@
         setStoredHelperBaseUrl('');
         return '';
       }
-      var candidate = normalizeHelperBaseUrl(params.get('workspaceHelper') || params.get('helper'));
-      if (candidate) setStoredHelperBaseUrl(candidate);
-      return candidate;
+      if (!params.has('workspaceHelper') && !params.has('helper')) return '';
+      var raw = params.get('workspaceHelper') || params.get('helper') || '';
+      if (!raw) {
+        setStoredHelperBaseUrl('');
+        return '';
+      }
+      return normalizeHelperBaseUrl(raw);
     } catch (_error) {
       return '';
     }
@@ -123,9 +128,6 @@
     config.dataFiles = Object.assign({}, (rawConfig && rawConfig.dataFiles) || {});
     config.serverRefresh = Object.assign({}, (rawConfig && rawConfig.serverRefresh) || {});
     var helperBase = getUrlHelperBaseUrl() || normalizeHelperBaseUrl(config.localAuth.helperBaseUrl) || getStoredHelperBaseUrl();
-    if (!helperBase && isRemoteHelperMode(config)) {
-      helperBase = normalizeHelperBaseUrl(WORKSPACE_DEFAULT_HELPER_BASE_URL);
-    }
     if (!helperBase) return config;
 
     config.provider = 'local-helper';

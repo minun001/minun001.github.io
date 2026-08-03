@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260705a">
   {% assign script_bundle = page.script_bundle | default: 'public' %}
   {% if script_bundle == 'timesfm' %}
-  <link rel="stylesheet" href="{{ "/assets/timesfm-forecast.css" | relative_url }}?v=20260705a">
+  <link rel="stylesheet" href="{{ "/assets/timesfm-forecast.css" | relative_url }}?v=20260803a">
   {% endif %}
 </head>
 {% assign current_url = page.url | replace: 'index.html', '' %}
@@ -85,19 +85,17 @@
   </script>
   {% if script_bundle == 'workspace' %}
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260509f"></script>
-    <script src="{{ "/assets/workspace.js" | relative_url }}?v=20260509f"></script>
+    <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260803a"></script>
+    <script src="{{ "/assets/workspace.js" | relative_url }}?v=20260803a"></script>
   {% elsif script_bundle == 'timesfm' %}
-    <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260509f"></script>
+    <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260803a"></script>
     <script src="{{ "/assets/timesfm-config.js" | relative_url }}?v=20260511c"></script>
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
-    <script src="{{ "/assets/timesfm-forecast.js" | relative_url }}?v=20260511d"></script>
+    <script src="{{ "/assets/timesfm-forecast.js" | relative_url }}?v=20260803a"></script>
   {% else %}
+    {% if page.include_public_analytics == true %}
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    {% if page.include_public_analytics != false %}
     <script src="{{ "/assets/site-analytics-config.js" | relative_url }}?v=20260508a"></script>
-    {% endif %}
-    {% if page.include_public_analytics != false %}
     <script src="{{ "/assets/visitor-tracker.js" | relative_url }}?v=20260420c"></script>
     {% endif %}
   {% endif %}
