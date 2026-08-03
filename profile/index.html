@@ -22,8 +22,8 @@ footer_content: >-
     .about-interest{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
     .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
     .about-stack{display:grid;gap:.9rem}
-    .about-entry{padding-top:.9rem;border-top:1px solid var(--border-soft)}
-    .about-entry:first-child{padding-top:0;border-top:none}
+    .about-entry:not(.education-card){padding-top:.9rem;border-top:1px solid var(--border-soft)}
+    .about-entry:first-child:not(.education-card){padding-top:0;border-top:none}
     .about-entry h3{margin-bottom:.2rem;font-size:1.08rem}
     .about-entry p{margin:0}
     #profile-education .about-entry h3,
@@ -109,7 +109,12 @@ footer_content: >-
             <dl class="about-meta">
               <div>
                 <dt>Affiliation</dt>
-                <dd>Department of Transportation and Logistics Engineering, Hanyang University</dd>
+                <dd>
+                  <span class="affiliation-badge">
+                    <span class="affiliation-badge__school">Hanyang University</span>
+                    <span class="affiliation-badge__dept">Department of Transportation and Logistics Engineering</span>
+                  </span>
+                </dd>
               </div>
               <div>
                 <dt>Email</dt>
@@ -169,7 +174,8 @@ footer_content: >-
             <div class="eyebrow">Education</div>
             <h2>Academic Background</h2>
             <div class="about-stack">
-              <div class="about-entry">
+              <div class="about-entry education-card">
+                <div class="education-card__meta">Graduate study</div>
                 <h3>M.S. in Transportation and Logistics Engineering</h3>
                 <p>Hanyang University, Department of Transportation and Logistics Engineering, Seoul, Republic of Korea</p>
                 <p><em>Mar. 2025 - Present</em></p>

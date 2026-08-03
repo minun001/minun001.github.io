@@ -25,6 +25,9 @@
   --radius-md: 14px;
   --radius-lg: 18px;
   --radius-pill: 999px;
+  --credential-accent: #174a8b;
+  --credential-accent-soft: rgba(23, 74, 139, 0.09);
+  --credential-accent-line: rgba(23, 74, 139, 0.22);
 }
 
 html {
@@ -685,6 +688,56 @@ body.page-news .timeline-item:hover {
   min-width: 0;
 }
 
+.affiliation-badge {
+  display: inline-grid;
+  max-width: 100%;
+  gap: 0.08rem;
+  padding: 0.58rem 0.72rem 0.62rem;
+  border: 1px solid var(--credential-accent-line);
+  border-left: 3px solid var(--credential-accent);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, var(--credential-accent-soft), rgba(255, 255, 255, 0.84) 62%),
+    rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66);
+  line-height: 1.32;
+}
+
+.affiliation-badge__school {
+  color: var(--text-title);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.affiliation-badge__dept {
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.055em;
+  line-height: 1.45;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.home-poster-meta .affiliation-badge {
+  padding: 0.42rem 0.58rem 0.46rem;
+  border-color: rgba(255, 255, 255, 0.22);
+  border-left-color: #8ab4ff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+}
+
+.home-poster-meta .affiliation-badge__school {
+  color: #fff;
+}
+
+.home-poster-meta .affiliation-badge__dept {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.72rem;
+  letter-spacing: 0.045em;
+}
+
 .btn,
 .btn-soft,
 .pub-action {
@@ -794,6 +847,34 @@ body.theme-night .hero-visual {
 
 .section-card {
   scroll-margin-top: var(--section-anchor-offset);
+}
+
+.about-entry.education-card {
+  padding: 1rem 1.05rem 1.05rem;
+  border: 1px solid var(--credential-accent-line);
+  border-left: 3px solid var(--credential-accent);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, var(--credential-accent-soft), rgba(255, 255, 255, 0.88) 58%),
+    rgba(255, 255, 255, 0.94);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66);
+}
+
+.education-card__meta {
+  display: inline-flex;
+  margin-bottom: 0.55rem;
+  color: var(--credential-accent);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+body.page-profile #profile-education .education-card h3 {
+  display: block;
+  min-height: 0;
+  margin-bottom: 0.35rem;
 }
 
 .photo-layout {
@@ -1086,6 +1167,12 @@ body.theme-night .photo-note {
   body.page-profile .section-card > .eyebrow,
   body.page-profile .section-card > h2 {
     grid-column: 1;
+    grid-row: auto;
+  }
+
+  body.page-profile .section-card > *:not(.eyebrow):not(h2) {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   body.page-home .page:before,
