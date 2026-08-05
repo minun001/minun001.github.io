@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" aria-hidden="true">
+  <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M34 334c74-38 113-100 152-158 47-70 96-134 198-150 76-12 141 4 196 42 43 30 73 71 106 112" stroke-width="6" stroke-opacity=".72"/>
+    <path d="M116 382c58-30 89-78 122-126 40-59 86-111 169-128 66-14 137-1 200 38" stroke-width="4.5" stroke-opacity=".42"/>
+    <path d="M256 350c31-40 53-88 93-124 43-39 104-63 187-62 51 1 93 12 143 34" stroke-width="4.5" stroke-opacity=".36"/>
+    <path d="M360 76c39 14 75 42 104 79 38 48 66 107 118 145 30 22 65 36 103 45" stroke-width="3.8" stroke-opacity=".3"/>
+    <path d="M206 252c56-7 105 0 151 23 62 31 103 83 157 109" stroke-width="3.6" stroke-opacity=".28"/>
+    <path d="M530 62c-22 44-20 91 7 136 24 40 64 72 104 104" stroke-width="3.6" stroke-opacity=".24"/>
+  </g>
+  <g fill="#000">
+    <circle cx="186" cy="176" r="10" opacity=".74"/>
+    <circle cx="384" cy="26" r="11" opacity=".72"/>
+    <circle cx="580" cy="68" r="9" opacity=".52"/>
+    <circle cx="407" cy="128" r="8" opacity=".5"/>
+    <circle cx="536" cy="164" r="8" opacity=".45"/>
+    <circle cx="238" cy="256" r="8" opacity=".42"/>
+    <circle cx="514" cy="384" r="10" opacity=".38"/>
+    <circle cx="641" cy="302" r="8" opacity=".34"/>
+  </g>
+  <g fill="none" stroke="#000" stroke-width="2.8">
+    <circle cx="186" cy="176" r="26" opacity=".25"/>
+    <circle cx="384" cy="26" r="31" opacity=".22"/>
+    <circle cx="580" cy="68" r="24" opacity=".16"/>
+    <circle cx="641" cy="302" r="23" opacity=".14"/>
+  </g>
+</svg>
