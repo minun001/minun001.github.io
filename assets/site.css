@@ -2,8 +2,8 @@
   color-scheme: light;
   --font-body: "Manrope", "Segoe UI", system-ui, sans-serif;
   --font-display: "Newsreader", Georgia, serif;
-  --bg-page: #f3f6fa;
-  --bg-surface: rgba(255, 255, 255, 0.92);
+  --bg-page: #eef3f8;
+  --bg-surface: rgba(255, 255, 255, 0.94);
   --bg-card: #ffffff;
   --bg-card-strong: #ffffff;
   --text-title: #112033;
@@ -11,8 +11,8 @@
   --text-soft: #708198;
   --border-soft: rgba(17, 32, 51, 0.1);
   --border-strong: rgba(17, 32, 51, 0.16);
-  --shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.06);
-  --shadow-float: 0 18px 42px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 10px 26px rgba(15, 23, 42, 0.055);
+  --shadow-float: 0 18px 40px rgba(15, 23, 42, 0.075);
   --accent: #1d4ed8;
   --accent-2: #0f766e;
   --accent-soft: rgba(29, 78, 216, 0.1);
@@ -28,8 +28,8 @@
   --credential-accent: #174a8b;
   --credential-accent-soft: rgba(23, 74, 139, 0.09);
   --credential-accent-line: rgba(23, 74, 139, 0.22);
-  --route-field-blue: rgba(29, 78, 216, 0.13);
-  --route-field-teal: rgba(15, 118, 110, 0.09);
+  --route-field-blue: rgba(29, 78, 216, 0.105);
+  --route-field-teal: rgba(15, 118, 110, 0.075);
   --route-field-mask: url("/assets/img/route-field.svg");
 }
 
@@ -47,10 +47,9 @@ body.theme-night {
   font-family: var(--font-body);
   color: var(--text-body);
   background:
-    radial-gradient(circle at top left, rgba(29, 78, 216, 0.08), rgba(29, 78, 216, 0) 34%),
-    radial-gradient(circle at top right, rgba(15, 118, 110, 0.07), rgba(15, 118, 110, 0) 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.48) 18%, rgba(255, 255, 255, 0) 34%),
-    linear-gradient(180deg, #fcfdff 0%, #f7f9fc 54%, var(--bg-page) 100%);
+    radial-gradient(ellipse at 8% 0%, rgba(29, 78, 216, 0.07), rgba(29, 78, 216, 0) 30rem),
+    radial-gradient(ellipse at 92% 6%, rgba(15, 118, 110, 0.06), rgba(15, 118, 110, 0) 28rem),
+    linear-gradient(180deg, #fbfdff 0%, #f8fbff 44%, var(--bg-page) 100%);
   line-height: 1.72;
   letter-spacing: 0;
   transition: background 0.25s ease, color 0.25s ease;
@@ -83,6 +82,10 @@ body.page-workspace {
 
 * {
   box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 img {
@@ -427,6 +430,10 @@ body.page-profile .page:after {
   height: min(420px, 40vw);
   pointer-events: none;
   background: linear-gradient(135deg, var(--route-field-blue), var(--route-field-teal));
+  opacity: 0.66;
+  filter: drop-shadow(0 26px 42px rgba(15, 23, 42, 0.035));
+  transform: rotate(-1.4deg);
+  transform-origin: center;
   -webkit-mask-image: var(--route-field-mask);
   mask-image: var(--route-field-mask);
   -webkit-mask-repeat: no-repeat;
@@ -446,7 +453,7 @@ body.page-profile .page:after {
   top: clamp(7rem, 11vw, 9.5rem);
   width: min(640px, 60vw);
   height: min(370px, 36vw);
-  opacity: 0.46;
+  opacity: 0.38;
 }
 
 .page > .site-shell {
@@ -471,9 +478,36 @@ body.page-profile .page:after {
 }
 
 .page-lead-copy p {
-  max-width: 42rem;
+  max-width: 38rem;
   margin: 0;
   font-size: 1.02rem;
+}
+
+.page-lead-copy p,
+.home-section p,
+.home-signal div,
+.home-block p,
+.home-spotlight-item p,
+.home-plain-panel p,
+.about-interest p,
+.about-entry p,
+.about-project p,
+.news-page .timeline-item p,
+.pub-note,
+.pub-marker-copy {
+  max-width: 68ch;
+  line-height: 1.62;
+}
+
+.home-signal div,
+.home-block p,
+.home-spotlight-item p,
+.about-interest p,
+.about-project p,
+.news-page .timeline-item p,
+.pub-note,
+.pub-marker-copy {
+  color: var(--text-body);
 }
 
 .page-lead-side {
@@ -1229,7 +1263,7 @@ body.theme-night .photo-note {
     right: 0.65rem;
     width: min(430px, 82vw);
     height: min(260px, 56vw);
-    opacity: 0.5;
+    opacity: 0.42;
   }
 
   body.page-home .page:after {
@@ -1354,7 +1388,7 @@ body.theme-night .photo-note {
     right: 0.45rem;
     width: 285px;
     height: 180px;
-    opacity: 0.38;
+    opacity: 0.34;
   }
 
   body.page-profile .page:after {
@@ -1362,7 +1396,7 @@ body.theme-night .photo-note {
     right: 0.45rem;
     width: 275px;
     height: 175px;
-    opacity: 0.26;
+    opacity: 0.22;
   }
 
   .page-lead {
