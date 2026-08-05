@@ -586,6 +586,80 @@ body.page-profile .page:after {
   transform: translateY(-1px);
 }
 
+body.page-profile .page-index,
+body.page-publications .page-index,
+body.page-news .page-index {
+  gap: 1rem;
+  padding: 0.78rem 0 0.92rem;
+  border-bottom: 1px solid rgba(17, 32, 51, 0.08);
+  background: linear-gradient(180deg, rgba(252, 253, 255, 0.98) 0%, rgba(252, 253, 255, 0.9) 78%, rgba(252, 253, 255, 0) 100%);
+}
+
+body.page-profile .page-index a,
+body.page-publications .page-index a,
+body.page-news .page-index a {
+  min-height: 34px;
+  padding: 0.24rem 0.04rem 0.34rem;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+}
+
+body.page-profile .page-index a:before,
+body.page-publications .page-index a:before,
+body.page-news .page-index a:before {
+  display: none;
+}
+
+body.page-profile .page-index a:hover,
+body.page-profile .page-index a.is-active,
+body.page-publications .page-index a:hover,
+body.page-publications .page-index a.is-active,
+body.page-news .page-index a:hover,
+body.page-news .page-index a.is-active {
+  border-bottom-color: var(--accent);
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-title);
+  transform: none;
+}
+
+body.page-profile .page-index a:focus-visible,
+body.page-publications .page-index a:focus-visible,
+body.page-news .page-index a:focus-visible {
+  border-radius: 8px;
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+body.page-publications .publications-page {
+  gap: 1.55rem;
+}
+
+body.page-publications .pub-summary {
+  padding-bottom: 0.2rem;
+}
+
+body.page-publications .pub-tools {
+  margin-top: -0.05rem;
+}
+
+body.page-publications .pub-jump {
+  margin-top: -0.25rem;
+}
+
+body.page-news .news-filter {
+  margin-bottom: -0.1rem;
+}
+
+body.page-news .news-jump {
+  margin-top: -0.55rem;
+}
+
 .section-rail {
   display: grid;
   grid-template-columns: 180px minmax(0, 1fr);
@@ -811,6 +885,36 @@ body.page-news .timeline-item:hover {
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.72rem;
   letter-spacing: 0.045em;
+}
+
+@media (max-width: 720px) {
+  body.page-home .home-poster-meta {
+    gap: 0.42rem;
+    padding-top: 0.54rem;
+  }
+
+  body.page-home .home-poster-meta .home-poster-meta-affiliation {
+    align-items: start;
+  }
+
+  body.page-home .home-poster-meta .affiliation-badge {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  body.page-home .home-poster-meta .affiliation-badge__school {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    text-shadow: 0 1px 12px rgba(8, 15, 28, 0.18);
+  }
+
+  body.page-home .home-poster-meta .affiliation-badge__dept {
+    display: none;
+  }
 }
 
 .btn,
