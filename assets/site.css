@@ -9,7 +9,7 @@
   --bg-card-strong: #ffffff;
   --text-title: #112033;
   --text-body: #46576b;
-  --text-soft: #708198;
+  --text-soft: #5f7187;
   --border-soft: rgba(17, 32, 51, 0.1);
   --border-strong: rgba(17, 32, 51, 0.16);
   --shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.045);
@@ -470,7 +470,7 @@ body.page-profile .page:after {
   top: clamp(7rem, 11vw, 9.5rem);
   width: min(640px, 60vw);
   height: min(370px, 36vw);
-  opacity: 0.38;
+  opacity: 0.24;
 }
 
 .page > .site-shell {

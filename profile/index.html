@@ -9,7 +9,7 @@ footer_content: >-
 <style>
     .about-page{display:grid;gap:1.8rem}
     .about-name{text-wrap:balance}
-    .about-hero-copy{display:grid;gap:1.2rem;padding-top:.35rem;animation:riseIn .7s ease both}
+    .about-hero-copy{display:grid;gap:1.2rem;padding:1.2rem 1.25rem 1.3rem;animation:riseIn .7s ease both}
     .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.1rem;margin-top:.3rem}
     .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
     .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -51,11 +51,13 @@ footer_content: >-
     .profile-project-visual-copy{position:absolute;z-index:2;inset:auto auto 1rem 1.1rem;max-width:30rem;padding-left:.75rem;border-left:2px solid #8edfff;color:#fff!important;text-shadow:0 1px 4px rgba(5,20,43,.45)}
     .profile-project-visual-copy span{display:block;margin-bottom:.3rem;color:#9be7ff;font-size:.7rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
     .profile-project-visual-copy strong{display:block;color:#fff!important;font-family:var(--font-display);font-size:1.45rem;line-height:1.08}
-    .identity-card{border:none;box-shadow:none;background:transparent;padding:0}
+    .identity-card{border:1px solid rgba(17,32,51,.08);box-shadow:0 14px 30px rgba(15,23,42,.035);background:rgba(255,255,255,.72);padding:1.2rem 1.25rem 1.3rem}
+    .about-hero-copy .hero-intro{color:#405268}
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
     .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
     .about-actions > *{width:100%}
     @media (min-width:981px){.photo-card img{min-height:468px}}
+    @media (max-width:980px){.photo-card{order:2}.identity-card{order:1}.photo-card img{min-height:340px;max-height:520px;object-position:center 74%}}
     @media (max-width:1024px){.about-meta,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.4rem,6vw,3.6rem)}}
     @media (max-width:760px){
       .about-page{gap:1.3rem}
