@@ -45,6 +45,14 @@ footer_content: >-
     .photo-card{border:none;box-shadow:none;background:transparent;animation:riseIn .55s ease both}
     .photo-card:after{display:none}
     .about-portrait{object-position:center 78%}
+    .profile-brand-lockup{display:inline-flex;align-items:center;gap:.62rem;margin-bottom:.25rem;color:var(--text-soft);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .profile-brand-lockup img{width:32px;height:32px;object-fit:contain}
+    .profile-project-visual{position:relative;min-height:190px;margin:1rem 0 1.15rem;overflow:hidden;border-radius:14px;background:#102b50;box-shadow:0 14px 28px rgba(15,23,42,.08)}
+    .profile-project-visual img{display:block;width:100%;height:190px;object-fit:cover;object-position:center 54%;opacity:.68}
+    .profile-project-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,25,51,.9) 0%,rgba(8,25,51,.45) 55%,rgba(8,25,51,.12) 100%)}
+    .profile-project-visual-copy{position:absolute;z-index:2;inset:auto auto 1rem 1.1rem;max-width:30rem;padding-left:.75rem;border-left:2px solid #8edfff;color:#fff!important;text-shadow:0 1px 4px rgba(5,20,43,.45)}
+    .profile-project-visual-copy span{display:block;margin-bottom:.3rem;color:#9be7ff;font-size:.7rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+    .profile-project-visual-copy strong{display:block;color:#fff!important;font-family:var(--font-display);font-size:1.45rem;line-height:1.08}
     .identity-card{border:none;box-shadow:none;background:transparent;padding:0}
     .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
     .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
@@ -61,6 +69,7 @@ footer_content: >-
       .about-name{font-size:clamp(1.95rem,9vw,2.6rem);line-height:.94}
       .hero-intro{margin:0;font-size:.97rem;line-height:1.58}
       .about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid{grid-template-columns:1fr}
+      .profile-project-visual,.profile-project-visual img{min-height:160px;height:160px}
       .about-meta{gap:.72rem .85rem;margin-top:.1rem}
       .about-meta div{padding-top:.58rem}
       .about-meta dt{font-size:.72rem}
@@ -102,6 +111,7 @@ footer_content: >-
           </div>
           <div class="panel identity-card about-hero-copy">
             <div>
+              <div class="profile-brand-lockup"><img src="/assets/img/hanyang-symbol-basic.png" alt=""><span>Hanyang University</span></div>
               <h1 class="about-name">Hyunsik Min</h1>
               <p class="hero-intro">I build trustworthy AI for mobility, energy forecasting, and decision support.</p>
               <p class="hero-intro">Recent work connects trajectory prediction, photovoltaic forecasting, legal AI, and VLA systems.</p>
@@ -213,6 +223,10 @@ footer_content: >-
           <article class="card section-card span-12" id="profile-projects">
             <div class="eyebrow">Projects &amp; Grants</div>
             <h2>Selected Projects and Grants</h2>
+            <div class="profile-project-visual" aria-label="Autonomous mobility research visual">
+              <img src="/assets/img/autonomy-route.png" alt="Autonomous vehicle following a blue route on a dark highway" loading="lazy">
+              <div class="profile-project-visual-copy"><span>Projects / Mobility Systems</span><strong>From urban mobility research to deployable systems.</strong></div>
+            </div>
             <div class="about-project-grid">
               <article class="about-project">
                 <h3>Emotional and Intelligence Child Care System Convergence Research Center (CRC)</h3>
