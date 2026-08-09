@@ -110,6 +110,7 @@ footer_content: >-
     @media (max-width:640px){.home-refresh{gap:1.8rem}.home-poster{min-height:472px}.home-poster:before{background:linear-gradient(180deg,rgba(8,15,28,.72) 0%,rgba(8,15,28,.46) 42%,rgba(8,15,28,.16) 100%),linear-gradient(90deg,rgba(8,15,28,.58) 0%,rgba(8,15,28,.24) 48%,rgba(8,15,28,.05) 100%)}.home-poster-shell{width:min(100%,calc(100% - 2rem));padding:1.62rem 0 .84rem}.home-poster-copy{max-width:29rem}.home-poster-title{font-size:clamp(1.78rem,10.8vw,2.48rem)}.home-poster-subtitle{font-size:.72rem;line-height:1.28}.home-poster-lead{font-size:.88rem;line-height:1.42}.home-poster-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;max-width:100%}.hero-action{min-height:52px;padding:.64rem .68rem .62rem}.hero-action span{font-size:.56rem}.hero-action strong{font-size:.78rem}.home-poster-meta{margin-top:.68rem}.home-poster-meta dd,.home-poster-meta .affiliation-inline,.home-poster-meta .home-poster-meta-inline{font-size:.76rem}.home-bulletin{padding:.9rem 0 1.05rem}.home-facts,.home-spotlight-grid,.home-signal-grid,.home-bulletin{grid-template-columns:1fr}.home-links a{width:100%}}
     @media (max-width:480px){.home-refresh{gap:1.6rem}.home-poster{min-height:430px}.home-poster-shell{width:min(100%,calc(100% - 2rem));padding:1.35rem 0 .72rem}.home-poster-kicker{font-size:.68rem}.home-poster-title{margin:.6rem 0 .48rem;font-size:clamp(1.58rem,9.8vw,2.05rem)}.home-poster-subtitle{margin-bottom:.56rem;font-size:.66rem}.home-poster-copy p{margin-bottom:.68rem}.home-poster-lead{font-size:.84rem;line-height:1.38}.home-poster-actions{gap:.45rem}.hero-action{min-height:48px;padding:.58rem .62rem}.hero-action span{font-size:.54rem}.hero-action strong{font-size:.74rem}.home-poster-meta{gap:.42rem;margin-top:.58rem;padding-top:.54rem}.home-poster-meta div{column-gap:.38rem}.home-poster-meta dt{font-size:.58rem}.home-poster-meta dd,.home-poster-meta .affiliation-inline,.home-poster-meta .home-poster-meta-inline{font-size:.72rem}.home-section h2{font-size:1.65rem}.home-block h3,.home-spotlight-item h3{font-size:1.08rem}}
     @media (max-width:360px){.home-poster-actions{grid-template-columns:1fr}}
+    .home-poster-kicker,.home-poster-subtitle,.hero-action span,.home-poster-meta dt,.home-signal span,.home-fact-label,.home-spotlight-label,.home-bulletin span{letter-spacing:.02em;text-transform:none}
   </style>
 
 {% assign home_publication_archive = site.data['google-scholar-publications'] %}
@@ -178,7 +179,7 @@ footer_content: >-
             <div class="home-poster-copy">
               <div class="home-poster-kicker">Profile</div>
               <h1 class="home-poster-title">Hyunsik Min</h1>
-              <p class="home-poster-subtitle">M.S. Candidate in Transportation and Logistics Engineering</p>
+              <p class="home-poster-subtitle">M.S. candidate in Transportation and Logistics Engineering</p>
               <p class="home-poster-lead">I study <strong>practical AI for mobility systems</strong>: predicting vehicle behavior and supporting safer transportation decisions.</p>
               <div class="home-poster-actions">
                 <a class="hero-action hero-action-primary" href="/publications/">
@@ -193,9 +194,9 @@ footer_content: >-
                   <span>Scholar</span>
                   <strong>Open Citations</strong>
                 </a>
-                <button class="hero-action hero-action-secondary" type="button" data-copy-email="minun001@hanyang.ac.kr" data-copy-label="Copy Email">
+                <button class="hero-action hero-action-secondary" type="button" data-copy-email="minun001@hanyang.ac.kr" data-copy-label="Copy email">
                   <span>Contact</span>
-                  <strong data-copy-text>Copy Email</strong>
+                  <strong data-copy-text>Copy email</strong>
                 </button>
               </div>
               <dl class="home-poster-meta">
@@ -223,29 +224,29 @@ footer_content: >-
 
         <section class="home-bulletin" aria-label="Current bulletin">
           <a href="/publications/#international-journals">
-            <span>Latest Journal</span>
+            <span>Latest journal</span>
             <strong>IEEE T-ITS trajectory prediction line</strong>
           </a>
           <a href="/news/#news-2026">
-            <span>Current Project</span>
+            <span>Current project</span>
             <strong>AI agent-based multi-domain safety monitoring</strong>
           </a>
           <a href="/publications/#international-conferences">
-            <span>Upcoming Presentation</span>
+            <span>Upcoming presentation</span>
             <strong>ITS World Congress 2026 in Gangneung</strong>
           </a>
         </section>
 
         <nav class="page-index home-index" aria-label="Jump to home section">
-          <a href="#home-at-a-glance">At a Glance</a>
-          <a href="#home-interests">Research Interests</a>
-          <a href="#home-overview">Overview</a>
-          <a href="#home-highlights">Highlights</a>
-          <a href="#home-current-tracks">Current Tracks</a>
+          <a href="#home-at-a-glance">Snapshot</a>
+          <a href="#home-interests">Research areas</a>
+          <a href="#home-overview">Focus</a>
+          <a href="#home-highlights">Selected work</a>
+          <a href="#home-current-tracks">Current work</a>
         </nav>
 
         <section class="home-section" id="home-at-a-glance">
-          <div class="eyebrow">At a Glance</div>
+          <div class="eyebrow">Snapshot</div>
           <div class="home-signal-grid">
             <article class="home-signal">
               <span>Current Work</span>
@@ -266,7 +267,7 @@ footer_content: >-
         </section>
 
         <section class="home-interest-rail" id="home-interests">
-          <div class="eyebrow">Research Interests</div>
+          <div class="eyebrow">Research areas</div>
           <div class="home-interest-list">
             <span>Trajectory Prediction</span>
             <span>Autonomous Driving</span>
@@ -277,9 +278,9 @@ footer_content: >-
         </section>
 
         <section class="home-section" id="home-overview">
-          <div class="eyebrow">Overview</div>
+          <div class="eyebrow">Focus</div>
           <h2>Practical AI for mobility systems</h2>
-          <p>I study vehicle behavior, transportation decisions, and safety-aware AI, with energy forecasting and legal AI as related applications.</p>
+          <p>I study vehicle behavior and safety-aware transportation decisions, with energy forecasting and legal AI as related applications.</p>
           <div class="home-columns">
             <article class="home-block">
               <h3>Mobility systems</h3>
@@ -298,23 +299,23 @@ footer_content: >-
 
         <section class="home-spotlight" id="home-highlights">
           <div class="home-section">
-            <div class="eyebrow">Selected Highlights</div>
-            <h2>Publication and research snapshot</h2>
+            <div class="eyebrow">Selected work</div>
+            <h2>Research snapshot</h2>
             <div class="home-spotlight-grid">
               <article class="home-spotlight-item">
                 <div class="home-spotlight-label">International Journals</div>
                 <h3>{{ home_international_journals.count }} international journal records</h3>
-                <p>Journal work leads with trajectory prediction for autonomous driving, alongside energy forecasting and legal AI.</p>
+                <p>Trajectory prediction for autonomous driving, with related energy forecasting and legal AI.</p>
               </article>
               <article class="home-spotlight-item">
                 <div class="home-spotlight-label">Domestic Journals</div>
                 <h3>{{ home_domestic_journals.count }} domestic journal papers</h3>
-                <p>Domestic work covers front-vehicle trajectory prediction and road-traffic judgment modeling.</p>
+                <p>Front-vehicle trajectory prediction and road-traffic judgment modeling.</p>
               </article>
               <article class="home-spotlight-item">
                 <div class="home-spotlight-label">International Conferences</div>
                 <h3>{{ home_international_conferences.count }} international conference records</h3>
-                <p>Conference work includes comfort-centric trajectory prediction at <strong>ITS World Congress 2026</strong> and related transportation studies.</p>
+                <p>Comfort-centric trajectory prediction at <strong>ITS World Congress 2026</strong> and related transportation studies.</p>
               </article>
             </div>
           </div>
@@ -322,7 +323,7 @@ footer_content: >-
 
         <section class="home-dual" id="home-current-tracks">
           <div class="home-plain-panel">
-            <div class="eyebrow">Research Themes</div>
+            <div class="eyebrow">Research themes</div>
             <h3>What this work is trying to do</h3>
             <ul class="home-list">
               <li>Predict vehicle behavior early enough to support safer action.</li>
@@ -331,9 +332,9 @@ footer_content: >-
             </ul>
           </div>
           <div class="home-plain-panel">
-            <div class="eyebrow">Current Tracks</div>
-            <h3>Where the work is moving now</h3>
-            <p>Current work centers on mobility, trajectory prediction, and safety monitoring; energy forecasting and legal AI remain related applications.</p>
+            <div class="eyebrow">Current work</div>
+            <h3>Mobility and safety monitoring</h3>
+            <p>Current work centers on mobility, trajectory prediction, and safety monitoring.</p>
             <div class="home-links">
               <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
               <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>

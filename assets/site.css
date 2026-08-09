@@ -348,8 +348,7 @@ body.mobile-nav-open .nav-toggle span:nth-child(3) {
   color: var(--text-soft);
   font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .mobile-nav__links {
@@ -539,8 +538,7 @@ body.page-profile .page:after {
   color: var(--text-title);
   font-size: 0.8rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .page-lead-side p {
@@ -695,8 +693,7 @@ body.page-news .news-jump {
   color: var(--text-soft);
   font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .section-rail-content {
@@ -794,8 +791,7 @@ body.page-news .timeline-item:hover {
   color: var(--text-soft);
   font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .eyebrow:before {
@@ -834,8 +830,7 @@ body.page-news .timeline-item:hover {
   color: var(--text-soft);
   font-size: 0.92rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .hero-intro {
@@ -879,9 +874,8 @@ body.page-news .timeline-item:hover {
   color: var(--text-soft);
   font-size: 0.78rem;
   font-weight: 850;
-  letter-spacing: 0.055em;
+  letter-spacing: 0.02em;
   line-height: 1.45;
-  text-transform: uppercase;
   overflow-wrap: anywhere;
 }
 
@@ -1062,9 +1056,8 @@ body.theme-night .hero-visual {
   color: var(--credential-accent);
   font-size: 0.72rem;
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
   line-height: 1.2;
-  text-transform: uppercase;
 }
 
 body.page-profile #profile-education .education-card h3 {
@@ -1176,8 +1169,7 @@ body.theme-night .photo-note {
   color: var(--text-soft);
   font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .footer-title {
@@ -1253,8 +1245,7 @@ body.theme-night .photo-note {
   color: var(--text-soft);
   font-size: 0.74rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .chapter-link strong {
