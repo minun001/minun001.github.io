@@ -190,8 +190,6 @@ ul {
 }
 
 .brand {
-  display: inline-flex;
-  align-items: center;
   font-family: var(--font-display);
   font-size: 1.7rem;
   font-weight: 700;
@@ -199,14 +197,6 @@ ul {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.brand-logo {
-  display: block;
-  width: min(218px, 34vw);
-  height: auto;
-  object-fit: contain;
-  object-position: left center;
 }
 
 .nav {
@@ -1431,9 +1421,6 @@ body.theme-night .photo-note {
     font-size: 1.28rem;
   }
 
-  .brand-logo {
-    width: min(178px, 42vw);
-  }
 
   .nav {
     display: none;
@@ -1547,9 +1534,6 @@ body.theme-night .photo-note {
     font-size: 1.18rem;
   }
 
-  .brand-logo {
-    width: min(154px, 48vw);
-  }
 
   .hero-copy,
   .hero-visual,

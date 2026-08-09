@@ -27,9 +27,7 @@
   <header class="site-header">
     <div class="site-shell site-header__inner">
       <div class="brand-lockup">
-        <a class="brand" href="{{ "/" | relative_url }}" aria-label="HMIN | Hyunsik Min">
-          <img class="brand-logo" src="{{ '/assets/img/hmin-logo.png' | relative_url }}" alt="HMIN | Hyunsik Min" width="218" height="63">
-        </a>
+        <a class="brand" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
       </div>
       <button
         class="nav-toggle"
