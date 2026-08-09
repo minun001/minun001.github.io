@@ -57,14 +57,14 @@ footer_content: >-
     .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
     .about-actions > *{width:100%}
     @media (min-width:981px){.photo-card img{min-height:468px}}
-    @media (max-width:980px){.photo-card{order:2}.identity-card{order:1}.photo-card img{min-height:340px;max-height:520px;object-position:center 74%}}
+    @media (max-width:980px){.photo-card{order:2}.identity-card{order:1}.photo-card img{min-height:340px;max-height:520px;object-position:center 92%}}
     @media (max-width:1024px){.about-meta,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.4rem,6vw,3.6rem)}}
     @media (max-width:760px){
       .about-page{gap:1.3rem}
       .photo-layout{gap:.72rem}
       .photo-card{order:2}
       .identity-card{order:1}
-      .photo-card img{min-height:300px;max-height:360px;object-position:center 74%}
+      .photo-card img{min-height:300px;max-height:360px;object-position:center 92%}
       .about-hero-copy{gap:.95rem;padding-top:0}
       .about-name{font-size:clamp(1.95rem,9vw,2.6rem);line-height:.94}
       .hero-intro{margin:0;font-size:.97rem;line-height:1.58}
@@ -107,7 +107,10 @@ footer_content: >-
 <div class="about-page">
         <section class="photo-layout">
           <div class="panel photo-card">
-            <img class="about-portrait" src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1920" height="2560" loading="eager" fetchpriority="high">
+            <picture>
+              <source srcset="/assets/img/KakaoTalk_20260318_150626.webp" type="image/webp">
+              <img class="about-portrait" src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1200" height="1600" loading="eager" fetchpriority="high">
+            </picture>
           </div>
           <div class="panel identity-card about-hero-copy">
             <div>
@@ -219,7 +222,10 @@ footer_content: >-
             <div class="eyebrow">Projects &amp; Grants</div>
             <h2>Selected Projects and Grants</h2>
             <div class="profile-project-visual" aria-label="Autonomous mobility research visual">
-              <img src="/assets/img/autonomy-route.png" alt="Autonomous vehicle following a blue route on a dark highway" loading="lazy">
+              <picture>
+                <source srcset="/assets/img/autonomy-route.webp" type="image/webp">
+                <img src="/assets/img/autonomy-route.png" alt="Autonomous vehicle following a blue route on a dark highway" width="1600" height="900" loading="lazy">
+              </picture>
               <div class="profile-project-visual-copy"><span>Projects / Mobility Systems</span><strong>From urban mobility research to practical systems.</strong></div>
             </div>
             <div class="about-project-grid">

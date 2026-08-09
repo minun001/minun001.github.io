@@ -677,7 +677,23 @@
       document.body.classList.toggle('mobile-nav-open', isOpen);
       toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       toggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
-      if (panel) panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      if (panel) {
+        panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        if (isOpen) panel.removeAttribute('inert');
+        else panel.setAttribute('inert', '');
+      }
+      if (closeButton) closeButton.setAttribute('tabindex', isOpen ? '0' : '-1');
+      links.forEach(function (link) {
+        if (isOpen) {
+          var previousTabIndex = link.getAttribute('data-mobile-nav-tabindex');
+          if (previousTabIndex === null || previousTabIndex === '') link.removeAttribute('tabindex');
+          else link.setAttribute('tabindex', previousTabIndex);
+          link.removeAttribute('data-mobile-nav-tabindex');
+        } else if (!link.hasAttribute('data-mobile-nav-tabindex')) {
+          link.setAttribute('data-mobile-nav-tabindex', link.getAttribute('tabindex') || '');
+          link.setAttribute('tabindex', '-1');
+        }
+      });
 
       if (isOpen) {
         lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : toggle;
