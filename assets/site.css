@@ -853,14 +853,12 @@ body.page-news .timeline-item:hover {
   display: inline-grid;
   max-width: 100%;
   gap: 0.08rem;
-  padding: 0.58rem 0.72rem 0.62rem;
-  border: 1px solid var(--credential-accent-line);
-  border-left: 3px solid var(--credential-accent);
-  border-radius: var(--radius-md);
-  background:
-    linear-gradient(135deg, var(--credential-accent-soft), rgba(255, 255, 255, 0.84) 62%),
-    rgba(255, 255, 255, 0.92);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66);
+  padding: 0.2rem 0 0.2rem 0.72rem;
+  border: 0;
+  border-left: 1px solid var(--border-soft);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   line-height: 1.32;
 }
 
@@ -881,11 +879,10 @@ body.page-news .timeline-item:hover {
 
 .home-poster-meta .affiliation-badge {
   padding: 0.42rem 0.58rem 0.46rem;
-  border-color: rgba(255, 255, 255, 0.22);
-  border-left-color: #8ab4ff;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(8px);
+  border-left: 1px solid rgba(255, 255, 255, 0.38);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .home-poster-meta .affiliation-badge__school {
@@ -1040,20 +1037,17 @@ body.theme-night .hero-visual {
 }
 
 .about-entry.education-card {
-  padding: 1rem 1.05rem 1.05rem;
-  border: 1px solid var(--credential-accent-line);
-  border-left: 3px solid var(--credential-accent);
-  border-radius: var(--radius-lg);
-  background:
-    linear-gradient(135deg, var(--credential-accent-soft), rgba(255, 255, 255, 0.88) 58%),
-    rgba(255, 255, 255, 0.94);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .education-card__meta {
   display: inline-flex;
   margin-bottom: 0.55rem;
-  color: var(--credential-accent);
+  color: var(--text-soft);
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.04em;
