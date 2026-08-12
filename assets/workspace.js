@@ -2824,11 +2824,11 @@
       setIdentity(null, config);
       setShellMode('auth');
       setView('login');
-      setStatus('Start a private helper tunnel, then open this page with ?workspaceHelper=https://your-helper-url. Credentials stay on the helper, not GitHub Pages.', 'warn');
+      setStatus('Private workspace: configure the helper URL before signing in. Credentials stay on the helper, not GitHub Pages.', 'warn');
       if (form) {
         form.addEventListener('submit', function (event) {
           event.preventDefault();
-          setStatus('Workspace helper URL is not configured yet. Reopen with ?workspaceHelper=https://your-helper-url.', 'warn');
+          setStatus('Helper URL is not configured. Reopen with ?workspaceHelper=https://your-helper-url.', 'warn');
         });
       }
       return;

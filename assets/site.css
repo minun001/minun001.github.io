@@ -1566,6 +1566,25 @@ body.theme-night .photo-note {
     white-space: nowrap;
   }
 
+  body.page-profile .page-index,
+  body.page-publications .page-index,
+  body.page-news .page-index {
+    position: relative;
+  }
+
+  body.page-profile .page-index::after,
+  body.page-publications .page-index::after,
+  body.page-news .page-index::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1.8rem;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(252, 253, 255, 0), rgba(252, 253, 255, 0.96));
+  }
+
   .mobile-nav__panel {
     top: calc(var(--header-height) + 0.35rem);
     right: max(0.62rem, calc(env(safe-area-inset-right, 0px) + 0.4rem));
