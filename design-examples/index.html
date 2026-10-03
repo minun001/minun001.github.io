@@ -1,0 +1,21 @@
+---
+layout: default
+title: Design studies
+description: Three visual directions for Hyunsik Min's mobility research website.
+body_class: page-home page-design-examples
+home_design: true
+robots: noindex,nofollow
+---
+<link rel="stylesheet" href="{{ '/assets/design-examples.css' | relative_url }}?v=20261003">
+<section class="design-study" aria-label="Compare website designs">
+  <div><p>Website design studies</p><h2>One researcher. Three perspectives.</h2><span>Same research and data, different visual rhythm.</span></div>
+  <nav class="design-switcher" aria-label="Design direction">
+    <a href="?design=editorial" data-design-choice="editorial" aria-current="true">01 Editorial</a>
+    <a href="?design=atlas" data-design-choice="atlas">02 Research atlas</a>
+    <a href="?design=ledger" data-design-choice="ledger">03 Academic ledger</a>
+  </nav>
+  <p class="design-study-note" data-design-note>Bright, spacious, and readable. The published design.</p>
+  <noscript><p>JavaScript is needed to switch directions. The editorial example is shown below.</p></noscript>
+</section>
+{% include home-research.html %}
+<script src="{{ '/assets/design-examples.js' | relative_url }}?v=20261003" defer></script>

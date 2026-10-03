@@ -7,122 +7,180 @@ footer_content: >-
   Research profile focused on mobility systems, safety-aware AI, and related forecasting.
 ---
 <style>
-    .about-page{display:grid;gap:1.8rem}
-    .about-name{text-wrap:balance}
-    .about-hero-copy{display:grid;gap:1.2rem;padding:1.2rem 1.25rem 1.3rem;animation:riseIn .7s ease both}
-    .about-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.1rem;margin-top:.3rem}
-    .about-meta div{padding-top:.8rem;border-top:1px solid var(--border-soft)}
-    .about-meta dt{margin:0 0 .2rem;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .about-meta dd{margin:0;color:var(--text-title);font-size:.98rem;font-weight:700;word-break:break-word}
-    .about-email-copy{padding:0;border:0;background:none;color:inherit;font:inherit;font-weight:inherit;text-align:left;line-height:1.42;cursor:pointer;text-decoration:underline;text-decoration-color:rgba(29,78,216,.32);text-underline-offset:.16em;transition:color .2s ease,text-decoration-color .2s ease}
-    .about-email-copy:hover{color:var(--accent);text-decoration-color:currentColor}
-    .about-email-copy:focus-visible{color:var(--accent);text-decoration-color:currentColor;outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
-    .about-jump{margin-top:-.15rem}
-    .about-jump-label-short{display:none}
-    .about-interest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:.35rem}
-    .about-interest{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
-    .about-interest h3{margin-bottom:.35rem;font-size:1.08rem}
-    .about-stack{display:grid;gap:.9rem}
-    .about-entry:not(.education-card){padding-top:.9rem;border-top:1px solid var(--border-soft)}
-    .about-entry:first-child:not(.education-card){padding-top:0;border-top:none}
-    .about-entry h3{margin-bottom:.2rem;font-size:1.08rem}
-    .about-entry p{margin:0}
-    #profile-education .about-entry h3,
-    #profile-experience .about-entry h3{display:flex;align-items:flex-start;min-height:3.15rem}
-    .about-list{margin:0;padding-left:1.1rem}
-    .about-list li+li{margin-top:.55rem}
-    .profile-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem 1.25rem;align-items:start}
-    .about-project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem 1.25rem}
-    .about-project{padding:1rem;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px var(--border-soft);border-top:none;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
-    .about-project h3{margin-bottom:.25rem;font-size:1.08rem}
-    .about-project p{margin:0}
-    .about-mini-note{margin-top:.35rem;color:var(--text-soft);font-size:.92rem}
-    #profile-awards .profile-detail-grid,
-    #profile-stack .profile-detail-grid{padding-top:.1rem}
-    #profile-awards .about-list{list-style:none;padding-left:0}
-    #profile-awards .about-list li{position:relative;padding-left:1rem}
-    #profile-awards .about-list li:before{content:"";position:absolute;left:0;top:.78em;width:.38rem;height:.38rem;border-radius:999px;background:var(--accent-2)}
-    .photo-layout{align-items:start}
-    .photo-card{border:none;box-shadow:none;background:transparent;animation:riseIn .55s ease both}
-    .photo-card:after{display:none}
-    .about-portrait{object-position:center 78%}
-    .profile-project-visual{position:relative;min-height:190px;margin:1rem 0 1.15rem;overflow:hidden;border-radius:14px;background:#102b50;box-shadow:0 14px 28px rgba(15,23,42,.08)}
-    .profile-project-visual img{display:block;width:100%;height:190px;object-fit:cover;object-position:center 54%;opacity:.68}
-    .profile-project-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,25,51,.9) 0%,rgba(8,25,51,.45) 55%,rgba(8,25,51,.12) 100%)}
-    .profile-project-visual-copy{position:absolute;z-index:2;inset:auto auto 1rem 1.1rem;max-width:30rem;padding-left:.75rem;border-left:2px solid #8edfff;color:#fff!important;text-shadow:0 1px 4px rgba(5,20,43,.45)}
-    .profile-project-visual-copy span{display:block;margin-bottom:.3rem;color:#9be7ff;font-size:.7rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
-    .profile-project-visual-copy strong{display:block;color:#fff!important;font-family:var(--font-display);font-size:1.45rem;line-height:1.08}
-    .identity-card{border:1px solid rgba(17,32,51,.08);box-shadow:0 14px 30px rgba(15,23,42,.035);background:rgba(255,255,255,.72);padding:1.2rem 1.25rem 1.3rem}
-    .about-hero-copy .hero-intro{color:#405268}
-    .about-interest:hover,.about-project:hover{transform:translateY(-3px);box-shadow:0 16px 28px rgba(15,23,42,.08),inset 0 0 0 1px rgba(17,32,51,.12)}
-    .about-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.75rem}
-    .about-actions > *{width:100%}
-    @media (min-width:981px){
-      .photo-layout{align-items:stretch}
-      .photo-card{display:flex;min-height:0}
-      .photo-card picture{display:block;width:100%;height:100%;min-height:0}
-      .photo-card img{height:100%;min-height:0;object-position:center 88%;transform:scale(1.12);transform-origin:center 86%}
-    }
-    @media (max-width:980px){.photo-card{order:2}.identity-card{order:1}.photo-card img{min-height:340px;max-height:520px;object-position:center 92%}}
-    @media (max-width:1024px){.about-meta,.profile-detail-grid{grid-template-columns:1fr}.about-name{font-size:clamp(2.4rem,6vw,3.6rem)}}
-    @media (max-width:760px){
-      .about-page{gap:1.3rem}
-      .photo-layout{gap:.72rem}
-      .photo-card{order:2}
-      .identity-card{order:1}
-      .photo-card img{min-height:300px;max-height:360px;object-position:center 92%}
-      .about-hero-copy{gap:.95rem;padding-top:0}
-      .about-name{font-size:clamp(1.95rem,9vw,2.6rem);line-height:.94}
-      .hero-intro{margin:0;font-size:.97rem;line-height:1.58}
-      .about-meta,.about-interest-grid,.about-project-grid,.profile-detail-grid{grid-template-columns:1fr}
-      .profile-project-visual,.profile-project-visual img{min-height:160px;height:160px}
-      .about-meta{gap:.72rem .85rem;margin-top:.1rem}
-      .about-meta div{padding-top:.58rem}
-      .about-meta dt{font-size:.72rem}
-      .about-meta dd{font-size:.93rem}
-      .about-email-copy{display:inline-flex;align-items:center;max-width:100%;min-height:44px;padding:.18rem 0}
-      .about-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:.58rem}
-      .about-actions > :last-child{grid-column:1 / -1}
-      .about-actions .btn-soft{min-height:44px;padding:.68rem .75rem;font-size:.84rem}
-      .about-jump{margin-top:-.3rem;scroll-snap-type:x proximity;scroll-padding-inline:.2rem}
-      .about-jump a{scroll-snap-align:start}
-      .about-jump a{flex:0 0 auto;min-height:42px;padding-inline:.74rem;font-size:.8rem}
-      .about-jump-label-full{display:none}
-      .about-jump-label-short{display:inline}
-      .about-page .section-grid{margin-top:.25rem;gap:.82rem}
-      .about-stack{gap:.75rem}
-      .about-entry{padding-top:.75rem}
-      .about-entry h3,.about-project h3{font-size:1rem}
-      #profile-education .about-entry h3,
-      #profile-experience .about-entry h3{min-height:0}
-    }
-    @media (max-width:420px){
-      .about-page{gap:1.15rem}
-      .photo-card img{min-height:270px;max-height:320px}
-      .about-name{font-size:clamp(1.82rem,10vw,2.2rem)}
-      .about-jump{margin-top:-.22rem}
-      .about-meta dd{font-size:.9rem}
-    }
-    @media (max-width:360px){
-      .about-actions{grid-template-columns:1fr}
-      .about-actions > :last-child{grid-column:auto}
-      .about-jump a{padding-inline:.68rem;font-size:.78rem}
-    }
-    .about-meta dt,.profile-project-visual-copy span{letter-spacing:.03em;text-transform:none}
-  </style>
+  .about-page {
+    display: grid;
+    gap: 2rem;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .about-page .photo-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: 1rem 1.5rem;
+  }
+
+  .about-hero-copy { min-width: 0; }
+  .about-name {
+    margin: 0 0 .6rem;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 500;
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+  .profile-role { margin: 0 0 1.3rem; color: var(--text-soft); }
+  .about-page .hero-intro {
+    max-width: 54ch;
+    margin: 0;
+    color: var(--text-body);
+    font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+    line-height: 1.65;
+  }
+  .profile-related { max-width: 60ch; margin: .85rem 0 0; color: var(--text-soft); }
+
+  .about-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+    margin: 1.5rem 0 0;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border-soft);
+  }
+  .about-meta > div { min-width: 0; }
+  .about-meta > div:first-child { grid-column: 1 / -1; }
+  .about-meta dt { margin-bottom: .25rem; color: var(--text-soft); font-size: .875rem; }
+  .about-meta dd { margin: 0; color: var(--text-title); overflow-wrap: anywhere; }
+  .about-meta > div:not(:first-child) dd { display: flex; align-items: center; min-height: 44px; }
+  .about-page .affiliation-badge { display: grid; gap: .15rem; padding: 0; border: 0; line-height: 1.55; }
+  .about-page .affiliation-badge__school { font-weight: 700; }
+  .about-page .affiliation-badge__dept { font-size: 1rem; font-weight: 400; letter-spacing: 0; }
+  .about-email-copy {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    max-width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: .2em;
+  }
+  .about-email-copy:hover { color: var(--accent); text-decoration-color: currentColor; }
+  .about-email-copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .about-actions { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin-top: 1rem; }
+  .about-actions a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: .2em; }
+
+  .about-page .photo-card { width: 100%; margin: 0; overflow: hidden; border: 0; border-radius: 6px; background: var(--bg-muted); box-shadow: none; }
+  .about-page .photo-card::after { display: none; }
+  .about-page .photo-card picture { display: block; aspect-ratio: 5 / 4; }
+  /* The subject is low in the source frame; a fixed lower crop avoids stretching. */
+  .about-page .photo-card img { width: 100%; height: 100%; min-height: 0; max-height: none; object-fit: cover; object-position: center bottom; transform: none; }
+
+  .page-profile .about-page .about-jump {
+    position: sticky;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.25rem;
+    margin: 0;
+    padding: .5rem 0;
+    overflow-x: auto;
+    background: var(--bg-page);
+    scroll-padding-inline: .25rem;
+  }
+  .page-profile .about-page .about-jump a { flex: 0 0 auto; min-height: 44px; padding: .25rem 0; font-size: 1rem; font-weight: 600; white-space: nowrap; }
+  .page-profile .about-page .about-jump::after { display: none; }
+  .about-jump-label-short { display: none; }
+
+  .profile-sections { display: grid; gap: 3rem; }
+  .profile-section {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 2.5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--border-soft);
+    scroll-margin-top: var(--section-anchor-offset);
+  }
+  .profile-section-heading,
+  .profile-section-content { min-width: 0; }
+  .profile-section-heading .eyebrow { margin-bottom: .65rem; color: var(--text-soft); font-size: .875rem; font-weight: 600; letter-spacing: 0; text-transform: none; }
+  .profile-section-heading .eyebrow::before { display: none; }
+  .profile-section-heading h2 { font-size: 2rem; font-weight: 500; line-height: 1.16; text-wrap: balance; }
+  .about-interest-grid,
+  .about-project-grid,
+  .profile-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 2rem; align-items: start; }
+  .page-profile .about-page .about-interest,
+  .page-profile .about-page .about-project { min-width: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+  .page-profile .about-page .about-interest:hover,
+  .page-profile .about-page .about-project:hover { transform: none; box-shadow: none; }
+  .about-page .about-interest h3,
+  .about-page .about-entry h3,
+  .about-page .about-project h3 { margin: 0 0 .55rem; font-family: var(--font-body); font-size: 1.125rem; font-weight: 700; line-height: 1.45; letter-spacing: -.01em; }
+  .about-page .about-interest p,
+  .about-page .about-entry p,
+  .about-page .about-project p { max-width: 64ch; margin: 0; font-size: 1rem; line-height: 1.7; overflow-wrap: anywhere; }
+  .about-stack { display: grid; gap: 1.5rem; }
+  .about-page .about-entry + .about-entry { padding-top: 1.5rem; border-top: 1px solid var(--border-soft); }
+  .about-page .about-entry p + p,
+  .about-page .about-project p + p { margin-top: .4rem; }
+  .about-page .education-card__meta { display: block; margin-bottom: .5rem; color: var(--text-soft); font-size: .875rem; font-weight: 600; letter-spacing: 0; line-height: 1.5; }
+  .about-page .about-entry-date { margin-bottom: .6rem; color: var(--text-soft); }
+  .about-entry-date em,
+  .about-project-meta em { font-style: normal; }
+  .about-mini-note,
+  .about-project-meta { color: var(--text-soft); }
+  .about-project-grid { row-gap: 2rem; }
+  .about-page .about-list { margin: 0; padding-left: 1.2rem; }
+  .about-list li { padding-left: .2rem; }
+  .about-list li + li { margin-top: 1rem; }
+  .profile-toolkit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; margin: 0; }
+  .profile-toolkit div { min-width: 0; }
+  .profile-toolkit dt { margin-bottom: .3rem; color: var(--text-title); font-weight: 700; }
+  .profile-toolkit dd { margin: 0; overflow-wrap: anywhere; }
+  .about-page .chapter-nav { margin-top: 0; }
+
+  @media (max-width: 1080px) {
+    .profile-section { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+    .profile-section-heading h2 { max-width: 30ch; }
+  }
+  @media (max-width: 900px) {
+    .about-page .photo-layout { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; padding-top: .5rem; }
+    .about-page .photo-card { max-width: 30rem; }
+    .page-profile .about-page .about-jump { position: relative; top: auto; }
+    .profile-section { scroll-margin-top: calc(var(--header-height) + 1rem); }
+  }
+  @media (max-width: 640px) {
+    .about-page { gap: 1.5rem; }
+    .about-name { font-size: clamp(2.75rem, 12vw, 3.75rem); }
+    .about-meta,
+    .about-interest-grid,
+    .about-project-grid,
+    .profile-detail-grid,
+    .profile-toolkit { grid-template-columns: minmax(0, 1fr); }
+    .page-profile .about-page .about-jump { gap: 1rem; }
+    .about-jump-label-full { display: none; }
+    .about-jump-label-short { display: inline; }
+    .profile-sections { gap: 2.25rem; }
+    .profile-section { padding-top: 1.5rem; gap: 1.25rem; }
+    .profile-section-heading h2 { font-size: 1.8rem; }
+  }
+</style>
 
 <div class="about-page">
-        <section class="photo-layout">
-          <div class="panel photo-card">
-            <picture>
-              <source srcset="/assets/img/KakaoTalk_20260318_150626.webp" type="image/webp">
-              <img class="about-portrait" src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1200" height="1600" loading="eager" fetchpriority="high">
-            </picture>
-          </div>
-          <div class="panel identity-card about-hero-copy">
+        <section class="photo-layout" aria-labelledby="profile-name">
+          <div class="about-hero-copy">
             <div>
-              <h1 class="about-name">Hyunsik Min</h1>
-              <p class="hero-intro">I study practical AI for mobility systems, focusing on trajectory prediction, anticipatory driving, and safety-aware decisions. Related work includes temporal modeling, foundation models, energy forecasting, and legal AI.</p>
+              <h1 class="about-name" id="profile-name">Hyunsik Min</h1>
+              <p class="profile-role">Master's student at Hanyang University</p>
+              <p class="hero-intro">I study intelligent mobility: predicting vehicle behavior, modeling vehicle interactions, and analyzing traffic accidents from CCTV. I also explore vision-language and vision-language-action models (VLM/VLA) for driving and traffic reasoning.</p>
+              <p class="profile-related">Related work spans temporal modeling, foundation models, energy forecasting, and legal AI.</p>
             </div>
             <dl class="about-meta">
               <div>
@@ -143,78 +201,90 @@ footer_content: >-
                 <dd>Seoul, Republic of Korea</dd>
               </div>
             </dl>
-            <div class="button-row about-actions">
-              <a class="btn-soft" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
-              <a class="btn-soft" href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
-              <a class="btn-soft" href="https://github.com/minun001" target="_blank" rel="noopener">GitHub</a>
+            <div class="about-actions">
+              <a href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a>
+              <a href="https://www.linkedin.com/in/hyunsik-min-9ba072346/" target="_blank" rel="noopener">LinkedIn</a>
+              <a href="https://github.com/minun001" target="_blank" rel="noopener">GitHub</a>
             </div>
           </div>
+          <figure class="photo-card">
+            <picture>
+              <source srcset="/assets/img/KakaoTalk_20260318_150626.webp" type="image/webp">
+              <img class="about-portrait" src="/assets/img/KakaoTalk_20260318_150626.jpg" alt="Hyunsik Min portrait" width="1920" height="2560" loading="eager" fetchpriority="high">
+            </picture>
+          </figure>
         </section>
 
         <nav class="about-jump page-index" aria-label="Jump to profile section">
           <a href="#profile-research"><span class="about-jump-label-full">Research</span><span class="about-jump-label-short">Research</span></a>
           <a href="#profile-education"><span class="about-jump-label-full">Education</span><span class="about-jump-label-short">Education</span></a>
           <a href="#profile-experience"><span class="about-jump-label-full">Experience</span><span class="about-jump-label-short">Experience</span></a>
-          <a href="#profile-projects"><span class="about-jump-label-full">Projects &amp; Grants</span><span class="about-jump-label-short">Projects</span></a>
-          <a href="#profile-awards"><span class="about-jump-label-full">Honors &amp; Awards</span><span class="about-jump-label-short">Awards</span></a>
-          <a href="#profile-stack"><span class="about-jump-label-full">Technical Toolkit</span><span class="about-jump-label-short">Toolkit</span></a>
+          <a href="#profile-projects"><span class="about-jump-label-full">Projects &amp; grants</span><span class="about-jump-label-short">Projects</span></a>
+          <a href="#profile-awards"><span class="about-jump-label-full">Honors &amp; awards</span><span class="about-jump-label-short">Awards</span></a>
+          <a href="#profile-stack"><span class="about-jump-label-full">Technical toolkit</span><span class="about-jump-label-short">Toolkit</span></a>
         </nav>
 
-        <section class="section-grid">
-          <article class="card section-card span-12" id="profile-research">
-            <div class="eyebrow">Research Focus</div>
-            <h2>Research directions</h2>
-            <div class="about-interest-grid">
+        <div class="profile-sections">
+          <section class="profile-section" id="profile-research" aria-labelledby="profile-research-title">
+            <header class="profile-section-heading">
+              <div class="eyebrow">Research focus</div>
+              <h2 id="profile-research-title">Research directions</h2>
+            </header>
+            <div class="profile-section-content about-interest-grid">
               <div class="about-interest">
-                <h3>Foundation Models &amp; Decision Support</h3>
-                <p>Reasoning, adaptation, and practical use in research and decision-support settings.</p>
+                <h3>Trajectory prediction</h3>
+                <p>Vehicle trajectory prediction, interaction modeling, and anticipatory driving support under uncertainty.</p>
               </div>
               <div class="about-interest">
-                <h3>Safety-aware Mobility AI</h3>
-                <p>Systems connecting prediction, monitoring, and action under transportation uncertainty.</p>
+                <h3>Safety-aware mobility AI</h3>
+                <p>Connecting prediction, monitoring, and action under transportation uncertainty, including traffic accident analysis from CCTV.</p>
               </div>
               <div class="about-interest">
-                <h3>Trajectory Prediction</h3>
-                <p>Vehicle trajectory prediction and driving support under interaction and uncertainty.</p>
+                <h3>Foundation models &amp; decision support</h3>
+                <p>Reasoning, adaptation, and practical use in research and decision-support settings, including VLM/VLA exploration for driving and traffic reasoning.</p>
               </div>
               <div class="about-interest">
-                <h3>Energy &amp; Operational Forecasting</h3>
+                <h3>Energy &amp; operational forecasting</h3>
                 <p>Reliable temporal forecasting for energy, infrastructure, and mobility operations.</p>
               </div>
             </div>
-          </article>
+          </section>
 
-          <article class="card section-card span-6" id="profile-education">
-            <div class="eyebrow">Education</div>
-            <h2>Academic Background</h2>
-            <div class="about-stack">
+          <section class="profile-section" id="profile-education" aria-labelledby="profile-education-title">
+            <header class="profile-section-heading">
+              <div class="eyebrow">Education</div>
+              <h2 id="profile-education-title">Academic background</h2>
+            </header>
+            <div class="profile-section-content about-stack">
               <div class="about-entry education-card">
                 <div class="education-card__meta">Graduate study</div>
                 <h3>M.S. in Transportation and Logistics Engineering</h3>
                 <p>Hanyang University, Department of Transportation and Logistics Engineering, Seoul, Republic of Korea</p>
-                <p><em>Mar. 2025 - Present</em></p>
+                <p class="about-entry-date"><em>Mar. 2025 - Present</em></p>
                 <p>Advisor: <strong>Byeongjoon Noh</strong></p>
                 <p class="about-mini-note">GPA: 4.42 / 4.5</p>
               </div>
               <div class="about-entry">
                 <h3>B.Eng. in AI and Big Data</h3>
                 <p>Soonchunhyang University, Department of AI and Big Data, Asan, Korea</p>
-                <p><em>Mar. 2021 - Feb. 2025</em></p>
+                <p class="about-entry-date"><em>Mar. 2021 - Feb. 2025</em></p>
                 <p>Advisor: <strong>Byeongjoon Noh</strong></p>
                 <p class="about-mini-note">Thesis: <strong>Temporal Graph Pattern Attention-based Vehicle Trajectory Prediction System: Toward Real-time Road Driving Information</strong></p>
                 <p class="about-mini-note">GPA: 3.88 / 4.5</p>
               </div>
             </div>
-          </article>
+          </section>
 
-          <article class="card section-card span-6" id="profile-experience">
-            <div class="eyebrow">Experience</div>
-            <h2>Research Experience</h2>
-            <div class="about-stack">
+          <section class="profile-section" id="profile-experience" aria-labelledby="profile-experience-title">
+            <header class="profile-section-heading">
+              <div class="eyebrow">Experience</div>
+              <h2 id="profile-experience-title">Research experience</h2>
+            </header>
+            <div class="profile-section-content about-stack">
               <div class="about-entry">
                 <h3>Graduate Researcher, Smart Autonomous &amp; Infrastructure Lab</h3>
                 <p>Soonchunhyang University, Department of AI and Big Data</p>
-                <p><em>Jul. 2023 - Present</em></p>
+                <p class="about-entry-date"><em>Jul. 2023 - Present</em></p>
                 <p class="about-mini-note">Current topics: trajectory prediction, VLA, safety monitoring, and segmentation.</p>
               </div>
               <div class="about-entry">
@@ -222,56 +292,53 @@ footer_content: >-
                 <p>Mobility-centered work spanning autonomous driving, energy forecasting, legal AI, and foundation models.</p>
               </div>
             </div>
-          </article>
+          </section>
 
-          <article class="card section-card span-12" id="profile-projects">
-            <div class="eyebrow">Projects &amp; Grants</div>
-            <h2>Selected Projects and Grants</h2>
-            <div class="profile-project-visual" aria-label="Autonomous mobility research visual">
-              <picture>
-                <source srcset="/assets/img/autonomy-route.webp" type="image/webp">
-                <img src="/assets/img/autonomy-route.png" alt="Autonomous vehicle following a blue route on a dark highway" width="1600" height="900" loading="lazy">
-              </picture>
-              <div class="profile-project-visual-copy"><span>Projects / Mobility Systems</span><strong>From urban mobility research to practical systems.</strong></div>
-            </div>
-            <div class="about-project-grid">
+          <section class="profile-section" id="profile-projects" aria-labelledby="profile-projects-title">
+            <header class="profile-section-heading">
+              <div class="eyebrow">Projects &amp; grants</div>
+              <h2 id="profile-projects-title">Selected projects and grants</h2>
+            </header>
+            <div class="profile-section-content about-project-grid">
               <article class="about-project">
                 <h3>Emotional and Intelligence Child Care System Convergence Research Center (CRC)</h3>
-                <p><em>Proposal Author &amp; Researcher | Sep. 2024 - Present</em></p>
+                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Sep. 2024 - Present</em></p>
                 <p>Speaker diarization and child-parent interaction analysis for emotionally aware care data.</p>
               </article>
               <article class="about-project">
                 <h3>2nd DSC Planning Living Lab in 2024</h3>
-                <p><em>Project Leader, Proposal Author &amp; Researcher | Aug. 2024 - Nov. 2024</em></p>
+                <p class="about-project-meta"><em>Project Leader, Proposal Author &amp; Researcher | Aug. 2024 - Nov. 2024</em></p>
                 <p>Led planning and proposal work for a field-connected living-lab project.</p>
               </article>
               <article class="about-project">
                 <h3>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</h3>
-                <p><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
+                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
                 <p>AIoT-energy convergence research with scalable forecasting workflows.</p>
               </article>
               <article class="about-project">
                 <h3>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</h3>
-                <p><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
+                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
                 <p>Metropolitan mobility simulation and prediction for next-generation urban transportation.</p>
               </article>
               <article class="about-project">
                 <h3>BK21 Overseas Training Program at Kingston University</h3>
-                <p><em>Principal Investigator (PI) &amp; Lead Researcher | Dec. 2025 - Feb. 2026</em></p>
+                <p class="about-project-meta"><em>Principal Investigator (PI) &amp; Lead Researcher | Dec. 2025 - Feb. 2026</em></p>
                 <p>Led the overseas training project at Kingston University.</p>
               </article>
               <article class="about-project">
                 <h3>Integrated coordination technology for AI agent-based multi-domain safety monitoring</h3>
-                <p><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
+                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
                 <p>Integrated coordination for AI agent-based safety monitoring across multiple domains.</p>
               </article>
             </div>
-          </article>
+          </section>
 
-          <article class="card section-card span-6" id="profile-awards">
-            <div class="eyebrow">Honors &amp; Awards</div>
-            <h2>Selected Honors and Awards</h2>
-            <div class="profile-detail-grid">
+          <section class="profile-section" id="profile-awards" aria-labelledby="profile-awards-title">
+            <header class="profile-section-heading">
+              <div class="eyebrow">Honors &amp; awards</div>
+              <h2 id="profile-awards-title">Selected honors and awards</h2>
+            </header>
+            <div class="profile-section-content profile-detail-grid">
               <ul class="about-list">
                 <li>National Outstanding Scholarship in Science and Engineering, Korea (Dec. 2025)</li>
                 <li>Grand Prize, 2024 Portfolio (Capstone) Competition, Soonchunhyang University SW Venture Startup Academy Center (Nov. 2024)</li>
@@ -286,33 +353,49 @@ footer_content: >-
                 <li>Encouragement Award, The 5th Big Data Analytics and Development Contest, Soonchunhyang University (Dec. 2021)</li>
               </ul>
             </div>
-          </article>
+          </section>
 
-          <article class="card section-card span-6" id="profile-stack">
-            <div class="eyebrow">Technical Toolkit</div>
-            <h2>Tools and Workflow</h2>
-            <div class="profile-detail-grid">
+          <section class="profile-section" id="profile-stack" aria-labelledby="profile-stack-title">
+            <header class="profile-section-heading">
+              <div class="eyebrow">Technical toolkit</div>
+              <h2 id="profile-stack-title">Tools and workflow</h2>
+            </header>
+            <dl class="profile-section-content profile-toolkit">
               <div>
-                <p><strong>Programming</strong><br>Python, R, Java</p>
-                <p><strong>Modeling</strong><br>PyTorch, TensorFlow, Keras, scikit-learn</p>
-                <p><strong>AI Collaboration</strong><br>Codex, OpenClaw, Slack</p>
+                <dt>Programming</dt>
+                <dd>Python, R, Java</dd>
               </div>
               <div>
-                <p><strong>Analysis</strong><br>NumPy, pandas, Matplotlib, Seaborn</p>
-                <p><strong>Visualization</strong><br>Tableau, NodeXL</p>
-                <p><strong>Workflow</strong><br>Multi-agent collaboration through Codex, OpenClaw, and Slack.</p>
+                <dt>Analysis</dt>
+                <dd>NumPy, pandas, Matplotlib, Seaborn</dd>
               </div>
-            </div>
-          </article>
-        </section>
+              <div>
+                <dt>Modeling</dt>
+                <dd>PyTorch, TensorFlow, Keras, scikit-learn</dd>
+              </div>
+              <div>
+                <dt>Visualization</dt>
+                <dd>Tableau, NodeXL</dd>
+              </div>
+              <div>
+                <dt>AI collaboration</dt>
+                <dd>Codex, OpenClaw, Slack</dd>
+              </div>
+              <div>
+                <dt>Workflow</dt>
+                <dd>Multi-agent collaboration through Codex, OpenClaw, and Slack.</dd>
+              </div>
+            </dl>
+          </section>
+        </div>
 
         <nav class="chapter-nav" aria-label="Continue through site chapters">
           <a class="chapter-link" href="/">
-            <span>Previous Chapter</span>
+            <span>Previous chapter</span>
             <strong>Home</strong>
           </a>
           <a class="chapter-link" href="/publications/">
-            <span>Next Chapter</span>
+            <span>Next chapter</span>
             <strong>Publications</strong>
           </a>
         </nav>

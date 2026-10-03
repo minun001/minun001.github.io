@@ -2,21 +2,21 @@
   color-scheme: light;
   --font-body: "Manrope", "Segoe UI", system-ui, sans-serif;
   --font-display: "Newsreader", Georgia, serif;
-  --bg-page: #eef3f8;
+  --bg-page: #f7f8fa;
   --bg-surface: rgba(255, 255, 255, 0.94);
-  --bg-muted: #f6f8fb;
+  --bg-muted: #edf2f7;
   --bg-card: #ffffff;
   --bg-card-strong: #ffffff;
-  --text-title: #112033;
-  --text-body: #46576b;
-  --text-soft: #5f7187;
+  --text-title: #102c46;
+  --text-body: #3e5265;
+  --text-soft: #536579;
   --border-soft: rgba(17, 32, 51, 0.1);
   --border-strong: rgba(17, 32, 51, 0.16);
   --shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.045);
   --shadow-float: 0 12px 28px rgba(15, 23, 42, 0.065);
-  --accent: #1d4ed8;
-  --accent-2: #0f766e;
-  --accent-soft: rgba(29, 78, 216, 0.1);
+  --accent: #103a63;
+  --accent-2: #3973a7;
+  --accent-soft: rgba(16, 58, 99, 0.08);
   --header-height: 68px;
   --page-index-offset: calc(var(--header-height) + 0.2rem);
   --section-anchor-offset: calc(var(--page-index-offset) + 4.35rem);
@@ -33,7 +33,7 @@
   --credential-accent-soft: rgba(23, 74, 139, 0.09);
   --credential-accent-line: rgba(23, 74, 139, 0.22);
   --route-field-blue: rgba(29, 78, 216, 0.105);
-  --route-field-teal: rgba(15, 118, 110, 0.075);
+  --route-field-teal: rgba(57, 115, 167, 0.075);
   --route-field-mask: url("/assets/img/route-field.svg");
 }
 
@@ -51,37 +51,20 @@ body.theme-night {
   font-family: var(--font-body);
   color: var(--text-body);
   background:
-    radial-gradient(ellipse at 8% 0%, rgba(29, 78, 216, 0.045), rgba(29, 78, 216, 0) 28rem),
-    radial-gradient(ellipse at 92% 6%, rgba(15, 118, 110, 0.04), rgba(15, 118, 110, 0) 26rem),
-    linear-gradient(180deg, #fbfdff 0%, #f8fbff 48%, var(--bg-page) 100%);
+    radial-gradient(ellipse at 90% 2%, rgba(57, 115, 167, 0.05), transparent 34rem),
+    linear-gradient(180deg, #ffffff 0%, var(--bg-page) 100%);
   line-height: 1.72;
   letter-spacing: 0;
   transition: background 0.25s ease, color 0.25s ease;
 }
 
-body.page-home {
-  --accent: #1d4ed8;
-  --accent-2: #0f766e;
-}
-
-body.page-profile {
-  --accent: #b91c1c;
-  --accent-2: #0f766e;
-}
-
-body.page-publications {
-  --accent: #2563eb;
-  --accent-2: #0891b2;
-}
-
-body.page-news {
-  --accent: #0f766e;
-  --accent-2: #2563eb;
-}
-
+body.page-home,
+body.page-profile,
+body.page-publications,
+body.page-news,
 body.page-workspace {
-  --accent: #1d4ed8;
-  --accent-2: #0f766e;
+  --accent: #103a63;
+  --accent-2: #3973a7;
 }
 
 * {
@@ -109,7 +92,7 @@ a:hover {
 .skip-link {
   position: absolute;
   left: 1rem;
-  top: -3rem;
+  top: -6rem;
   z-index: 90;
   padding: 0.7rem 0.9rem;
   border-radius: 8px;
@@ -169,8 +152,8 @@ ul {
   top: 0;
   z-index: 40;
   border-bottom: 1px solid rgba(17, 32, 51, 0.08);
-  background: rgba(252, 253, 255, 0.84);
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: none;
   backdrop-filter: blur(14px) saturate(1.05);
 }
 
@@ -216,7 +199,7 @@ ul {
   min-height: 42px;
   padding: 0.46rem 0.08rem 0.62rem;
   border-radius: 0;
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--text-title);
   transition: color 0.2s ease, transform 0.2s ease;
@@ -421,24 +404,24 @@ body.page-news .page:before {
 }
 
 body.page-home .page:before {
-  content: "01";
+  content: none;
 }
 
 body.page-profile .page:before {
-  content: "02";
+  content: none;
 }
 
 body.page-publications .page:before {
-  content: "03";
+  content: none;
 }
 
 body.page-news .page:before {
-  content: "04";
+  content: none;
 }
 
 body.page-home .page:after,
 body.page-profile .page:after {
-  content: "";
+  content: none;
   position: absolute;
   right: max(0.9rem, calc((100vw - 1180px) / 2));
   z-index: -1;
@@ -488,8 +471,8 @@ body.page-profile .page:after {
 
 .page-lead-copy h1 {
   margin: 0.35rem 0 0.55rem;
-  font-size: clamp(3rem, 7vw, 5.8rem);
-  line-height: 0.9;
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  line-height: 1.03;
   text-wrap: balance;
 }
 
@@ -779,7 +762,7 @@ body.page-news .timeline-item:hover {
 .card:hover,
 .timeline-item:hover,
 .pub-item:hover {
-  transform: translateY(-2px);
+  transform: none;
   border-color: rgba(17, 32, 51, 0.16);
   box-shadow: var(--shadow-float);
 }

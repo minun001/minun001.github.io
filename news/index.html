@@ -7,22 +7,20 @@ footer_content: >-
   Research updates, presentations, and academic milestones.
 ---
 <style>
-    .news-page{display:grid;gap:1.95rem}
-    .news-featured{counter-reset:featured}
-    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.35rem;padding:1.45rem 1.25rem;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(247,250,252,.92) 100%);box-shadow:0 14px 28px rgba(15,23,42,.04);animation:riseIn .8s ease both}
-    .news-featured article{position:relative;display:grid;gap:.35rem;padding:1.15rem 1.2rem 0 0;border-right:1px solid var(--border-soft);counter-increment:featured}
-    .news-featured article:before{content:"0" counter(featured);position:absolute;top:0;right:1.2rem;font-family:var(--font-display);font-size:2.2rem;line-height:1;color:rgba(17,32,51,.08)}
-    .news-featured article:last-child{padding-right:0;border-right:none}
-    .news-featured h3{margin-bottom:.35rem;font-size:1.18rem}
-    .news-featured p{margin:0}
-    .news-visual-feature{display:grid;grid-template-columns:1fr;min-height:0;overflow:hidden;border:1px solid rgba(17,32,51,.08);border-radius:18px;background:linear-gradient(135deg,#0b2446,#123b70);box-shadow:0 14px 28px rgba(15,23,42,.06);animation:riseIn .7s ease both}
-    .news-visual-feature-copy{display:grid;align-content:center;gap:.55rem;max-width:68ch;padding:1.6rem;color:#fff}
-    .news-visual-feature-copy .eyebrow{color:rgba(255,255,255,.82)}
-    .news-visual-feature-copy h2{color:#fff;font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.04}
-    .news-visual-feature-copy p{max-width:30rem;color:rgba(255,255,255,.86)}
-    .news-visual-feature-copy .btn-soft{justify-self:start;margin-top:.25rem;background:#fff;color:#102033}
-    .news-filter{display:flex;flex-wrap:wrap;gap:.65rem;padding:1.15rem 0 1rem;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft)}
-    .news-filter button{font-weight:800}
+    .news-page{display:grid;gap:1.75rem}
+    .news-page > .page-lead{grid-template-columns:minmax(0,1fr);border-bottom:0;padding-bottom:0}
+    .news-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem;padding:1.25rem;border-radius:12px;background:#f7f8fa}
+    .news-featured article{display:grid;gap:.4rem;align-content:start;min-width:0}
+    .news-featured .eyebrow{font-size:.9375rem;line-height:1.5;letter-spacing:0}
+    .news-featured .eyebrow:before{display:none}
+    .news-featured h3{margin:0;font-size:1.25rem;line-height:1.4;text-wrap:pretty}
+    .news-featured h3 a{display:block;min-height:44px;color:var(--accent);text-decoration:underline;text-decoration-color:rgba(16,58,99,.25);text-underline-offset:.2em}
+    .news-featured h3 a:hover{color:var(--accent-2);text-decoration-color:currentColor}
+    .news-filter{display:flex;flex-wrap:wrap;gap:.5rem;padding:.25rem 0}
+    .news-filter button{min-height:44px;padding:.6rem .9rem;border:0;border-radius:8px;background:#edf2f7;box-shadow:none;color:var(--text-body);font-size:.9375rem;font-weight:700}
+    .news-filter button:before{display:none}
+    .news-filter button:hover,.news-filter button.is-active{background:#103a63;color:#fff;box-shadow:none;transform:none}
+    .news-filter button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
     .news-badge-burst{position:fixed;left:0;top:0;width:0;height:0;pointer-events:none;z-index:60}
     .news-badge-spark{position:absolute;left:0;top:0;width:var(--spark-size,6px);height:var(--spark-size,6px);margin-left:calc(var(--spark-size,6px) / -2);margin-top:calc(var(--spark-size,6px) / -2);border-radius:999px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),var(--spark-color,#fff067) 42%,rgba(255,255,255,0) 76%);box-shadow:0 0 10px var(--spark-color,#fff067);transform:translate3d(0,0,0) rotate(var(--spark-rotate,0deg)) scale(.45);opacity:0;animation:newsBadgeSparkBurst .74s cubic-bezier(.16,.84,.28,1) forwards}
     @keyframes newsBadgeSparkBurst{
@@ -30,35 +28,46 @@ footer_content: >-
       20%{opacity:1}
       100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(calc(var(--spark-rotate,0deg) + 32deg)) scale(1)}
     }
-    .news-jump{margin-top:-.15rem;padding-bottom:1.3rem;border-bottom:1px solid rgba(17,32,51,.08)}
-    .news-year{display:grid;grid-template-columns:108px minmax(0,1fr);gap:1.35rem;align-items:start;scroll-margin-top:var(--section-anchor-offset)}
-    .news-year + .news-year{padding-top:1.15rem;border-top:1px solid rgba(17,32,51,.08)}
-    .news-year-head{position:sticky;top:calc(var(--page-index-offset) + .7rem);padding-top:.55rem}
-    .news-year-head span{display:block;color:var(--text-soft);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    .news-year-head h2{margin-top:.2rem;font-size:2.1rem}
-    .news-timeline{position:relative;display:grid;gap:1.15rem;padding-left:1.35rem}
-    .news-timeline:before{content:"";position:absolute;left:.38rem;top:.35rem;bottom:.35rem;width:1px;background:linear-gradient(180deg,rgba(29,78,216,.35),rgba(15,118,110,.12))}
-    .timeline-item{position:relative}
-    .timeline-item:after{content:"";position:absolute;left:-1.28rem;top:1.45rem;width:.72rem;height:.72rem;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 6px rgba(29,78,216,.08)}
-    .news-page .timeline-item{border:none;border-radius:0;background:transparent;box-shadow:none;border-top:1px solid rgba(17,32,51,.08);border-inline:none;border-bottom:none;padding:1.35rem 0 0}
-    .news-page .timeline-item:first-child{padding-top:0;border-top:none}
-    .news-page .timeline-item:hover{transform:none;box-shadow:none;border-color:rgba(17,32,51,.08)}
-    .news-meta-row{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;margin-bottom:.7rem}
-    .news-date{color:var(--text-soft);font-size:.92rem}
-    .news-badge{position:relative;display:inline-flex;align-items:center;min-height:28px;padding:.3rem .62rem;border-radius:999px;color:var(--text-title);font-size:.78rem;font-weight:800;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
-    .news-badge:hover,.news-badge:focus-visible{transform:translateY(-1px) scale(1.03);filter:saturate(1.08) brightness(1.03)}
-    .news-badge.conference{background:rgba(29,78,216,.08)}
-    .news-badge.journal{background:rgba(16,185,129,.1)}
-    .news-badge.award{background:rgba(245,158,11,.12)}
-    .news-badge.project{background:rgba(148,163,184,.14)}
-    .news-badge.academic{background:rgba(14,165,233,.12)}
-    .page-lead{animation:riseIn .6s ease both}
+    body.page-news .news-jump.page-index{flex-wrap:wrap;gap:.5rem 1rem;margin:0;padding:.5rem 0;background:#f7f8fa}
+    body.page-news .news-jump.page-index a{min-height:44px;padding:.4rem 0;font-size:.9375rem}
+    .news-year{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:1.5rem;align-items:start;scroll-margin-top:var(--section-anchor-offset)}
+    .news-year + .news-year{padding-top:1.5rem;border-top:1px solid var(--border-soft)}
+    .news-year-head{position:sticky;top:calc(var(--section-anchor-offset) + .5rem)}
+    .news-year-head span{display:block;color:var(--text-soft);font-size:.9375rem;font-weight:600;line-height:1.5}
+    .news-year-head h2{margin:.25rem 0 0;font-size:2rem;line-height:1.2}
+    .news-timeline{--news-axis:.375rem;--news-indent:1.5rem;--news-dot:.625rem;position:relative;display:grid;gap:1.5rem;min-width:0;padding-left:var(--news-indent)}
+    .news-timeline:before{content:"";position:absolute;left:var(--news-axis);top:.5rem;bottom:.5rem;width:1px;background:rgba(57,115,167,.25)}
+    body.page-news .timeline-item{--news-item-top:0rem;position:relative;min-width:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+    body.page-news .timeline-item:hover{transform:none;box-shadow:none;border-color:var(--border-soft)}
+    .news-page .timeline-item:before{display:none}
+    .news-page .timeline-item:after{content:"";position:absolute;left:calc(var(--news-axis) - var(--news-indent) - var(--news-dot) / 2 + .5px);top:calc(var(--news-item-top) + .55rem);width:var(--news-dot);height:var(--news-dot);border-radius:50%;background:#3973a7;box-shadow:0 0 0 4px #f7f8fa}
+    .news-page .timeline-item:not([hidden]) ~ .timeline-item:not([hidden]){--news-item-top:1.5rem;padding-top:var(--news-item-top);border-top:1px solid var(--border-soft)}
+    .news-page .timeline-item h3{margin:0 0 .6rem;font-size:clamp(1.25rem,1.8vw,1.5rem);line-height:1.4;text-wrap:pretty;overflow-wrap:anywhere}
+    .news-page .timeline-item p{margin:.65rem 0 0;max-width:68ch;color:var(--text-body);font-size:1.0625rem;line-height:1.65;overflow-wrap:anywhere}
+    .news-meta-row{display:flex;flex-wrap:wrap;gap:.5rem .75rem;align-items:center}
+    .news-date{color:var(--text-soft);font-size:.9375rem;line-height:1.5}
+    .news-badge{position:relative;display:inline-flex;align-items:center;min-height:30px;padding:.3rem .6rem;border-radius:6px;background:#eaf0f6;color:var(--accent);font-size:.9rem;font-weight:700;line-height:1.3;transition:transform .18s ease}
+    .news-badge:hover,.news-badge:focus-visible{transform:translateY(-1px)}
+    .news-badge.conference{background:#eaf0f6}
+    .news-badge.journal{background:#eaf0f6}
+    .news-badge.award{background:#edf1f5}
+    .news-badge.project{background:#eef1f4}
+    .news-badge.academic{background:#eaf0f6}
+    .news-page .button-row{margin-top:.8rem}
+    .news-page .button-row .btn-soft{min-height:44px;font-size:.9375rem;box-shadow:none}
     .news-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
-    @media (max-width:980px){.news-featured{grid-template-columns:repeat(2,minmax(0,1fr));padding:1.2rem}.news-featured article{padding-right:0;border-right:none}.news-year{grid-template-columns:1fr}.news-year-head{position:static;padding-top:0}.news-timeline{padding-left:1rem}}
-    @media (max-width:720px){.news-featured{grid-template-columns:1fr}.news-featured article{padding-right:0;border-right:none}.news-timeline{padding-left:.9rem}.timeline-item:after{left:-.88rem;top:1.35rem}.news-filter,.news-jump.page-index{display:flex;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-inline:0 max(.5rem,env(safe-area-inset-right,0px))}.news-filter{flex-wrap:wrap;overflow-x:visible}.news-jump.page-index{flex-wrap:nowrap;overflow-x:auto}.news-filter::-webkit-scrollbar,.news-jump.page-index::-webkit-scrollbar{display:none}.news-filter button,.news-jump.page-index a{flex:0 0 auto;white-space:nowrap}.news-jump.page-index{position:static;top:auto;z-index:auto}}
-    @media (max-width:640px){.news-featured{gap:.9rem;padding:.9rem .9rem .88rem;border-radius:16px}.news-featured article{gap:.3rem;padding-top:.05rem}.news-featured article:before{right:.05rem;font-size:1.45rem}.news-featured .eyebrow{padding-right:1.7rem;font-size:.7rem}.news-featured h3{padding-right:1.7rem;font-size:1rem;line-height:1.26;overflow-wrap:anywhere}.news-filter{gap:.45rem;padding:.82rem 0 .78rem}.news-filter button{min-height:38px;padding:.5rem .76rem;font-size:.8rem}.news-jump{margin-top:0;padding-bottom:.88rem}.news-jump.page-index{gap:.4rem}.news-jump.page-index a{min-height:38px;padding:.46rem .76rem;font-size:.8rem}.news-year{gap:.78rem}.news-year-head span{font-size:.72rem}.news-year-head h2{font-size:1.65rem}.news-page .timeline-item{padding-top:.95rem}.news-page .timeline-item h3{font-size:1.04rem;line-height:1.34;overflow-wrap:anywhere}.news-page .timeline-item p{font-size:.94rem;line-height:1.58;overflow-wrap:anywhere}.news-meta-row{gap:.4rem .45rem;margin-bottom:.58rem}.news-date{font-size:.82rem}.news-badge{min-height:25px;padding:.24rem .5rem;font-size:.73rem;line-height:1.2}.news-timeline{gap:.95rem;padding-left:.7rem}.news-timeline:before{left:.22rem;top:.18rem;bottom:.2rem}.timeline-item:after{left:-.68rem;top:1.2rem;width:.58rem;height:.58rem;box-shadow:0 0 0 4px rgba(29,78,216,.08)}.button-row .btn-soft{width:100%;justify-content:center}}
-    @media (max-width:480px){.news-featured{gap:.82rem;padding:.82rem .82rem .8rem}.news-featured article{gap:.24rem}.news-featured article:before{font-size:1.28rem}.news-featured .eyebrow,.news-featured h3{padding-right:1.5rem}.news-filter{gap:.38rem;padding:.72rem 0 .74rem}.news-filter button{min-height:38px;padding:.44rem .66rem;font-size:.78rem}.news-jump{padding-bottom:.76rem}.news-jump.page-index a{min-height:38px;padding:.42rem .66rem;font-size:.78rem}.news-year{gap:.72rem}.news-year-head h2{font-size:1.5rem}.news-timeline{gap:.88rem;padding-left:.66rem}.news-page .timeline-item{padding-top:.88rem}.news-meta-row{gap:.36rem .42rem}.news-badge{min-height:24px;font-size:.71rem;padding:.2rem .46rem}}
-  .news-year-head span{letter-spacing:.03em;text-transform:none}
+    @media (max-width:980px){
+      .news-featured{grid-template-columns:minmax(0,1fr);gap:1rem}
+      .news-year{grid-template-columns:minmax(0,1fr);gap:1rem}
+      .news-year-head{position:static}
+      body.page-news .news-jump.page-index{position:static;top:auto;z-index:auto}
+    }
+    @media (max-width:640px){
+      .news-featured{padding:1rem}
+      .news-timeline{--news-indent:1.25rem}
+      .news-page .button-row .btn-soft{width:100%;justify-content:center}
+      body.page-news .news-jump.page-index:after{display:none}
+    }
   </style>
 
 <div class="news-page" data-news-root>
@@ -69,27 +78,18 @@ footer_content: >-
           </div>
         </section>
 
-        <section class="news-visual-feature" aria-label="Featured mobility update">
-          <div class="news-visual-feature-copy">
-            <div class="eyebrow">Mobility update</div>
-            <h2>ITS World Congress 2026</h2>
-            <p>Trajectory-prediction presentation at ITS World Congress 2026.</p>
-            <a class="btn-soft" href="#news-2026">View 2026 timeline</a>
-          </div>
-        </section>
-
         <section class="news-featured" aria-label="Featured updates">
           <article>
             <div class="eyebrow">Apr. 2026</div>
-            <h3>Harry Boer Best Student Award Selection</h3>
+            <h3><a href="?news=award#news-euroma-award-2026">Harry Boer Best Student Award selection</a></h3>
           </article>
           <article>
             <div class="eyebrow">Oct. 2026</div>
-            <h3>ITS World Congress 2026</h3>
+            <h3><a href="?news=conference#news-its-congress-2026">ITS World Congress 2026</a></h3>
           </article>
           <article>
             <div class="eyebrow">Jul. 31, 2026</div>
-            <h3>Hanyang University M.S. Admission</h3>
+            <h3><a href="?news=academic#news-hanyang-admission-2026">Hanyang University M.S. admission</a></h3>
           </article>
         </section>
 
@@ -116,19 +116,19 @@ footer_content: >-
             <h2>2026</h2>
           </div>
           <div class="news-timeline">
-            <article class="timeline-item" data-news-item data-news-kind="academic">
+            <article class="timeline-item" id="news-hanyang-admission-2026" data-news-item data-news-kind="academic">
               <h3>Admission to Hanyang University M.S. Program</h3>
               <div class="news-meta-row"><span class="news-date">Jul. 31, 2026</span><span class="news-badge academic">Academic</span></div>
               <p>Admitted to Hanyang University's M.S. program in Transportation and Logistics Engineering.</p>
             </article>
 
-            <article class="timeline-item" data-news-item data-news-kind="award">
+            <article class="timeline-item" id="news-euroma-award-2026" data-news-item data-news-kind="award">
               <h3>Harry Boer Best Student Award Selection at EurOMA 2026</h3>
               <div class="news-meta-row"><span class="news-date">Apr. 2026</span><span class="news-badge award">Award</span></div>
               <p>The EurOMA 2026 contribution <em>Theorising Service Routines through Ontological Granularity and Behavioural Sequencing</em> (contribution ID 928) was selected for the Harry Boer Best Student Award.</p>
             </article>
 
-            <article class="timeline-item" data-news-item data-news-kind="conference">
+            <article class="timeline-item" id="news-its-congress-2026" data-news-item data-news-kind="conference">
               <h3>ITS World Congress 2026 Scheduled Presentation</h3>
               <div class="news-meta-row"><span class="news-date">Oct. 19-23, 2026</span><span class="news-badge conference">Conference</span></div>
               <p><em>COMFORT-CENTRIC TRAJECTORY PREDICTION FOR AUTONOMOUS DRIVING VIA TEMPORAL GRAPH CROSS ATTENTION</em> will be presented at ITS World Congress 2026 in Gangneung.</p>
@@ -310,11 +310,11 @@ footer_content: >-
 
         <nav class="chapter-nav" aria-label="Continue through site chapters">
           <a class="chapter-link" href="/publications/">
-            <span>Previous Chapter</span>
+            <span>Previous chapter</span>
             <strong>Publications</strong>
           </a>
           <a class="chapter-link" href="/">
-            <span>Back to Start</span>
+            <span>Back to start</span>
             <strong>Home</strong>
           </a>
         </nav>

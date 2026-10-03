@@ -12,7 +12,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20260808a">
+  <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20261003">
+  {% if page.home_design %}
+  <link rel="stylesheet" href="{{ "/assets/home-research.css" | relative_url }}?v=20261003">
+  {% endif %}
   {% assign script_bundle = page.script_bundle | default: 'public' %}
   {% if script_bundle == 'timesfm' %}
   <link rel="stylesheet" href="{{ "/assets/timesfm-forecast.css" | relative_url }}?v=20260803a">
@@ -48,7 +51,7 @@
           {% if current_url == item_link %}
             {% assign item_class = 'is-active' %}
           {% endif %}
-          <a{% if item_class != '' %} class="{{ item_class }}"{% endif %} href="{{ item.link | relative_url }}">{{ item.name | escape }}</a>
+          <a{% if item_class != '' %} class="{{ item_class }}" aria-current="page"{% endif %} href="{{ item.link | relative_url }}">{{ item.name | escape }}</a>
         {% endfor %}
       </nav>
     </div>
@@ -63,7 +66,7 @@
             {% if current_url == item_link %}
               {% assign item_class = 'is-active' %}
             {% endif %}
-            <a{% if item_class != '' %} class="{{ item_class }}"{% endif %} href="{{ item.link | relative_url }}">{{ item.name | escape }}</a>
+            <a{% if item_class != '' %} class="{{ item_class }}" aria-current="page"{% endif %} href="{{ item.link | relative_url }}">{{ item.name | escape }}</a>
           {% endfor %}
         </div>
       </nav>
@@ -99,6 +102,6 @@
     <script src="{{ "/assets/visitor-tracker.js" | relative_url }}?v=20260420c"></script>
     {% endif %}
   {% endif %}
-  <script src="{{ "/assets/site.js" | relative_url }}?v=20260425c"></script>
+  <script src="{{ "/assets/site.js" | relative_url }}?v=20261003"></script>
 </body>
 </html>

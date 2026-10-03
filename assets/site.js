@@ -409,7 +409,7 @@
       if (!matches.length) {
         results.hidden = false;
         results.innerHTML =
-          '<div class="pub-search-results-head"><span>Recommended Matches</span><span>0 results</span></div>' +
+          '<div class="pub-search-results-head"><span>Search matches</span><span>0 results</span></div>' +
           '<div class="pub-search-result-empty">No close match yet. Try a venue, topic, or shorter paper title.</div>';
         return;
       }
@@ -431,8 +431,8 @@
 
       results.hidden = false;
       results.innerHTML =
-        '<div class="pub-search-results-head"><span>Recommended Matches</span><span>' + topMatches.length + ' results</span></div>' +
-        '<div class="pub-search-result-list" role="listbox">' + listMarkup + '</div>';
+        '<div class="pub-search-results-head"><span>Search matches</span><span>' + topMatches.length + (topMatches.length === 1 ? ' result' : ' results') + '</span></div>' +
+        '<div class="pub-search-result-list">' + listMarkup + '</div>';
     }
 
     function update(shouldSync) {

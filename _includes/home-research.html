@@ -1,0 +1,57 @@
+{% assign archive = site.data['google-scholar-publications'] %}
+{% assign journals = archive.sections | where: 'key', 'international-journals' | first %}
+{% assign scholar = site.data['google-scholar-metrics'] %}
+<div class="research-home">
+  <section class="research-hero" id="home-overview" aria-labelledby="research-title">
+    <div class="research-hero-copy">
+      <p class="research-kicker">Hyunsik Min <span>/ Intelligent mobility</span></p>
+      <h1 id="research-title">AI for the way<br>we move.</h1>
+      <p class="research-intro">I study how AI can predict vehicle behavior, understand traffic situations, and support safer transportation decisions.</p>
+      <p class="research-affiliation">M.S. candidate at <strong>Hanyang University</strong><br>Department of Transportation and Logistics Engineering</p>
+      <div class="research-actions">
+        <a class="research-button" href="{{ '/publications/' | relative_url }}">Explore publications <span aria-hidden="true">&#8599;</span></a>
+        <a class="research-text-link" href="{{ '/profile/' | relative_url }}">About my research <span aria-hidden="true">&#8594;</span></a>
+      </div>
+      <div class="research-contact">
+        <a href="{{ site.scholar_url | escape }}" target="_blank" rel="noopener">Google Scholar</a>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-copy-email="{{ site.email | escape }}" data-copy-label="Copy email"><span data-copy-text>Copy email</span></button>
+      </div>
+    </div>
+    <figure class="research-hero-visual">
+      <img src="{{ '/assets/img/mobility-atlas.webp' | relative_url }}" alt="Conceptual blue aerial illustration of roads and vehicles" width="1774" height="887" fetchpriority="high" decoding="async">
+      <figcaption><span>Prediction. Understanding. Decisions.</span><span>Mobility research</span></figcaption>
+    </figure>
+  </section>
+  <section class="research-directions" id="home-interests" aria-labelledby="directions-title">
+    <div class="research-section-heading"><p class="research-kicker">Research directions</p><h2 id="directions-title">From motion to understanding.</h2></div>
+    <div class="research-direction-grid">
+      <article><span class="research-number" aria-hidden="true">01</span><h3>Predict vehicle behavior</h3><p>Trajectory prediction and vehicle interactions for anticipatory driving.</p></article>
+      <article><span class="research-number" aria-hidden="true">02</span><h3>Understand traffic scenes</h3><p>CCTV accident analysis and vision-language models for traffic reasoning.</p></article>
+      <article><span class="research-number" aria-hidden="true">03</span><h3>Support safer decisions</h3><p>Safety-aware AI, agent coordination, and explainable decision support.</p></article>
+    </div>
+  </section>
+  <section class="research-selected" id="home-highlights" aria-labelledby="selected-title">
+    <div class="research-section-heading research-heading-row"><div><p class="research-kicker">Selected work</p><h2 id="selected-title">Research in practice.</h2></div><a class="research-text-link" href="{{ '/publications/' | relative_url }}">All {{ archive.total_records }} works <span aria-hidden="true">&#8594;</span></a></div>
+    <div class="research-paper-grid">
+      {% for paper in journals.items limit:3 %}
+      <article class="research-paper">
+        <p class="research-paper-topic">{{ paper.topic_title | escape }}</p>
+        <h3><a href="{{ '/publications/' | relative_url }}#publication-{{ paper.id | escape }}">{{ paper.title | escape }}</a></h3>
+        <p class="research-paper-venue">{{ paper.venue | escape }} <span>/ {{ paper.year }}</span></p>
+        <a class="research-paper-link" href="{{ '/publications/' | relative_url }}#publication-{{ paper.id | escape }}">Read publication <span aria-hidden="true">&#8599;</span></a>
+      </article>
+      {% endfor %}
+    </div>
+    <div class="research-scholar-line" id="home-at-a-glance"><p><strong>{{ scholar.citations.all }}</strong> citations <span aria-hidden="true">/</span> h-index <strong>{{ scholar.h_index.all }}</strong></p><a href="{{ scholar.source_url | escape }}" target="_blank" rel="noopener">Google Scholar <span aria-hidden="true">&#8599;</span></a><small>Checked {{ scholar.checked_at_display | escape }}</small></div>
+  </section>
+  <section class="research-updates" id="home-current-tracks" aria-labelledby="updates-title">
+    <div><p class="research-kicker">Recent &amp; upcoming</p><h2 id="updates-title">Along the way.</h2><a class="research-text-link" href="{{ '/news/' | relative_url }}">News archive <span aria-hidden="true">&#8594;</span></a></div>
+    <div class="research-update-list">
+      <a href="{{ '/news/' | relative_url }}#news-2026"><time datetime="2026-10">Oct. 2026</time><div><h3>ITS World Congress</h3><p>Scheduled presentation on comfort-centric trajectory prediction in Gangneung.</p></div><span aria-hidden="true">&#8599;</span></a>
+      <a href="{{ '/news/' | relative_url }}#news-2026"><time datetime="2026-07-31">Jul. 2026</time><div><h3>Hanyang University</h3><p>Admitted to the M.S. program in Transportation and Logistics Engineering.</p></div><span aria-hidden="true">&#8599;</span></a>
+      <a href="{{ '/news/' | relative_url }}#news-2026"><time datetime="2026-04">Apr. 2026</time><div><h3>Multi-domain safety monitoring</h3><p>AI agent coordination for safety monitoring across domains.</p></div><span aria-hidden="true">&#8599;</span></a>
+    </div>
+  </section>
+  <section class="research-connect" aria-labelledby="connect-title"><div><p class="research-kicker">Research conversations</p><h2 id="connect-title">Let's connect.</h2><p>Interested in mobility prediction, traffic understanding, or trustworthy AI?</p></div><a class="research-button" href="mailto:{{ site.email | escape }}">{{ site.email | escape }} <span aria-hidden="true">&#8599;</span></a></section>
+</div>
