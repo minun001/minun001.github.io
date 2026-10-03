@@ -9,6 +9,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   body.page-publications .publications-page{display:grid;gap:1.75rem}
   .page-publications .pub-lead{grid-template-columns:minmax(0,1fr) minmax(17rem,22rem);gap:2rem;border-bottom:0;padding-bottom:0}
   .pub-lead-copy{display:grid;gap:.75rem;min-width:0}
+  .pub-lead-copy .pub-citation-note{margin:0;color:var(--text-soft);font-size:.9rem;line-height:1.6}
   .pub-scholar-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem 1.25rem;padding:1rem 1.25rem;border-radius:12px;background:#f7f8fa;align-content:start}
   .pub-scholar-label{align-self:center;color:var(--text-title);font-size:.9375rem;font-weight:700;line-height:1.4}
   .pub-scholar-stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
@@ -59,6 +60,9 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-meta-row{display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:.35rem .75rem;align-items:baseline}
   .pub-meta-label{color:var(--text-soft);font-size:.9375rem;font-weight:600;line-height:1.6}
   .pub-meta-value{min-width:0;color:var(--text-body);font-size:1rem;line-height:1.6;overflow-wrap:anywhere}
+  .pub-citation-link{display:inline-flex;align-items:center;gap:.3rem;min-height:44px;color:var(--accent);text-decoration:underline;text-underline-offset:.2em}
+  .pub-citation-link strong{font-variant-numeric:tabular-nums}
+  .pub-citation-unavailable{color:var(--text-soft)}
   .pub-journal-line{display:grid;gap:.5rem}
   .pub-journal-name{color:var(--text-title);font-weight:700}
   .pub-journal-metrics{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
@@ -136,6 +140,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     <div class="page-lead-copy pub-lead-copy">
       <h1>Publications</h1>
       <p>Trajectory prediction and autonomous driving, with related energy, legal AI, and urban sensing work.</p>
+      <p class="pub-citation-note">Per-paper citations from Google Scholar, as of <time datetime="{{ publication_archive.checked_at | escape }}">{{ publication_archive.checked_at_display | escape }}</time>.</p>
     </div>
     <article class="pub-scholar-panel pub-scholar-panel--overview" data-scholar-card>
       <span class="pub-scholar-label">Google Scholar</span>
@@ -240,6 +245,20 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
             <span class="pub-meta-value">{{ item.details | escape }}</span>
           </div>
           {% endif %}
+          <div class="pub-meta-row" data-publication-citations>
+            <span class="pub-meta-label">Citations</span>
+            <span class="pub-meta-value">
+              {% if item.source == 'scholar' and item.citation_count != nil %}
+                {% if item.scholar_url and item.scholar_url != '' %}
+              <a class="pub-citation-link" href="{{ item.scholar_url | escape }}" target="_blank" rel="noopener" aria-label="Cited by {{ item.citation_count }} on Google Scholar: {{ item.title | escape }}">Cited by <strong>{{ item.citation_count }}</strong></a>
+                {% else %}
+              Cited by {{ item.citation_count }}
+                {% endif %}
+              {% else %}
+              <span class="pub-citation-unavailable">Not available</span>
+              {% endif %}
+            </span>
+          </div>
         </div>
         {% if item.doi and item.doi != '' %}
         <p class="pub-note">DOI: {{ item.doi | escape }}</p>
