@@ -48,7 +48,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-section-head{padding-top:1rem}
   .pub-section-head h2{margin:0;font-size:clamp(1.65rem,2.5vw,2.1rem);line-height:1.25;text-wrap:pretty}
   .pub-section-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
-  body.page-publications .pub-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,210px);gap:.65rem 1.75rem;align-content:start;align-items:start;min-width:0;padding:1.5rem 0;border:0;border-top:1px solid var(--border-soft);border-radius:0;background:transparent;box-shadow:none;scroll-margin-top:var(--section-anchor-offset)}
+  body.page-publications .pub-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,340px);gap:.65rem 2rem;align-content:start;align-items:start;min-width:0;padding:1.75rem 0;border:0;border-top:1px solid var(--border-soft);border-radius:0;background:transparent;box-shadow:none;scroll-margin-top:var(--section-anchor-offset)}
   body.page-publications .pub-item:hover{transform:none;box-shadow:none;border-color:var(--border-soft)}
   .pub-item:before{display:none}
   .pub-item > h3,.pub-item > .pub-record-year,.pub-item > .pub-meta,.pub-item > .pub-note,.pub-item > .pub-actions{grid-column:1}
@@ -82,13 +82,19 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:.25rem}
   .publications-page .pub-action,.pub-tool-meta .btn-soft{min-height:44px;font-size:.9375rem;text-align:center;box-shadow:none;background:#eaf0f6}
   .publications-page .pub-action:before,.pub-tool-meta .btn-soft:before{display:none}
-  .pub-image{grid-column:2;grid-row:1 / span 5;display:flex;justify-content:center;align-items:center;min-width:0;max-width:100%;margin:0;padding:.75rem;border-radius:10px;background:#f7f8fa}
-  .pub-image img{width:100%;max-height:220px;height:auto;object-fit:contain}
+  .pub-image{grid-column:2;grid-row:1 / span 5;display:grid;gap:.65rem;min-width:0;max-width:100%;margin:0;padding:1rem;border-radius:10px;background:#f7f8fa}
+  .pub-image a{display:grid;gap:.65rem;min-width:0}
+  .pub-image a:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
+  .pub-image img{display:block;width:100%;max-height:300px;height:auto;object-fit:contain}
+  .pub-image figcaption{color:var(--text-soft);font-size:.8rem;line-height:1.5}
+  .pub-image-link{display:flex;align-items:center;min-height:44px;color:var(--accent);font-size:.875rem;text-decoration:underline;text-underline-offset:.2em}
+  .pub-image--concept{padding:0;overflow:hidden;background:#edf2f7}
+  .pub-image--concept img{aspect-ratio:3 / 2;object-fit:cover}
+  .pub-image--concept figcaption{padding:0 1rem .8rem}
   .pub-marker{grid-column:2;grid-row:1 / span 5;display:grid;gap:.65rem;align-content:start;min-width:0;padding:.75rem 0 .75rem 1rem;border-left:1px solid var(--border-soft)}
   .pub-marker-head{display:grid;gap:.28rem}
   .pub-marker-label{color:var(--accent);font-size:.9rem;font-weight:700;line-height:1.4}
   .pub-marker-title{margin:0;color:var(--text-title);font-size:1.0625rem;line-height:1.4}
-  .pub-marker-copy{margin:0;color:var(--text-soft);font-size:.9375rem;line-height:1.6}
   .pub-marker-year{color:var(--text-soft);font-size:.9375rem;font-weight:700}
   .bibtex-modal[hidden]{display:none}
   .bibtex-modal{position:fixed;inset:0;z-index:40}
@@ -107,7 +113,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     .pub-scholar-panel{max-width:26rem}
     body.page-publications .pub-item{grid-template-columns:minmax(0,1fr)}
     .pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.25rem}
-    .pub-image{max-width:22rem}
+    .pub-image{width:100%;max-width:30rem}
     .pub-marker{padding:.5rem 0;border-left:0}
     .pub-tools{grid-template-columns:minmax(0,1fr);gap:.5rem}
   }
@@ -116,7 +122,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     .pub-summary-item{padding:1rem}
     .pub-meta-row{grid-template-columns:minmax(0,1fr);gap:.1rem}
     .pub-actions{gap:.5rem}
-    .pub-image img{max-height:190px}
+    .pub-image img{max-height:260px}
     .bibtex-dialog{max-width:calc(100vw - 1rem);max-height:calc(100dvh - 1.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));margin:max(.75rem,env(safe-area-inset-top)) auto 0;padding:1rem;overflow:auto}
     .bibtex-code{max-height:min(48dvh,420px)}
   }
@@ -207,6 +213,8 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     <div class="pub-section-grid" data-publication-grid="{{ section.key }}">
       {% for item in section.items %}
       {% assign legacy_record_index = legacy_record_index | plus: 1 %}
+      {% assign visual = site.data.publication_visuals[item.id] %}
+      {% assign concept = site.data.research_directions | where: 'publication_topic', item.topic_title | first %}
       <article class="pub-item{% unless item.image and item.image != '' %} pub-item-text{% endunless %}" id="publication-{{ item.id | escape }}" data-publication-item data-search="{{ item.search_terms | escape }}">
         <span class="publication-anchor-compat" id="publication-record-{{ legacy_record_index }}" aria-hidden="true"></span>
         <p class="pub-record-year">{{ item.year }}</p>
@@ -264,15 +272,23 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
         <p class="pub-note">DOI: {{ item.doi | escape }}</p>
         {% endif %}
         {% if item.image and item.image != '' %}
-        <div class="pub-image">
-          <img src="{{ item.image }}" alt="{{ item.image_alt | default: item.title | escape }}" loading="lazy">
-        </div>
+        <figure class="pub-image pub-image--original">
+          <a href="{{ item.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open original figure for {{ item.title | escape }}">
+            <img src="{{ visual.preview | default: item.image | relative_url }}" alt="{{ item.image_alt | default: item.title | escape }}"{% if visual.width %} width="{{ visual.width }}" height="{{ visual.height }}"{% endif %} loading="lazy" decoding="async">
+            <span class="pub-image-link">Open original figure <span aria-hidden="true">&#8599;</span></span>
+          </a>
+          <figcaption>Paper figure</figcaption>
+        </figure>
+        {% elsif concept %}
+        <figure class="pub-image pub-image--concept">
+          <img src="{{ concept.image | relative_url }}" srcset="{{ concept.image_small | relative_url }} 480w, {{ concept.image | relative_url }} 960w" sizes="(max-width: 480px) calc(100vw - 32px), (max-width: 980px) 480px, 340px" alt="{{ concept.alt | escape }}" width="960" height="640" loading="lazy" decoding="async">
+          <figcaption>AI-generated concept illustration, not a paper figure.</figcaption>
+        </figure>
         {% else %}
         <aside class="pub-marker" aria-hidden="true">
           <div class="pub-marker-head">
             <span class="pub-marker-label">{% if section.key contains 'journals' %}Journal paper{% else %}Conference paper{% endif %}</span>
             <p class="pub-marker-title">{{ item.topic_title | default: 'Research Paper' | escape }}</p>
-            <p class="pub-marker-copy">{{ item.topic_copy | default: 'Synchronized from the Google Scholar archive.' | escape }}</p>
           </div>
           <span class="pub-marker-year">{{ item.year }}</span>
         </aside>

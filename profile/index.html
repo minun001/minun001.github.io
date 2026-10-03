@@ -3,6 +3,7 @@ layout: default
 title: Profile
 description: Profile of Hyunsik Min's work in mobility systems, trajectory prediction, safety-aware AI, and related forecasting applications.
 body_class: page-profile
+research_visuals: true
 footer_content: >-
   Research profile focused on mobility systems, safety-aware AI, and related forecasting.
 ---
@@ -137,6 +138,9 @@ footer_content: >-
   .about-mini-note,
   .about-project-meta { color: var(--text-soft); }
   .about-project-grid { row-gap: 2rem; }
+  .profile-project-visual { margin: 0 0 1rem; }
+  .profile-project-visual img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; }
+  .profile-project-visual figcaption { margin-top: .45rem; color: var(--text-soft); font-size: .8rem; }
   .about-page .about-list { margin: 0; padding-left: 1.2rem; }
   .about-list li { padding-left: .2rem; }
   .about-list li + li { margin-top: 1rem; }
@@ -230,23 +234,9 @@ footer_content: >-
               <div class="eyebrow">Research focus</div>
               <h2 id="profile-research-title">Research directions</h2>
             </header>
-            <div class="profile-section-content about-interest-grid">
-              <div class="about-interest">
-                <h3>Trajectory prediction</h3>
-                <p>Vehicle trajectory prediction, interaction modeling, and anticipatory driving support under uncertainty.</p>
-              </div>
-              <div class="about-interest">
-                <h3>Safety-aware mobility AI</h3>
-                <p>Connecting prediction, monitoring, and action under transportation uncertainty, including traffic accident analysis from CCTV.</p>
-              </div>
-              <div class="about-interest">
-                <h3>Foundation models &amp; decision support</h3>
-                <p>Reasoning, adaptation, and practical use in research and decision-support settings, including VLM/VLA exploration for driving and traffic reasoning.</p>
-              </div>
-              <div class="about-interest">
-                <h3>Energy &amp; operational forecasting</h3>
-                <p>Reliable temporal forecasting for energy, infrastructure, and mobility operations.</p>
-              </div>
+            <div class="profile-section-content">
+              {% include research-direction-cards.html id_prefix='profile' sizes='(max-width: 740px) calc(100vw - 32px), (max-width: 1080px) 45vw, 450px' %}
+              <p class="research-visual-note">AI-generated research concepts, not experimental results.</p>
             </div>
           </section>
 
@@ -311,11 +301,19 @@ footer_content: >-
                 <p>Led planning and proposal work for a field-connected living-lab project.</p>
               </article>
               <article class="about-project">
+                <figure class="profile-project-visual">
+                  <img src="{{ '/assets/img/research-energy.webp' | relative_url }}" srcset="{{ '/assets/img/research-energy-small.webp' | relative_url }} 480w, {{ '/assets/img/research-energy.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Concept illustration of photovoltaic power and temporal forecasting." width="960" height="640" loading="lazy" decoding="async">
+                  <figcaption>Concept illustration</figcaption>
+                </figure>
                 <h3>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</h3>
                 <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
                 <p>AIoT-energy convergence research with scalable forecasting workflows.</p>
               </article>
               <article class="about-project">
+                <figure class="profile-project-visual">
+                  <img src="{{ '/assets/img/research-trajectory.webp' | relative_url }}" srcset="{{ '/assets/img/research-trajectory-small.webp' | relative_url }} 480w, {{ '/assets/img/research-trajectory.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Concept illustration of vehicles and predicted trajectories in a mobility simulation." width="960" height="640" loading="lazy" decoding="async">
+                  <figcaption>Concept illustration</figcaption>
+                </figure>
                 <h3>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</h3>
                 <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
                 <p>Metropolitan mobility simulation and prediction for next-generation urban transportation.</p>

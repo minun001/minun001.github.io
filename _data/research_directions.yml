@@ -1,0 +1,25 @@
+- title: Trajectory prediction
+  summary: Vehicle interactions and anticipatory driving.
+  image: /assets/img/research-trajectory.webp
+  image_small: /assets/img/research-trajectory-small.webp
+  alt: Concept illustration of vehicles and possible trajectories at a highway merge.
+  link: /publications/?q=trajectory
+  publication_topic: Autonomous Driving
+- title: Traffic understanding
+  summary: CCTV accident analysis and safety-aware scene understanding.
+  image: /assets/img/research-traffic.webp
+  image_small: /assets/img/research-traffic-small.webp
+  alt: Concept illustration of a CCTV camera observing vehicles at an intersection.
+  link: /profile/#profile-research
+- title: Scene-to-action reasoning
+  summary: Exploring VLMs and VLAs for driving and decision support.
+  image: /assets/img/research-reasoning.webp
+  image_small: /assets/img/research-reasoning-small.webp
+  alt: Concept illustration connecting road features, vehicle interactions, and possible actions.
+  link: /profile/#profile-research
+- title: Energy forecasting
+  summary: Temporal modeling for photovoltaic power and infrastructure.
+  image: /assets/img/research-energy.webp
+  image_small: /assets/img/research-energy-small.webp
+  alt: Concept illustration of solar panels and unscaled forecast curves.
+  link: /publications/?q=photovoltaic
