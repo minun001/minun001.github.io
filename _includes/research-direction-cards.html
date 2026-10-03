@@ -2,7 +2,9 @@
 <div class="research-topic-grid">
   {% for direction in site.data.research_directions limit:direction_limit %}
   <a class="research-topic-card" href="{{ direction.link | relative_url }}" aria-labelledby="{{ include.id_prefix }}-topic-{{ forloop.index }}">
-    <img class="research-topic-image" src="{{ direction.image | relative_url }}" srcset="{{ direction.image_small | relative_url }} 480w, {{ direction.image | relative_url }} 960w" sizes="{{ include.sizes }}" alt="{{ direction.alt | escape }}" width="960" height="640" loading="lazy" decoding="async">
+    <div class="research-topic-art">
+      <img class="research-topic-image" src="{{ direction.image | relative_url }}" srcset="{{ direction.image_small | relative_url }} 480w, {{ direction.image | relative_url }} 960w" sizes="{{ include.sizes }}" alt="{{ direction.alt | escape }}" width="960" height="640" loading="lazy" decoding="async">
+    </div>
     <div class="research-topic-copy">
       <span class="research-topic-number" aria-hidden="true">0{{ forloop.index }}</span>
       <h3 id="{{ include.id_prefix }}-topic-{{ forloop.index }}">{{ direction.title | escape }}</h3>
