@@ -19,14 +19,13 @@
       </div>
     </div>
     <figure class="research-hero-visual">
-      <img src="{{ '/assets/img/mobility-atlas.webp' | relative_url }}" alt="Conceptual blue aerial illustration of roads and vehicles" width="1774" height="887" fetchpriority="high" decoding="async">
-      <figcaption><span>Intelligent mobility</span><span>Concept illustration</span></figcaption>
+      <img src="{{ '/assets/img/mobility-atlas.webp' | relative_url }}" alt="Blue aerial illustration of roads and vehicles" width="1774" height="887" fetchpriority="high" decoding="async">
+      <figcaption><span>Intelligent mobility</span></figcaption>
     </figure>
   </section>
   <section class="research-directions" id="home-interests" aria-labelledby="directions-title">
     <div class="research-section-heading"><p class="research-kicker">Research directions</p><h2 id="directions-title">From motion to understanding.</h2></div>
     {% include research-direction-cards.html limit=3 id_prefix='home' sizes='(max-width: 820px) calc(100vw - 32px), (max-width: 1212px) 32vw, 375px' %}
-    <p class="research-visual-note">AI-generated research concepts, not experimental results.</p>
   </section>
   <section class="research-selected" id="home-highlights" aria-labelledby="selected-title">
     <div class="research-section-heading research-heading-row"><div><p class="research-kicker">Selected work</p><h2 id="selected-title">Research in practice.</h2></div><a class="research-text-link" href="{{ '/publications/' | relative_url }}">All {{ archive.total_records }} works <span aria-hidden="true">&#8594;</span></a></div>

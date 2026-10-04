@@ -89,9 +89,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-image figcaption{color:var(--text-soft);font-size:.8rem;line-height:1.5}
   .pub-image-link{display:flex;align-items:center;min-height:44px;color:var(--accent);font-size:.875rem;text-decoration:underline;text-underline-offset:.2em}
   .pub-image--original{background:#fff;border-radius:6px}
-  .pub-image--concept{padding:.5rem 0;border-radius:0;background:transparent}
-  .pub-image--concept img{width:100%;height:210px;object-fit:contain}
-  .pub-image--concept figcaption{padding:.35rem 0 0;max-width:34ch}
   .pub-marker{grid-column:2;grid-row:1 / span 5;display:grid;gap:.65rem;align-content:start;min-width:0;padding:.75rem 0 .75rem 1rem;border-left:1px solid var(--border-soft)}
   .pub-marker-head{display:grid;gap:.28rem}
   .pub-marker-label{color:var(--accent);font-size:.9rem;font-weight:700;line-height:1.4}
@@ -215,7 +212,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
       {% for item in section.items %}
       {% assign legacy_record_index = legacy_record_index | plus: 1 %}
       {% assign visual = site.data.publication_visuals[item.id] %}
-      {% assign concept = site.data.research_directions | where: 'publication_topic', item.topic_title | first %}
       <article class="pub-item{% unless item.image and item.image != '' %} pub-item-text{% endunless %}" id="publication-{{ item.id | escape }}" data-publication-item data-search="{{ item.search_terms | escape }}">
         <span class="publication-anchor-compat" id="publication-record-{{ legacy_record_index }}" aria-hidden="true"></span>
         <p class="pub-record-year">{{ item.year }}</p>
@@ -279,11 +275,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
             <span class="pub-image-link">Open original figure <span aria-hidden="true">&#8599;</span></span>
           </a>
           <figcaption>Paper figure</figcaption>
-        </figure>
-        {% elsif concept %}
-        <figure class="pub-image pub-image--concept">
-          <img src="{{ concept.image | relative_url }}" srcset="{{ concept.image_small | relative_url }} 480w, {{ concept.image | relative_url }} 960w" sizes="(max-width: 480px) calc(100vw - 32px), (max-width: 980px) 480px, 340px" alt="{{ concept.alt | escape }}" width="960" height="640" loading="lazy" decoding="async">
-          <figcaption>AI-generated concept illustration, not a paper figure.</figcaption>
         </figure>
         {% else %}
         <aside class="pub-marker" aria-hidden="true">

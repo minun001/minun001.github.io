@@ -1,25 +1,24 @@
 - title: Trajectory prediction
   summary: Vehicle interactions and anticipatory driving.
-  image: /assets/img/research-trajectory-spot.webp
-  image_small: /assets/img/research-trajectory-spot-small.webp
-  alt: Isolated concept illustration of vehicles and possible trajectories at a highway merge.
+  image: /assets/img/research-trajectory-scene.webp
+  image_small: /assets/img/research-trajectory-scene-small.webp
+  alt: Realistic illustration of vehicles navigating a highway merge.
   link: /publications/?q=trajectory
-  publication_topic: Autonomous Driving
 - title: Traffic understanding
   summary: CCTV accident analysis and safety-aware scene understanding.
-  image: /assets/img/research-traffic-spot.webp
-  image_small: /assets/img/research-traffic-spot-small.webp
-  alt: Isolated concept illustration of a CCTV camera observing vehicles at an intersection.
+  image: /assets/img/research-traffic-scene.webp
+  image_small: /assets/img/research-traffic-scene-small.webp
+  alt: Realistic illustration of a CCTV camera observing an urban intersection.
   link: /profile/#profile-research
 - title: Scene-to-action reasoning
   summary: Exploring VLMs and VLAs for driving and decision support.
-  image: /assets/img/research-reasoning-spot.webp
-  image_small: /assets/img/research-reasoning-spot-small.webp
-  alt: Isolated concept illustration connecting a road scene, an interaction graph, and possible routes.
+  image: /assets/img/research-reasoning-scene.webp
+  image_small: /assets/img/research-reasoning-scene-small.webp
+  alt: Realistic illustration of vehicles following a curved road beside a protected cycle lane.
   link: /profile/#profile-research
 - title: Energy forecasting
   summary: Temporal modeling for photovoltaic power and infrastructure.
-  image: /assets/img/research-energy-spot.webp
-  image_small: /assets/img/research-energy-spot-small.webp
-  alt: Isolated concept illustration of solar panels and unscaled forecast curves.
+  image: /assets/img/research-energy-scene.webp
+  image_small: /assets/img/research-energy-scene-small.webp
+  alt: Realistic illustration of a photovoltaic panel installation and its electrical equipment.
   link: /publications/?q=photovoltaic

@@ -139,8 +139,7 @@ footer_content: >-
   .about-project-meta { color: var(--text-soft); }
   .about-project-grid { row-gap: 2rem; }
   .profile-project-visual { margin: 0 0 1rem; }
-  .profile-project-visual img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; }
-  .profile-project-visual figcaption { margin-top: .45rem; color: var(--text-soft); font-size: .8rem; }
+  .profile-project-visual img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; }
   .about-page .about-list { margin: 0; padding-left: 1.2rem; }
   .about-list li { padding-left: .2rem; }
   .about-list li + li { margin-top: 1rem; }
@@ -236,7 +235,6 @@ footer_content: >-
             </header>
             <div class="profile-section-content">
               {% include research-direction-cards.html id_prefix='profile' sizes='(max-width: 740px) calc(100vw - 32px), (max-width: 1080px) 45vw, 450px' %}
-              <p class="research-visual-note">AI-generated research concepts, not experimental results.</p>
             </div>
           </section>
 
@@ -302,8 +300,7 @@ footer_content: >-
               </article>
               <article class="about-project">
                 <figure class="profile-project-visual">
-                  <img src="{{ '/assets/img/research-energy.webp' | relative_url }}" srcset="{{ '/assets/img/research-energy-small.webp' | relative_url }} 480w, {{ '/assets/img/research-energy.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Concept illustration of photovoltaic power and temporal forecasting." width="960" height="640" loading="lazy" decoding="async">
-                  <figcaption>Concept illustration</figcaption>
+                  <img src="{{ '/assets/img/research-energy-scene.webp' | relative_url }}" srcset="{{ '/assets/img/research-energy-scene-small.webp' | relative_url }} 480w, {{ '/assets/img/research-energy-scene.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of photovoltaic panels and electrical equipment." width="960" height="640" loading="lazy" decoding="async">
                 </figure>
                 <h3>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</h3>
                 <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
@@ -311,8 +308,7 @@ footer_content: >-
               </article>
               <article class="about-project">
                 <figure class="profile-project-visual">
-                  <img src="{{ '/assets/img/research-trajectory.webp' | relative_url }}" srcset="{{ '/assets/img/research-trajectory-small.webp' | relative_url }} 480w, {{ '/assets/img/research-trajectory.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Concept illustration of vehicles and predicted trajectories in a mobility simulation." width="960" height="640" loading="lazy" decoding="async">
-                  <figcaption>Concept illustration</figcaption>
+                  <img src="{{ '/assets/img/research-trajectory-scene.webp' | relative_url }}" srcset="{{ '/assets/img/research-trajectory-scene-small.webp' | relative_url }} 480w, {{ '/assets/img/research-trajectory-scene.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of vehicles navigating a highway merge." width="960" height="640" loading="lazy" decoding="async">
                 </figure>
                 <h3>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</h3>
                 <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
