@@ -19,7 +19,7 @@
       </div>
     </div>
     <figure class="research-hero-visual">
-      <img src="{{ '/assets/img/mobility-atlas.webp' | relative_url }}" alt="Blue aerial illustration of roads and vehicles" width="1774" height="887" fetchpriority="high" decoding="async">
+      <img src="{{ '/assets/img/mobility-riverside-v2.webp' | relative_url }}" srcset="{{ '/assets/img/mobility-riverside-v2-small.webp' | relative_url }} 720w, {{ '/assets/img/mobility-riverside-v2.webp' | relative_url }} 1440w" sizes="(max-width: 820px) calc(100vw - 32px), (max-width: 1212px) 54vw, 651px" alt="Aerial illustration of a divided riverside road with a bus and an SUV travelling in opposite directions." width="1440" height="960" fetchpriority="high" decoding="async">
       <figcaption><span>Intelligent mobility</span></figcaption>
     </figure>
   </section>
@@ -34,10 +34,12 @@
       {% assign visual = site.data.publication_visuals[paper.id] %}
       <article class="research-paper">
         {% if paper.image and paper.image != '' %}
-        <figure class="research-paper-figure">
-          <img src="{{ visual.preview | default: paper.image | relative_url }}" alt="{{ paper.image_alt | default: paper.title | escape }}"{% if visual.width %} width="{{ visual.width }}" height="{{ visual.height }}"{% endif %} loading="lazy" decoding="async">
-          <figcaption>Paper figure</figcaption>
-        </figure>
+        <a class="research-paper-figure-link" href="{{ paper.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open original figure for {{ paper.title | escape }} (new tab)">
+          <figure class="research-paper-figure">
+            <img src="{{ visual.preview | default: paper.image | relative_url }}" alt="{{ paper.image_alt | default: paper.title | escape }}"{% if visual.width %} width="{{ visual.width }}" height="{{ visual.height }}"{% endif %} loading="lazy" decoding="async">
+            <figcaption>Open original figure <span aria-hidden="true">&#8599;</span></figcaption>
+          </figure>
+        </a>
         {% endif %}
         <p class="research-paper-topic">{{ paper.topic_title | escape }}</p>
         <h3><a href="{{ '/publications/' | relative_url }}#publication-{{ paper.id | escape }}" aria-label="{{ paper.title | escape }}">{{ visual.short_title | default: paper.title | escape }}</a></h3>

@@ -28,8 +28,10 @@
 .research-paper-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem}
 .research-paper{display:flex;flex-direction:column;min-width:0;padding:1.5rem;background:#fff;border-radius:5px}
 .research-paper-figure{position:relative;margin:0 0 1.2rem;padding:.5rem 0;background:#fff}
+.research-paper-figure-link{display:block;color:inherit;text-decoration:none;border-radius:4px}
+.research-paper-figure-link:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
 .research-paper-figure img{width:100%;height:190px;object-fit:contain}
-.research-paper-figure figcaption{margin-top:.65rem;color:var(--text-soft);font-size:.75rem}
+.research-paper-figure figcaption{margin-top:.65rem;color:var(--text-soft);font-size:.75rem;text-decoration:underline;text-underline-offset:3px}
 .research-paper-topic{color:var(--accent);font-size:.82rem;font-weight:700}
 .research-paper h3{margin:1rem 0;font-size:1.45rem;line-height:1.3;letter-spacing:-.015em}
 .research-paper h3 a{color:var(--text-title)}
