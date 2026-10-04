@@ -4,13 +4,12 @@
 <div class="research-home">
   <section class="research-hero" id="home-overview" aria-labelledby="research-title">
     <div class="research-hero-copy">
-      <p class="research-kicker">Hyunsik Min <span>/ Intelligent mobility</span></p>
-      <h1 id="research-title">AI for the way<br>we move.</h1>
-      <p class="research-intro">Predicting vehicle behavior. Understanding traffic. Connecting scenes to decisions.</p>
-      <p class="research-affiliation">M.S. candidate at <strong>Hanyang University</strong><br>Department of Transportation and Logistics Engineering</p>
+      <h1 id="research-title">Hyunsik Min</h1>
+      <p class="research-intro">I study vehicle behavior prediction, vehicle interactions, and CCTV-based traffic accident analysis. I also explore VLMs and VLAs for driving and traffic reasoning.</p>
+      <p class="research-affiliation">M.S. student at <strong>Hanyang University</strong><br>Department of Transportation and Logistics Engineering</p>
       <div class="research-actions">
-        <a class="research-button" href="{{ '/publications/' | relative_url }}">Explore publications <span aria-hidden="true">&#8599;</span></a>
-        <a class="research-text-link" href="{{ '/profile/' | relative_url }}">About my research <span aria-hidden="true">&#8594;</span></a>
+        <a class="research-button" href="{{ '/publications/' | relative_url }}">Publications <span aria-hidden="true">&#8594;</span></a>
+        <a class="research-text-link" href="{{ '/profile/' | relative_url }}">About me <span aria-hidden="true">&#8594;</span></a>
       </div>
       <div class="research-contact">
         <a href="{{ site.scholar_url | escape }}" target="_blank" rel="noopener">Google Scholar</a>
@@ -18,17 +17,11 @@
         <button type="button" data-copy-email="{{ site.email | escape }}" data-copy-label="Copy email"><span data-copy-text>Copy email</span></button>
       </div>
     </div>
-    <figure class="research-hero-visual">
-      <img src="{{ '/assets/img/home-intelligent-mobility.webp' | relative_url }}" srcset="{{ '/assets/img/home-intelligent-mobility-small.webp' | relative_url }} 720w, {{ '/assets/img/home-intelligent-mobility.webp' | relative_url }} 1440w" sizes="(max-width: 820px) calc(100vw - 32px), (max-width: 1212px) 54vw, 651px" alt="Scene illustration of an urban street with cars, a bus, pedestrians, a protected cycle lane, and a traffic camera." width="1440" height="960" fetchpriority="high" loading="eager" decoding="async">
-      <figcaption><strong>Intelligent mobility</strong><span>Understanding traffic. Anticipating behavior. Supporting decisions.</span></figcaption>
-    </figure>
   </section>
   <section class="research-showcase" id="home-research" aria-labelledby="research-showcase-title">
     <div class="research-showcase-copy">
-      <p class="research-kicker">Research highlights</p>
-      <h2 id="research-showcase-title">Current &amp; past research.</h2>
-      <p>Mobility research, with related work in energy forecasting and legal AI.</p>
-      <a class="research-text-link" href="{{ '/publications/' | relative_url }}">Explore the work <span aria-hidden="true">&#8594;</span></a>
+      <h2 id="research-showcase-title">Current &amp; past research</h2>
+      <p>Vehicle prediction, traffic analysis, and driving models. Related work includes energy forecasting and legal AI.</p>
     </div>
     <div class="research-carousel" data-research-carousel data-interval="7000" role="region" aria-roledescription="carousel" aria-label="Current and past research">
       <div class="research-carousel-stage">
@@ -55,25 +48,17 @@
       <p class="research-carousel-status" data-research-status aria-live="polite" aria-atomic="true"></p>
     </div>
   </section>
-  <section class="research-directions" id="home-interests" aria-labelledby="directions-title">
-    <div class="research-section-heading"><p class="research-kicker">Research directions</p><h2 id="directions-title">From motion to understanding.</h2></div>
-    {% include research-direction-cards.html limit=3 id_prefix='home' sizes='(max-width: 820px) calc(100vw - 32px), (max-width: 1212px) 32vw, 375px' %}
-  </section>
   <section class="research-selected" id="home-highlights" aria-labelledby="selected-title">
-    <div class="research-section-heading research-heading-row"><div><p class="research-kicker">Selected work</p><h2 id="selected-title">Research in practice.</h2></div><a class="research-text-link" href="{{ '/publications/' | relative_url }}">All {{ archive.total_records }} works <span aria-hidden="true">&#8594;</span></a></div>
+    <div class="research-section-heading research-heading-row"><h2 id="selected-title">Selected publications</h2><a class="research-text-link" href="{{ '/publications/' | relative_url }}">All {{ archive.total_records }} works <span aria-hidden="true">&#8594;</span></a></div>
     <div class="research-paper-grid">
       {% for paper in journals.items limit:3 %}
       {% assign visual = site.data.publication_visuals[paper.id] %}
       <article class="research-paper">
         {% if paper.image and paper.image != '' %}
         <a class="research-paper-figure-link" href="{{ paper.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open original figure for {{ paper.title | escape }} (new tab)">
-          <figure class="research-paper-figure{% if visual.scene %} research-paper-figure--scene{% endif %}">
-            {% if visual.scene %}
-            <img src="{{ visual.scene | relative_url }}" srcset="{{ visual.scene_small | relative_url }} 720w, {{ visual.scene | relative_url }} 1440w" sizes="(max-width: 820px) calc(100vw - 72px), (max-width: 1212px) 28vw, 300px" alt="{{ visual.scene_alt | escape }}" width="1440" height="960" loading="lazy" decoding="async">
-            {% else %}
+          <figure class="research-paper-figure">
             <img src="{{ visual.preview | default: paper.image | relative_url }}" alt="{{ paper.image_alt | default: paper.title | escape }}"{% if visual.width %} width="{{ visual.width }}" height="{{ visual.height }}"{% endif %} loading="lazy" decoding="async">
-            {% endif %}
-            <figcaption>View paper figure <span aria-hidden="true">&#8599;</span></figcaption>
+            <figcaption>Open paper figure <span aria-hidden="true">&#8599;</span></figcaption>
           </figure>
         </a>
         {% endif %}
@@ -81,19 +66,17 @@
         <h3><a href="{{ '/publications/' | relative_url }}#publication-{{ paper.id | escape }}" aria-label="{{ paper.title | escape }}">{{ visual.short_title | default: paper.title | escape }}</a></h3>
         <p class="research-paper-summary">{{ paper.topic_copy | escape }}</p>
         <p class="research-paper-venue">{{ paper.venue | escape }} <span>/ {{ paper.year }}</span></p>
-        <a class="research-paper-link" href="{{ '/publications/' | relative_url }}#publication-{{ paper.id | escape }}">Read publication <span aria-hidden="true">&#8599;</span></a>
       </article>
       {% endfor %}
     </div>
     <div class="research-scholar-line" id="home-at-a-glance"><p><strong>{{ scholar.citations.all }}</strong> citations <span aria-hidden="true">/</span> h-index <strong>{{ scholar.h_index.all }}</strong></p><a href="{{ scholar.source_url | escape }}" target="_blank" rel="noopener">Google Scholar <span aria-hidden="true">&#8599;</span></a><small>Checked {{ scholar.checked_at_display | escape }}</small></div>
   </section>
   <section class="research-updates" id="home-current-tracks" aria-labelledby="updates-title">
-    <div><p class="research-kicker">Recent &amp; upcoming</p><h2 id="updates-title">Along the way.</h2><a class="research-text-link" href="{{ '/news/' | relative_url }}">News archive <span aria-hidden="true">&#8594;</span></a></div>
+    <div><h2 id="updates-title">Updates</h2><a class="research-text-link" href="{{ '/news/' | relative_url }}">All news <span aria-hidden="true">&#8594;</span></a></div>
     <div class="research-update-list">
       <a href="{{ '/news/' | relative_url }}#news-2026"><time datetime="2026-10">Oct. 2026</time><div><h3>ITS World Congress</h3><p>Scheduled presentation on comfort-centric trajectory prediction in Gangneung.</p></div><span aria-hidden="true">&#8599;</span></a>
       <a href="{{ '/news/' | relative_url }}#news-2026"><time datetime="2026-07-31">Jul. 2026</time><div><h3>Hanyang University</h3><p>Admitted to the M.S. program in Transportation and Logistics Engineering.</p></div><span aria-hidden="true">&#8599;</span></a>
       <a href="{{ '/news/' | relative_url }}#news-2026"><time datetime="2026-04">Apr. 2026</time><div><h3>Multi-domain safety monitoring</h3><p>AI agent coordination for safety monitoring across domains.</p></div><span aria-hidden="true">&#8599;</span></a>
     </div>
   </section>
-  <section class="research-connect" aria-labelledby="connect-title"><div><p class="research-kicker">Research conversations</p><h2 id="connect-title">Let's connect.</h2><p>Interested in mobility prediction, traffic understanding, or trustworthy AI?</p></div><a class="research-button" href="mailto:{{ site.email | escape }}">{{ site.email | escape }} <span aria-hidden="true">&#8599;</span></a></section>
 </div>

@@ -67,6 +67,14 @@ body.page-workspace {
   --accent-2: #3973a7;
 }
 
+body.page-home,
+body.page-profile,
+body.page-publications,
+body.page-news {
+  --text-body: #293e52;
+  --text-soft: #43586c;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -480,6 +488,12 @@ body.page-profile .page:after {
   max-width: 36rem;
   margin: 0;
   font-size: 1.02rem;
+}
+
+body.page-publications .page-lead-copy h1,
+body.page-news .page-lead-copy h1 {
+  font-size: clamp(2.25rem, 4.4vw, 3.5rem);
+  line-height: 1.12;
 }
 
 .page-lead-copy p,

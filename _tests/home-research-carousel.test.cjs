@@ -7,18 +7,27 @@ const { runInNewContext } = require("node:vm");
 const source = readFileSync(join(__dirname, "../assets/home-research.js"), "utf8");
 const homeTemplate = readFileSync(join(__dirname, "../_includes/home-research.html"), "utf8");
 
-test("Home identity uses a static mobility hero, separate from current and past research", () => {
+test("Home introduces the researcher without an invented brand or redundant hero image", () => {
   const hero = homeTemplate.split('<section class="research-hero"')[1].split("</section>")[0];
   const showcase = homeTemplate.split('<section class="research-showcase"')[1].split("</section>")[0];
-  assert.match(hero, /home-intelligent-mobility\.webp/);
-  assert.match(hero, /<strong>Intelligent mobility<\/strong>/);
-  assert.match(hero, /fetchpriority="high" loading="eager"/);
+  assert.match(hero, /<h1 id="research-title">Hyunsik Min<\/h1>/);
+  assert.match(hero, /vehicle behavior prediction, vehicle interactions, and CCTV-based traffic accident analysis/);
+  assert.doesNotMatch(hero, /<img|intelligent mobility|AI for the way/i);
   assert.doesNotMatch(hero, /data-research-carousel|research_slides/);
-  assert.match(showcase, /Current &amp; past research\./);
+  assert.match(showcase, /Current &amp; past research/);
   assert.match(showcase, /data-research-carousel data-interval="7000"/);
   assert.match(showcase, /for slide in site\.data\.research_slides/);
   assert.match(showcase, /loading="lazy"/);
   assert.doesNotMatch(showcase, /fetchpriority="high"/);
+});
+
+test("Home keeps research images in the slideshow and original paper figures in selected work", () => {
+  const selected = homeTemplate.split('<section class="research-selected"')[1].split("</section>")[0];
+  assert.doesNotMatch(homeTemplate, /research-direction-cards\.html|research-connect/);
+  assert.match(selected, /visual\.preview \| default: paper\.image/);
+  assert.match(selected, /href="\{\{ paper\.image \| relative_url \}\}"/);
+  assert.doesNotMatch(selected, /visual\.scene|Read publication/);
+  assert.match(selected, /visual\.short_title \| default: paper\.title/);
 });
 
 class Element {
