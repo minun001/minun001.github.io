@@ -1,18 +1,18 @@
 - title: Predicting vehicle behavior
   summary: Trajectory prediction for anticipatory driving.
-  image: /assets/img/research-slide-trajectory.webp
-  image_small: /assets/img/research-slide-trajectory-small.webp
-  alt: Scene illustration of three vehicles approaching an expressway merge in the same direction.
+  image: /assets/img/research-slide-trajectory-v2.webp
+  image_small: /assets/img/research-slide-trajectory-v2-small.webp
+  alt: Scene illustration of vehicles on a city road, with blue trajectory corridors and future-position markers showing vehicle behavior prediction.
 - title: Understanding traffic
   summary: CCTV-based scene and accident analysis.
-  image: /assets/img/research-slide-traffic.webp
-  image_small: /assets/img/research-slide-traffic-small.webp
-  alt: Scene illustration of a roadside CCTV camera observing two vehicles stopped at a pedestrian crossing.
+  image: /assets/img/research-slide-traffic-v2.webp
+  image_small: /assets/img/research-slide-traffic-v2-small.webp
+  alt: Scene illustration of roadside CCTV observing vehicles and pedestrians at a crossing, with blue perception outlines and vehicle tracking markers.
 - title: Connecting scenes to decisions
   summary: Exploring VLMs and VLAs for driving.
-  image: /assets/img/research-slide-reasoning.webp
-  image_small: /assets/img/research-slide-reasoning-small.webp
-  alt: Scene illustration of a road viewed through a vehicle windshield, with a car ahead and a protected cycle lane.
+  image: /assets/img/research-slide-reasoning-v2.webp
+  image_small: /assets/img/research-slide-reasoning-v2-small.webp
+  alt: Scene illustration of a driver's view with a planned driving corridor and blue perception outlines around a lead vehicle and cyclist in a separated cycle lane.
 - title: Forecasting solar power
   summary: SolarNexus and photovoltaic time-series modeling.
   image: /assets/img/research-slide-energy.webp

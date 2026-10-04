@@ -6,6 +6,29 @@ const { runInNewContext } = require("node:vm");
 
 const source = readFileSync(join(__dirname, "../assets/home-research.js"), "utf8");
 const homeTemplate = readFileSync(join(__dirname, "../_includes/home-research.html"), "utf8");
+const slideData = readFileSync(join(__dirname, "../_data/research_slides.yml"), "utf8");
+
+test("Home research slides have distinct responsive WebP assets and meaningful alt text", () => {
+  const slides = slideData.split(/\r?\n(?=- title:)/);
+  assert.equal(slides.length, 5);
+  const paths = new Set();
+  for (const slide of slides) {
+    assert.match(slide, /^- title: .+/);
+    assert.match(slide, /\n  alt: Scene illustration of .+/);
+    for (const key of ["image", "image_small"]) {
+      const path = slide.match(new RegExp(`\\n  ${key}: (\\/assets\\/img\\/[^\\s]+\\.webp)`))?.[1];
+      assert.ok(path, `${key} must reference a local WebP asset`);
+      assert.ok(!paths.has(path), `${path} must be unique`);
+      paths.add(path);
+      const asset = readFileSync(join(__dirname, "..", path.slice(1)));
+      assert.equal(asset.toString("ascii", 0, 4), "RIFF");
+      assert.equal(asset.toString("ascii", 8, 12), "WEBP");
+    }
+  }
+  assert.match(slides[0], /trajectory corridors and future-position markers/);
+  assert.match(slides[1], /perception outlines and vehicle tracking markers/);
+  assert.match(slides[2], /planned driving corridor/);
+});
 
 test("Home introduces the researcher alongside one automatically rotating research gallery", () => {
   const hero = homeTemplate.split('<section class="research-hero"')[1].split("</section>")[0];
