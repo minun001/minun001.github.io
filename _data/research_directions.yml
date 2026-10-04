@@ -22,3 +22,9 @@
   image_small: /assets/img/research-energy-scene-small.webp
   alt: Realistic illustration of a photovoltaic panel installation and its electrical equipment.
   link: /publications/?q=photovoltaic
+- title: Legal AI
+  summary: Traffic-case analysis with language models.
+  image: /assets/img/research-legal-scene.webp
+  image_small: /assets/img/research-legal-scene-small.webp
+  alt: Illustration of a traffic-case folder, a tablet displaying a road scene, and balanced scales.
+  link: /publications/?q=TRACS

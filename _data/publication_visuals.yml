@@ -3,16 +3,25 @@
   width: 1080
   height: 367
   short_title: Anticipatory driving
+  scene: /assets/img/research-slide-trajectory.webp
+  scene_small: /assets/img/research-slide-trajectory-small.webp
+  scene_alt: Scene illustration of vehicles approaching a merge, representing anticipatory driving research.
 ufrVoPGSRksC:
   preview: /assets/img/paper-solarnexus-preview.webp
   width: 1080
   height: 1162
   short_title: SolarNexus
+  scene: /assets/img/research-slide-energy.webp
+  scene_small: /assets/img/research-slide-energy-small.webp
+  scene_alt: Scene illustration of photovoltaic panels under changing weather, representing solar power forecasting.
 LkGwnXOMwfcC:
   preview: /assets/img/paper-tracs-preview.webp
   width: 1080
   height: 1130
   short_title: TRACS-LLM
+  scene: /assets/img/research-slide-legal.webp
+  scene_small: /assets/img/research-slide-legal-small.webp
+  scene_alt: Scene illustration of traffic-case documents and balanced scales, representing legal text analysis.
 u-x6o8ySG0sC:
   preview: /assets/img/paper-solarflux-preview.webp
   width: 550

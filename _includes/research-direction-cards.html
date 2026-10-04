@@ -1,4 +1,4 @@
-{% assign direction_limit = include.limit | default: 4 %}
+{% assign direction_limit = include.limit | default: site.data.research_directions.size %}
 <div class="research-topic-grid">
   {% for direction in site.data.research_directions limit:direction_limit %}
   <a class="research-topic-card" href="{{ direction.link | relative_url }}" aria-labelledby="{{ include.id_prefix }}-topic-{{ forloop.index }}">

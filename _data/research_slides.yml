@@ -1,0 +1,25 @@
+- title: Predicting vehicle behavior
+  summary: Trajectory prediction for anticipatory driving.
+  image: /assets/img/research-slide-trajectory.webp
+  image_small: /assets/img/research-slide-trajectory-small.webp
+  alt: Scene illustration of three vehicles approaching an expressway merge in the same direction.
+- title: Understanding traffic
+  summary: CCTV-based scene and accident analysis.
+  image: /assets/img/research-slide-traffic.webp
+  image_small: /assets/img/research-slide-traffic-small.webp
+  alt: Scene illustration of a roadside CCTV camera observing two vehicles stopped at a pedestrian crossing.
+- title: Connecting scenes to decisions
+  summary: Exploring VLMs and VLAs for driving.
+  image: /assets/img/research-slide-reasoning.webp
+  image_small: /assets/img/research-slide-reasoning-small.webp
+  alt: Scene illustration of a road viewed through a vehicle windshield, with a car ahead and a protected cycle lane.
+- title: Forecasting solar power
+  summary: SolarNexus and photovoltaic time-series modeling.
+  image: /assets/img/research-slide-energy.webp
+  image_small: /assets/img/research-slide-energy-small.webp
+  alt: Scene illustration of photovoltaic panels and an inverter under changing cloud cover.
+- title: Reading traffic cases
+  summary: TRACS-LLM and legal document analysis.
+  image: /assets/img/research-slide-legal.webp
+  image_small: /assets/img/research-slide-legal-small.webp
+  alt: Scene illustration of case documents, a tablet displaying a road scene, and balanced scales on a desk.
