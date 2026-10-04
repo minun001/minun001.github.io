@@ -7,18 +7,17 @@ const { runInNewContext } = require("node:vm");
 const source = readFileSync(join(__dirname, "../assets/home-research.js"), "utf8");
 const homeTemplate = readFileSync(join(__dirname, "../_includes/home-research.html"), "utf8");
 
-test("Home introduces the researcher without an invented brand or redundant hero image", () => {
+test("Home introduces the researcher alongside one automatically rotating research gallery", () => {
   const hero = homeTemplate.split('<section class="research-hero"')[1].split("</section>")[0];
-  const showcase = homeTemplate.split('<section class="research-showcase"')[1].split("</section>")[0];
   assert.match(hero, /<h1 id="research-title">Hyunsik Min<\/h1>/);
   assert.match(hero, /vehicle behavior prediction, vehicle interactions, and CCTV-based traffic accident analysis/);
-  assert.doesNotMatch(hero, /<img|intelligent mobility|AI for the way/i);
-  assert.doesNotMatch(hero, /data-research-carousel|research_slides/);
-  assert.match(showcase, /Current &amp; past research/);
-  assert.match(showcase, /data-research-carousel data-interval="7000"/);
-  assert.match(showcase, /for slide in site\.data\.research_slides/);
-  assert.match(showcase, /loading="lazy"/);
-  assert.doesNotMatch(showcase, /fetchpriority="high"/);
+  assert.doesNotMatch(homeTemplate, /intelligent mobility|AI for the way|Research highlights|Current &amp; past research|research-showcase|Mobility research,/i);
+  assert.match(hero, /id="home-research" data-research-carousel data-interval="7000"/);
+  assert.match(hero, /for slide in site\.data\.research_slides/);
+  assert.match(hero, /if forloop\.first %\} fetchpriority="high" loading="eager"/);
+  assert.match(hero, /else %\} loading="lazy"/);
+  assert.match(hero, /#profile-research">Research details/);
+  assert.equal((homeTemplate.match(/data-research-carousel/g) || []).length, 1);
 });
 
 test("Home keeps research images in the slideshow and original paper figures in selected work", () => {
@@ -125,6 +124,18 @@ test("autoplay advances every seven seconds, wraps and stays silent", async () =
   assert.equal(f.button("status").textContent, "");
   assert.equal(f.dots[0].attributes.get("aria-current"), "true");
   assert.equal(f.slides.filter((slide) => !slide.hidden).length, 1);
+});
+
+test("a fresh page starts autoplay without a Play click or a previous manual pause", async () => {
+  const previousPage = fixture();
+  previousPage.toggle.emit("click");
+  assert.equal(previousPage.root.dataset.rotation, "paused");
+  const freshPage = fixture();
+  assert.equal(freshPage.root.dataset.rotation, "playing");
+  assert.equal(freshPage.toggle.attributes.get("aria-label"), "Pause automatic slides");
+  assert.equal(freshPage.timers.size, 1);
+  await freshPage.tick();
+  assert.equal(freshPage.visible(), 1);
 });
 
 test("manual navigation pauses, announces and only explicit Play restarts", async () => {
