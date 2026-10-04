@@ -18,11 +18,23 @@
         <button type="button" data-copy-email="{{ site.email | escape }}" data-copy-label="Copy email"><span data-copy-text>Copy email</span></button>
       </div>
     </div>
-    <div class="research-hero-visual research-carousel" data-research-carousel data-interval="7000" role="region" aria-roledescription="carousel" aria-label="Research highlights">
+    <figure class="research-hero-visual">
+      <img src="{{ '/assets/img/home-intelligent-mobility.webp' | relative_url }}" srcset="{{ '/assets/img/home-intelligent-mobility-small.webp' | relative_url }} 720w, {{ '/assets/img/home-intelligent-mobility.webp' | relative_url }} 1440w" sizes="(max-width: 820px) calc(100vw - 32px), (max-width: 1212px) 54vw, 651px" alt="Scene illustration of an urban street with cars, a bus, pedestrians, a protected cycle lane, and a traffic camera." width="1440" height="960" fetchpriority="high" loading="eager" decoding="async">
+      <figcaption><strong>Intelligent mobility</strong><span>Understanding traffic. Anticipating behavior. Supporting decisions.</span></figcaption>
+    </figure>
+  </section>
+  <section class="research-showcase" id="home-research" aria-labelledby="research-showcase-title">
+    <div class="research-showcase-copy">
+      <p class="research-kicker">Research highlights</p>
+      <h2 id="research-showcase-title">Current &amp; past research.</h2>
+      <p>Mobility research, with related work in energy forecasting and legal AI.</p>
+      <a class="research-text-link" href="{{ '/publications/' | relative_url }}">Explore the work <span aria-hidden="true">&#8594;</span></a>
+    </div>
+    <div class="research-carousel" data-research-carousel data-interval="7000" role="region" aria-roledescription="carousel" aria-label="Current and past research">
       <div class="research-carousel-stage">
         {% for slide in site.data.research_slides %}
         <figure class="research-carousel-slide" id="research-slide-{{ forloop.index }}" data-research-slide data-title="{{ slide.title | escape }}" role="group" aria-roledescription="slide" aria-label="{{ forloop.index }} of {{ forloop.length }}: {{ slide.title | escape }}"{% unless forloop.first %} hidden{% endunless %}>
-          <img src="{{ slide.image | relative_url }}" srcset="{{ slide.image_small | relative_url }} 720w, {{ slide.image | relative_url }} 1440w" sizes="(max-width: 820px) calc(100vw - 32px), (max-width: 1212px) 54vw, 651px" alt="{{ slide.alt | escape }}" width="1440" height="960"{% if forloop.first %} fetchpriority="high" loading="eager"{% else %} loading="lazy"{% endif %} decoding="async">
+          <img src="{{ slide.image | relative_url }}" srcset="{{ slide.image_small | relative_url }} 720w, {{ slide.image | relative_url }} 1440w" sizes="(max-width: 820px) calc(100vw - 32px), (max-width: 1212px) 54vw, 651px" alt="{{ slide.alt | escape }}" width="1440" height="960" loading="lazy" decoding="async">
           <figcaption><strong>{{ slide.title | escape }}</strong><span>{{ slide.summary | escape }}</span></figcaption>
         </figure>
         {% endfor %}

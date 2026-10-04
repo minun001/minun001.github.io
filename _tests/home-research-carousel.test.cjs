@@ -5,6 +5,21 @@ const test = require("node:test");
 const { runInNewContext } = require("node:vm");
 
 const source = readFileSync(join(__dirname, "../assets/home-research.js"), "utf8");
+const homeTemplate = readFileSync(join(__dirname, "../_includes/home-research.html"), "utf8");
+
+test("Home identity uses a static mobility hero, separate from current and past research", () => {
+  const hero = homeTemplate.split('<section class="research-hero"')[1].split("</section>")[0];
+  const showcase = homeTemplate.split('<section class="research-showcase"')[1].split("</section>")[0];
+  assert.match(hero, /home-intelligent-mobility\.webp/);
+  assert.match(hero, /<strong>Intelligent mobility<\/strong>/);
+  assert.match(hero, /fetchpriority="high" loading="eager"/);
+  assert.doesNotMatch(hero, /data-research-carousel|research_slides/);
+  assert.match(showcase, /Current &amp; past research\./);
+  assert.match(showcase, /data-research-carousel data-interval="7000"/);
+  assert.match(showcase, /for slide in site\.data\.research_slides/);
+  assert.match(showcase, /loading="lazy"/);
+  assert.doesNotMatch(showcase, /fetchpriority="high"/);
+});
 
 class Element {
   constructor() {
