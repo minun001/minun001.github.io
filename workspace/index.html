@@ -23,6 +23,11 @@ script_bundle: workspace
     .workspace-login-panel{position:relative;overflow:hidden}
     .workspace-login-panel::before{content:"";position:absolute;inset:-90px -120px auto auto;width:240px;height:240px;border-radius:999px;background:radial-gradient(circle,rgba(57,115,167,.1) 0%,rgba(57,115,167,0) 70%);pointer-events:none}
     .workspace-login-copy{max-width:34rem}
+    .workspace-helper-setup{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-soft)}
+    .workspace-helper-setup[hidden]{display:none}
+    .workspace-helper-setup summary{min-height:44px;padding:.5rem 0;color:var(--accent);font-weight:700;cursor:pointer}
+    .workspace-helper-setup summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+    .workspace-helper-setup p{margin:.5rem 0 .75rem;font-size:.9rem;line-height:1.6}
     .workspace-login-preview{position:relative;display:grid;gap:.85rem;margin-top:1rem;padding:1rem;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(242,248,250,.96) 100%);box-shadow:inset 0 0 0 1px rgba(17,32,51,.08)}
     .workspace-login-preview-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
     .workspace-login-preview-head span{color:var(--text-soft);font-size:.72rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
@@ -299,36 +304,7 @@ script_bundle: workspace
           <article class="workspace-panel workspace-login-panel" data-workspace-view="login">
             <div class="eyebrow">Login</div>
             <h2>Workspace Login</h2>
-            <p class="workspace-login-copy">Sign in with your private workspace credentials. A quick preview shows the tools available after login.</p>
-            <div class="workspace-login-preview" aria-label="Workspace preview">
-              <div class="workspace-login-preview-head">
-                <div>
-                  <span>Inside Workspace</span>
-                  <strong>Small operations cockpit after login</strong>
-                </div>
-                <div class="workspace-login-preview-note">Private data hidden</div>
-              </div>
-              <div class="workspace-login-preview-grid">
-                <div class="workspace-login-preview-card">
-                  <span>Server Usage</span>
-                  <strong>CPU, GPU, disk</strong>
-                  <p>Check server load, disk pressure, and live refresh status.</p>
-                  <div class="workspace-login-preview-meter" aria-hidden="true"></div>
-                </div>
-                <div class="workspace-login-preview-card">
-                  <span>Work Monitor</span>
-                  <strong>Active jobs</strong>
-                  <p>Review running work, recent files, and min_hs activity.</p>
-                  <div class="workspace-login-preview-meter" aria-hidden="true"></div>
-                </div>
-                <div class="workspace-login-preview-card">
-                  <span>Server Alerts</span>
-                  <strong>Needs attention</strong>
-                  <p>Surface high disk usage, busy GPU, and stale snapshots.</p>
-                  <div class="workspace-login-preview-meter" aria-hidden="true"></div>
-                </div>
-              </div>
-            </div>
+            <p class="workspace-login-copy">Sign in to use your private research tools.</p>
             <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true">Checking workspace access...</div>
             <form id="workspace-login-form" class="workspace-form">
               <label class="workspace-field">
@@ -344,6 +320,40 @@ script_bundle: workspace
                 <button id="workspace-resend-confirmation" class="workspace-button secondary" type="button" hidden>Resend Verification</button>
               </div>
             </form>
+            <details class="workspace-helper-setup" id="workspace-helper-setup" hidden>
+              <summary>Helper connection</summary>
+              <p>Start your private helper and HTTPS tunnel, then enter its current address. Use only a helper you control: it handles your sign-in credentials. No server address or password is published here.</p>
+              <form id="workspace-helper-form" class="workspace-form">
+                <label class="workspace-field">
+                  <span>Private helper URL</span>
+                  <input id="workspace-helper-url" type="url" placeholder="https://your-helper.trycloudflare.com" autocomplete="off" spellcheck="false" required>
+                </label>
+                <div class="workspace-actions">
+                  <button class="workspace-button secondary" type="submit">Connect helper</button>
+                  <button class="workspace-button secondary" id="workspace-helper-clear" type="button">Clear saved address</button>
+                </div>
+              </form>
+              <p>The address is saved only in this browser. You will still need to sign in; this does not unlock private data.</p>
+            </details>
+            <details class="workspace-helper-setup workspace-preview-disclosure">
+              <summary>Inside Workspace</summary>
+              <div class="workspace-login-preview" aria-label="Workspace preview">
+                <div class="workspace-login-preview-grid">
+                  <div class="workspace-login-preview-card">
+                    <strong>Server usage</strong>
+                    <p>CPU, GPU, disk, and manual refresh.</p>
+                  </div>
+                  <div class="workspace-login-preview-card">
+                    <strong>Work monitor</strong>
+                    <p>Running jobs and recent activity.</p>
+                  </div>
+                  <div class="workspace-login-preview-card">
+                    <strong>Server alerts</strong>
+                    <p>Disk pressure, GPU load, and stale snapshots.</p>
+                  </div>
+                </div>
+              </div>
+            </details>
           </article>
 
           <article class="workspace-panel" data-workspace-view="dashboard" data-workspace-private hidden>

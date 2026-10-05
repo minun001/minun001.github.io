@@ -1,24 +1,29 @@
 - title: Predicting vehicle behavior
+  category: Mobility research
   summary: Trajectory prediction for anticipatory driving.
   image: /assets/img/research-slide-trajectory-v2.webp
   image_small: /assets/img/research-slide-trajectory-v2-small.webp
   alt: Scene illustration of vehicles on a city road, with blue trajectory corridors and future-position markers showing vehicle behavior prediction.
 - title: Understanding traffic
+  category: Mobility research
   summary: CCTV-based scene and accident analysis.
   image: /assets/img/research-slide-traffic-v2.webp
   image_small: /assets/img/research-slide-traffic-v2-small.webp
   alt: Scene illustration of roadside CCTV observing vehicles and pedestrians at a crossing, with blue perception outlines and vehicle tracking markers.
 - title: Connecting scenes to decisions
+  category: Mobility research
   summary: Exploring VLMs and VLAs for driving.
   image: /assets/img/research-slide-reasoning-v2.webp
   image_small: /assets/img/research-slide-reasoning-v2-small.webp
   alt: Scene illustration of a driver's view with a planned driving corridor and blue perception outlines around a lead vehicle and cyclist in a separated cycle lane.
 - title: Forecasting solar power
+  category: Related research
   summary: SolarNexus and photovoltaic time-series modeling.
   image: /assets/img/research-slide-energy.webp
   image_small: /assets/img/research-slide-energy-small.webp
   alt: Scene illustration of photovoltaic panels and an inverter under changing cloud cover.
 - title: Reading traffic cases
+  category: Related research
   summary: TRACS-LLM and legal document analysis.
   image: /assets/img/research-slide-legal.webp
   image_small: /assets/img/research-slide-legal-small.webp

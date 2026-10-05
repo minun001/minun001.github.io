@@ -65,6 +65,7 @@
     if (!raw) return '';
     try {
       var parsed = new URL(raw, window.location.href);
+      if (parsed.username || parsed.password) return '';
       var isLoopback = parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost' || parsed.hostname === '::1';
       var isTryCloudflare = parsed.hostname === 'trycloudflare.com' || parsed.hostname.endsWith('.trycloudflare.com');
       if (!isLoopback && !isTryCloudflare) return '';
@@ -418,7 +419,7 @@
   function getLocalHelperErrorMessage(error) {
     var message = error && error.message ? String(error.message) : '';
     if (/failed to fetch|networkerror|load failed/i.test(message)) {
-      return 'Workspace helper connection failed. Start the helper tunnel, then open this page with ?workspaceHelper=https://your-helper-url.';
+      return 'Cannot reach your private helper. Check that it is running, or update the address under Helper connection.';
     }
     return message || 'Local helper request failed.';
   }
@@ -2694,8 +2695,46 @@
     renderWorkspaceSignals();
   }
 
+  function bindHelperSetup(config) {
+    var setup = byId('workspace-helper-setup');
+    var helperForm = byId('workspace-helper-form');
+    var input = byId('workspace-helper-url');
+    if (!setup || !helperForm || !input || (!isRemoteHelperMode(config) && !isLocalHelperMode(config))) return;
+    setup.hidden = false;
+    setup.open = isRemoteHelperMode(config);
+    input.value = String((config.localAuth && config.localAuth.helperBaseUrl) || '');
+    helperForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var raw = String(input.value || '').trim();
+      var base = /^https?:\/\//i.test(raw) ? normalizeHelperBaseUrl(raw) : '';
+      if (!base) {
+        setStatus('Use your own HTTPS *.trycloudflare.com helper address. HTTP localhost is allowed only on a local HTTP page.', 'warn');
+        input.focus();
+        return;
+      }
+      var password = byId('workspace-password');
+      if (password) password.value = '';
+      var next = new URL(window.location.href);
+      next.searchParams.delete('clearWorkspaceHelper');
+      next.searchParams.delete('helper');
+      next.searchParams.set('workspaceHelper', base);
+      setStoredHelperBaseUrl(base);
+      window.location.assign(next.toString());
+    });
+    var clear = byId('workspace-helper-clear');
+    if (clear) clear.addEventListener('click', function () {
+      setStoredHelperBaseUrl('');
+      var next = new URL(window.location.href);
+      next.searchParams.delete('workspaceHelper');
+      next.searchParams.delete('helper');
+      next.searchParams.set('clearWorkspaceHelper', '1');
+      window.location.assign(next.toString());
+    });
+  }
+
   async function boot() {
     var config = getConfig();
+    bindHelperSetup(config);
     var form = byId('workspace-login-form');
     var signOut = byId('workspace-signout');
     var unauthorizedSignOut = byId('workspace-signout-unauthorized');
@@ -2824,11 +2863,11 @@
       setIdentity(null, config);
       setShellMode('auth');
       setView('login');
-      setStatus('Private workspace: configure the helper URL before signing in. Credentials stay on the helper, not GitHub Pages.', 'warn');
+      setStatus('Connect your private helper below to enable sign-in. Your credentials stay on the helper.', 'warn');
       if (form) {
         form.addEventListener('submit', function (event) {
           event.preventDefault();
-          setStatus('Helper URL is not configured. Reopen with ?workspaceHelper=https://your-helper-url.', 'warn');
+          setStatus('Add your private helper address under Helper connection before signing in.', 'warn');
         });
       }
       return;

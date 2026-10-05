@@ -3,13 +3,12 @@ layout: default
 title: Publications
 description: Research on trajectory prediction and autonomous driving, with related work in energy forecasting, legal AI, and urban sensing.
 body_class: page-publications
-footer_content: "[Google Scholar profile](https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en)"
 ---
 <style>
   body.page-publications .publications-page{display:grid;gap:1.75rem}
   .page-publications .pub-lead{grid-template-columns:minmax(0,1fr) minmax(17rem,22rem);gap:2rem;border-bottom:0;padding-bottom:0}
   .pub-lead-copy{display:grid;gap:.75rem;min-width:0}
-  .pub-lead-copy .pub-citation-note{margin:0;color:var(--text-soft);font-size:.9rem;line-height:1.6}
+  .publications-page > .pub-citation-note{margin:0;color:var(--text-soft);font-size:.8125rem;line-height:1.6}
   .pub-scholar-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem 1.25rem;padding:1rem 1.25rem;border-radius:12px;background:#f7f8fa;align-content:start}
   .pub-scholar-label{align-self:center;color:var(--text-title);font-size:.9375rem;font-weight:700;line-height:1.4}
   .pub-scholar-stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
@@ -18,8 +17,11 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-scholar-stat-value{color:var(--accent);font-size:1.625rem;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
   .pub-scholar-link{grid-column:2;grid-row:1;justify-self:end;display:inline-flex;align-items:center;min-height:44px;color:var(--accent);font-size:.9375rem;font-weight:700;text-decoration:underline;text-underline-offset:.2em}
   .pub-scholar-panel .pub-scholar-note{grid-column:1/-1;margin:0;color:var(--text-soft);font-size:.9rem;line-height:1.5}
-  body.page-publications .pub-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem;padding:0}
-  .pub-summary-item{display:grid;gap:.35rem;align-content:start;min-width:0;padding:.75rem 0;border-bottom:1px solid var(--border-soft);background:none}
+  body.page-publications .pub-summary.pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem;padding:0;border:0}
+  body.page-publications .pub-summary.pub-jump .pub-summary-item{display:grid;gap:.35rem;align-content:start;min-width:0;padding:.75rem 0;border:0;border-bottom:2px solid var(--border-soft);border-radius:0;background:none;color:var(--text-body);text-decoration:none;white-space:normal}
+  body.page-publications .pub-summary.pub-jump .pub-summary-item:hover,
+  body.page-publications .pub-summary.pub-jump .pub-summary-item.is-active{border-bottom-color:var(--accent);color:var(--accent)}
+  .pub-summary-item:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
   .pub-summary-item > span{color:var(--text-body);font-size:.9375rem;font-weight:600;line-height:1.5;white-space:normal}
   .pub-summary-item strong{color:var(--text-title);font-size:1.25rem;line-height:1.4;font-variant-numeric:tabular-nums}
   .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:start}
@@ -106,7 +108,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   .pub-lead{animation:none}
   .pub-empty{padding:1rem 0;border-top:1px solid var(--border-soft);color:var(--text-soft)}
   @media (max-width:1100px){
-    body.page-publications .pub-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+    body.page-publications .pub-summary.pub-jump{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media (max-width:980px){
     .page-publications .pub-lead{grid-template-columns:minmax(0,1fr);gap:1rem}
@@ -118,8 +120,16 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     .pub-tools{grid-template-columns:minmax(0,1fr);gap:.5rem}
   }
   @media (max-width:640px){
-    body.page-publications .pub-summary{grid-template-columns:minmax(0,1fr);gap:.75rem}
-    .pub-summary-item{grid-template-columns:minmax(0,1fr) auto;align-items:baseline;padding:.6rem 0}
+    body.page-publications .publications-page{gap:1.25rem}
+    body.page-publications .pub-summary.pub-jump{grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem 1rem}
+    .pub-summary-item > span{font-size:.875rem}
+    .pub-summary-item strong{font-size:1.0625rem}
+    .pub-scholar-panel{max-width:none;grid-template-columns:minmax(0,1fr) auto;gap:.25rem .75rem;padding:.65rem .9rem}
+    .pub-scholar-stats{display:flex;flex-wrap:wrap;gap:.5rem 1rem}
+    .pub-scholar-stat{display:flex;align-items:baseline;gap:.4rem}
+    .pub-scholar-stat-label{font-size:.875rem}
+    .pub-scholar-stat-value{font-size:1.25rem}
+    .pub-scholar-panel .pub-scholar-note{font-size:.8125rem}
     .pub-meta-row{grid-template-columns:minmax(0,1fr);gap:.1rem}
     .pub-actions{gap:.5rem}
     .pub-image img{max-height:260px}
@@ -129,7 +139,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   @media (max-width:480px){
     .pub-search{padding:.65rem .75rem}
     .pub-search span{display:none}
-    .pub-scholar-panel{padding:.75rem 1rem;gap:.65rem .75rem}
     .pub-marker{display:none}
     .pub-actions .pub-action{flex:1 1 auto}
     body.page-publications .pub-jump.page-index:after{display:none}
@@ -144,8 +153,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
   <section class="page-lead pub-lead">
     <div class="page-lead-copy pub-lead-copy">
       <h1>Publications</h1>
-      <p>Journal articles and conference papers.</p>
-      <p class="pub-citation-note">Per-paper citations checked <time datetime="{{ publication_archive.checked_at | escape }}">{{ publication_archive.checked_at_display | escape }}</time>.</p>
     </div>
     <article class="pub-scholar-panel pub-scholar-panel--overview" data-scholar-card>
       <span class="pub-scholar-label">Google Scholar</span>
@@ -164,15 +171,6 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     </article>
   </section>
 
-  <section class="pub-summary" aria-label="Publication summary">
-    {% for section in publication_archive.sections %}
-    <article class="pub-summary-item" data-publication-summary="{{ section.key }}">
-      <span>{{ section.label | replace: 'Journals', 'journals' | replace: 'Conferences', 'conferences' }}</span>
-      <strong data-publication-summary-count>{{ section.count }} {% if section.count == 1 %}paper{% else %}papers{% endif %}</strong>
-    </article>
-    {% endfor %}
-  </section>
-
   <section class="pub-tools" aria-label="Publication tools">
     <div class="pub-search-wrap">
       <label class="pub-search">
@@ -187,11 +185,14 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
     </div>
   </section>
 
-  <section class="pub-jump page-index" aria-label="Jump to publication type">
+  <nav class="pub-summary pub-jump page-index" aria-label="Jump to publication type">
     {% for section in publication_archive.sections %}
-    <a href="#{{ section.key }}">{{ section.label | replace: 'Journals', 'journals' | replace: 'Conferences', 'conferences' }}</a>
+    <a class="pub-summary-item" href="#{{ section.key }}" data-publication-summary="{{ section.key }}">
+      <span>{{ section.label | replace: 'Journals', 'journals' | replace: 'Conferences', 'conferences' }}</span>
+      <strong data-publication-summary-count>{{ section.count }} {% if section.count == 1 %}paper{% else %}papers{% endif %}</strong>
+    </a>
     {% endfor %}
-  </section>
+  </nav>
 
   {% assign legacy_record_index = 0 %}
   {% for section in publication_archive.sections %}
@@ -294,6 +295,7 @@ footer_content: "[Google Scholar profile](https://scholar.google.com/citations?u
 
   <p class="pub-empty" data-publication-empty hidden>No publication matched that search yet.</p>
 
+  <p class="pub-citation-note">Per-paper citations checked <time datetime="{{ publication_archive.checked_at | escape }}">{{ publication_archive.checked_at_display | escape }}</time>.</p>
   <nav class="chapter-nav" aria-label="Continue through site chapters">
     <a class="chapter-link" href="/profile/">
       <span>Previous chapter</span>

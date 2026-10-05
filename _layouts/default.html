@@ -14,10 +14,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20261004g">
   {% if page.home_design %}
-  <link rel="stylesheet" href="{{ "/assets/home-research.css" | relative_url }}?v=20261004h">
+  <link rel="stylesheet" href="{{ "/assets/home-research.css" | relative_url }}?v=20261005a">
   {% endif %}
   {% if page.research_visuals %}
-  <link rel="stylesheet" href="{{ "/assets/research-visuals.css" | relative_url }}?v=20261004c">
+  <link rel="stylesheet" href="{{ "/assets/research-visuals.css" | relative_url }}?v=20261005a">
   {% endif %}
   {% assign script_bundle = page.script_bundle | default: 'public' %}
   {% if script_bundle == 'timesfm' %}
@@ -92,7 +92,7 @@
   {% if script_bundle == 'workspace' %}
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260803a"></script>
-    <script src="{{ "/assets/workspace.js" | relative_url }}?v=20260803a"></script>
+    <script src="{{ "/assets/workspace.js" | relative_url }}?v=20261005a"></script>
   {% elsif script_bundle == 'timesfm' %}
     <script src="{{ "/assets/workspace-config.js" | relative_url }}?v=20260803a"></script>
     <script src="{{ "/assets/timesfm-config.js" | relative_url }}?v=20260511c"></script>

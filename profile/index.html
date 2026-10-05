@@ -4,8 +4,6 @@ title: Profile
 description: Profile of Hyunsik Min's work in mobility systems, trajectory prediction, safety-aware AI, and related forecasting applications.
 body_class: page-profile
 research_visuals: true
-footer_content: >-
-  Research profile focused on mobility systems, safety-aware AI, and related forecasting.
 ---
 <style>
   .about-page {
@@ -148,6 +146,19 @@ footer_content: >-
   .profile-toolkit dt { margin-bottom: .3rem; color: var(--text-title); font-weight: 700; }
   .profile-toolkit dd { margin: 0; overflow-wrap: anywhere; }
   .about-page .chapter-nav { margin-top: 0; }
+  .profile-more { margin-top: 1.25rem; }
+  .profile-more > summary { width: fit-content; min-height: 44px; padding: .65rem 0; color: var(--accent); font-weight: 600; cursor: pointer; }
+  .profile-more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .profile-more[open] > summary { margin-bottom: .75rem; }
+  .profile-projects-main { margin-bottom: 1.75rem; }
+  @media (max-width: 740px) {
+    .page-profile .research-topic-card { grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; align-items: center; }
+    .page-profile .research-topic-art { height: 110px; padding: 0; }
+    .page-profile .research-topic-copy { grid-template-columns: minmax(0, 1fr); gap: .35rem; padding: .5rem 0; }
+    .page-profile .research-topic-copy p { grid-column: 1; }
+    .page-profile .research-topic-number { display: none; }
+    .page-profile .research-topic-arrow { top: .65rem; }
+  }
 
   @media (max-width: 1080px) {
     .profile-section { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
@@ -230,11 +241,14 @@ footer_content: >-
         <div class="profile-sections">
           <section class="profile-section" id="profile-research" aria-labelledby="profile-research-title">
             <header class="profile-section-heading">
-              <div class="eyebrow">Research focus</div>
               <h2 id="profile-research-title">Research directions</h2>
             </header>
             <div class="profile-section-content">
-              {% include research-direction-cards.html id_prefix='profile' sizes='(max-width: 740px) calc(100vw - 32px), (max-width: 1080px) 45vw, 450px' %}
+              {% include research-direction-cards.html group='primary' id_prefix='profile' sizes='(max-width: 740px) 112px, (max-width: 1080px) 45vw, 450px' %}
+              <details class="profile-more">
+                <summary>Related research: energy forecasting and legal AI</summary>
+                {% include research-direction-cards.html group='related' id_prefix='profile-related' sizes='(max-width: 740px) 112px, (max-width: 1080px) 45vw, 450px' %}
+              </details>
             </div>
           </section>
 
@@ -248,7 +262,7 @@ footer_content: >-
                 <div class="education-card__meta">Graduate study</div>
                 <h3>M.S. in Transportation and Logistics Engineering</h3>
                 <p>Hanyang University, Department of Transportation and Logistics Engineering, Seoul, Republic of Korea</p>
-                <p class="about-entry-date"><em>Mar. 2025 - Present</em></p>
+                <p class="about-entry-date"><em>2025 - Present</em></p>
                 <p>Advisor: <strong>Byeongjoon Noh</strong></p>
                 <p class="about-mini-note">GPA: 4.42 / 4.5</p>
               </div>
@@ -287,43 +301,50 @@ footer_content: >-
               <div class="eyebrow">Projects &amp; grants</div>
               <h2 id="profile-projects-title">Selected projects and grants</h2>
             </header>
-            <div class="profile-section-content about-project-grid">
-              <article class="about-project">
-                <h3>Emotional and Intelligence Child Care System Convergence Research Center (CRC)</h3>
-                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Sep. 2024 - Present</em></p>
-                <p>Speaker diarization and child-parent interaction analysis for emotionally aware care data.</p>
-              </article>
-              <article class="about-project">
-                <h3>2nd DSC Planning Living Lab in 2024</h3>
-                <p class="about-project-meta"><em>Project Leader, Proposal Author &amp; Researcher | Aug. 2024 - Nov. 2024</em></p>
-                <p>Led planning and proposal work for a field-connected living-lab project.</p>
-              </article>
-              <article class="about-project">
-                <figure class="profile-project-visual">
-                  <img src="{{ '/assets/img/research-energy-scene.webp' | relative_url }}" srcset="{{ '/assets/img/research-energy-scene-small.webp' | relative_url }} 480w, {{ '/assets/img/research-energy-scene.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of photovoltaic panels and electrical equipment." width="960" height="640" loading="lazy" decoding="async">
-                </figure>
-                <h3>BK21 AIoT-Energy Convergence Technology Regional Innovation Talent Development</h3>
-                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
-                <p>AIoT-energy convergence research with scalable forecasting workflows.</p>
-              </article>
-              <article class="about-project">
-                <figure class="profile-project-visual">
-                  <img src="{{ '/assets/img/research-trajectory-scene-v2.webp' | relative_url }}" srcset="{{ '/assets/img/research-trajectory-scene-v2-small.webp' | relative_url }} 480w, {{ '/assets/img/research-trajectory-scene-v2.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of vehicles navigating a highway merge." width="960" height="640" loading="lazy" decoding="async">
-                </figure>
-                <h3>Next-generation AI convergence mobility simulation and prediction-utilization technology for metropolitan cities</h3>
-                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
-                <p>Metropolitan mobility simulation and prediction for next-generation urban transportation.</p>
-              </article>
-              <article class="about-project">
-                <h3>BK21 Overseas Training Program at Kingston University</h3>
-                <p class="about-project-meta"><em>Principal Investigator (PI) &amp; Lead Researcher | Dec. 2025 - Feb. 2026</em></p>
-                <p>Led the overseas training project at Kingston University.</p>
-              </article>
-              <article class="about-project">
-                <h3>Integrated coordination technology for AI agent-based multi-domain safety monitoring</h3>
-                <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
-                <p>Integrated coordination for AI agent-based safety monitoring across multiple domains.</p>
-              </article>
+            <div class="profile-section-content">
+              <div class="about-project-grid profile-projects-main">
+                <article class="about-project">
+                  <figure class="profile-project-visual">
+                    <img src="{{ '/assets/img/research-trajectory-scene-v2.webp' | relative_url }}" srcset="{{ '/assets/img/research-trajectory-scene-v2-small.webp' | relative_url }} 480w, {{ '/assets/img/research-trajectory-scene-v2.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of vehicles navigating a highway merge." width="960" height="640" loading="lazy" decoding="async">
+                  </figure>
+                  <h3>Metropolitan mobility simulation and prediction</h3>
+                  <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
+                  <p>Urban mobility simulation and prediction for next-generation transportation.</p>
+                </article>
+                <article class="about-project">
+                  <h3>AI agent-based safety monitoring</h3>
+                  <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
+                  <p>Coordinating AI agents for safety monitoring across domains.</p>
+                </article>
+              </div>
+              <details class="profile-more">
+                <summary>Other projects and grants</summary>
+                <div class="about-project-grid">
+                  <article class="about-project">
+                    <h3>CRC child-care interaction analysis</h3>
+                    <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Sep. 2024 - Present</em></p>
+                    <p>Speaker diarization and child-parent interaction analysis for emotionally aware care data.</p>
+                  </article>
+                  <article class="about-project">
+                    <h3>DSC planning living lab</h3>
+                    <p class="about-project-meta"><em>Project Leader, Proposal Author &amp; Researcher | Aug. 2024 - Nov. 2024</em></p>
+                    <p>Led planning and proposal work for a field-connected living-lab project.</p>
+                  </article>
+                  <article class="about-project">
+                    <figure class="profile-project-visual">
+                      <img src="{{ '/assets/img/research-energy-scene.webp' | relative_url }}" srcset="{{ '/assets/img/research-energy-scene-small.webp' | relative_url }} 480w, {{ '/assets/img/research-energy-scene.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of photovoltaic panels and electrical equipment." width="960" height="640" loading="lazy" decoding="async">
+                    </figure>
+                    <h3>BK21 AIoT-energy forecasting</h3>
+                    <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
+                    <p>AIoT-energy convergence research with scalable forecasting workflows.</p>
+                  </article>
+                  <article class="about-project">
+                    <h3>BK21 overseas training at Kingston University</h3>
+                    <p class="about-project-meta"><em>Principal Investigator (PI) &amp; Lead Researcher | Dec. 2025 - Feb. 2026</em></p>
+                    <p>Led the overseas training project at Kingston University.</p>
+                  </article>
+                </div>
+              </details>
             </div>
           </section>
 

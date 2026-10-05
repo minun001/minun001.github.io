@@ -1,7 +1,15 @@
 {% assign direction_limit = include.limit | default: site.data.research_directions.size %}
+{% assign directions = site.data.research_directions %}
+{% if include.group %}
+  {% assign directions = directions | where: 'group', include.group %}
+{% endif %}
 <div class="research-topic-grid">
-  {% for direction in site.data.research_directions limit:direction_limit %}
+  {% for direction in directions limit:direction_limit %}
+  {% if direction.link %}
   <a class="research-topic-card" href="{{ direction.link | relative_url }}" aria-labelledby="{{ include.id_prefix }}-topic-{{ forloop.index }}">
+  {% else %}
+  <article class="research-topic-card" aria-labelledby="{{ include.id_prefix }}-topic-{{ forloop.index }}">
+  {% endif %}
     <div class="research-topic-art">
       <img class="research-topic-image" src="{{ direction.image | relative_url }}" srcset="{{ direction.image_small | relative_url }} 480w, {{ direction.image | relative_url }} 960w" sizes="{{ include.sizes }}" alt="{{ direction.alt | escape }}" width="960" height="640" loading="lazy" decoding="async">
     </div>
@@ -9,8 +17,12 @@
       <span class="research-topic-number" aria-hidden="true">0{{ forloop.index }}</span>
       <h3 id="{{ include.id_prefix }}-topic-{{ forloop.index }}">{{ direction.title | escape }}</h3>
       <p>{{ direction.summary | escape }}</p>
-      <span class="research-topic-arrow" aria-hidden="true">&#8599;</span>
+      {% if direction.link %}<span class="research-topic-arrow" aria-hidden="true">&#8599;</span>{% endif %}
     </div>
+  {% if direction.link %}
   </a>
+  {% else %}
+  </article>
+  {% endif %}
   {% endfor %}
 </div>
