@@ -2,12 +2,14 @@ name: Update Google Scholar Data
 
 on:
   push:
+    branches: [main]
     paths:
       - ".github/workflows/update-scholar-metrics.yml"
       - "tools/update_scholar_metrics.py"
       - "tools/scholar_publication_overrides.json"
       - "_data/google-scholar-metrics.json"
       - "_data/google-scholar-publications.json"
+      - "_tests/test_scholar_refresh.py"
   workflow_dispatch:
   schedule:
     - cron: "15 15 * * *"
@@ -31,8 +33,16 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Test Scholar refresh safeguards
+        run: python -B -m unittest discover -s _tests -p test_scholar_refresh.py -v
+
       - name: Refresh Google Scholar data
+        id: scholar
         run: python tools/update_scholar_metrics.py
+
+      - name: Report refresh failure
+        if: failure() && steps.scholar.outcome == 'failure'
+        run: echo "Scholar could not be refreshed. The last successful snapshot remains published; checked dates were not advanced." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit and push updated snapshot
         run: |

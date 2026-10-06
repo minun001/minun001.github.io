@@ -11,6 +11,8 @@ test('Profile uses the requested graduate start year without inventing a month',
   const graduate = profile.split('M.S. in Transportation and Logistics Engineering')[1].split('</div>')[0];
   assert.match(graduate, /2025 - Present/);
   assert.doesNotMatch(graduate, /Mar\. 2025/);
+  assert.match(graduate, /Graduate studies: 2025 - Present/);
+  assert.match(graduate, /Admitted to Hanyang University on July 31, 2026/);
 });
 
 test('Research directions distinguish linked publications from informational cards', () => {
@@ -52,6 +54,19 @@ test('Workspace puts sign-in before its optional preview and keeps the dashboard
   assert.match(workspace, /data-workspace-view="dashboard" data-workspace-private hidden/);
   assert.match(workspace, /id="workspace-helper-url" type="url"/);
   assert.doesNotMatch(workspace, /workspace-login-preview-meter" aria-hidden/);
+});
+
+test('News keeps known dates while ordering 2026 events newest first', () => {
+  const news = read('news/index.html');
+  const year = news.split('id="news-2026"')[1].split('id="news-2025"')[0];
+  assert.ok(year.indexOf('news-its-congress-2026') < year.indexOf('news-hanyang-admission-2026'));
+  assert.ok(year.indexOf('EurOMA 2026 conference contribution') < year.indexOf('news-euroma-award-2026'));
+  assert.doesNotMatch(news, /Fall Conference Presentation on Traffic Sentencing/);
+  assert.match(news, /conference presentation on traffic sentencing prediction<\/h3>\s*<div[^>]*><span class="news-date">Apr\. 2024/);
+});
+
+test('Mobile Publications reserves two label lines without shrinking paper counts', () => {
+  assert.match(read('publications/index.html'), /\.pub-summary-item > span\{font-size:\.875rem;min-height:3em\}/);
 });
 
 function helperFixture(href = 'https://minun001.github.io/workspace/') {

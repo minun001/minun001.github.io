@@ -423,6 +423,26 @@ permalink: /VLA/
       background: #111827;
     }
 
+    .simulation-toggle {
+      display: block;
+      min-height: 44px;
+      margin: 12px;
+      padding: 10px 16px;
+      border: 1px solid #64748b;
+      border-radius: 8px;
+      background: #172436;
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .simulation-toggle[hidden] { display: none; }
+    .simulation-toggle:hover { background: #24415e; }
+    .simulation-toggle:focus-visible { outline: 3px solid #93c5fd; outline-offset: 3px; }
+    .simulation-status { margin: 0 12px 12px; color: #cbd5e1; font-size: .85rem; }
+    .simulation-status:empty { display: none; }
+    [data-simulation-player] noscript a { display: inline-block; padding: 12px; color: #93c5fd; }
+
     .scenario-caption {
       padding: 18px 22px 22px;
       color: #344054;
@@ -727,7 +747,7 @@ permalink: /VLA/
           <h2>두 가지 핵심 조건</h2>
         </div>
         <p class="section-note">
-          GIF는 repo에 존재하는 side-by-side CARLA event asset만 사용했습니다. 수치 해석은 아래 표의 final 150-trial source-of-truth에 따릅니다.
+          정지 화면을 먼저 표시합니다. Play comparison을 누르면 원본 CARLA GIF가 재생됩니다. 수치 해석은 아래 표의 final 150-trial source-of-truth에 따릅니다.
         </p>
       </div>
 
@@ -738,19 +758,25 @@ permalink: /VLA/
             <span>merge 이후 late reaction vs proactive gap</span>
           </div>
           <div class="gif-row">
-            <figure class="gif-frame">
+            <figure class="gif-frame" data-simulation-player data-simulation-label="representative event A">
               <figcaption class="gif-label">
                 <span>Representative event A</span>
                 <span>No-GUIDANCE / GUIDANCE</span>
               </figcaption>
-              <img src="assets/carla_event_a.gif" alt="Side-by-side CARLA visualization for Ramp merge No-GUIDANCE and GUIDANCE comparison.">
+              <img src="assets/carla_event_a-poster.png" data-animation-src="assets/carla_event_a.gif" alt="Side-by-side CARLA visualization for Ramp merge No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
+              <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+              <p class="simulation-status" data-simulation-status role="status"></p>
+              <noscript><a href="assets/carla_event_a.gif">Open original animation A</a></noscript>
             </figure>
-            <figure class="gif-frame">
+            <figure class="gif-frame" data-simulation-player data-simulation-label="representative event B">
               <figcaption class="gif-label">
                 <span>Representative event B</span>
                 <span>No-GUIDANCE / GUIDANCE</span>
               </figcaption>
-              <img src="assets/carla_event_b.gif" alt="Additional side-by-side CARLA visualization for Ramp merge No-GUIDANCE and GUIDANCE comparison." loading="lazy">
+              <img src="assets/carla_event_b-poster.png" data-animation-src="assets/carla_event_b.gif" alt="Additional side-by-side CARLA visualization for Ramp merge No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
+              <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+              <p class="simulation-status" data-simulation-status role="status"></p>
+              <noscript><a href="assets/carla_event_b.gif">Open original animation B</a></noscript>
             </figure>
           </div>
           <div class="scenario-caption">
@@ -765,19 +791,25 @@ permalink: /VLA/
             <span>closing risk vs gap-first response</span>
           </div>
           <div class="gif-row">
-            <figure class="gif-frame">
+            <figure class="gif-frame" data-simulation-player data-simulation-label="representative event C">
               <figcaption class="gif-label">
                 <span>Representative event C</span>
                 <span>No-GUIDANCE / GUIDANCE</span>
               </figcaption>
-              <img src="assets/carla_event_c.gif" alt="Side-by-side CARLA visualization for Speed-gap stress No-GUIDANCE and GUIDANCE comparison." loading="lazy">
+              <img src="assets/carla_event_c-poster.png" data-animation-src="assets/carla_event_c.gif" alt="Side-by-side CARLA visualization for Speed-gap stress No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
+              <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+              <p class="simulation-status" data-simulation-status role="status"></p>
+              <noscript><a href="assets/carla_event_c.gif">Open original animation C</a></noscript>
             </figure>
-            <figure class="gif-frame">
+            <figure class="gif-frame" data-simulation-player data-simulation-label="representative event D">
               <figcaption class="gif-label">
                 <span>Representative event D</span>
                 <span>No-GUIDANCE / GUIDANCE</span>
               </figcaption>
-              <img src="assets/carla_event_d.gif" alt="Additional side-by-side CARLA visualization for Speed-gap stress No-GUIDANCE and GUIDANCE comparison." loading="lazy">
+              <img src="assets/carla_event_d-poster.png" data-animation-src="assets/carla_event_d.gif" alt="Additional side-by-side CARLA visualization for Speed-gap stress No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
+              <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+              <p class="simulation-status" data-simulation-status role="status"></p>
+              <noscript><a href="assets/carla_event_d.gif">Open original animation D</a></noscript>
             </figure>
           </div>
           <div class="scenario-caption">
@@ -847,21 +879,33 @@ permalink: /VLA/
       </div>
 
       <div class="example-strip" aria-label="Representative simulation examples">
-        <figure class="example-card">
-          <img src="assets/carla_event_a.gif" alt="Representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison.">
+        <figure class="example-card" data-simulation-player data-simulation-label="simulation example A">
+          <img src="assets/carla_event_a-poster.png" data-animation-src="assets/carla_event_a.gif" alt="Representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
           <figcaption>대표 시뮬레이션 예시 A: 두 조건의 반응 시점 비교</figcaption>
+          <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+          <p class="simulation-status" data-simulation-status role="status"></p>
+          <noscript><a href="assets/carla_event_a.gif">Open original animation A</a></noscript>
         </figure>
-        <figure class="example-card">
-          <img src="assets/carla_event_b.gif" alt="Second representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison." loading="lazy">
+        <figure class="example-card" data-simulation-player data-simulation-label="simulation example B">
+          <img src="assets/carla_event_b-poster.png" data-animation-src="assets/carla_event_b.gif" alt="Second representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
           <figcaption>대표 시뮬레이션 예시 B: gap 형성 과정 확인</figcaption>
+          <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+          <p class="simulation-status" data-simulation-status role="status"></p>
+          <noscript><a href="assets/carla_event_b.gif">Open original animation B</a></noscript>
         </figure>
-        <figure class="example-card">
-          <img src="assets/carla_event_c.gif" alt="Third representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison." loading="lazy">
+        <figure class="example-card" data-simulation-player data-simulation-label="simulation example C">
+          <img src="assets/carla_event_c-poster.png" data-animation-src="assets/carla_event_c.gif" alt="Third representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
           <figcaption>대표 시뮬레이션 예시 C: traffic response 비교</figcaption>
+          <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+          <p class="simulation-status" data-simulation-status role="status"></p>
+          <noscript><a href="assets/carla_event_c.gif">Open original animation C</a></noscript>
         </figure>
-        <figure class="example-card">
-          <img src="assets/carla_event_d.gif" alt="Fourth representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison." loading="lazy">
+        <figure class="example-card" data-simulation-player data-simulation-label="simulation example D">
+          <img src="assets/carla_event_d-poster.png" data-animation-src="assets/carla_event_d.gif" alt="Fourth representative CARLA simulation example for No-GUIDANCE and GUIDANCE comparison." width="860" height="241" loading="lazy" decoding="async">
           <figcaption>대표 시뮬레이션 예시 D: 위험 접근 구간 비교</figcaption>
+          <button class="simulation-toggle" type="button" data-simulation-toggle hidden>Play comparison</button>
+          <p class="simulation-status" data-simulation-status role="status"></p>
+          <noscript><a href="assets/carla_event_d.gif">Open original animation D</a></noscript>
         </figure>
       </div>
 
@@ -1149,7 +1193,9 @@ permalink: /VLA/
   </main>
 
   <footer class="page">
+    <p><a href="{{ '/profile/' | relative_url }}">Back to Profile</a> · <a href="{{ '/' | relative_url }}">Home</a></p>
     <strong>Hyunsik Min</strong> · Department of Transportation and Logistics Engineering, Hanyang University · minun001@hanyang.ac.kr
   </footer>
+  <script src="{{ '/assets/vla-media.js' | relative_url }}" defer></script>
 </body>
 </html>

@@ -4,8 +4,10 @@ import html
 import json
 import os
 import re
+import time
 import unicodedata
 from datetime import datetime, timedelta, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
@@ -58,8 +60,18 @@ def fetch_html(url: str) -> str:
             "Accept-Language": "en-US,en;q=0.9",
         },
     )
-    with urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8", "ignore")
+    for attempt in range(3):
+        try:
+            with urlopen(request, timeout=30) as response:
+                return response.read().decode("utf-8", "ignore")
+        except HTTPError as error:
+            if error.code not in {429, 500, 502, 503, 504} or attempt == 2:
+                raise
+        except (URLError, TimeoutError):
+            if attempt == 2:
+                raise
+        time.sleep(2 ** (attempt + 1))
+    raise RuntimeError("Google Scholar request did not complete")
 
 
 def clean_html_text(value: str) -> str:
@@ -79,20 +91,54 @@ def load_json_if_exists(path: Path) -> dict[str, Any] | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def parse_metrics(profile_html: str) -> dict[str, dict[str, int]]:
-    metric_map: dict[str, dict[str, int]] = {}
-    pattern = re.compile(
-        r">(?P<label>Citations|h-index|i10-index)</a></td>"
-        r"<td class=\"gsc_rsb_std\">(?P<all>\d+)</td>"
-        r"<td class=\"gsc_rsb_std\">(?P<recent>\d+)</td>"
-    )
+class MetricsTableParser(HTMLParser):
+    """Read the metrics table without depending on attribute order or whitespace."""
 
-    for match in pattern.finditer(profile_html):
-        label = match.group("label")
+    def __init__(self) -> None:
+        super().__init__()
+        self.in_table = False
+        self.rows: list[list[str]] = []
+        self.row: list[str] = []
+        self.cell: list[str] | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "table" and dict(attrs).get("id") == "gsc_rsb_st":
+            self.in_table = True
+        if self.in_table and tag == "tr":
+            self.row = []
+        if self.in_table and tag == "td":
+            self.cell = []
+
+    def handle_data(self, data: str) -> None:
+        if self.cell is not None:
+            self.cell.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "td" and self.cell is not None:
+            self.row.append(" ".join("".join(self.cell).split()))
+            self.cell = None
+        if self.in_table and tag == "tr":
+            self.rows.append(self.row)
+        if self.in_table and tag == "table":
+            self.in_table = False
+
+
+def parse_metrics(profile_html: str) -> dict[str, dict[str, int]]:
+    parser = MetricsTableParser()
+    parser.feed(profile_html)
+    metric_map: dict[str, dict[str, int]] = {}
+
+    for row in parser.rows:
+        if len(row) < 3 or row[0] not in {"Citations", "h-index", "i10-index"}:
+            continue
+        label = row[0]
         key = label.lower().replace("-", "_")
+        counts = [value.replace(",", "") for value in row[1:3]]
+        if not all(value.isdigit() for value in counts):
+            continue
         metric_map[key] = {
-            "all": int(match.group("all")),
-            "since_2021": int(match.group("recent")),
+            "all": int(counts[0]),
+            "since_2021": int(counts[1]),
         }
 
     expected = {"citations", "h_index", "i10_index"}
@@ -142,6 +188,8 @@ def parse_profile_rows(profile_html: str) -> list[dict[str, Any]]:
 
 def parse_detail_page(detail_html: str) -> dict[str, str]:
     title_match = re.search(r'id=\"gsc_oci_title\">(.*?)</div>', detail_html, flags=re.DOTALL)
+    if not title_match or not clean_html_text(title_match.group(1)):
+        raise RuntimeError("Google Scholar returned an unreadable publication detail page")
     detail_map: dict[str, str] = {"title": clean_html_text(title_match.group(1)) if title_match else ""}
 
     field_pattern = re.compile(
@@ -517,16 +565,9 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def payload_without_refresh_stamp(payload: dict[str, Any]) -> dict[str, Any]:
-    stripped = json.loads(json.dumps(payload))
-    stripped.pop("checked_at", None)
-    stripped.pop("checked_at_display", None)
-    return stripped
-
-
 def write_publications_payload_if_changed(payload: dict[str, Any]) -> bool:
     current_payload = load_json_if_exists(PUBLICATIONS_OUTPUT_PATH)
-    if current_payload and payload_without_refresh_stamp(current_payload) == payload_without_refresh_stamp(payload):
+    if current_payload == payload:
         return False
     write_json(PUBLICATIONS_OUTPUT_PATH, payload)
     return True
@@ -538,6 +579,8 @@ def main() -> None:
         profile_html = fetch_html(PROFILE_URL)
         metrics = parse_metrics(profile_html)
         rows = parse_profile_rows(profile_html)
+        if not rows:
+            raise RuntimeError("Google Scholar returned no readable publication rows")
 
         override_map: dict[str, dict[str, Any]] = overrides.get("scholar_overrides", {})
         records: list[dict[str, Any]] = []
@@ -563,10 +606,10 @@ def main() -> None:
             f"and {publications_payload['total_records']} publication records "
             f"({'changed' if publications_changed else 'no publication changes'})."
         )
-    except (HTTPError, URLError, RuntimeError) as error:
+    except (HTTPError, URLError, TimeoutError, RuntimeError) as error:
         if os.environ.get("GITHUB_ACTIONS") == "true":
-            print(f"Skipping Google Scholar refresh in GitHub Actions: {error}")
-            return
+            message = str(error).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+            print(f"::error::Google Scholar refresh failed; last good snapshot retained. {message}")
         raise
 
 
