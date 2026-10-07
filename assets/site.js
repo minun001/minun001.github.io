@@ -544,6 +544,7 @@
     var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-news-filter]'));
     var items = Array.prototype.slice.call(root.querySelectorAll('[data-news-item]'));
     var years = Array.prototype.slice.call(root.querySelectorAll('[data-news-year]'));
+    var yearLinks = Array.prototype.slice.call(root.querySelectorAll('.news-jump a[href^="#"]'));
     var empty = root.querySelector('[data-news-empty]');
     var params = new URLSearchParams(window.location.search);
     if (!buttons.length || !items.length) return;
@@ -582,6 +583,12 @@
           }
         );
         year.hidden = !hasVisibleItem;
+      });
+
+      yearLinks.forEach(function (link) {
+        var year = root.querySelector(link.getAttribute('href'));
+        link.hidden = !year || year.hidden;
+        if (link.hidden) link.classList.remove('is-active');
       });
 
       if (empty) empty.hidden = visibleCount !== 0;

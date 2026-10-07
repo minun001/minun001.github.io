@@ -332,10 +332,12 @@ def build_bibtex(record: dict[str, Any]) -> str:
     year = record.get("year")
     entry_type = "article" if "journals" in record["category"] else "inproceedings"
     venue_field = "journal" if entry_type == "article" else "booktitle"
+    # Scholar's display list uses commas; BibTeX separates people with "and".
+    authors = " and ".join(author.strip() for author in record.get("authors", "").split(",") if author.strip())
     lines = [
         f"@{entry_type}{{{build_bibtex_key(record['title'], record.get('authors', ''), year)},",
         f"  title={{{record['title']}}},",
-        f"  author={{{record.get('authors', '')}}},",
+        f"  author={{{authors}}},",
         f"  {venue_field}={{{record.get('venue', '')}}},",
     ]
     if record.get("volume"):

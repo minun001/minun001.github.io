@@ -1,4 +1,5 @@
 import io
+import json
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
@@ -51,17 +52,38 @@ class ScholarRefreshTests(unittest.TestCase):
             self.assertTrue(output.call_args.args[0].startswith("::error::"))
 
     def test_empty_archive_is_not_published(self):
-        with patch.object(scholar, "load_overrides", return_value={}), patch.object(scholar, "fetch_html", return_value=METRICS_HTML), patch.object(scholar, "write_json") as write:
+        with patch.dict(scholar.os.environ, {"GITHUB_ACTIONS": "true"}), patch.object(scholar, "load_overrides", return_value={}), patch.object(scholar, "fetch_html", return_value=METRICS_HTML), patch.object(scholar, "write_json") as write, patch("builtins.print") as output:
             with self.assertRaisesRegex(RuntimeError, "no readable publication rows"):
                 scholar.main()
             write.assert_not_called()
+            self.assertTrue(output.call_args.args[0].startswith("::error::"))
 
     def test_failed_detail_request_does_not_update_aggregate_metrics(self):
         row = {"scholar_url": "https://scholar.google.com/detail"}
-        with patch.object(scholar, "load_overrides", return_value={}), patch.object(scholar, "fetch_html", side_effect=[METRICS_HTML, "Captcha"]), patch.object(scholar, "parse_profile_rows", return_value=[row]), patch.object(scholar, "write_json") as write:
+        with patch.dict(scholar.os.environ, {"GITHUB_ACTIONS": "true"}), patch.object(scholar, "load_overrides", return_value={}), patch.object(scholar, "fetch_html", side_effect=[METRICS_HTML, "Captcha"]), patch.object(scholar, "parse_profile_rows", return_value=[row]), patch.object(scholar, "write_json") as write, patch("builtins.print") as output:
             with self.assertRaises(RuntimeError):
                 scholar.main()
             write.assert_not_called()
+            self.assertTrue(output.call_args.args[0].startswith("::error::"))
+
+    def test_bibtex_uses_and_between_individual_authors(self):
+        for authors, expected in [
+            ("Hyunsik Min, Byeongjoon Noh", "Hyunsik Min and Byeongjoon Noh"),
+            (" Hyunsik Min , Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh ", "Hyunsik Min and Gyeongseon Baek and Yeeun Kim and Byeongjoon Noh"),
+            ("Hyunsik Min", "Hyunsik Min"),
+        ]:
+            with self.subTest(authors=authors):
+                record = {"title": "Example", "category": "international-journals", "year": 2026, "authors": authors}
+                self.assertIn(f"author={{{expected}}}", scholar.build_bibtex(record))
+                self.assertEqual(record["authors"], authors)
+
+    def test_published_bibtex_matches_generator_without_changing_display_authors(self):
+        payload = json.loads(scholar.PUBLICATIONS_OUTPUT_PATH.read_text(encoding="utf-8"))
+        records = [record for section in payload["sections"] for record in section["items"] if record.get("bibtex")]
+        self.assertTrue(records)
+        for record in records:
+            with self.subTest(title=record["title"]):
+                self.assertEqual(record["bibtex"], scholar.build_bibtex(record))
 
     def test_transient_fetch_is_retried_with_bounded_backoff(self):
         with patch.object(scholar, "urlopen", side_effect=[URLError("temporary"), io.BytesIO(b"ok")]) as fetch, patch.object(scholar.time, "sleep") as sleep:
