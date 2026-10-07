@@ -33,14 +33,14 @@ test('Selected research resolves existing publications instead of duplicating bi
   assert.match(card, /#publication-\{\{ project_paper\.id \| escape \}\}/);
 });
 
-test('Research is public and links to controlled simulation evidence with an explicit boundary', () => {
+test('Research stays public without the removed simulation demo or its navigation link', () => {
   const research = read('research/index.html');
   assert.match(research, /body_class: page-research/);
   assert.doesNotMatch(research, /workspace-config|workspace\.js|data-workspace-private|sessionStorage|\.gif/);
-  assert.match(research, /Controlled CARLA simulation evidence only; not real-world vehicle safety certification\./);
-  assert.match(research, /href="\{\{ '\/VLA\/' \| relative_url \}\}"/);
+  assert.doesNotMatch(research, /Simulation demo|research-demo|Scene reasoning for proactive driving|Open comparison and limitations|\/VLA\//);
+  assert.ok(existsSync(join(root, 'VLA/index.html')));
   assert.ok(existsSync(join(root, 'VLA/assets/carla_event_a-poster.png')));
-  for (const id of ['research-directions', 'research-work', 'research-demo']) {
+  for (const id of ['research-directions', 'research-work']) {
     assert.ok(research.includes(`id="${id}"`));
     assert.ok(research.includes(`href="#${id}"`));
   }
