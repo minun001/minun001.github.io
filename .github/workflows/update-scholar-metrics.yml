@@ -7,15 +7,21 @@ on:
       - ".github/workflows/update-scholar-metrics.yml"
       - "tools/update_scholar_metrics.py"
       - "tools/scholar_publication_overrides.json"
-      - "_data/google-scholar-metrics.json"
-      - "_data/google-scholar-publications.json"
+      - "tools/scholar_local_fallback.ps1"
+      - "tools/register_scholar_local_fallback_task.ps1"
       - "_tests/test_scholar_refresh.py"
   workflow_dispatch:
+    inputs:
+      force_refresh:
+        description: "Query Scholar even if both snapshots were checked today"
+        type: boolean
+        default: false
   schedule:
     - cron: "15 15 * * *"
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: scholar-metrics-update
@@ -23,7 +29,9 @@ concurrency:
 
 jobs:
   update:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -31,22 +39,46 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.12"
 
       - name: Test Scholar refresh safeguards
         run: python -B -m unittest discover -s _tests -p test_scholar_refresh.py -v
 
       - name: Refresh Google Scholar data
         id: scholar
-        run: python tools/update_scholar_metrics.py
+        if: github.event_name != 'push'
+        env:
+          FORCE_REFRESH: ${{ inputs.force_refresh || false }}
+        run: |
+          args=(--defer-on-block --max-stale-days 3)
+          if [[ "$FORCE_REFRESH" != "true" ]]; then
+            args+=(--skip-if-fresh)
+          fi
+          python -B tools/update_scholar_metrics.py "${args[@]}"
+
+      - name: Report refresh outcome
+        if: always() && steps.scholar.outcome == 'success'
+        env:
+          SCHOLAR_STATUS: ${{ steps.scholar.outputs.status }}
+          SCHOLAR_CHECKED_AT: ${{ steps.scholar.outputs.checked_at }}
+          SCHOLAR_STALE_DAYS: ${{ steps.scholar.outputs.stale_days }}
+        run: |
+          {
+            echo "Scholar refresh: $SCHOLAR_STATUS"
+            echo "Last successful check (KST): $SCHOLAR_CHECKED_AT; age: $SCHOLAR_STALE_DAYS day(s)."
+            if [[ "$SCHOLAR_STATUS" == "deferred" ]]; then
+              echo "Scholar access was blocked or unavailable. Existing snapshots were NOT refreshed. The trusted-PC fallback is scheduled separately."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Report refresh failure
         if: failure() && steps.scholar.outcome == 'failure'
         run: echo "Scholar could not be refreshed. The last successful snapshot remains published; checked dates were not advanced." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit and push updated snapshot
+        if: steps.scholar.outputs.status == 'updated'
         run: |
-          if git diff --quiet; then
+          if git diff --quiet -- _data/google-scholar-metrics.json _data/google-scholar-publications.json; then
             echo "No Scholar changes detected."
             exit 0
           fi
@@ -54,4 +86,30 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add _data/google-scholar-metrics.json _data/google-scholar-publications.json
           git commit -m "Update Google Scholar data"
+          git pull --rebase origin main
           git push
+
+      - name: Publish and verify the latest Scholar snapshot
+        if: steps.scholar.outputs.status == 'updated' || (github.event_name == 'workflow_dispatch' && steps.scholar.outputs.status == 'fresh')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # GITHUB_TOKEN commits do not trigger branch-based Pages builds.
+          expected_commit="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq '.sha')"
+          build_url="$(gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --jq '.url')"
+          for attempt in {1..30}; do
+            build="$(gh api "$build_url")"
+            status="$(jq -r '.status' <<< "$build")"
+            commit="$(jq -r '.commit' <<< "$build")"
+            if [[ "$status" == "built" && "$commit" == "$expected_commit" ]]; then
+              echo "GitHub Pages published Scholar snapshot at $commit." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            if [[ "$status" == "errored" ]]; then
+              echo "::error::GitHub Pages build failed after Scholar refresh."
+              exit 1
+            fi
+            sleep 10
+          done
+          echo "::error::Timed out verifying the GitHub Pages build for $expected_commit."
+          exit 1

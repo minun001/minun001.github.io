@@ -1,7 +1,9 @@
 import io
 import json
 import unittest
-from unittest.mock import patch
+from datetime import timedelta
+from pathlib import Path
+from unittest.mock import mock_open, patch
 from urllib.error import HTTPError, URLError
 
 from tools import update_scholar_metrics as scholar
@@ -17,6 +19,141 @@ METRICS_HTML = """
 
 
 class ScholarRefreshTests(unittest.TestCase):
+    def setUp(self):
+        self.environment = patch.dict(scholar.os.environ, {"GITHUB_OUTPUT": ""})
+        self.environment.start()
+        self.addCleanup(self.environment.stop)
+        self.today = scholar.datetime.now(scholar.KST).date()
+
+    def snapshots(self, checked=None):
+        checked_at = (checked or self.today).isoformat()
+        return {
+            scholar.METRICS_OUTPUT_PATH: {
+                "checked_at": checked_at,
+                "citations": {"all": 52}, "h_index": {"all": 3}, "i10_index": {"all": 2},
+            },
+            scholar.PUBLICATIONS_OUTPUT_PATH: {
+                "checked_at": checked_at, "total_records": 1,
+                "sections": [{"count": 1, "items": [{"source": "scholar"}]}],
+            },
+        }
+
+    def test_fresh_complete_snapshots_skip_all_network_access(self):
+        payloads = self.snapshots()
+        with patch.object(scholar, "load_json_if_exists", side_effect=payloads.get), patch.object(scholar, "fetch_html") as fetch, patch.object(scholar, "load_overrides") as overrides, patch.object(scholar, "write_json") as write:
+            self.assertEqual(scholar.main(skip_if_fresh=True), "fresh")
+            fetch.assert_not_called()
+            overrides.assert_not_called()
+            write.assert_not_called()
+
+    def test_snapshot_validation_rejects_missing_mismatched_future_or_incomplete_data(self):
+        for kind in ("missing", "mismatch", "future", "empty", "wrong_total", "wrong_count", "negative", "boolean", "manual_only"):
+            payloads = self.snapshots()
+            metrics = payloads[scholar.METRICS_OUTPUT_PATH]
+            archive = payloads[scholar.PUBLICATIONS_OUTPUT_PATH]
+            if kind == "missing":
+                payloads.pop(scholar.PUBLICATIONS_OUTPUT_PATH)
+            elif kind == "mismatch":
+                archive["checked_at"] = (self.today - timedelta(days=1)).isoformat()
+            elif kind == "future":
+                for payload in payloads.values():
+                    payload["checked_at"] = (self.today + timedelta(days=1)).isoformat()
+            elif kind == "empty":
+                archive["sections"] = []
+            elif kind == "wrong_total":
+                archive["total_records"] = 2
+            elif kind == "wrong_count":
+                archive["sections"][0]["count"] = 2
+            elif kind == "negative":
+                metrics["citations"]["all"] = -1
+            elif kind == "boolean":
+                metrics["citations"]["all"] = True
+            elif kind == "manual_only":
+                archive["sections"][0]["items"][0]["source"] = "manual"
+            with self.subTest(kind=kind), patch.object(scholar, "load_json_if_exists", side_effect=payloads.get):
+                self.assertIsNone(scholar.last_successful_check(self.today))
+
+    def test_invalid_json_cannot_be_used_as_a_fallback(self):
+        error = json.JSONDecodeError("invalid", "", 0)
+        with patch.object(scholar, "load_json_if_exists", side_effect=error):
+            self.assertIsNone(scholar.last_successful_check(self.today))
+
+    def test_recent_access_block_is_explicitly_deferred_without_rewriting_dates(self):
+        checked = self.today - timedelta(days=1)
+        errors = [HTTPError("https://scholar.google.com", 403, "Forbidden", {}, None), scholar.ScholarAccessBlocked("Captcha"), URLError("temporary")]
+        for error in errors:
+            with self.subTest(error=error), patch.dict(scholar.os.environ, {"GITHUB_ACTIONS": "true"}), patch.object(scholar, "last_successful_check", return_value=checked), patch.object(scholar, "fetch_html", side_effect=error), patch.object(scholar, "write_json") as write, patch.object(scholar, "report_refresh") as report, patch("builtins.print") as output:
+                self.assertEqual(scholar.main(defer_on_block=True), "deferred")
+                write.assert_not_called()
+                report.assert_called_once_with("deferred", checked, self.today)
+                self.assertIn("::warning::", output.call_args.args[0])
+                self.assertIn("NOT updated", output.call_args.args[0])
+
+    def test_access_failure_is_fatal_with_missing_or_three_day_old_snapshots(self):
+        for checked in (None, self.today - timedelta(days=3), self.today - timedelta(days=4)):
+            error = HTTPError("https://scholar.google.com", 403, "Forbidden", {}, None)
+            with self.subTest(checked=checked), patch.object(scholar, "last_successful_check", return_value=checked), patch.object(scholar, "fetch_html", side_effect=error), patch.object(scholar, "write_json") as write:
+                with self.assertRaises(HTTPError):
+                    scholar.main(defer_on_block=True)
+                write.assert_not_called()
+
+    def test_parser_errors_are_not_hidden_as_access_blocks(self):
+        with patch.object(scholar, "last_successful_check", return_value=self.today), patch.object(scholar, "fetch_html", return_value="<html>changed markup</html>"), patch.object(scholar, "write_json") as write:
+            with self.assertRaisesRegex(RuntimeError, "Failed to parse metrics"):
+                scholar.main(defer_on_block=True)
+            write.assert_not_called()
+
+    def test_strict_local_refresh_still_fails_on_access_block(self):
+        error = HTTPError("https://scholar.google.com", 403, "Forbidden", {}, None)
+        with patch.object(scholar, "last_successful_check", return_value=self.today), patch.object(scholar, "fetch_html", side_effect=error), self.assertRaises(HTTPError):
+            scholar.main()
+
+    def test_hidden_records_are_not_requested_and_success_reports_updated(self):
+        rows = [{"citation_id": "hidden", "scholar_url": "hidden"}, {"citation_id": "visible", "scholar_url": "visible"}]
+        overrides = {"profile_name": "Example", "scholar_overrides": {"hidden": {"hidden": True}}}
+        with patch.object(scholar, "load_overrides", return_value=overrides), patch.object(scholar, "fetch_html", side_effect=[METRICS_HTML, "detail"]) as fetch, patch.object(scholar, "parse_profile_rows", return_value=rows), patch.object(scholar, "parse_detail_page", return_value={}), patch.object(scholar, "build_scholar_record", return_value={"id": "visible"}), patch.object(scholar, "build_publications_payload", return_value={"total_records": 1}), patch.object(scholar, "write_json"), patch.object(scholar, "write_publications_payload_if_changed", return_value=True), patch.object(scholar, "report_refresh") as report:
+            self.assertEqual(scholar.main(), "updated")
+            self.assertEqual([call.args[0] for call in fetch.call_args_list], [scholar.PROFILE_URL, "visible"])
+            self.assertEqual(report.call_args.args[0], "updated")
+
+    def test_actions_outputs_distinguish_deferred_from_updated(self):
+        checked = self.today - timedelta(days=1)
+        with patch.dict(scholar.os.environ, {"GITHUB_OUTPUT": "step-output"}), patch("builtins.open", mock_open()) as output:
+            scholar.report_refresh("deferred", checked, self.today)
+            output.assert_called_once_with("step-output", "a", encoding="utf-8")
+            written = "".join(call.args[0] for call in output().write.call_args_list)
+            self.assertEqual(written, f"status=deferred\nchecked_at={checked}\nstale_days=1\n")
+
+    def test_workflow_never_refetches_on_data_commits_or_source_pushes(self):
+        workflow = Path(".github/workflows/update-scholar-metrics.yml").read_text(encoding="utf-8")
+        push = workflow.split("  push:", 1)[1].split("  workflow_dispatch:", 1)[0]
+        self.assertNotIn("_data/", push)
+        refresh = workflow.split("      - name: Refresh Google Scholar data", 1)[1].split("      - name:", 1)[0]
+        self.assertIn("if: github.event_name != 'push'", refresh)
+        self.assertIn("--skip-if-fresh", refresh)
+        self.assertIn("--defer-on-block --max-stale-days 3", refresh)
+        self.assertIn("if: steps.scholar.outputs.status == 'updated'", workflow)
+        self.assertIn("if: github.ref == 'refs/heads/main'", workflow)
+        self.assertIn("  pages: write", workflow)
+        self.assertIn('gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"', workflow)
+
+    def test_powershell_fallback_validates_both_snapshots_without_extra_log_files(self):
+        fallback = Path("tools/scholar_local_fallback.ps1").read_text(encoding="utf-8")
+        self.assertIn('"--skip-if-fresh"', fallback)
+        self.assertIn('"-B", $UpdateScriptPath', fallback)
+        self.assertNotIn("Add-Content", fallback)
+        self.assertNotIn("$LogPath", fallback)
+
+    def test_unexpected_http_errors_are_not_deferred(self):
+        error = HTTPError("https://scholar.google.com", 404, "Not found", {}, None)
+        with patch.object(scholar, "last_successful_check", return_value=self.today), patch.object(scholar, "fetch_html", side_effect=error), self.assertRaises(HTTPError):
+            scholar.main(defer_on_block=True)
+
+    def test_nonpositive_staleness_limit_is_rejected_before_fetch(self):
+        with patch.object(scholar, "fetch_html") as fetch, self.assertRaises(ValueError):
+            scholar.main(max_stale_days=0)
+        fetch.assert_not_called()
+
     def test_metrics_accept_whitespace_nested_text_and_attribute_variations(self):
         result = scholar.parse_metrics(METRICS_HTML)
         self.assertEqual(result["citations"], {"all": 1234, "since_2021": 52})

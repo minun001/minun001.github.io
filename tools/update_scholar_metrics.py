@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import argparse
 import html
 import json
 import os
 import re
 import time
 import unicodedata
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -52,6 +53,16 @@ CONFERENCE_HINTS = (
 )
 
 
+class ScholarAccessBlocked(RuntimeError):
+    """Scholar returned a challenge instead of public profile data."""
+
+
+def reject_access_challenge(page: str) -> None:
+    lowered = page.lower()
+    if any(marker in lowered for marker in ("captcha", "unusual traffic", "automated queries", "/sorry/")):
+        raise ScholarAccessBlocked("Google Scholar returned an access challenge")
+
+
 def fetch_html(url: str) -> str:
     request = Request(
         url,
@@ -89,6 +100,52 @@ def load_json_if_exists(path: Path) -> dict[str, Any] | None:
     if not path.exists():
         return None
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def last_successful_check(today: date) -> date | None:
+    """Both complete snapshots must agree before a refresh can be skipped/deferred."""
+    try:
+        metrics = load_json_if_exists(METRICS_OUTPUT_PATH)
+        publications = load_json_if_exists(PUBLICATIONS_OUTPUT_PATH)
+        if not isinstance(metrics, dict) or not isinstance(publications, dict):
+            return None
+        checked = date.fromisoformat(metrics["checked_at"])
+        if checked > today or publications["checked_at"] != checked.isoformat():
+            return None
+        for key in ("citations", "h_index", "i10_index"):
+            count = metrics[key]["all"]
+            if type(count) is not int or count < 0:
+                return None
+        sections = publications["sections"]
+        records = [record for section in sections for record in section["items"]]
+        if not records or len(records) != publications["total_records"]:
+            return None
+        if any(section["count"] != len(section["items"]) for section in sections):
+            return None
+        if not any(record.get("source") == "scholar" for record in records):
+            return None
+        return checked
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return None
+
+
+def report_refresh(status: str, checked: date | None, today: date) -> None:
+    values = {
+        "status": status,
+        "checked_at": checked.isoformat() if checked else "unknown",
+        "stale_days": str((today - checked).days) if checked else "unknown",
+    }
+    output_path = os.environ.get("GITHUB_OUTPUT")
+    if output_path:
+        with open(output_path, "a", encoding="utf-8") as output:
+            for key, value in values.items():
+                output.write(f"{key}={value}\n")
+
+
+def can_defer(error: Exception) -> bool:
+    if isinstance(error, HTTPError):
+        return error.code in {403, 429, 500, 502, 503, 504}
+    return isinstance(error, (ScholarAccessBlocked, URLError, TimeoutError))
 
 
 class MetricsTableParser(HTMLParser):
@@ -144,6 +201,7 @@ def parse_metrics(profile_html: str) -> dict[str, dict[str, int]]:
     expected = {"citations", "h_index", "i10_index"}
     missing = expected.difference(metric_map)
     if missing:
+        reject_access_challenge(profile_html)
         raise RuntimeError(f"Failed to parse metrics from Google Scholar: missing {sorted(missing)}")
 
     return metric_map
@@ -189,6 +247,7 @@ def parse_profile_rows(profile_html: str) -> list[dict[str, Any]]:
 def parse_detail_page(detail_html: str) -> dict[str, str]:
     title_match = re.search(r'id=\"gsc_oci_title\">(.*?)</div>', detail_html, flags=re.DOTALL)
     if not title_match or not clean_html_text(title_match.group(1)):
+        reject_access_challenge(detail_html)
         raise RuntimeError("Google Scholar returned an unreadable publication detail page")
     detail_map: dict[str, str] = {"title": clean_html_text(title_match.group(1)) if title_match else ""}
 
@@ -575,7 +634,15 @@ def write_publications_payload_if_changed(payload: dict[str, Any]) -> bool:
     return True
 
 
-def main() -> None:
+def main(*, skip_if_fresh: bool = False, defer_on_block: bool = False, max_stale_days: int = 3) -> str:
+    if max_stale_days < 1:
+        raise ValueError("max_stale_days must be at least 1")
+    today = datetime.now(KST).date()
+    checked = last_successful_check(today)
+    if skip_if_fresh and checked == today:
+        print(f"Google Scholar snapshots already checked on {today} (KST); no request made.")
+        report_refresh("fresh", checked, today)
+        return "fresh"
     overrides = load_overrides()
     try:
         profile_html = fetch_html(PROFILE_URL)
@@ -586,10 +653,17 @@ def main() -> None:
 
         override_map: dict[str, dict[str, Any]] = overrides.get("scholar_overrides", {})
         records: list[dict[str, Any]] = []
+        detail_requests = 0
         for row in rows:
+            override = override_map.get(row.get("citation_id", ""))
+            if override and override.get("hidden"):
+                continue
+            if detail_requests:
+                time.sleep(1)
+            detail_requests += 1
             detail_html = fetch_html(row["scholar_url"])
             detail_map = parse_detail_page(detail_html)
-            record = build_scholar_record(row, detail_map, override_map.get(row["citation_id"]))
+            record = build_scholar_record(row, detail_map, override)
             if record:
                 records.append(record)
 
@@ -608,7 +682,20 @@ def main() -> None:
             f"and {publications_payload['total_records']} publication records "
             f"({'changed' if publications_changed else 'no publication changes'})."
         )
+        report_refresh("updated", date.fromisoformat(metrics_payload["checked_at"]), today)
+        return "updated"
     except (HTTPError, URLError, TimeoutError, RuntimeError) as error:
+        age = (today - checked).days if checked else None
+        if defer_on_block and can_defer(error) and age is not None and age < max_stale_days:
+            message = (
+                "Google Scholar refresh deferred, NOT updated; last good snapshots retained "
+                f"from {checked} ({age} day(s) old). The trusted-PC fallback can retry. {error}"
+            )
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                message = "::warning::" + message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+            print(message)
+            report_refresh("deferred", checked, today)
+            return "deferred"
         if os.environ.get("GITHUB_ACTIONS") == "true":
             message = str(error).replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
             print(f"::error::Google Scholar refresh failed; last good snapshot retained. {message}")
@@ -616,4 +703,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Refresh verified Google Scholar snapshots without fine-grained duplicate requests.")
+    parser.add_argument("--skip-if-fresh", action="store_true", help="Skip network access when both snapshots were checked today (KST).")
+    parser.add_argument("--defer-on-block", action="store_true", help="Keep a recent verified snapshot on an external access failure; report deferred, not updated.")
+    parser.add_argument("--max-stale-days", type=int, default=3, help="Fail on access errors once the verified snapshot reaches this age (default: 3 days).")
+    main(**vars(parser.parse_args()))
