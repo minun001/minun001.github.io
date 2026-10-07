@@ -20,7 +20,7 @@ METRICS_HTML = """
 
 class ScholarRefreshTests(unittest.TestCase):
     def setUp(self):
-        self.environment = patch.dict(scholar.os.environ, {"GITHUB_OUTPUT": ""})
+        self.environment = patch.dict(scholar.os.environ, {"GITHUB_ACTIONS": "false", "GITHUB_OUTPUT": ""})
         self.environment.start()
         self.addCleanup(self.environment.stop)
         self.today = scholar.datetime.now(scholar.KST).date()
