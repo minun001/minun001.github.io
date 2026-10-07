@@ -1,0 +1,98 @@
+---
+layout: default
+title: Research
+description: Vehicle prediction, traffic understanding, and scene-to-action reasoning by Hyunsik Min.
+body_class: page-research
+research_visuals: true
+---
+<style>
+  .research-chapter { display: grid; gap: 2.5rem; }
+  .research-chapter h1 { margin: 0 0 .65rem; font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.12; }
+  .research-chapter-lead p { max-width: 58ch; margin: 0; font-size: 1.125rem; }
+  .research-chapter-index { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; border-bottom: 1px solid var(--border-soft); }
+  .research-chapter-index a, .research-chapter-link { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+  .research-chapter-section { min-width: 0; scroll-margin-top: calc(var(--header-height) + 1rem); }
+  .research-chapter-section > header { margin-bottom: 1.25rem; }
+  .research-chapter-section h2 { margin: 0; font-size: clamp(1.75rem, 3vw, 2.25rem); line-height: 1.25; }
+  .research-chapter-section header p { margin: .5rem 0 0; }
+  .page-research .research-topic-copy h3 { font-family: var(--font-body); font-size: 1.125rem; font-weight: 700; line-height: 1.45; }
+  .research-project, .research-demo { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2rem; align-items: center; padding-block: 1.5rem; border-block: 1px solid var(--border-soft); }
+  .research-project-figure { display: grid; gap: .5rem; min-width: 0; }
+  .research-project-figure img { width: 100%; height: 260px; padding: .5rem; object-fit: contain; background: #fff; }
+  .research-project-figure > span { display: flex; align-items: center; gap: .4rem; min-height: 44px; color: var(--text-soft); font-size: .875rem; text-decoration: underline; text-underline-offset: 3px; }
+  .research-project-copy, .research-demo-copy { min-width: 0; }
+  .research-project-copy h3, .research-demo h3 { margin: .35rem 0 .85rem; font-family: var(--font-body); font-size: 1.35rem; font-weight: 700; line-height: 1.4; }
+  .research-project-area { margin: 0; color: var(--text-soft); font-size: .875rem; }
+  .research-project-method { display: grid; gap: .85rem; margin: 0 0 1rem; }
+  .research-project-method dt { color: var(--text-title); font-weight: 700; }
+  .research-project-method dd { margin: .2rem 0 0; }
+  .research-project-source, .research-project-status { margin: .3rem 0; color: var(--text-soft); font-size: .875rem; overflow-wrap: anywhere; }
+  .research-demo-figure { margin: 0; }
+  .research-demo-figure img { width: 100%; height: auto; background: #fff; }
+  .research-demo-figure figcaption { margin-top: .6rem; color: var(--text-soft); font-size: .875rem; }
+  .research-demo-copy p { margin: .5rem 0; }
+  .research-demo-boundary { padding-top: .75rem; border-top: 1px solid var(--border-soft); font-size: .875rem; }
+  .research-related { margin-top: 1.5rem; }
+  .research-related > summary { width: fit-content; min-height: 44px; padding: .65rem 0; color: var(--accent); font-weight: 700; cursor: pointer; }
+  .research-related-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-top: 1rem; }
+  .research-project--compact { display: block; border-top: none; padding-top: 0; }
+  .research-project--compact .research-project-figure img { height: 220px; }
+  .research-chapter a:focus-visible, .research-related > summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+  @media (max-width: 980px) { .page-research .research-topic-grid { grid-template-columns: 1fr; } .page-research .research-topic-card { grid-template-columns: 11rem minmax(0, 1fr); gap: 1.25rem; align-items: center; } .page-research .research-topic-art { height: 150px; } .research-project, .research-demo { grid-template-columns: 1fr; gap: 1.25rem; } }
+  @media (max-width: 640px) { .research-chapter { gap: 1.75rem; } .research-chapter-lead p { font-size: 1rem; } .page-research .research-topic-card { grid-template-columns: 6rem minmax(0, 1fr); gap: .75rem; } .page-research .research-topic-art { height: 100px; padding: 0; } .page-research .research-topic-copy { grid-template-columns: 1fr; gap: .35rem; padding: .5rem 0; } .page-research .research-topic-copy p { grid-column: 1; } .page-research .research-topic-number { display: none; } .research-project-figure img { height: 200px; } .research-related-grid { grid-template-columns: 1fr; gap: 1.5rem; } }
+</style>
+<div class="research-chapter">
+  <header class="research-chapter-lead">
+    <h1>Research</h1>
+    <p>Vehicle prediction, traffic understanding, and scene-to-action reasoning.</p>
+  </header>
+
+  <nav class="research-chapter-index" aria-label="Jump to research section">
+    <a href="#research-directions">Directions</a>
+    <a href="#research-work">Selected work</a>
+    <a href="#research-demo">Demo</a>
+  </nav>
+
+  <section class="research-chapter-section" id="research-directions" aria-labelledby="research-directions-title">
+    <header><h2 id="research-directions-title">Research directions</h2></header>
+    {% include research-direction-cards.html group='primary' id_prefix='research' sizes='(max-width: 640px) 96px, (max-width: 980px) 176px, 370px' %}
+  </section>
+
+  <section class="research-chapter-section" id="research-work" aria-labelledby="research-work-title">
+    <header><h2 id="research-work-title">Selected work</h2></header>
+    {% assign primary_projects = site.data.research_projects | where: 'group', 'primary' %}
+    {% for project in primary_projects %}
+      {% include research-project-card.html project=project %}
+    {% endfor %}
+    <details class="research-related">
+      <summary>Related work: energy forecasting and legal AI</summary>
+      <div class="research-related-grid">
+        {% assign related_projects = site.data.research_projects | where: 'group', 'related' %}
+        {% for project in related_projects %}
+          {% include research-project-card.html project=project compact=true %}
+        {% endfor %}
+      </div>
+    </details>
+  </section>
+
+  <section class="research-chapter-section" id="research-demo" aria-labelledby="research-demo-title">
+    <header><h2 id="research-demo-title">Simulation demo</h2></header>
+    <article class="research-demo">
+      <figure class="research-demo-figure">
+        <img src="{{ '/VLA/assets/carla_event_a-poster.png' | relative_url }}" alt="Side-by-side still frames from the No-GUIDANCE and GUIDANCE CARLA ramp-merge comparison." width="860" height="241" loading="lazy" decoding="async">
+        <figcaption>Ramp merge &middot; original CARLA simulation frames</figcaption>
+      </figure>
+      <div class="research-demo-copy">
+        <h3>Scene reasoning for proactive driving</h3>
+        <p>VLM output becomes a trajectory prior. Explore No-GUIDANCE and GUIDANCE comparisons for ramp merge and speed-gap stress.</p>
+        <p class="research-demo-boundary">Controlled CARLA simulation evidence only; not real-world vehicle safety certification.</p>
+        <a class="research-chapter-link" href="{{ '/VLA/' | relative_url }}">Open comparison and limitations <span aria-hidden="true">&#8594;</span></a>
+      </div>
+    </article>
+  </section>
+
+  <nav class="chapter-nav" aria-label="Continue through site chapters">
+    <a class="chapter-link" href="{{ '/profile/' | relative_url }}"><span>Previous chapter</span><strong>Profile</strong></a>
+    <a class="chapter-link" href="{{ '/publications/' | relative_url }}"><span>Next chapter</span><strong>Publications</strong></a>
+  </nav>
+</div>

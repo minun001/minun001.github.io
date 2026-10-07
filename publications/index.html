@@ -302,9 +302,9 @@ body_class: page-publications
 
   <p class="pub-citation-note">Per-paper citations checked <time datetime="{{ publication_archive.checked_at | escape }}">{{ publication_archive.checked_at_display | escape }}</time>.</p>
   <nav class="chapter-nav" aria-label="Continue through site chapters">
-    <a class="chapter-link" href="/profile/">
+    <a class="chapter-link" href="{{ '/research/' | relative_url }}">
       <span>Previous chapter</span>
-      <strong>Profile</strong>
+      <strong>Research</strong>
     </a>
     <a class="chapter-link" href="/news/">
       <span>Next chapter</span>

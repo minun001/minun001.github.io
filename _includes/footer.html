@@ -6,7 +6,7 @@
       <a class="footer-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
       <p class="footer-description">{{ site.description | escape }}</p>
     </div>
-    <nav class="footer-links" aria-label="External links">
+    <nav class="footer-links" aria-label="Contact and tools">
       {% if site.email %}
       <a class="footer-link" href="mailto:{{ site.email | escape }}">Email</a>
       {% endif %}
@@ -16,6 +16,7 @@
       {% if site.scholar_url %}
       <a class="footer-link" href="{{ site.scholar_url | escape }}" target="_blank" rel="noopener">Scholar</a>
       {% endif %}
+      <a class="footer-link" href="{{ '/workspace/' | relative_url }}">Private Workspace</a>
     </nav>
     {% if footer_content %}
     <div class="footer-note">

@@ -39,7 +39,7 @@ test("Home introduces the researcher alongside one automatically rotating resear
   assert.match(hero, /for slide in site\.data\.research_slides/);
   assert.match(hero, /if forloop\.first %\} fetchpriority="high" loading="eager"/);
   assert.match(hero, /else %\} loading="lazy"/);
-  assert.match(hero, /#profile-research">Research details/);
+  assert.match(hero, /\/research\/' \| relative_url \}\}">Research details/);
   assert.equal((homeTemplate.match(/data-research-carousel/g) || []).length, 1);
 });
 

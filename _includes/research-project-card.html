@@ -1,0 +1,31 @@
+{% assign project_paper = nil %}
+{% for archive_section in site.data['google-scholar-publications'].sections %}
+  {% assign candidate = archive_section.items | where: 'id', include.project.publication_id | first %}
+  {% if candidate %}{% assign project_paper = candidate %}{% endif %}
+{% endfor %}
+{% if project_paper %}
+{% assign project_visual = site.data.publication_visuals[project_paper.id] %}
+<article class="research-project{% if include.compact %} research-project--compact{% endif %}" data-research-publication="{{ project_paper.id | escape }}">
+  {% if project_paper.image and project_paper.image != '' %}
+  <a class="research-project-figure" href="{{ project_paper.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open original figure for {{ project_paper.title | escape }} (new tab)">
+    <img src="{{ project_visual.preview | default: project_paper.image | relative_url }}" alt="{{ project_paper.image_alt | default: project_paper.title | escape }}"{% if project_visual.width %} width="{{ project_visual.width }}" height="{{ project_visual.height }}"{% endif %} loading="lazy" decoding="async">
+    <span>View full-size figure <span aria-hidden="true">&#8599;</span></span>
+  </a>
+  {% endif %}
+  <div class="research-project-copy">
+    <p class="research-project-area">{{ include.project.area | escape }}</p>
+    <h3>{{ project_visual.short_title | default: project_paper.title | escape }}</h3>
+    {% if include.compact %}
+    <p>{{ project_paper.topic_copy | escape }}</p>
+    {% else %}
+    <dl class="research-project-method">
+      <div><dt>Question</dt><dd>{{ include.project.question | escape }}</dd></div>
+      <div><dt>Approach</dt><dd>{{ include.project.approach | escape }}</dd></div>
+    </dl>
+    {% endif %}
+    <p class="research-project-source">{{ project_paper.venue | escape }} &middot; {{ project_paper.year }}</p>
+    <p class="research-project-status">{{ project_paper.details | escape }}</p>
+    <a class="research-chapter-link" href="{{ '/publications/' | relative_url }}#publication-{{ project_paper.id | escape }}">View publication <span aria-hidden="true">&#8594;</span></a>
+  </div>
+</article>
+{% endif %}

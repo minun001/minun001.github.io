@@ -289,21 +289,32 @@ script_bundle: workspace
     @media (max-width:480px){.workspace-page{gap:1rem}.workspace-panel{padding:.9rem}.workspace-dashboard-copy h2{font-size:clamp(1.55rem,9vw,1.95rem)}.workspace-dashboard-copy p,.workspace-section-head p{font-size:.81rem}.workspace-section{padding-top:.8rem}.workspace-section-head h3{font-size:1rem}.workspace-metrics,.workspace-signal-stats{gap:.55rem}.workspace-mini-card,.workspace-empty,.workspace-select-card,.workspace-signal-card,.workspace-detail-panel,.workspace-server-detail-block,.workspace-analytics-card,.workspace-analytics-panel,.workspace-server-stat-card,.workspace-server-device{padding:.82rem;border-radius:13px}.workspace-select-card-head h4,.workspace-signal-head h4,.workspace-detail-head h4{font-size:.95rem}.workspace-select-card-copy,.workspace-signal-copy,.workspace-detail-copy{font-size:.84rem;line-height:1.5}.workspace-detail-head{gap:.7rem}.workspace-detail-list{padding-left:1rem}.workspace-detail-list code{font-size:.86em}.workspace-server-status{font-size:.68rem}.workspace-server-stat-value{font-size:1.28rem}.workspace-server-stat-subtitle,.workspace-server-fact-pill span,.workspace-server-error,.workspace-analytics-card p,.workspace-analytics-row span{font-size:.78rem}.workspace-line-chart svg{height:210px}.workspace-analytics-panel--featured .workspace-line-chart svg{height:240px}.workspace-line-chart-value{font-size:11px}.workspace-signal-mini svg{height:78px}.workspace-analytics-badge,.workspace-link-tag,.workspace-note-badge,.workspace-card-microtag,.workspace-server-chip{font-size:.72rem}.workspace-meta-label,.workspace-meta-value{font-size:.74rem}}
     @media (max-width:360px){.workspace-metrics,.workspace-signal-stats{grid-template-columns:1fr}.workspace-button{font-size:.86rem}}
     .workspace-login-preview-head span,.workspace-login-preview-card span,.workspace-field span,.workspace-meta-label,.workspace-card-step,.workspace-mini-card span,.workspace-note-badge,.workspace-link-tag,.workspace-card-microtag,.workspace-detail-block h5,.workspace-server-stat-label,.workspace-server-fact-pill strong,.workspace-minhs-stat span,.workspace-minhs-badge,.workspace-analytics-card span,.workspace-line-chart-labels span,.workspace-signal-stat span{letter-spacing:.03em;text-transform:none}
+    .workspace-panel{border-radius:12px;background:var(--bg-card);box-shadow:none}
+    .workspace-index{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;padding-top:.75rem;border-bottom:1px solid var(--border-soft)}
+    .workspace-index a,.workspace-return{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline;text-underline-offset:4px}
+    .workspace-index a:focus-visible,.workspace-return:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+    .workspace-section[id]{scroll-margin-top:calc(var(--header-height) + 1rem)}
+    .workspace-overview-work{display:grid;gap:.8rem}
+    .workspace-overview-work h4{margin:0;color:var(--text-title);font-size:1rem}
+    .workspace-site-details{padding-top:1rem;border-top:1px solid var(--border-soft)}
+    .workspace-site-details>summary{min-height:44px;padding:.5rem 0;color:var(--accent);font-weight:700;cursor:pointer}
+    .workspace-site-details>summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+    .workspace-site-details[open]>summary{margin-bottom:.75rem}
+    @media(max-width:720px){.workspace-button{min-height:44px}.workspace-section-head--split{grid-template-columns:minmax(0,1fr) auto}.workspace-refresh-button{width:46px;min-width:46px;padding:0}.workspace-index{gap:.25rem 1rem}.workspace-index a{font-size:.9rem}}
   </style>
 
 <div class="workspace-page" data-workspace-page data-mode="auth">
         <section class="page-lead workspace-lead">
           <div class="page-lead-copy">
-            <div class="eyebrow">Workspace</div>
+            <a class="workspace-return" href="{{ '/research/' | relative_url }}">&#8592; Back to Research</a>
             <h1>Workspace</h1>
-            <p>Private research tools, server load, and site traffic.</p>
+            <p>Private tools, running jobs, and infrastructure.</p>
           </div>
         </section>
 
         <section class="workspace-shell" data-workspace-shell data-mode="auth">
           <article class="workspace-panel workspace-login-panel" data-workspace-view="login">
-            <div class="eyebrow">Login</div>
-            <h2>Workspace Login</h2>
+            <h2>Sign in</h2>
             <p class="workspace-login-copy">Sign in to use your private research tools.</p>
             <div id="workspace-status" class="workspace-status" data-tone="neutral" role="status" aria-live="polite" aria-atomic="true">Checking workspace access...</div>
             <form id="workspace-login-form" class="workspace-form">
@@ -360,35 +371,26 @@ script_bundle: workspace
             <div class="workspace-dashboard-head">
               <div class="workspace-dashboard-copy">
                 <h2>Workspace</h2>
-                <p>Private research tools, server load, and site traffic.</p>
+                <p>Tools, running jobs, and infrastructure. Refresh when needed.</p>
               </div>
             </div>
+            <nav class="workspace-index" aria-label="Jump to workspace section">
+              <a href="#workspace-overview">Overview</a>
+              <a href="#workspace-tools">Tools</a>
+              <a href="#workspace-infrastructure">Infrastructure</a>
+              <a href="#workspace-files">Files</a>
+            </nav>
             <div class="workspace-stack">
-              <section class="workspace-section" aria-labelledby="workspace-tools-title">
+              <section class="workspace-section" id="workspace-overview" aria-labelledby="workspace-overview-title">
                 <div class="workspace-section-head">
-                  <h3 id="workspace-tools-title">Workspace Tools</h3>
-                  <p>Private utilities for forecasting, server monitoring, and research operations.</p>
+                  <h3 id="workspace-overview-title">Overview</h3>
+                  <p>Alerts and running jobs from the latest snapshot. <a href="#workspace-infrastructure">Refresh infrastructure to update server alerts.</a></p>
                 </div>
-                <div class="workspace-links">
-                  <a class="workspace-select-card workspace-link-card workspace-select-card--featured" href="{{ "/workspace/timesfm/" | relative_url }}">
-                    <div class="workspace-select-card-head">
-                      <h4>TimesFM Forecaster</h4>
-                      <span class="workspace-link-tag">aibig9 GPU</span>
-                    </div>
-                    <p class="workspace-select-card-copy">Zero-shot time-series forecasting for mobility, energy, and operations on aibig9 GPU</p>
-                    <div class="workspace-select-card-meta">
-                      <span>No fine-tuning</span>
-                      <span>CSV / TSV upload</span>
-                      <span>Private API token</span>
-                    </div>
-                  </a>
-                </div>
-              </section>
-
-              <section class="workspace-section" aria-labelledby="workspace-minhs-title">
+                <div class="workspace-server-alerts" id="workspace-server-alerts" aria-live="polite"></div>
+                <div class="workspace-overview-work" role="region" aria-labelledby="workspace-minhs-title">
                 <div class="workspace-section-head workspace-section-head--split">
                   <div class="workspace-section-head-copy">
-                    <h3 id="workspace-minhs-title">min_hs Work Monitor</h3>
+                    <h4 id="workspace-minhs-title">Running jobs</h4>
                     <p class="workspace-refresh-note" id="workspace-minhs-refresh-note" aria-live="polite">Press refresh to scan currently running min_hs tasks and runtime duration.</p>
                   </div>
                   <button class="workspace-button secondary workspace-refresh-button" id="workspace-minhs-refresh" data-workspace-refresh-source="minhs" type="button" aria-label="Refresh min_hs tasks" title="Refresh min_hs tasks">
@@ -404,12 +406,33 @@ script_bundle: workspace
                 <div class="workspace-minhs" id="workspace-minhs-work">
                   <div class="workspace-empty">No min_hs work snapshot yet.</div>
                 </div>
+                </div>
               </section>
 
-              <section class="workspace-section" aria-labelledby="workspace-servers-title">
+              <section class="workspace-section" id="workspace-tools" aria-labelledby="workspace-tools-title">
+                <div class="workspace-section-head">
+                  <h3 id="workspace-tools-title">Tools</h3>
+                  <p>Run private research utilities through the authenticated helper.</p>
+                </div>
+                <div class="workspace-links">
+                  <a class="workspace-select-card workspace-link-card workspace-select-card--featured" href="{{ "/workspace/timesfm/" | relative_url }}">
+                    <div class="workspace-select-card-head">
+                      <h4>TimesFM Forecaster</h4>
+                      <span class="workspace-link-tag">aibig9 GPU</span>
+                    </div>
+                    <p class="workspace-select-card-copy">Zero-shot time-series forecasting on aibig9.</p>
+                    <div class="workspace-select-card-meta">
+                      <span>No fine-tuning</span>
+                      <span>CSV / TSV upload</span>
+                    </div>
+                  </a>
+                </div>
+              </section>
+
+              <section class="workspace-section" id="workspace-infrastructure" aria-labelledby="workspace-servers-title">
                 <div class="workspace-section-head workspace-section-head--split">
                   <div class="workspace-section-head-copy">
-                    <h3 id="workspace-servers-title">Server Signals</h3>
+                    <h3 id="workspace-servers-title">Infrastructure</h3>
                     <p class="workspace-refresh-note" id="workspace-server-refresh-note" aria-live="polite">Press refresh to run the local server probe.</p>
                   </div>
                   <button class="workspace-button secondary workspace-refresh-button" id="workspace-server-refresh" data-workspace-refresh-source="servers" type="button" aria-label="Refresh server signals" title="Refresh server signals">
@@ -422,24 +445,15 @@ script_bundle: workspace
                     <span class="workspace-visually-hidden">Refresh server signals</span>
                   </button>
                 </div>
-                <div class="workspace-server-alerts" id="workspace-server-alerts" aria-live="polite"></div>
                 <div class="workspace-servers" id="workspace-servers">
                   <div class="workspace-empty">No server snapshot yet.</div>
                 </div>
               </section>
 
-              <section class="workspace-section workspace-analytics" aria-labelledby="workspace-analytics-title">
+              <section class="workspace-section" id="workspace-files" aria-labelledby="workspace-library-title">
                 <div class="workspace-section-head">
-                  <h3 id="workspace-analytics-title">Site Signals</h3>
-                </div>
-                <div class="workspace-signals" id="workspace-signals">
-                  <div class="workspace-empty">No traffic summary yet.</div>
-                </div>
-              </section>
-
-              <section class="workspace-section" aria-labelledby="workspace-library-title">
-                <div class="workspace-section-head">
-                  <h3 id="workspace-library-title">Workspace Files</h3>
+                  <h3 id="workspace-library-title">Files</h3>
+                  <p>Internal data opens through the authenticated helper, not public file links.</p>
                 </div>
                 <div class="workspace-links" id="workspace-links">
                   <div class="workspace-empty">No workspace files yet.</div>
@@ -456,6 +470,12 @@ script_bundle: workspace
                   </div>
                   <pre id="workspace-private-file-body" data-tone="neutral"></pre>
                 </section>
+                <details class="workspace-site-details">
+                  <summary id="workspace-analytics-title">Site traffic</summary>
+                  <div class="workspace-signals" id="workspace-signals">
+                    <div class="workspace-empty">No traffic summary yet.</div>
+                  </div>
+                </details>
               </section>
             </div>
           </article>
@@ -517,6 +537,7 @@ script_bundle: workspace
                 </div>
             </div>
             <div class="workspace-actions workspace-quick-access-actions">
+              <a class="workspace-button secondary" href="{{ '/research/' | relative_url }}">Public research</a>
               <a class="workspace-button secondary" href="https://github.com/minun001/minun001.github.io" target="_blank" rel="noreferrer">Open Repository</a>
               <button id="workspace-signout" class="workspace-button secondary" type="button">Sign Out</button>
             </div>

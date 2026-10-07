@@ -147,6 +147,9 @@ research_visuals: true
   .profile-toolkit dd { margin: 0; overflow-wrap: anywhere; }
   .about-page .chapter-nav { margin-top: 0; }
   .profile-more { margin-top: 1.25rem; }
+  .profile-research-summary { display: grid; gap: .85rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+  .profile-research-summary strong { display: block; color: var(--text-title); }
+  .profile-research-link { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; }
   .profile-more > summary { width: fit-content; min-height: 44px; padding: .65rem 0; color: var(--accent); font-weight: 600; cursor: pointer; }
   .profile-more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
   .profile-more[open] > summary { margin-bottom: .75rem; }
@@ -244,10 +247,21 @@ research_visuals: true
               <h2 id="profile-research-title">Research directions</h2>
             </header>
             <div class="profile-section-content">
-              {% include research-direction-cards.html group='primary' id_prefix='profile' sizes='(max-width: 740px) 112px, (max-width: 1080px) 45vw, 450px' %}
+              {% assign primary_directions = site.data.research_directions | where: 'group', 'primary' %}
+              <ul class="profile-research-summary">
+                {% for direction in primary_directions %}
+                <li><strong>{{ direction.title | escape }}</strong>{{ direction.summary | escape }}</li>
+                {% endfor %}
+              </ul>
+              <a class="profile-research-link" href="{{ '/research/' | relative_url }}">Explore research and demos &#8594;</a>
               <details class="profile-more">
                 <summary>Related research: energy forecasting and legal AI</summary>
-                {% include research-direction-cards.html group='related' id_prefix='profile-related' sizes='(max-width: 740px) 112px, (max-width: 1080px) 45vw, 450px' %}
+                {% assign related_directions = site.data.research_directions | where: 'group', 'related' %}
+                <ul class="profile-research-summary">
+                  {% for direction in related_directions %}
+                  <li><strong>{{ direction.title | escape }}</strong>{{ direction.summary | escape }}</li>
+                  {% endfor %}
+                </ul>
               </details>
             </div>
           </section>
@@ -410,9 +424,9 @@ research_visuals: true
             <span>Previous chapter</span>
             <strong>Home</strong>
           </a>
-          <a class="chapter-link" href="/publications/">
+          <a class="chapter-link" href="{{ '/research/' | relative_url }}">
             <span>Next chapter</span>
-            <strong>Publications</strong>
+            <strong>Research</strong>
           </a>
         </nav>
 </div>

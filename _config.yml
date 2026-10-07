@@ -41,12 +41,12 @@ nav:
     link: "/"
   - name: "Profile"
     link: "/profile/"
+  - name: "Research"
+    link: "/research/"
   - name: "Publications"
     link: "/publications/"
   - name: "News"
     link: "/news/"
-  - name: "Workspace"
-    link: "/workspace/"
 
 exclude:
   - Gemfile

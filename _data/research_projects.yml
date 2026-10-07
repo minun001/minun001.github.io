@@ -1,0 +1,11 @@
+- publication_id: 5nxA0vEk-isC
+  group: primary
+  area: Vehicle behavior prediction
+  question: How can surrounding vehicle motion be anticipated?
+  approach: Temporal graph cross attention models vehicle interactions for front-vehicle trajectory prediction.
+- publication_id: ufrVoPGSRksC
+  group: related
+  area: Energy forecasting
+- publication_id: LkGwnXOMwfcC
+  group: related
+  area: Legal AI
