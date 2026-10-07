@@ -65,8 +65,59 @@ test('News keeps known dates while ordering 2026 events newest first', () => {
   assert.match(news, /conference presentation on traffic sentencing prediction<\/h3>\s*<div[^>]*><span class="news-date">Apr\. 2024/);
 });
 
-test('Mobile Publications reserves two label lines without shrinking paper counts', () => {
-  assert.match(read('publications/index.html'), /\.pub-summary-item > span\{font-size:\.875rem;min-height:3em\}/);
+test('Mobile Publications keeps full category labels and readable counts in compact rows', () => {
+  const publications = read('publications/index.html');
+  assert.match(publications, /\.pub-summary-item\{grid-template-columns:minmax\(0,1fr\) auto;/);
+  assert.match(publications, /\.pub-summary-item strong\{font-size:1rem;white-space:nowrap\}/);
+  assert.doesNotMatch(publications, /min-height:3em/);
+  assert.match(publications, /\.pub-meta-row\{grid-template-columns:3\.5rem minmax\(0,1fr\)/);
+});
+
+test('Home enlarges original publication figures without cropping them or changing carousel timing', () => {
+  const css = read('assets/home-research.css');
+  const html = read('_includes/home-research.html');
+  assert.match(css, /\.research-paper:first-child\{grid-column:1\/-1;display:grid/);
+  assert.match(css, /\.research-paper-figure img\{[^}]*height:260px;[^}]*object-fit:contain/);
+  assert.match(css, /\.research-paper:first-child\{display:block\}/);
+  assert.match(html, /data-interval="7000"/);
+  assert.match(html, /href="\{\{ paper\.image \| relative_url \}\}"/);
+});
+
+test('Profile keeps the portrait frame and lower crop while gently enlarging the subject', () => {
+  const profile = read('profile/index.html');
+  assert.match(profile, /picture \{ display: block; aspect-ratio: 5 \/ 4; \}/);
+  assert.match(profile, /object-position: center bottom; transform: scale\(1\.1\); transform-origin: center bottom/);
+});
+
+test('Mobile News compacts featured updates without removing filters or their targets', () => {
+  const news = read('news/index.html');
+  assert.match(news, /\.news-featured article\{grid-template-columns:5\.25rem minmax\(0,1fr\)/);
+  assert.match(news, /\.news-featured h3 a\{display:flex;align-items:center\}/);
+  assert.match(news, /\.news-featured h3 a\{[^}]*min-height:44px/);
+  for (const category of ['all', 'journal', 'conference', 'project', 'award', 'academic']) {
+    assert.ok(news.includes(`data-news-filter="${category}"`));
+  }
+});
+
+test('TimesFM shares site colors and keeps authentication and forecasting hooks', () => {
+  const css = read('assets/timesfm-forecast.css');
+  const html = read('workspace/timesfm/index.html');
+  assert.match(css, /--timesfm-ink: var\(--text-title\)/);
+  assert.match(css, /--timesfm-accent: var\(--accent\)/);
+  assert.match(css, /\.timesfm-hero,\s*\.timesfm-panel \{[^}]*border-radius: 12px;[^}]*box-shadow: none/);
+  assert.match(html, /script_bundle: timesfm/);
+  assert.match(html, /id="timesfm-auth-gate" hidden/);
+  assert.match(html, /id="timesfm-app" hidden/);
+});
+
+test('VLA keeps comparison colors and exact evidence while adding an early return path', () => {
+  const html = read('VLA/index.html');
+  assert.ok(html.indexOf('aria-label="Return to personal website"') < html.indexOf('class="hero"'));
+  assert.match(html, /--guidance: #0f9f6e/);
+  assert.match(html, /--baseline: #ef4444/);
+  assert.match(html, /1\.31s/);
+  assert.match(html, /7\.05s/);
+  assert.match(html, /실제 차량 제어 성능 인증/);
 });
 
 function helperFixture(href = 'https://minun001.github.io/workspace/') {

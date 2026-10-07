@@ -61,7 +61,15 @@ body_class: page-news
       body.page-news .news-jump.page-index{position:static;top:auto;z-index:auto}
     }
     @media (max-width:640px){
-      .news-featured{padding:1rem}
+      .news-page{gap:1rem}
+      .news-featured{padding:.75rem 1rem;gap:0}
+      .news-featured article{grid-template-columns:5.25rem minmax(0,1fr);gap:.75rem;align-items:center;padding:.4rem 0}
+      .news-featured article + article{border-top:1px solid var(--border-soft)}
+      .news-featured .eyebrow{margin:0;font-size:.8125rem}
+      .news-featured h3{font-size:1rem;line-height:1.4}
+      .news-featured h3 a{display:flex;align-items:center}
+      .news-year-head span{display:none}
+      .news-year-head h2{margin:0;font-size:1.65rem}
       .news-timeline{--news-indent:1.25rem}
       .news-page .button-row .btn-soft{width:100%;justify-content:center}
       body.page-news .news-jump.page-index:after{display:none}
