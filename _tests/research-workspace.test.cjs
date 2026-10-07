@@ -38,8 +38,7 @@ test('Research stays public without the removed simulation demo or its navigatio
   assert.match(research, /body_class: page-research/);
   assert.doesNotMatch(research, /workspace-config|workspace\.js|data-workspace-private|sessionStorage|\.gif/);
   assert.doesNotMatch(research, /Simulation demo|research-demo|Scene reasoning for proactive driving|Open comparison and limitations|\/VLA\//);
-  assert.ok(existsSync(join(root, 'VLA/index.html')));
-  assert.ok(existsSync(join(root, 'VLA/assets/carla_event_a-poster.png')));
+  assert.ok(!existsSync(join(root, 'VLA/index.html')));
   for (const id of ['research-directions', 'research-work']) {
     assert.ok(research.includes(`id="${id}"`));
     assert.ok(research.includes(`href="#${id}"`));

@@ -33,9 +33,6 @@ author:
   name: "Hyunsik Min"
   email: "minun001@hanyang.ac.kr"
 
-include:
-  - VLA
-
 nav:
   - name: "Home"
     link: "/"
@@ -49,6 +46,7 @@ nav:
     link: "/news/"
 
 exclude:
+  - VLA/
   - Gemfile
   - Gemfile.lock
   - node_modules/

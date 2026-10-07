@@ -36,17 +36,12 @@ function fixture(count = 1) {
   return { roots, document };
 }
 
-test('VLA starts with existing posters, preserves original clips and the scientific boundary', () => {
-  const html = readFileSync(join(rootPath, 'VLA/index.html'), 'utf8');
-  assert.doesNotMatch(html, /<img\b[^>]*\ssrc="[^"]+\.gif"/);
-  assert.equal((html.match(/data-simulation-player/g) || []).length, 9); // Includes its CSS rule.
-  assert.equal((html.match(/data-animation-src=/g) || []).length, 8);
-  assert.equal((html.match(/<noscript>/g) || []).length, 8);
-  for (const match of html.matchAll(/(?:\ssrc|data-animation-src)="(assets\/[^"]+)"/g)) {
-    assert.ok(existsSync(join(rootPath, 'VLA', match[1])), match[1]);
-  }
-  assert.ok(html.includes('실제 차량 제어 성능 인증'));
-  assert.ok(html.includes('0.560에서 0.013'));
+test('The VLA page is removed and its retained media is excluded from deployment', () => {
+  assert.ok(!existsSync(join(rootPath, 'VLA/index.html')));
+  const config = readFileSync(join(rootPath, '_config.yml'), 'utf8');
+  const excludes = config.split(/\r?\nexclude:\r?\n/)[1];
+  assert.match(excludes, /^\s+- VLA\/\s*$/m);
+  assert.doesNotMatch(config, /^include:\r?\n\s+- VLA\s*$/m);
 });
 
 test('No GIF is loaded until the user presses play', () => {

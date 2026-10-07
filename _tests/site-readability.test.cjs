@@ -110,14 +110,10 @@ test('TimesFM shares site colors and keeps authentication and forecasting hooks'
   assert.match(html, /id="timesfm-app" hidden/);
 });
 
-test('VLA keeps comparison colors and exact evidence while adding an early return path', () => {
-  const html = read('VLA/index.html');
-  assert.ok(html.indexOf('aria-label="Return to personal website"') < html.indexOf('class="hero"'));
-  assert.match(html, /--guidance: #0f9f6e/);
-  assert.match(html, /--baseline: #ef4444/);
-  assert.match(html, /1\.31s/);
-  assert.match(html, /7\.05s/);
-  assert.match(html, /실제 차량 제어 성능 인증/);
+test('Public pages do not link to the removed VLA page', () => {
+  for (const path of ['index.html', '_includes/home-research.html', '_includes/footer.html', 'profile/index.html', 'research/index.html', 'publications/index.html', 'news/index.html', 'workspace/index.html', 'workspace/timesfm/index.html']) {
+    assert.doesNotMatch(read(path), /\/VLA\//, path);
+  }
 });
 
 function helperFixture(href = 'https://minun001.github.io/workspace/') {
