@@ -14,6 +14,7 @@ include_public_analytics: false
     <span class="analytics-chip" id="analytics-connection">Checking connection</span>
   </header>
   <p id="analytics-status" class="analytics-status" role="status" aria-live="polite">Connecting to the private API…</p>
+  <button class="btn-soft analytics-reconnect" id="analytics-reconnect" type="button" hidden>Retry connection</button>
   <section id="analytics-login" class="analytics-login analytics-panel" aria-labelledby="analytics-login-title">
     <div>
       <h2 id="analytics-login-title">Sign in</h2>
@@ -23,12 +24,13 @@ include_public_analytics: false
         <input id="analytics-username" name="username" autocomplete="username" required maxlength="80">
         <label for="analytics-password">Password</label>
         <input id="analytics-password" name="password" type="password" autocomplete="current-password" required maxlength="256">
-        <button class="btn" id="analytics-signin" type="submit">Sign in</button>
+        <button class="btn" id="analytics-signin" type="submit" disabled>Sign in</button>
       </form>
     </div>
     <aside class="analytics-login-note">
       <h3>What this shows</h3>
       <p>Daily browsers and page views. Popular pages and referring sites.</p>
+      <p>PC-hosted: available only while the owner's PC, API and secure connection are running. Visits missed while offline are not recovered.</p>
       <p>Anonymous browser IDs are not people's identities. Names and email addresses are not collected.</p>
       <a href="{{ '/privacy/' | relative_url }}">How analytics works ↗</a>
     </aside>

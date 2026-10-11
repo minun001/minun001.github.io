@@ -1,24 +1,28 @@
-param([int]$Port = 8792, [string]$Python = 'python', [string]$Cloudflared = 'cloudflared')
+param([int]$Port = 8792, [string]$Python = 'python', [string]$Cloudflared = 'cloudflared', [switch]$LocalOnly)
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
 $auth = Join-Path $repo '.private\analytics\owner.json'
 if (!(Test-Path -LiteralPath $auth)) { throw 'Configure the owner first: python tools/site_analytics.py --set-credentials' }
-$probe = New-Object System.Net.Sockets.TcpClient
-try { $probe.Connect('127.0.0.1', $Port) } catch {}
-$occupied = $probe.Connected
-$probe.Dispose()
-if ($occupied) { throw "Port $Port is already in use. Stop the existing Analytics API before starting this launcher." }
-if (!(Get-Command $Cloudflared -ErrorAction SilentlyContinue)) {
-    $installed = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
-    if (Test-Path -LiteralPath $installed) { $Cloudflared = $installed }
-    else { throw 'Install the official Cloudflare.cloudflared package first.' }
+if ($LocalOnly -and $Port -ne 8792) { throw 'Local-only mode uses port 8792, matching the local dashboard.' }
+function Test-LocalPort([int]$Value) {
+    $probe = New-Object System.Net.Sockets.TcpClient
+    try { $probe.Connect('127.0.0.1', $Value); return $true } catch { return $false }
+    finally { $probe.Dispose() }
 }
-$api = Start-Process -FilePath $Python -ArgumentList @('tools/site_analytics.py', '--port', $Port) -WorkingDirectory $repo -WindowStyle Hidden -PassThru
+$api = $null
+$preview = $null
 $tunnel = $null
 try {
+    if (Test-LocalPort $Port) {
+        $existing = Invoke-RestMethod "http://127.0.0.1:$Port/health" -TimeoutSec 2
+        if ($existing.service -ne 'private-site-analytics' -or !$existing.configured) { throw "Port $Port is occupied by an unexpected or unconfigured service." }
+        Write-Host 'Reusing the running Analytics API. This launcher will not stop an existing process.'
+    } else {
+        $api = Start-Process -FilePath $Python -ArgumentList @('tools/site_analytics.py', '--port', $Port) -WorkingDirectory $repo -WindowStyle Hidden -PassThru
+    }
     $ready = $false
     for ($i=0; $i -lt 30; $i++) {
-        if ($api.HasExited) { throw 'The Analytics API could not start. Check for an existing process on this port.' }
+        if ($null -ne $api -and $api.HasExited) { throw 'The Analytics API could not start. Check for an existing process on this port.' }
         try {
             $health = Invoke-RestMethod "http://127.0.0.1:$Port/health" -TimeoutSec 1
             if ($health.service -eq 'private-site-analytics' -and $health.configured) { $ready = $true; break }
@@ -26,6 +30,35 @@ try {
         Start-Sleep -Milliseconds 300
     }
     if (!$ready) { throw 'The private Analytics API did not become ready.' }
+    if ($LocalOnly) {
+        if (!(Test-Path -LiteralPath (Join-Path $repo '_site\analytics\index.html'))) { throw 'Build the local site first: bundle exec jekyll build' }
+        if (!(Test-LocalPort 4000)) {
+            $preview = Start-Process -FilePath $Python -ArgumentList @('-m', 'http.server', '4000', '--bind', '127.0.0.1', '--directory', '_site') -WorkingDirectory $repo -WindowStyle Hidden -PassThru
+        }
+        $previewReady = $false
+        for ($i=0; $i -lt 30; $i++) {
+            if ($null -ne $preview -and $preview.HasExited) { throw 'The local site preview could not start.' }
+            try {
+                $page = Invoke-WebRequest 'http://127.0.0.1:4000/analytics/' -UseBasicParsing -TimeoutSec 1
+                if ($page.Content -match 'id="analytics-login-form"') { $previewReady = $true; break }
+            } catch {}
+            Start-Sleep -Milliseconds 300
+        }
+        if (!$previewReady) { throw 'Port 4000 did not serve the expected built Analytics page. Existing processes were not stopped.' }
+        Write-Host 'Local Analytics: http://127.0.0.1:4000/analytics/'
+        Write-Host 'PC-hosted mode. No public visits are collected without a permitted HTTPS tunnel.'
+        Write-Host 'Shutdown or sleep interrupts the API. Missed visits are not queued or recovered.'
+        Write-Host 'Keep this launcher running. Only processes started by it are stopped on exit.'
+        while ($true) {
+            if (($null -ne $api -and $api.HasExited) -or ($null -ne $preview -and $preview.HasExited)) { throw 'A local Analytics process stopped. Restart this launcher.' }
+            Start-Sleep -Seconds 2
+        }
+    }
+    if (!(Get-Command $Cloudflared -ErrorAction SilentlyContinue)) {
+        $installed = 'C:\Program Files (x86)\cloudflared\cloudflared.exe'
+        if (Test-Path -LiteralPath $installed) { $Cloudflared = $installed }
+        else { throw 'Install the official Cloudflare.cloudflared package first, or use -LocalOnly.' }
+    }
     $info = New-Object System.Diagnostics.ProcessStartInfo
     $info.FileName = $Cloudflared
     $info.Arguments = "tunnel --url http://127.0.0.1:$Port --no-autoupdate"
@@ -67,5 +100,6 @@ try {
     throw 'The HTTPS tunnel stopped. Restart this launcher and redeploy the new API URL.'
 } finally {
     if ($null -ne $tunnel -and !$tunnel.HasExited) { $tunnel.Kill() }
-    if (!$api.HasExited) { Stop-Process -Id $api.Id }
+    if ($null -ne $preview -and !$preview.HasExited) { Stop-Process -Id $preview.Id }
+    if ($null -ne $api -and !$api.HasExited) { Stop-Process -Id $api.Id }
 }

@@ -6,6 +6,7 @@
 .analytics-chip{padding:.4rem .8rem;border-radius:var(--radius-pill);background:var(--bg-muted);font-size:.8rem;color:var(--text-title);overflow-wrap:anywhere}
 .analytics-status{padding:.8rem 0;min-height:3rem;color:var(--text-soft)}
 .analytics-status[data-error="true"]{color:#9a302b}
+.analytics-reconnect{margin:0 0 1.2rem}
 .analytics-panel{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:1.5rem;margin:0 0 1.2rem;min-width:0}
 .analytics-panel h2{font-size:1.1rem;margin:0 0 .75rem;color:var(--text-title)}
 .analytics-panel p{font-size:.9rem}
@@ -40,6 +41,6 @@
 .analytics-page th,.analytics-page td{padding:.65rem .5rem;border-bottom:1px solid var(--border-soft);overflow-wrap:anywhere}
 .analytics-page th{font-weight:600;color:var(--text-title)}
 .analytics-footnote{font-size:.8rem;max-width:85ch;color:var(--text-soft)}
-.analytics-page button:disabled{opacity:.6;cursor:wait}
+.analytics-page button:disabled{opacity:.6;cursor:not-allowed}
 @media(max-width:1024px){.analytics-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.analytics-page{margin-top:1.5rem}.analytics-login,.analytics-columns{grid-template-columns:1fr;gap:1rem}.analytics-login{padding:1.1rem}.analytics-login-note{padding:1.1rem}.analytics-panel{padding:1rem}.analytics-stats{gap:.6rem}.analytics-stats .analytics-panel{padding:.9rem}.analytics-stats h2{font-size:.8rem}.analytics-panel-head{gap:0}.analytics-page td:first-child{min-width:7rem}}

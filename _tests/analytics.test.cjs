@@ -17,7 +17,17 @@ test('Tunnel launcher ignores service error URLs and publishes only after public
   assert.match(source, /throw 'The HTTPS tunnel stopped/);
 });
 
-function tracker({ consent = 'yes', dnt, gpc, path = '/', enabled = true, blocked = false, owner = false } = {}) {
+test('Local-only launcher needs no tunnel, serves only the built loopback preview and preserves existing processes', () => {
+  const source = read('tools/start_site_analytics.ps1');
+  assert.match(source, /\[switch\]\$LocalOnly/);
+  assert.ok(source.indexOf('if ($LocalOnly) {') < source.indexOf('$info.FileName = $Cloudflared'));
+  assert.match(source, /'http\.server', '4000', '--bind', '127\.0\.0\.1', '--directory', '_site'/);
+  assert.match(source, /No public visits are collected without a permitted HTTPS tunnel/);
+  assert.match(source, /if \(\$null -ne \$api -and !\$api.HasExited\) \{ Stop-Process -Id \$api.Id \}/);
+  assert.doesNotMatch(source, /Register-ScheduledTask|Set-DnsClientServerAddress|New-NetFirewallRule/);
+});
+
+function tracker({ consent = 'yes', dnt, gpc, path = '/', enabled = true, blocked = false, owner = false, offline = false } = {}) {
   const requests = [];
   const memory = new Map(consent ? [['site.analytics.consent', consent]] : []);
   const storage = { getItem(key) { if (blocked) throw new Error('blocked'); return memory.get(key) || null; }, setItem(key, value) { memory.set(key, value); } };
@@ -27,7 +37,7 @@ function tracker({ consent = 'yes', dnt, gpc, path = '/', enabled = true, blocke
     navigator: { doNotTrack: dnt, globalPrivacyControl: gpc }, location,
     crypto: { randomUUID: () => '6ea78470-c19c-4785-a987-cf0065f57ef6' },
     document: { readyState: 'complete', referrer: 'https://example.org/private?email=secret@example.org' },
-    fetch(url, options) { requests.push({ url, options, payload: JSON.parse(options.body) }); return Promise.resolve({ ok: true }); }
+    fetch(url, options) { requests.push({ url, options, payload: JSON.parse(options.body) }); return offline ? Promise.reject(new TypeError('PC offline')) : Promise.resolve({ ok: true }); }
   };
   context.window = { location, crypto: context.crypto, innerWidth: 390, SITE_ANALYTICS_CONFIG: { apiBaseUrl: 'https://analytics.example.com', collectionEnabled: enabled } };
   runInNewContext(read('assets/visitor-tracker.js'), context);
@@ -52,11 +62,21 @@ test('Tracker respects opt-out, DNT, GPC, blocked storage, private pages and own
   }
 });
 
+test('Offline collection fails silently without persisting visits or scheduling later delivery', async() => {
+  const { requests, memory } = tracker({offline:true});
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(requests.length,1);
+  assert.deepEqual([...memory.keys()].sort(),['site.analytics.browser','site.analytics.consent']);
+  assert.doesNotMatch(read('assets/visitor-tracker.js'), /indexedDB|serviceWorker|setInterval|addEventListener\(['"]online/);
+});
+
 test('Private dashboard starts hidden and credentials never appear in frontend sources', () => {
   const html = read('analytics/index.html');
   assert.match(html, /id="analytics-dashboard" hidden/);
   assert.match(html, /robots: noindex,nofollow/);
   assert.match(html, /include_public_analytics: false/);
+  assert.match(html, /id="analytics-signin"[^>]*disabled/);
+  assert.match(html, /id="analytics-reconnect"/);
   const js = read('assets/analytics.js');
   assert.match(js, /\/analytics\/session/);
   assert.match(js, /\/analytics\/login/);
@@ -75,7 +95,7 @@ test('Only public research routes load the collector and private data is never b
   assert.match(read('_includes/footer.html'), /'\/privacy\/'/);
 });
 
-function dashboard() {
+function dashboard({ apiBaseUrl = 'https://analytics.example.com', hostname = '127.0.0.1', offline = false, configured = true } = {}) {
   class Node {
     constructor() { this.hidden = false; this.value = ''; this.textContent = ''; this.children = []; this.dataset = {}; this.handlers = {}; }
     addEventListener(name, callback) { this.handlers[name] = callback; }
@@ -90,20 +110,20 @@ function dashboard() {
   $('dashboard').hidden = true; $('range').value = '30';
   const local = new Map(), session = new Map(), calls = [], timers = [];
   const storage = memory => ({ getItem:key => memory.get(key) || null, setItem:(key,value) => memory.set(key,value), removeItem:key => memory.delete(key) });
-  const state = { authorized:false, rejectLogin:false, offline:false, summaryPending:null, loginPending:null };
+  const state = { authorized:false, rejectLogin:false, offline, configured, summaryPending:null, loginPending:null, sessionPending:null };
   const summary = { today:{browsers:2,pageviews:3}, totals:{browsers:2,pageviews:3}, generated_at:'2026-10-11T01:00:00Z',
     daily:[{date:'2026-10-11',browsers:2,pageviews:3}], recent:[], pages:[], referrers:[] };
   const response = (status, data) => ({ok:status === 200,status,headers:{get:() => 'application/json'},json:async() => data});
   const context = {
     URL, AbortController, Date, Number, TypeError, console,
     localStorage:storage(local), sessionStorage:storage(session),
-    location:{protocol:'http:',hostname:'127.0.0.1'},
+    location:{protocol:hostname === '127.0.0.1' ? 'http:' : 'https:',hostname},
     setTimeout(fn,delay) { timers.push({fn,delay}); return timers.length; }, clearTimeout(){},
     document:{getElementById:id => $(id.replace('analytics-', '')),createElement:() => new Node(),createElementNS:() => new Node()},
     fetch:async(url,options) => {
       calls.push({url,options});
       if (state.offline) throw new TypeError('Network failed');
-      if (url.endsWith('/session')) return response(200,{configured:true,authenticated:state.authorized});
+      if (url.endsWith('/session')) return state.sessionPending || response(200,{configured:state.configured,authenticated:state.authorized});
       if (url.endsWith('/login')) {
         if (state.loginPending) return state.loginPending;
         if (state.rejectLogin) return response(401,{error:'Incorrect username or password.'});
@@ -114,7 +134,7 @@ function dashboard() {
       return state.authorized ? response(200,summary) : response(401,{error:'Owner sign-in required.'});
     }
   };
-  context.window = { SITE_ANALYTICS_CONFIG:{apiBaseUrl:'https://analytics.example.com'},scrollTo(){} };
+  context.window = { SITE_ANALYTICS_CONFIG:{apiBaseUrl},scrollTo(){} };
   runInNewContext(read('assets/analytics.js'),context);
   const flush = async() => { for(let i=0;i<4;i++) await new Promise(resolve=>setImmediate(resolve)); };
   const click = async(id,event='click') => { await $(id).handlers[event]({preventDefault(){}}); await flush(); };
@@ -127,6 +147,61 @@ test('Dashboard checks the server session before requesting any statistics', asy
   assert.equal(ui.$('dashboard').hidden,true);
   assert.equal(ui.calls.length,1);
   assert.ok(ui.calls[0].url.endsWith('/session'));
+  assert.equal(ui.$('signin').disabled,false);
+});
+
+test('Unconfigured public API never submits credentials or shows misleading zero statistics', async() => {
+  const ui=dashboard({apiBaseUrl:'',hostname:'minun001.github.io'}); await ui.flush();
+  assert.equal(ui.calls.length,0);
+  assert.equal(ui.$('signin').disabled,true);
+  assert.equal(ui.$('connection').textContent,'Online setup pending');
+  assert.match(ui.$('status').textContent,/No public visits are being collected/);
+  await ui.login();
+  assert.equal(ui.calls.length,0);
+  assert.equal(ui.$('password').value,'');
+  assert.equal(ui.$('dashboard').hidden,true);
+});
+
+test('Local page finds the loopback API without requiring a public tunnel', async() => {
+  const ui=dashboard({apiBaseUrl:''}); await ui.flush(); await ui.login();
+  assert.ok(ui.calls.every(call=>call.url.startsWith('http://127.0.0.1:8792/')));
+  assert.equal(ui.$('dashboard').hidden,false);
+});
+
+test('Offline API disables login until manual reconnect succeeds', async() => {
+  const ui=dashboard({offline:true}); await ui.flush();
+  assert.equal(ui.$('signin').disabled,true);
+  assert.equal(ui.$('reconnect').hidden,false);
+  await ui.login();
+  assert.equal(ui.calls.filter(call=>call.url.endsWith('/login')).length,0);
+  ui.state.offline=false; await ui.click('reconnect');
+  assert.equal(ui.$('signin').disabled,false);
+  assert.equal(ui.$('reconnect').hidden,true);
+  await ui.login();
+  assert.equal(ui.$('dashboard').hidden,false);
+});
+
+test('Unconfigured owner credentials leave sign-in disabled', async() => {
+  const ui=dashboard({configured:false}); await ui.flush(); await ui.login();
+  assert.equal(ui.$('signin').disabled,true);
+  assert.equal(ui.$('connection').textContent,'Account setup required');
+  assert.equal(ui.calls.filter(call=>call.url.endsWith('/login')).length,0);
+});
+
+test('Reconnect invalidates a pending login even when the API origin is unchanged', async() => {
+  const ui=dashboard(); await ui.flush();
+  let resolveLogin, resolveSession;
+  ui.state.loginPending=new Promise(done=>{resolveLogin=done;});
+  const pendingLogin=ui.login(); await ui.flush();
+  ui.state.sessionPending=new Promise(done=>{resolveSession=done;});
+  const pendingReconnect=ui.click('reconnect'); await ui.flush();
+  resolveLogin(ui.response(200,{session_token:'stale-login-token'})); await pendingLogin;
+  assert.equal(ui.$('signin').disabled,true);
+  assert.equal(ui.session.size,0);
+  assert.equal(ui.$('dashboard').hidden,true);
+  resolveSession(ui.response(200,{configured:true,authenticated:false})); await pendingReconnect;
+  assert.equal(ui.$('signin').disabled,false);
+  assert.equal(ui.session.size,0);
 });
 
 test('Successful login displays actual API values and stores only a session token', async() => {

@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   var config = window.SITE_ANALYTICS_CONFIG || {};
-  var base = '', token = '', requestSequence = 0, expiryTimer;
+  var base = '', token = '', requestSequence = 0, connectionSequence = 0, connectionReady = false, expiryTimer;
   var $ = function (id) { return document.getElementById('analytics-' + id); };
   function normalize(value) {
     try {
@@ -14,6 +14,11 @@
   }
   function tokenKey() { return 'site.analytics.session:' + base; }
   function status(message, error) { $('status').textContent = message; $('status').dataset.error = error ? 'true' : 'false'; }
+  function availability(ready) {
+    connectionReady = ready;
+    $('signin').disabled = !ready;
+    $('reconnect').hidden = ready;
+  }
   function saveToken(value) {
     token = value;
     try {
@@ -29,7 +34,7 @@
     ['today-browsers', 'today-views', 'total-browsers', 'total-views'].forEach(function (id) { $(id).textContent = '—'; });
   }
   async function api(path, body) {
-    if (!base) throw new Error('Set your trusted Analytics API URL below. Statistics are unavailable until the local API and HTTPS tunnel are running.');
+    if (!base) throw new Error('The PC-hosted API has no online connection configured. Sign-in requires the owner\'s PC and a permitted HTTPS tunnel. No public visits are being collected.');
     var controller = new AbortController();
     var requestBase = base, requestToken = token;
     var timer = setTimeout(function () { controller.abort(); }, 15000);
@@ -39,11 +44,13 @@
       var payload = await response.json();
       if (!response.ok) {
         if (response.status === 401 && base === requestBase && token === requestToken) saveToken('');
-        throw new Error(payload.error || 'API request failed (' + response.status + ').');
+        var failure = new Error(payload.error || 'API request failed (' + response.status + ').');
+        failure.status = response.status;
+        throw failure;
       }
       return payload;
     } catch (error) {
-      if (error instanceof TypeError || error.name === 'AbortError') throw new Error('API disconnected. Keep this PC, the Analytics API and its HTTPS tunnel running.');
+      if (error instanceof TypeError || error.name === 'AbortError') throw new Error('API disconnected. The owner\'s PC, API or secure connection is unavailable. Offline visits cannot be recovered.');
       throw error;
     } finally { clearTimeout(timer); }
   }
@@ -86,35 +93,41 @@
       rows('recent', data.recent.map(function (visit) { return [new Date(visit.timestamp).toLocaleString('en-GB', { timeZone: 'Asia/Seoul' }), visit.browser, visit.page, visit.referrer || 'Direct / unknown']; }));
       ranking('pages', data.pages, 'path'); ranking('referrers', data.referrers, 'host'); chart(data.daily);
       $('dashboard').hidden = false; $('login').hidden = true; $('settings').open = false;
+      availability(true);
       $('connection').textContent = 'Private API connected';
       clearTimeout(expiryTimer);
       expiryTimer = setTimeout(function () { saveToken(''); lock(); $('connection').textContent = 'Owner sign-in required'; status('Session expired. Sign in again to view private statistics.'); }, 30 * 60 * 1000);
       status('Only consented visits recorded while this PC and its tunnel are online are included.');
-    } catch (error) { if (sequence === requestSequence) { lock(); status(error.message, true); $('connection').textContent = 'Statistics unavailable'; } }
+    } catch (error) { if (sequence === requestSequence) { lock(); availability(error.status === 401); status(error.message, true); $('connection').textContent = 'Statistics unavailable'; } }
     finally { $('refresh').disabled = false; }
   }
   async function connect() {
-    var connectionBase = base;
-    lock(); $('connection').textContent = 'Checking connection';
+    var connectionBase = base, sequence = ++connectionSequence;
+    lock(); availability(false); $('reconnect').disabled = true; $('password').value = '';
+    $('connection').textContent = 'Checking connection'; status('Checking the PC-hosted API…');
     try {
       var session = await api('/analytics/session');
-      if (connectionBase !== base) return;
+      if (connectionBase !== base || sequence !== connectionSequence) return;
+      availability(session.configured === true);
       $('connection').textContent = session.configured ? 'Owner sign-in required' : 'Account setup required';
       if (session.authenticated) { await refresh(); return; }
       saveToken('');
       status(session.configured ? 'Sign in to view private statistics. API: ' + base : 'Configure the owner account on this PC before signing in.', !session.configured);
-    } catch (error) { if (connectionBase === base) { $('connection').textContent = 'API disconnected'; status(error.message, true); $('settings').open = true; } }
+    } catch (error) { if (connectionBase === base && sequence === connectionSequence) { availability(false); $('connection').textContent = base ? 'PC-hosted API offline' : 'Online setup pending'; status(error.message, true); $('settings').open = true; } }
+    finally { if (sequence === connectionSequence) $('reconnect').disabled = false; }
   }
   $('login-form').addEventListener('submit', async function (event) {
-    var loginBase = base;
-    event.preventDefault(); $('signin').disabled = true; status('Signing in to ' + base + '…');
+    event.preventDefault();
+    if (!connectionReady) { $('password').value = ''; status('Connect the PC-hosted API before signing in. Use Retry connection after the PC and its secure connection are running.', true); return; }
+    var loginBase = base, sequence = connectionSequence;
+    $('signin').disabled = true; status('Signing in to ' + base + '…');
     try {
       var data = await api('/analytics/login', { username: $('username').value.trim(), password: $('password').value });
-      if (loginBase !== base) return;
+      if (loginBase !== base || sequence !== connectionSequence) return;
       saveToken(data.session_token); $('password').value = ''; await refresh();
       if (!$('dashboard').hidden) { $('title').focus(); window.scrollTo(0, 0); }
-    } catch (error) { if (loginBase === base) { $('password').value = ''; status(error.message, true); } }
-    finally { $('signin').disabled = false; }
+    } catch (error) { if (loginBase === base && sequence === connectionSequence) { $('password').value = ''; availability(Boolean(error.status && error.status < 500)); status(error.message, true); } }
+    finally { if (loginBase === base && sequence === connectionSequence) $('signin').disabled = !connectionReady; }
   });
   $('api-form').addEventListener('submit', function (event) {
     event.preventDefault(); var next = normalize($('api-url').value);
@@ -124,10 +137,12 @@
     $('password').value = ''; connect();
   });
   $('refresh').addEventListener('click', refresh); $('range').addEventListener('change', refresh);
+  $('reconnect').addEventListener('click', connect);
   $('signout').addEventListener('click', async function () {
+    connectionSequence += 1;
     $('signout').disabled = true;
     try { await api('/analytics/logout', {}); status('Signed out.'); }
-    catch (_error) { status('Signed out in this browser. The API was unreachable; the server session will expire automatically.', true); }
+    catch (_error) { availability(false); status('Signed out in this browser. The API was unreachable; the server session will expire automatically.', true); }
     finally { saveToken(''); lock(); $('connection').textContent = 'Owner sign-in required'; $('signout').disabled = false; $('username').focus(); }
   });
   try { base = normalize(localStorage.getItem('site.analytics.api')) || normalize(config.apiBaseUrl); } catch (_error) { base = normalize(config.apiBaseUrl); }

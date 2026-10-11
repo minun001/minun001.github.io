@@ -69,11 +69,35 @@ The `/analytics/` menu is public; statistics require a separate server-verified 
 The existing Workspace login and private tools are unchanged. The Python API uses only
 standard-library dependencies and listens on loopback port 8792.
 
+Operation is PC-hosted, not an always-on cloud service. Shutdown, sleep, loss of network
+or a stopped API/tunnel interrupts collection. Missed visits are not queued or recovered.
+The website itself remains available on GitHub Pages. No AI jobs run during collection.
+
 ```powershell
 python tools/site_analytics.py --set-credentials
 winget install --id Cloudflare.cloudflared --exact
 powershell -ExecutionPolicy Bypass -File tools/start_site_analytics.ps1
 ```
+
+For use on this PC without a public tunnel, build once and start local-only mode:
+
+```powershell
+bundle exec jekyll build
+powershell -ExecutionPolicy Bypass -File tools/start_site_analytics.ps1 -LocalOnly
+```
+
+Open `http://127.0.0.1:4000/analytics/` and use the configured owner account. This mode
+starts the loopback API and built-site preview, or reuses already running matching
+services without killing them on exit. It does not enable public visitor collection.
+Keep the launcher running while using it; restart after boot. No Windows startup task
+or always-on hosting is installed. Only processes it starts are stopped on exit.
+
+If the network security filter blocks Cloudflare Tunnel (for example, redirecting
+`api.trycloudflare.com` to an Akamai error page), request permission from the network
+administrator. Do not change DNS, disable security controls or publish an HTTP API to
+work around that restriction. Online login and collection remain unavailable until an
+approved HTTPS connection is reachable and deployed. The sign-in button stays disabled
+until the API session check succeeds; Retry connection checks again without reloading.
 
 Credentials are salted PBKDF2 hashes in `.private/analytics/owner.json`; visitor events
 are in `.private/analytics/visits.sqlite3`. Both are ignored by Git and excluded from
