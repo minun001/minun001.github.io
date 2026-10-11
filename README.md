@@ -6,8 +6,10 @@ Personal academic website for Hyunsik Min, published with GitHub Pages.
 
 - Home
 - Profile
+- Research
 - Publications
 - News
+- Analytics (`/analytics/`) for private owner-only traffic statistics
 - Dashboard (`/workspace/`) for private, authenticated access
 
 ## Local Development
@@ -60,3 +62,42 @@ The fallback uses the existing dedicated `.scholar-sync-worktree` checkout so or
 - Private dashboard tables and policies are defined in `tools/workspace_supabase_schema.sql`.
 - Starter private dashboard content is defined in `tools/workspace_supabase_seed.sql`.
 - Do not commit service-role keys, database passwords, or other backend secrets.
+
+## Private Analytics
+
+The `/analytics/` menu is public; statistics require a separate server-verified owner login.
+The existing Workspace login and private tools are unchanged. The Python API uses only
+standard-library dependencies and listens on loopback port 8792.
+
+```powershell
+python tools/site_analytics.py --set-credentials
+winget install --id Cloudflare.cloudflared --exact
+powershell -ExecutionPolicy Bypass -File tools/start_site_analytics.ps1
+```
+
+Credentials are salted PBKDF2 hashes in `.private/analytics/owner.json`; visitor events
+are in `.private/analytics/visits.sqlite3`. Both are ignored by Git and excluded from
+Jekyll. Never move them into `_site` or publish them. Configure Windows folder access
+so only your account can read `.private`. Restart the API after changing credentials;
+existing sessions then become invalid. Sessions expire after 30 idle minutes or 12 hours.
+
+The launcher creates a Quick Tunnel and updates `assets/site-analytics-config.js`
+with its public HTTPS URL. Build, review and deploy that config after every tunnel
+restart. A Quick Tunnel is temporary: its hostname changes and uptime is not guaranteed.
+This PC, the launcher and its tunnel must remain running to collect visits or sign in.
+For stable unattended operation, replace it with a named tunnel and fixed HTTPS hostname.
+Do not put a Cloudflare Access login in front of the public collect endpoint; protect
+private reads with the API's owner authentication instead.
+
+Collection is opt-in on five public pages only. DNT/GPC opt out; local owner sessions
+are excluded. IDs rotate every 30 days and are HMAC-hashed before storage. No names,
+email addresses, raw IPs, query strings or full referrers are stored. Raw events expire
+after 90 days (purged on collection/summary requests). Network providers may separately
+log connection metadata. Browser counts are estimates, not identified people or a
+complete count of all visitors. Public writes can be spoofed; allowlisted origins and
+rate limits mitigate abuse but are not proof of a real person.
+
+Checks: `python -m unittest discover -s _tests -p test_site_analytics.py`,
+`node --test _tests/*.test.cjs`, and `bundle exec jekyll build`.
+To roll back, revert the Analytics commit and stop the launcher. Preserve `.private`
+unless you explicitly intend to delete the owner's credentials and collected visits.

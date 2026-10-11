@@ -1,0 +1,23 @@
+---
+layout: default
+title: Privacy
+description: How optional website analytics works.
+robots: noindex,follow
+include_public_analytics: false
+---
+<section class="section" style="max-width:760px;margin:3rem auto">
+  <h1>Privacy &amp; analytics</h1>
+  <p>Optional analytics helps me understand which research pages are useful. It is off until you choose “Allow analytics.”</p>
+  <h2>What is collected</h2>
+  <p>A random browser ID, the page path, visit time, referring hostname and a broad device category. No names, email addresses, precise locations, raw IP addresses, full referrer URLs or query strings are stored in the analytics database. Browser IDs rotate after 30 days.</p>
+  <p>Browser IDs estimate browsers, not people. They do not reveal who you are. Raw events are kept for up to 90 days and the dashboard requires an owner login. Past visits cannot be recovered before collection begins.</p>
+  <h2>Your choice</h2>
+  <p>Only Home, Profile, Research, Publications and News are measured. Private tools and this page are not tracked. Global Privacy Control and Do Not Track are respected. You can change your choice below; declining removes this site's analytics ID from this browser but does not delete already recorded events.</p>
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap"><button class="btn-soft" id="privacy-allow" type="button">Allow analytics</button><button class="btn-soft" id="privacy-decline" type="button">Decline analytics</button></div>
+  <p id="privacy-status" role="status" aria-live="polite"></p>
+  <h2>Hosting</h2>
+  <p>GitHub Pages hosts this site. Hosting and network providers may process connection metadata under their own policies, independently of this optional analytics system.</p>
+  <p>Questions or deletion requests: <a href="mailto:{{ site.email | escape }}">{{ site.email | escape }}</a>.</p>
+  <noscript><p>With JavaScript disabled, this site's optional analytics does not run.</p></noscript>
+</section>
+<script src="{{ '/assets/privacy.js' | relative_url }}?v=20261011a"></script>

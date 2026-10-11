@@ -23,6 +23,9 @@
   {% if script_bundle == 'timesfm' %}
   <link rel="stylesheet" href="{{ "/assets/timesfm-forecast.css" | relative_url }}?v=20261007b">
   {% endif %}
+  {% if script_bundle == 'analytics' %}
+  <link rel="stylesheet" href="{{ '/assets/analytics.css' | relative_url }}?v=20261011a">
+  {% endif %}
 </head>
 {% assign current_url = page.url | replace: 'index.html', '' %}
 {% if current_url == '' %}
@@ -98,12 +101,14 @@
     <script src="{{ "/assets/timesfm-config.js" | relative_url }}?v=20260511c"></script>
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
     <script src="{{ "/assets/timesfm-forecast.js" | relative_url }}?v=20260803a"></script>
-  {% else %}
-    {% if page.include_public_analytics == true %}
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="{{ "/assets/site-analytics-config.js" | relative_url }}?v=20260508a"></script>
-    <script src="{{ "/assets/visitor-tracker.js" | relative_url }}?v=20260420c"></script>
-    {% endif %}
+  {% elsif script_bundle == 'analytics' %}
+    <script src="{{ '/assets/site-analytics-config.js' | relative_url }}?v=20261011a"></script>
+    <script src="{{ '/assets/analytics.js' | relative_url }}?v=20261011a"></script>
+  {% endif %}
+  {% assign tracked_paths = '/|/profile/|/research/|/publications/|/news/' | split: '|' %}
+  {% if tracked_paths contains current_url %}
+  <script src="{{ '/assets/site-analytics-config.js' | relative_url }}?v=20261011a"></script>
+  <script src="{{ '/assets/visitor-tracker.js' | relative_url }}?v=20261011a"></script>
   {% endif %}
   <script src="{{ "/assets/site.js" | relative_url }}?v=20261007a"></script>
   {% if page.home_design %}

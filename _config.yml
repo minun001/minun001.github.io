@@ -44,8 +44,17 @@ nav:
     link: "/publications/"
   - name: "News"
     link: "/news/"
+  - name: "Analytics"
+    link: "/analytics/"
 
 exclude:
+  - .private/
+  - tools/site_analytics.py
+  - _tests/
+  - tools/workspace_servers.local.json
+  - tools/workspace_auth.local.json
+  - tools/workspace_helper.env
+  - tools/timesfm_server/.env
   - VLA/
   - Gemfile
   - Gemfile.lock

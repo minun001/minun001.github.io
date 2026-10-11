@@ -1,0 +1,66 @@
+---
+layout: default
+title: Analytics
+description: Private website traffic dashboard.
+body_class: page-analytics
+script_bundle: analytics
+robots: noindex,nofollow
+show_footer: false
+include_public_analytics: false
+---
+<section class="analytics-page" aria-labelledby="analytics-title">
+  <header class="analytics-lead">
+    <div><p class="analytics-eyebrow">Owner access</p><h1 id="analytics-title" tabindex="-1">Analytics</h1><p>Website visits, at a glance.</p></div>
+    <span class="analytics-chip" id="analytics-connection">Checking connection</span>
+  </header>
+  <p id="analytics-status" class="analytics-status" role="status" aria-live="polite">Connecting to the private API…</p>
+  <section id="analytics-login" class="analytics-login analytics-panel" aria-labelledby="analytics-login-title">
+    <div>
+      <h2 id="analytics-login-title">Sign in</h2>
+      <p>Traffic data is available only to the site owner.</p>
+      <form id="analytics-login-form">
+        <label for="analytics-username">Username</label>
+        <input id="analytics-username" name="username" autocomplete="username" required maxlength="80">
+        <label for="analytics-password">Password</label>
+        <input id="analytics-password" name="password" type="password" autocomplete="current-password" required maxlength="256">
+        <button class="btn" id="analytics-signin" type="submit">Sign in</button>
+      </form>
+    </div>
+    <aside class="analytics-login-note">
+      <h3>What this shows</h3>
+      <p>Daily browsers and page views. Popular pages and referring sites.</p>
+      <p>Anonymous browser IDs are not people's identities. Names and email addresses are not collected.</p>
+      <a href="{{ '/privacy/' | relative_url }}">How analytics works ↗</a>
+    </aside>
+  </section>
+  <details id="analytics-settings" class="analytics-settings">
+    <summary>API connection settings</summary>
+    <p>Use the trusted HTTPS address of your own Analytics backend. Credentials are sent only to the address shown here. This setting affects this browser, not public collection.</p>
+    <form id="analytics-api-form"><label for="analytics-api-url">Trusted API URL</label><input id="analytics-api-url" type="url" placeholder="https://analytics.example.com" required><button class="btn-soft" type="submit">Connect</button></form>
+  </details>
+  <section id="analytics-dashboard" hidden aria-label="Private traffic data">
+    <div class="analytics-toolbar">
+      <label for="analytics-range">Date range <select id="analytics-range"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option></select></label>
+      <div><button class="btn-soft" id="analytics-refresh" type="button">Refresh</button><button class="btn-soft" id="analytics-signout" type="button">Sign out</button></div>
+    </div>
+    <div class="analytics-stats">
+      <article class="analytics-panel"><h2>Browsers today</h2><strong id="analytics-today-browsers">—</strong><p>Estimated unique browsers</p></article>
+      <article class="analytics-panel"><h2>Page views today</h2><strong id="analytics-today-views">—</strong><p>Includes repeat page loads</p></article>
+      <article class="analytics-panel"><h2>Browsers in range</h2><strong id="analytics-total-browsers">—</strong><p>Deduplicated across this range</p></article>
+      <article class="analytics-panel"><h2>Page views in range</h2><strong id="analytics-total-views">—</strong><p id="analytics-range-caption">Last 30 days</p></article>
+    </div>
+    <section class="analytics-panel analytics-trend" aria-labelledby="analytics-trend-title">
+      <div class="analytics-panel-head"><h2 id="analytics-trend-title">Daily traffic</h2><p>Seoul time · <span id="analytics-updated">Not loaded</span></p></div>
+      <p id="analytics-empty" hidden>No visits recorded in this period. Collection starts only after the public API is enabled and a visitor consents.</p>
+      <div id="analytics-chart"></div>
+      <details><summary>View daily numbers</summary><div class="analytics-table-wrap"><table><thead><tr><th scope="col">Date</th><th scope="col">Browsers</th><th scope="col">Page views</th></tr></thead><tbody id="analytics-daily"></tbody></table></div></details>
+    </section>
+    <div class="analytics-columns">
+      <section class="analytics-panel"><h2>Popular pages</h2><ol id="analytics-pages" class="analytics-ranking"></ol></section>
+      <section class="analytics-panel"><h2>Referring sites</h2><ol id="analytics-referrers" class="analytics-ranking"></ol></section>
+    </div>
+    <section class="analytics-panel"><h2>Recent visits</h2><p>Anonymous browser IDs, not identified people. Latest 100 page views in this range.</p><div class="analytics-table-wrap"><table><thead><tr><th scope="col">Time (Seoul)</th><th scope="col">Browser ID</th><th scope="col">Page</th><th scope="col">Source</th></tr></thead><tbody id="analytics-recent"></tbody></table></div></section>
+    <p class="analytics-footnote">Consent-based estimates only. Devices, blockers, cleared storage and missed requests affect counts. Raw events are retained for up to 90 days. <a href="{{ '/privacy/' | relative_url }}">Privacy details</a></p>
+  </section>
+  <noscript><p>JavaScript is required for this private dashboard. Statistics remain protected by the backend login.</p></noscript>
+</section>

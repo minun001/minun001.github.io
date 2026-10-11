@@ -1,7 +1,7 @@
 window.SITE_ANALYTICS_CONFIG = {
-  supabaseUrl: '',
-  supabaseAnonKey: '',
-  rpcFunction: 'record_site_visit',
+  // Set a stable HTTPS backend URL before enabling public collection.
+  apiBaseUrl: '',
+  collectionEnabled: false,
   timezone: 'Asia/Seoul',
-  storageKeyPrefix: 'hyunsik-min-site'
+  retentionDays: 90
 };
