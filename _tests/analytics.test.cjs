@@ -5,6 +5,18 @@ const test = require('node:test');
 const { runInNewContext } = require('node:vm');
 const read = path => readFileSync(join(__dirname, '..', path), 'utf8');
 
+test('Tunnel launcher ignores service error URLs and publishes only after public health succeeds', () => {
+  const source = read('tools/start_site_analytics.ps1');
+  const pattern = source.match(/\$line -match '([^'\n]*trycloudflare[^'\n]*)'/)[1];
+  const banner = new RegExp(pattern);
+  assert.equal(banner.test('failed to request quick Tunnel: Post "https://api.trycloudflare.com/tunnel": EOF'), false);
+  assert.equal(banner.test('| https://api.trycloudflare.com |'), false);
+  assert.equal(banner.test('| https://sample-private-dashboard.trycloudflare.com |'), true);
+  assert.ok(source.indexOf('if (!$reachable)') < source.indexOf('[System.IO.File]::WriteAllText'));
+  assert.match(source, /Registered tunnel connection/);
+  assert.match(source, /throw 'The HTTPS tunnel stopped/);
+});
+
 function tracker({ consent = 'yes', dnt, gpc, path = '/', enabled = true, blocked = false, owner = false } = {}) {
   const requests = [];
   const memory = new Map(consent ? [['site.analytics.consent', consent]] : []);

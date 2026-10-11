@@ -34,10 +34,25 @@ try {
     $info.RedirectStandardError = $true
     $tunnel = [System.Diagnostics.Process]::Start($info)
     $published = $false
+    $url = $null
+    $lastLine = ''
     while (!$tunnel.StandardError.EndOfStream) {
         $line = $tunnel.StandardError.ReadLine()
-        if (!$published -and $line -match 'https://[a-z0-9-]+\.trycloudflare\.com') {
-            $url = $Matches[0]
+        $lastLine = $line
+        # Only accept the allocated hostname from the success banner, not api.trycloudflare.com in an error.
+        if (!$published -and $line -match '\|\s*(https://(?!api\.)[a-z0-9-]+\.trycloudflare\.com)\s*\|') {
+            $url = $Matches[1]
+        }
+        if (!$published -and $url -and $line -match 'Registered tunnel connection') {
+            $reachable = $false
+            for ($attempt=0; $attempt -lt 10; $attempt++) {
+                try {
+                    $publicHealth = Invoke-RestMethod "$url/health" -TimeoutSec 5
+                    if ($publicHealth.service -eq 'private-site-analytics' -and $publicHealth.configured) { $reachable = $true; break }
+                } catch {}
+                Start-Sleep -Seconds 1
+            }
+            if (!$reachable) { throw 'The allocated HTTPS URL did not reach the Analytics API. Public config was not changed.' }
             # A public URL is not a credential. Never put credentials or statistics in this asset.
             $source = "window.SITE_ANALYTICS_CONFIG = {`n  apiBaseUrl: '$url',`n  collectionEnabled: true,`n  timezone: 'Asia/Seoul',`n  retentionDays: 90`n};`n"
             [System.IO.File]::WriteAllText((Join-Path $repo 'assets\site-analytics-config.js'), $source, (New-Object System.Text.UTF8Encoding($false)))
@@ -48,7 +63,8 @@ try {
         }
         if ($line -match '\bERR\b') { Write-Warning 'The HTTPS tunnel reported a connection error.' }
     }
-    if (!$published) { throw 'The tunnel did not provide an HTTPS URL.' }
+    if (!$published) { throw "The tunnel did not become reachable. Public config was not changed. $lastLine" }
+    throw 'The HTTPS tunnel stopped. Restart this launcher and redeploy the new API URL.'
 } finally {
     if ($null -ne $tunnel -and !$tunnel.HasExited) { $tunnel.Kill() }
     if (!$api.HasExited) { Stop-Process -Id $api.Id }

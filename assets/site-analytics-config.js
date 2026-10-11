@@ -1,5 +1,5 @@
 window.SITE_ANALYTICS_CONFIG = {
-  // Set a stable HTTPS backend URL before enabling public collection.
+  // Set a reachable HTTPS backend URL before enabling public collection.
   apiBaseUrl: '',
   collectionEnabled: false,
   timezone: 'Asia/Seoul',
