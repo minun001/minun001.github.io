@@ -1,8 +1,8 @@
 {
   "profile_name": "Hyunsik Min",
   "source_url": "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en",
-  "checked_at": "2026-10-21",
-  "checked_at_display": "October 21, 2026",
+  "checked_at": "2026-10-22",
+  "checked_at_display": "October 22, 2026",
   "total_records": 13,
   "sections": [
     {
@@ -134,7 +134,7 @@
           "topic_title": "Energy Forecasting",
           "topic_copy": "Deep-learning forecasting for photovoltaic power generation.",
           "year": 2024,
-          "citation_count": 26,
+          "citation_count": 27,
           "keywords": [
             "solar",
             "photovoltaic",
