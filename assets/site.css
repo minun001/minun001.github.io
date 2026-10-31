@@ -26,9 +26,13 @@
   --radius-md: 12px;
   --radius-lg: 14px;
   --radius-pill: 999px;
-  --control-height: 42px;
+  --control-height: 44px;
   --content-measure: 68ch;
   --section-gap: 1.75rem;
+  --section-space: clamp(2.5rem, 4vw, 3.5rem);
+  --heading-page-size: clamp(2.25rem, 4.4vw, 3.5rem);
+  --heading-section-size: clamp(1.65rem, 2.8vw, 2.25rem);
+  --lead-size: clamp(1.0625rem, 1.4vw, 1.125rem);
   --credential-accent: #174a8b;
   --credential-accent-soft: rgba(23, 74, 139, 0.09);
   --credential-accent-line: rgba(23, 74, 139, 0.22);
@@ -204,7 +208,7 @@ ul {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
+  min-height: var(--control-height);
   padding: 0.46rem 0.08rem 0.62rem;
   border-radius: 0;
   font-size: 0.92rem;
@@ -492,7 +496,7 @@ body.page-profile .page:after {
 
 body.page-publications .page-lead-copy h1,
 body.page-news .page-lead-copy h1 {
-  font-size: clamp(2.25rem, 4.4vw, 3.5rem);
+  font-size: var(--heading-page-size);
   line-height: 1.12;
 }
 
@@ -1188,19 +1192,23 @@ body.theme-night .photo-note {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 0.55rem 0.88rem;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: inset 0 0 0 1px rgba(17, 32, 51, 0.09);
+  min-height: var(--control-height);
+  padding: 0.4rem 0.35rem;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
   color: var(--text-title);
   font-size: 0.86rem;
-  font-weight: 800;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 4px;
 }
 
 .footer-link:hover {
-  background: var(--text-title);
-  color: #fff;
+  background: transparent;
+  color: var(--accent);
+  text-decoration-color: currentColor;
 }
 
 .footer-note {

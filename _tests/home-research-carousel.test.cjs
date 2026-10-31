@@ -33,7 +33,8 @@ test("Home research slides have distinct responsive WebP assets and meaningful a
 test("Home introduces the researcher alongside one automatically rotating research gallery", () => {
   const hero = homeTemplate.split('<section class="research-hero"')[1].split("</section>")[0];
   assert.match(hero, /<h1 id="research-title">Hyunsik Min<\/h1>/);
-  assert.match(hero, /vehicle behavior prediction, vehicle interactions, and CCTV-based traffic accident analysis/);
+  assert.match(hero, /how vehicles move, interact, and respond to traffic/);
+  assert.match(hero, /trajectory prediction and CCTV-based scene analysis/);
   assert.doesNotMatch(homeTemplate, /intelligent mobility|AI for the way|Research highlights|Current &amp; past research|research-showcase|Mobility research,/i);
   assert.match(hero, /id="home-research" data-research-carousel data-interval="7000"/);
   assert.match(hero, /for slide in site\.data\.research_slides/);

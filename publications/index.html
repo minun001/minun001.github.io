@@ -6,22 +6,24 @@ body_class: page-publications
 ---
 <style>
   body.page-publications .publications-page{display:grid;gap:1.75rem}
-  .page-publications .pub-lead{grid-template-columns:minmax(0,1fr) minmax(17rem,22rem);gap:2rem;border-bottom:0;padding-bottom:0}
+  .page-publications .pub-lead{grid-template-columns:minmax(0,1fr) minmax(18rem,25rem);align-items:center;gap:1.5rem;border-bottom:0;padding-bottom:0}
   .pub-lead-copy{display:grid;gap:.75rem;min-width:0}
   .publications-page > .pub-citation-note{margin:0;color:var(--text-soft);font-size:.8125rem;line-height:1.6}
-  .pub-scholar-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem 1.25rem;padding:1rem 1.25rem;border-radius:12px;background:#f7f8fa;align-content:start}
+  .pub-scholar-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.35rem 1rem;padding:.75rem 1rem;border-radius:var(--radius-sm);background:var(--bg-muted);align-content:start}
   .pub-scholar-label{align-self:center;color:var(--text-title);font-size:.9375rem;font-weight:700;line-height:1.4}
-  .pub-scholar-stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}
-  .pub-scholar-stat{display:grid;gap:.3rem}
+  .pub-scholar-stats{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
+  .pub-scholar-stat{display:flex;align-items:baseline;gap:.5rem}
   .pub-scholar-stat-label{color:var(--text-soft);font-size:.9375rem;line-height:1.4}
-  .pub-scholar-stat-value{color:var(--accent);font-size:1.625rem;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+  .pub-scholar-stat-value{color:var(--accent);font-size:1.375rem;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
   .pub-scholar-link{grid-column:2;grid-row:1;justify-self:end;display:inline-flex;align-items:center;min-height:44px;color:var(--accent);font-size:.9375rem;font-weight:700;text-decoration:underline;text-underline-offset:.2em}
-  .pub-scholar-panel .pub-scholar-note{grid-column:1/-1;margin:0;color:var(--text-soft);font-size:.9rem;line-height:1.5}
-  body.page-publications .pub-summary.pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.25rem;padding:0;border:0}
-  body.page-publications .pub-summary.pub-jump .pub-summary-item{display:grid;gap:.35rem;align-content:start;min-width:0;padding:.75rem 0;border:0;border-bottom:2px solid var(--border-soft);border-radius:0;background:none;color:var(--text-body);text-decoration:none;white-space:normal}
+  .pub-scholar-panel .pub-scholar-note{grid-column:1/-1;margin:0;color:var(--text-soft);font-size:.8125rem;line-height:1.5}
+  body.page-publications .pub-summary.pub-jump{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem 1.25rem;padding:0;border:0}
+  body.page-publications .pub-summary.pub-jump .pub-summary-item{display:grid;gap:.3rem;align-content:start;min-width:0;min-height:44px;padding:.5rem 0;border:0;border-bottom:2px solid var(--border-soft);border-radius:0;background:none;color:var(--text-body);text-decoration:none;white-space:normal}
   body.page-publications .pub-summary.pub-jump .pub-summary-item:hover,
   body.page-publications .pub-summary.pub-jump .pub-summary-item.is-active{border-bottom-color:var(--accent);color:var(--accent)}
   .pub-summary-item:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+  body.page-publications .pub-summary.pub-jump .pub-summary-item[aria-disabled="true"]{cursor:not-allowed;border-bottom-color:var(--border-soft);border-bottom-style:dashed;transform:none}
+  .pub-summary-item[aria-disabled="true"] > span,.pub-summary-item[aria-disabled="true"] strong{color:var(--text-soft)}
   .pub-summary-item > span{color:var(--text-body);font-size:.9375rem;font-weight:600;line-height:1.5;white-space:normal}
   .pub-summary-item strong{color:var(--text-title);font-size:1.25rem;line-height:1.4;font-variant-numeric:tabular-nums}
   .pub-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:start}
@@ -31,11 +33,11 @@ body_class: page-publications
   .pub-search input{flex:1;min-width:0;width:100%;border:0;background:transparent;color:var(--text-title);font:500 1rem/1.5 var(--font-body)}
   .pub-search input::placeholder{color:var(--text-soft);opacity:1}
   .pub-search input:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
-  .pub-search-results{display:grid;gap:.65rem;padding:1rem;border:1px solid var(--border-soft);border-radius:10px;background:#fff}
+  .pub-search-results{display:grid;gap:.4rem;padding:.25rem 0;background:transparent}
   .pub-search-results[hidden]{display:none}
   .pub-search-results-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;color:var(--text-soft);font-size:.9375rem;font-weight:700}
-  .pub-search-result-list{display:grid;gap:.5rem}
-  .pub-search-result{display:grid;gap:.35rem;padding:.9rem;border-radius:8px;background:#f7f8fa;color:inherit;text-decoration:none;transition:background .18s ease}
+  .pub-search-result-list{display:flex;flex-wrap:wrap;gap:.4rem .75rem}
+  .pub-search-result{display:inline-flex;align-items:center;min-height:44px;padding:.35rem .6rem;border-radius:var(--radius-sm);background:var(--bg-muted);color:var(--accent);font-size:.875rem;text-decoration:underline;text-underline-offset:3px;transition:background .18s ease}
   .pub-search-result:hover{background:#eaf0f6}
   .pub-search-result:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .pub-search-result-title{color:var(--text-title);font-size:1.0625rem;font-weight:700;line-height:1.45;overflow-wrap:anywhere}
@@ -47,13 +49,20 @@ body_class: page-publications
   body.page-publications .pub-jump.page-index a{min-height:44px;padding:.4rem 0;font-size:.9375rem;white-space:normal}
   .pub-section{display:grid;gap:1rem;scroll-margin-top:var(--section-anchor-offset)}
   .pub-section-head{padding-top:1rem}
-  .pub-section-head h2{margin:0;font-size:clamp(1.65rem,2.5vw,2.1rem);line-height:1.25;text-wrap:pretty}
+  .pub-section-head h2{margin:0;font-size:var(--heading-section-size);line-height:1.25;text-wrap:pretty}
   .pub-section-grid{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
-  body.page-publications .pub-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,340px);gap:.65rem 2rem;align-content:start;align-items:start;min-width:0;padding:1.75rem 0;border:0;border-top:1px solid var(--border-soft);border-radius:0;background:transparent;box-shadow:none;scroll-margin-top:var(--section-anchor-offset)}
+  body.page-publications .pub-item{display:grid;grid-template-columns:minmax(0,1fr) 15rem;gap:.5rem 2rem;align-content:start;align-items:start;min-width:0;padding:1.5rem 0;border:0;border-top:1px solid var(--border-soft);border-radius:0;background:transparent;box-shadow:none;scroll-margin-top:var(--section-anchor-offset)}
+  body.page-publications .pub-item-text{grid-template-columns:minmax(0,1fr)}
+  .pub-item-text h3,.pub-item-text .pub-meta{max-width:75ch}
   body.page-publications .pub-item:hover{transform:none;box-shadow:none;border-color:var(--border-soft)}
   .pub-item:before{display:none}
-  .pub-item > h3,.pub-item > .pub-record-year,.pub-item > .pub-meta,.pub-item > .pub-note,.pub-item > .pub-actions{grid-column:1}
-  .pub-item h3{margin:0;font-size:clamp(1.25rem,1.8vw,1.5rem);line-height:1.4;text-wrap:pretty;overflow-wrap:anywhere}
+  .pub-item > h3,.pub-item > .pub-record-year,.pub-item > .pub-meta,.pub-item > .pub-note,.pub-item > .pub-actions,.pub-item > .pub-details{grid-column:1}
+  .pub-item h3{margin:0;font-family:var(--font-body);font-size:1.125rem;font-weight:700;line-height:1.5;text-wrap:pretty;overflow-wrap:anywhere}
+  .pub-details{font-size:.9375rem;color:var(--text-soft)}
+  .pub-details summary{display:list-item;width:fit-content;min-height:44px;padding:.5rem 0;color:var(--accent);cursor:pointer}
+  .pub-details summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .pub-details[open] summary{margin-bottom:.35rem}
+  .pub-details .pub-note{margin-top:.4rem}
   .pub-record-year{margin:0;color:var(--accent);font-size:.9375rem;font-weight:800;line-height:1.4;font-variant-numeric:tabular-nums}
   .publications-page .pub-item{position:relative}
   .publication-anchor-compat{position:absolute;top:0;left:0;scroll-margin-top:var(--section-anchor-offset)}
@@ -83,10 +92,10 @@ body_class: page-publications
   .pub-actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:.25rem}
   .publications-page .pub-action,.pub-tool-meta .btn-soft{min-height:44px;font-size:.9375rem;text-align:center;box-shadow:none;background:#eaf0f6}
   .publications-page .pub-action:before,.pub-tool-meta .btn-soft:before{display:none}
-  .pub-image{grid-column:2;grid-row:1 / span 5;display:grid;gap:.65rem;min-width:0;max-width:100%;margin:0;padding:1rem;border-radius:10px;background:#f7f8fa}
+  .pub-image{grid-column:2;grid-row:1 / span 5;display:grid;gap:.5rem;min-width:0;max-width:100%;margin:0;padding:.5rem;border-radius:var(--radius-sm);background:#fff}
   .pub-image a{display:grid;gap:.65rem;min-width:0}
   .pub-image a:focus-visible{outline:3px solid var(--accent);outline-offset:5px}
-  .pub-image img{display:block;width:100%;max-height:300px;height:auto;object-fit:contain}
+  .pub-image img{display:block;width:100%;max-height:220px;height:auto;object-fit:contain}
   .pub-image figcaption{color:var(--text-soft);font-size:.8rem;line-height:1.5}
   .pub-image-link{display:flex;align-items:center;min-height:44px;color:var(--accent);font-size:.875rem;text-decoration:underline;text-underline-offset:.2em}
   .pub-image--original{background:#fff;border-radius:6px}
@@ -111,16 +120,17 @@ body_class: page-publications
     body.page-publications .pub-summary.pub-jump{grid-template-columns:repeat(2,minmax(0,1fr))}
   }
   @media (max-width:980px){
-    .page-publications .pub-lead{grid-template-columns:minmax(0,1fr);gap:1rem}
-    .pub-scholar-panel{max-width:26rem}
+    .page-publications .pub-lead{gap:1rem}
+    body.page-publications .pub-summary.pub-jump .pub-summary-item{grid-template-columns:minmax(0,1fr) auto;align-items:center}
     body.page-publications .pub-item{grid-template-columns:minmax(0,1fr)}
     .pub-image,.pub-marker{grid-column:1;grid-row:auto;margin-top:.25rem}
-    .pub-image{width:100%;max-width:30rem}
+    .pub-image{width:100%;max-width:24rem}
     .pub-marker{padding:.5rem 0;border-left:0}
     .pub-tools{grid-template-columns:minmax(0,1fr);gap:.5rem}
   }
   @media (max-width:640px){
     body.page-publications .publications-page{gap:1rem}
+    .page-publications .pub-lead{grid-template-columns:minmax(0,1fr)}
     body.page-publications .pub-summary.pub-jump{grid-template-columns:minmax(0,1fr);gap:0}
     body.page-publications .pub-summary.pub-jump .pub-summary-item{grid-template-columns:minmax(0,1fr) auto;gap:.75rem;align-items:center;padding:.4rem 0;border-bottom-width:1px}
     .pub-summary-item > span{font-size:.875rem;line-height:1.4}
@@ -137,7 +147,7 @@ body_class: page-publications
     .pub-meta-row{grid-template-columns:3.5rem minmax(0,1fr);gap:.5rem}
     .pub-meta-label{font-size:.875rem}
     .pub-actions{gap:.5rem}
-    .pub-image img{max-height:260px}
+    .pub-image img{max-height:180px}
     .bibtex-dialog{max-width:calc(100vw - 1rem);max-height:calc(100dvh - 1.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));margin:max(.75rem,env(safe-area-inset-top)) auto 0;padding:1rem;overflow:auto}
     .bibtex-code{max-height:min(48dvh,420px)}
   }
@@ -209,7 +219,7 @@ body_class: page-publications
       {% for item in section.items %}
       {% assign legacy_record_index = legacy_record_index | plus: 1 %}
       {% assign visual = site.data.publication_visuals[item.id] %}
-      <article class="pub-item{% unless item.image and item.image != '' %} pub-item-text{% endunless %}" id="publication-{{ item.id | escape }}" data-publication-item data-search="{{ item.search_terms | escape }}">
+      <article class="pub-item{% unless item.image and item.image != '' %} pub-item-text{% endunless %}" id="publication-{{ item.id | escape }}" data-publication-item data-search="{{ item.search_terms | escape }}" data-short-title="{{ visual.short_title | default: item.title | escape }}">
         <span class="publication-anchor-compat" id="publication-record-{{ legacy_record_index }}" aria-hidden="true"></span>
         <p class="pub-record-year">{{ item.year }}</p>
         <h3>{{ item.title | escape }}</h3>
@@ -241,12 +251,6 @@ body_class: page-publications
             <span class="pub-meta-label">Authors</span>
             <span class="pub-meta-value">{{ item.authors | escape }}</span>
           </div>
-          {% if item.details and item.details != '' %}
-          <div class="pub-meta-row">
-            <span class="pub-meta-label">Details</span>
-            <span class="pub-meta-value">{{ item.details | escape }}</span>
-          </div>
-          {% endif %}
           <div class="pub-meta-row" data-publication-citations>
             <span class="pub-meta-label">Citations</span>
             <span class="pub-meta-value">
@@ -262,8 +266,19 @@ body_class: page-publications
             </span>
           </div>
         </div>
-        {% if item.doi and item.doi != '' %}
-        <p class="pub-note">DOI: {{ item.doi | escape }}</p>
+        {% assign has_publication_details = false %}
+        {% if item.details and item.details != '' %}{% assign has_publication_details = true %}{% endif %}
+        {% if item.doi and item.doi != '' %}{% assign has_publication_details = true %}{% endif %}
+        {% if has_publication_details %}
+        <details class="pub-details">
+          <summary>Publication details</summary>
+          {% if item.details and item.details != '' %}
+          <p class="pub-note" data-publication-details>{{ item.details | escape }}</p>
+          {% endif %}
+          {% if item.doi and item.doi != '' %}
+          <p class="pub-note">DOI: {{ item.doi | escape }}</p>
+          {% endif %}
+        </details>
         {% endif %}
         {% if item.image and item.image != '' %}
         <figure class="pub-image pub-image--original">
@@ -271,16 +286,7 @@ body_class: page-publications
             <img src="{{ visual.preview | default: item.image | relative_url }}" alt="{{ item.image_alt | default: item.title | escape }}"{% if visual.width %} width="{{ visual.width }}" height="{{ visual.height }}"{% endif %} loading="lazy" decoding="async">
             <span class="pub-image-link">Open original figure <span aria-hidden="true">&#8599;</span></span>
           </a>
-          <figcaption>Paper figure</figcaption>
         </figure>
-        {% else %}
-        <aside class="pub-marker" aria-hidden="true">
-          <div class="pub-marker-head">
-            <span class="pub-marker-label">{% if section.key contains 'journals' %}Journal paper{% else %}Conference paper{% endif %}</span>
-            <p class="pub-marker-title">{{ item.topic_title | default: 'Research Paper' | escape }}</p>
-          </div>
-          <span class="pub-marker-year">{{ item.year }}</span>
-        </aside>
         {% endif %}
         {% if item.scholar_url or item.bibtex %}
         <div class="pub-actions">

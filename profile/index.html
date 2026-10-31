@@ -15,8 +15,8 @@ research_visuals: true
 
   .about-page .photo-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
-    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+    gap: clamp(2rem, 4vw, 3.5rem);
     align-items: center;
     padding-block: 1rem 1.5rem;
   }
@@ -25,7 +25,7 @@ research_visuals: true
   .about-name {
     margin: 0 0 .6rem;
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 4.4vw, 3.5rem);
+    font-size: var(--heading-page-size);
     font-weight: 500;
     line-height: 1.06;
     text-wrap: balance;
@@ -35,7 +35,7 @@ research_visuals: true
     max-width: 54ch;
     margin: 0;
     color: var(--text-body);
-    font-size: 1.125rem;
+    font-size: var(--lead-size);
     line-height: 1.75;
   }
   .profile-related { max-width: 60ch; margin: .85rem 0 0; color: var(--text-soft); }
@@ -98,7 +98,7 @@ research_visuals: true
   .page-profile .about-page .about-jump::after { display: none; }
   .about-jump-label-short { display: none; }
 
-  .profile-sections { display: grid; gap: 3rem; }
+  .profile-sections { display: grid; gap: var(--section-space); }
   .profile-section {
     display: grid;
     grid-template-columns: 220px minmax(0, 1fr);
@@ -111,7 +111,7 @@ research_visuals: true
   .profile-section-content { min-width: 0; }
   .profile-section-heading .eyebrow { margin-bottom: .65rem; color: var(--text-soft); font-size: .875rem; font-weight: 600; letter-spacing: 0; text-transform: none; }
   .profile-section-heading .eyebrow::before { display: none; }
-  .profile-section-heading h2 { font-size: 2rem; font-weight: 500; line-height: 1.16; text-wrap: balance; }
+  .profile-section-heading h2 { font-size: var(--heading-section-size); font-weight: 500; line-height: 1.16; text-wrap: balance; }
   .about-interest-grid,
   .about-project-grid,
   .profile-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 2rem; align-items: start; }
@@ -196,8 +196,8 @@ research_visuals: true
             <div>
               <h1 class="about-name" id="profile-name">Hyunsik Min</h1>
               <p class="profile-role">Master's student at Hanyang University</p>
-              <p class="hero-intro">I study vehicle behavior prediction, vehicle interactions, and CCTV-based traffic accident analysis.</p>
-              <p class="profile-related">I also explore vision-language and vision-language-action models (VLMs/VLAs) for driving and traffic reasoning. Related work includes energy forecasting and legal AI.</p>
+              <p class="hero-intro">I study vehicle behavior prediction, interactions, and CCTV-based traffic accident analysis.</p>
+              <p class="profile-related">I also explore vision-language and vision-language-action models (VLMs/VLAs) for driving and decision support.</p>
             </div>
             <dl class="about-meta">
               <div>
@@ -367,20 +367,23 @@ research_visuals: true
               <div class="eyebrow">Honors &amp; awards</div>
               <h2 id="profile-awards-title">Selected honors and awards</h2>
             </header>
-            <div class="profile-section-content profile-detail-grid">
+            <div class="profile-section-content">
               <ul class="about-list">
                 <li>National Outstanding Scholarship in Science and Engineering, Korea (Dec. 2025)</li>
                 <li>Grand Prize, 2024 Portfolio (Capstone) Competition, Soonchunhyang University SW Venture Startup Academy Center (Nov. 2024)</li>
                 <li>Silver Medal, 2024 SCHU AI-SW Festival, Soonchunhyang University Department of AI and Big Data (Nov. 2024)</li>
-                <li>Special Prize, 2024 Soonchunhyang SW Idea Contest, Soonchunhyang University (Nov. 2024)</li>
-                <li>Excellence Award, The 1st SW Convergence University Academic Festival, Soonchunhyang University (Nov. 2024)</li>
               </ul>
-              <ul class="about-list">
-                <li>Outstanding Paper Award, The Korea Society of Computer and Information (Jul. 2024)</li>
-                <li>Grand Prize, SW Convergence University Ideathon, Soonchunhyang University (Jun. 2024)</li>
-                <li>Grand Prize, 2023 Soonchunhyang SW Idea Contest, Soonchunhyang University, the Information and Communication Planning and Evaluation Agency, and the Ministry of Science and ICT (Dec. 2023)</li>
-                <li>Encouragement Award, The 5th Big Data Analytics and Development Contest, Soonchunhyang University (Dec. 2021)</li>
-              </ul>
+              <details class="profile-more">
+                <summary>More honors and awards</summary>
+                <ul class="about-list">
+                  <li>Special Prize, 2024 Soonchunhyang SW Idea Contest, Soonchunhyang University (Nov. 2024)</li>
+                  <li>Excellence Award, The 1st SW Convergence University Academic Festival, Soonchunhyang University (Nov. 2024)</li>
+                  <li>Outstanding Paper Award, The Korea Society of Computer and Information (Jul. 2024)</li>
+                  <li>Grand Prize, SW Convergence University Ideathon, Soonchunhyang University (Jun. 2024)</li>
+                  <li>Grand Prize, 2023 Soonchunhyang SW Idea Contest, Soonchunhyang University, the Information and Communication Planning and Evaluation Agency, and the Ministry of Science and ICT (Dec. 2023)</li>
+                  <li>Encouragement Award, The 5th Big Data Analytics and Development Contest, Soonchunhyang University (Dec. 2021)</li>
+                </ul>
+              </details>
             </div>
           </section>
 

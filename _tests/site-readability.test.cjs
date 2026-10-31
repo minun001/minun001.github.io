@@ -88,11 +88,37 @@ test('Profile uses the supplied portrait with a face-safe crop in the existing f
   const portrait = readFileSync(join(__dirname, '..', 'assets/img/bio-HyunsikMin_profile.png'));
   assert.match(profile, /picture \{ display: block; aspect-ratio: 5 \/ 4; \}/);
   assert.match(profile, /object-fit: cover; object-position: center 35%;/);
+  assert.match(profile, /grid-template-columns: minmax\(0, 1fr\) minmax\(280px, 420px\)/);
   assert.match(profile, /class="about-portrait" src="\{\{ '\/assets\/img\/bio-HyunsikMin_profile\.png' \| relative_url \}\}"[^>]*width="1103" height="1426"/);
   assert.doesNotMatch(profile, /KakaoTalk_20260318_150626/);
   assert.equal(portrait.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
   assert.equal(portrait.readUInt32BE(16), 1103);
   assert.equal(portrait.readUInt32BE(20), 1426);
+});
+
+test('Profile keeps all honors while showing three highlights before the disclosure', () => {
+  const awards = read('profile/index.html').split('id="profile-awards"')[1].split('</section>')[0];
+  assert.equal((awards.match(/<li>/g) || []).length, 9);
+  assert.equal((awards.split('<details')[0].match(/<li>/g) || []).length, 3);
+  assert.match(awards, /<summary>More honors and awards<\/summary>/);
+});
+
+test('Research separates paper-linked work from exploratory directions without inventing results', () => {
+  const directions = read('_data/research_directions.yml');
+  assert.equal((directions.match(/question:/g) || []).length, 3);
+  assert.equal((directions.match(/status: Related publication/g) || []).length, 1);
+  assert.equal((directions.match(/status: Research direction/g) || []).length, 2);
+  assert.match(read('_includes/research-direction-cards.html'), /direction\.question \| escape/);
+});
+
+test('Past conference wording is neutral and featured updates are newest first', () => {
+  const news = read('news/index.html');
+  const featured = news.split('aria-label="Featured updates"')[1].split('</section>')[0];
+  assert.ok(featured.indexOf('Oct. 2026') < featured.indexOf('Jul. 31, 2026'));
+  assert.ok(featured.indexOf('Jul. 31, 2026') < featured.indexOf('Apr. 2026'));
+  const contribution = news.split('id="news-its-congress-2026"')[1].split('</article>')[0];
+  assert.doesNotMatch(contribution, /scheduled|was presented|will be presented/);
+  assert.doesNotMatch(read('_includes/home-research.html'), /Scheduled talk/);
 });
 
 test('Mobile News compacts featured updates without removing filters or their targets', () => {

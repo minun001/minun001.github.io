@@ -319,6 +319,14 @@
     var empty = root.querySelector('[data-publication-empty]');
     var items = Array.prototype.slice.call(root.querySelectorAll('[data-publication-item]'));
     var sections = Array.prototype.slice.call(root.querySelectorAll('[data-publication-section]'));
+    var summaries = Array.prototype.map.call(root.querySelectorAll('[data-publication-summary]'), function (link) {
+      return {
+        link: link,
+        href: link.getAttribute('href'),
+        count: link.querySelector('[data-publication-summary-count]'),
+        label: link.querySelector('span').textContent.trim()
+      };
+    });
     var params = new URLSearchParams(window.location.search);
     if (!input || !count || !items.length) return;
     var publicationKindPriority = {
@@ -331,11 +339,11 @@
     var records = items.map(function (item, index) {
       var titleNode = item.querySelector('h3');
       var metaValues = Array.prototype.slice.call(item.querySelectorAll('.pub-meta-value'));
-      var primaryLink = item.querySelector('.pub-actions a[href]');
+      var detailsNode = item.querySelector('[data-publication-details]');
       var kindLabel = item.closest('[data-publication-section]') && item.closest('[data-publication-section]').querySelector('h2');
       var title = titleNode ? titleNode.textContent.trim() : 'Publication';
       var venue = metaValues[0] ? metaValues[0].textContent.trim() : '';
-      var details = metaValues[2] ? metaValues[2].textContent.trim() : '';
+      var details = detailsNode ? detailsNode.textContent.trim() : '';
       var kind = kindLabel ? kindLabel.textContent.trim() : 'Publication';
       var anchorId = item.id || 'publication-record-' + (index + 1);
 
@@ -346,13 +354,13 @@
         item: item,
         anchorId: anchorId,
         title: title,
+        shortTitle: item.getAttribute('data-short-title') || title,
         venue: venue,
         details: details,
         kind: kind,
         kindPriority: Object.prototype.hasOwnProperty.call(publicationKindPriority, normalizeSearchText(kind))
           ? publicationKindPriority[normalizeSearchText(kind)]
           : 99,
-        primaryLink: primaryLink ? primaryLink.href : '',
         titleNorm: normalizeSearchText(title),
         venueNorm: normalizeSearchText(venue),
         detailsNorm: normalizeSearchText(details),
@@ -397,7 +405,8 @@
     function renderResults(matches, query) {
       if (!results) return;
 
-      if (!query) {
+      // The filtered archive is the result view; shortcuts only help when there are multiple matches.
+      if (!query || matches.length < 2) {
         results.hidden = true;
         results.innerHTML = '';
         input.setAttribute('aria-expanded', 'false');
@@ -406,32 +415,19 @@
 
       input.setAttribute('aria-expanded', 'true');
 
-      if (!matches.length) {
-        results.hidden = false;
-        results.innerHTML =
-          '<div class="pub-search-results-head"><span>Search matches</span><span>0 results</span></div>' +
-          '<div class="pub-search-result-empty">No close match yet. Try a venue, topic, or shorter paper title.</div>';
-        return;
-      }
-
-      var topMatches = matches.slice(0, 6);
+      var topMatches = matches.slice(0, 4);
       var listMarkup = topMatches.map(function (entry) {
         var record = entry.record;
-        var href = record.primaryLink || ('#' + record.anchorId);
-        var targetAttrs = record.primaryLink ? ' target="_blank" rel="noopener"' : '';
-        var metaText = [record.venue, record.details].filter(Boolean).join(' | ');
         return (
-          '<a class="pub-search-result" href="' + escapeHtml(href) + '"' + targetAttrs + ' data-publication-result="' + escapeHtml(record.anchorId) + '">' +
-            '<span class="pub-search-result-kind">' + escapeHtml(record.kind) + '</span>' +
-            '<span class="pub-search-result-title">' + escapeHtml(record.title) + '</span>' +
-            '<span class="pub-search-result-meta">' + escapeHtml(metaText) + '</span>' +
+          '<a class="pub-search-result" href="#' + escapeHtml(record.anchorId) + '" aria-label="Jump to ' + escapeHtml(record.title) + '" data-publication-result="' + escapeHtml(record.anchorId) + '">' +
+            escapeHtml(record.shortTitle) +
           '</a>'
         );
       }).join('');
 
       results.hidden = false;
       results.innerHTML =
-        '<div class="pub-search-results-head"><span>Search matches</span><span>' + topMatches.length + (topMatches.length === 1 ? ' result' : ' results') + '</span></div>' +
+        '<div class="pub-search-results-head"><span>Jump to a match</span></div>' +
         '<div class="pub-search-result-list">' + listMarkup + '</div>';
     }
 
@@ -470,6 +466,26 @@
         section.hidden = !hasVisibleItem;
       });
 
+      summaries.forEach(function (summary) {
+        var section = root.querySelector(summary.href);
+        var sectionItems = section ? Array.prototype.slice.call(section.querySelectorAll('[data-publication-item]')) : [];
+        var matchingCount = sectionItems.filter(function (item) { return !item.hidden; }).length;
+        var total = sectionItems.length;
+        var disabled = matchingCount === 0;
+        if (disabled) {
+          summary.link.removeAttribute('href');
+          summary.link.setAttribute('aria-disabled', 'true');
+          summary.link.setAttribute('tabindex', '-1');
+          summary.link.classList.remove('is-active');
+        } else {
+          summary.link.setAttribute('href', summary.href);
+          summary.link.removeAttribute('aria-disabled');
+          summary.link.removeAttribute('tabindex');
+        }
+        if (summary.count) summary.count.textContent = query ? matchingCount + ' / ' + total : total + (total === 1 ? ' paper' : ' papers');
+        summary.link.setAttribute('aria-label', summary.label + ', ' + (query ? matchingCount + ' of ' : '') + total + (total === 1 ? ' paper' : ' papers'));
+      });
+
       matchedRecords.sort(function (left, right) {
         if (right.score !== left.score) return right.score - left.score;
         if (left.record.kindPriority !== right.record.kindPriority) {
@@ -479,7 +495,7 @@
       });
 
       renderResults(matchedRecords, query);
-      count.textContent = query ? visibleCount + ' matching records' : items.length + ' total records';
+      count.textContent = query ? visibleCount + ' of ' + items.length + ' records' : items.length + ' total records';
       if (reset) reset.hidden = !query;
       if (empty) empty.hidden = visibleCount !== 0;
       if (shouldSync !== false) {
@@ -495,12 +511,18 @@
     input.addEventListener('input', function () {
       update(true);
     });
+    function jumpToRecord(item) {
+      if (!item || item.hidden) return;
+      item.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      item.focus({ preventScroll: true });
+    }
+
     input.addEventListener('keydown', function (event) {
-      if (event.key !== 'Enter' || !results || results.hidden) return;
-      var firstResult = results.querySelector('.pub-search-result');
-      if (!firstResult) return;
+      if (event.key !== 'Enter') return;
+      var firstMatch = records.find(function (record) { return !record.item.hidden; });
+      if (!firstMatch) return;
       event.preventDefault();
-      firstResult.click();
+      jumpToRecord(firstMatch.item);
     });
     if (reset) {
       reset.addEventListener('click', function () {
@@ -521,10 +543,7 @@
         var anchorTarget = recordId ? document.getElementById(recordId) : null;
         if (!resultLink.getAttribute('target') && anchorTarget) {
           event.preventDefault();
-          anchorTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          window.setTimeout(function () {
-            anchorTarget.focus({ preventScroll: true });
-          }, 220);
+          jumpToRecord(anchorTarget);
         }
       });
     }
@@ -632,7 +651,7 @@
 
       function setActive(id) {
         sectionMap.forEach(function (entry) {
-          entry.link.classList.toggle('is-active', '#' + entry.section.id === id);
+          entry.link.classList.toggle('is-active', !entry.section.hidden && entry.link.getAttribute('aria-disabled') !== 'true' && '#' + entry.section.id === id);
         });
       }
 

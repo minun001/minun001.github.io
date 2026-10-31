@@ -6,12 +6,13 @@ const test = require('node:test');
 const root = join(__dirname, '..');
 const read = (path) => readFileSync(join(root, path), 'utf8');
 
-test('Public navigation introduces Research while Workspace remains reachable from the footer', () => {
+test('Public navigation stays research-focused while owner tools remain reachable from the footer', () => {
   const nav = read('_config.yml').split('\nnav:')[1].split('\nexclude:')[0];
   assert.deepEqual([...nav.matchAll(/link: "([^"]+)"/g)].map(match => match[1]), [
-    '/', '/profile/', '/research/', '/publications/', '/news/', '/analytics/',
+    '/', '/profile/', '/research/', '/publications/', '/news/',
   ]);
   assert.match(read('_includes/footer.html'), /href="\{\{ '\/workspace\/' \| relative_url \}\}">Private Workspace<\/a>/);
+  assert.match(read('_includes/footer.html'), /href="\{\{ '\/analytics\/' \| relative_url \}\}">Owner analytics<\/a>/);
   assert.match(read('workspace/index.html'), /href="\{\{ '\/research\/' \| relative_url \}\}">Public research<\/a>/);
 });
 

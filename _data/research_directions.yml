@@ -1,5 +1,7 @@
 - title: Trajectory prediction
   group: primary
+  question: What will nearby vehicles do next?
+  status: Related publication
   summary: Vehicle interactions and anticipatory driving.
   image: /assets/img/research-trajectory-scene-v2.webp
   image_small: /assets/img/research-trajectory-scene-v2-small.webp
@@ -7,12 +9,16 @@
   link: /publications/?q=trajectory
 - title: Traffic understanding
   group: primary
+  question: What is happening in a traffic scene?
+  status: Research direction
   summary: CCTV accident analysis and safety-aware scene understanding.
   image: /assets/img/research-traffic-scene-v2.webp
   image_small: /assets/img/research-traffic-scene-v2-small.webp
   alt: Realistic illustration of a CCTV camera observing an urban intersection.
 - title: Scene-to-action reasoning
   group: primary
+  question: How can scene understanding inform driving?
+  status: Research direction
   summary: Exploring VLMs and VLAs for driving and decision support.
   image: /assets/img/research-reasoning-scene-v2.webp
   image_small: /assets/img/research-reasoning-scene-v2-small.webp

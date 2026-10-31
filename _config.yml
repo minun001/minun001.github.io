@@ -44,8 +44,6 @@ nav:
     link: "/publications/"
   - name: "News"
     link: "/news/"
-  - name: "Analytics"
-    link: "/analytics/"
 
 exclude:
   - .private/

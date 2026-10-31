@@ -16,7 +16,9 @@
     <div class="research-topic-copy">
       <span class="research-topic-number" aria-hidden="true">0{{ forloop.index }}</span>
       <h3 id="{{ include.id_prefix }}-topic-{{ forloop.index }}">{{ direction.title | escape }}</h3>
+      {% if direction.question %}<p class="research-topic-question">{{ direction.question | escape }}</p>{% endif %}
       <p>{{ direction.summary | escape }}</p>
+      {% if direction.status %}<span class="research-topic-status">{{ direction.status | escape }}</span>{% endif %}
       {% if direction.link %}<span class="research-topic-arrow" aria-hidden="true">&#8599;</span>{% endif %}
     </div>
   {% if direction.link %}
