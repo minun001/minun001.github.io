@@ -83,10 +83,16 @@ test('Home enlarges original publication figures without cropping them or changi
   assert.match(html, /href="\{\{ paper\.image \| relative_url \}\}"/);
 });
 
-test('Profile keeps the portrait frame and lower crop while gently enlarging the subject', () => {
+test('Profile uses the supplied portrait with a face-safe crop in the existing frame', () => {
   const profile = read('profile/index.html');
+  const portrait = readFileSync(join(__dirname, '..', 'assets/img/bio-HyunsikMin_profile.png'));
   assert.match(profile, /picture \{ display: block; aspect-ratio: 5 \/ 4; \}/);
-  assert.match(profile, /object-position: center bottom; transform: scale\(1\.1\); transform-origin: center bottom/);
+  assert.match(profile, /object-fit: cover; object-position: center 35%;/);
+  assert.match(profile, /class="about-portrait" src="\{\{ '\/assets\/img\/bio-HyunsikMin_profile\.png' \| relative_url \}\}"[^>]*width="1103" height="1426"/);
+  assert.doesNotMatch(profile, /KakaoTalk_20260318_150626/);
+  assert.equal(portrait.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+  assert.equal(portrait.readUInt32BE(16), 1103);
+  assert.equal(portrait.readUInt32BE(20), 1426);
 });
 
 test('Mobile News compacts featured updates without removing filters or their targets', () => {
