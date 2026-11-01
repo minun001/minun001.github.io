@@ -526,9 +526,9 @@ def build_scholar_record(
         "doi": (override.get("doi") if override else None) or detail_map.get("DOI", ""),
         "image": (override.get("image") if override else None) or "",
         "image_alt": (override.get("image_alt") if override else None) or "",
-        "volume": detail_map.get("Volume", ""),
-        "issue": detail_map.get("Issue", ""),
-        "pages": detail_map.get("Pages", ""),
+        "volume": (override.get("volume") if override else None) or detail_map.get("Volume", ""),
+        "issue": (override.get("issue") if override else None) or detail_map.get("Issue", ""),
+        "pages": (override.get("pages") if override else None) or detail_map.get("Pages", ""),
         "journal_metrics": dict(override.get("journal_metrics", {})) if override else {},
     }
     record["search_terms"] = build_search_terms(record)

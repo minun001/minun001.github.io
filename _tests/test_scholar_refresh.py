@@ -222,6 +222,50 @@ class ScholarRefreshTests(unittest.TestCase):
             with self.subTest(title=record["title"]):
                 self.assertEqual(record["bibtex"], scholar.build_bibtex(record))
 
+    def test_verified_publication_metadata_survives_incomplete_scholar_details(self):
+        override = scholar.load_overrides()["scholar_overrides"]["5nxA0vEk-isC"]
+        row = {
+            "citation_id": "5nxA0vEk-isC", "title": "Anticipatory Driving",
+            "scholar_url": "https://scholar.google.com/example", "year": 2026,
+            "citation_count": 7,
+        }
+        for detail in ({"Publication date": "2026"}, {
+            "Publication date": "2026", "Volume": "early access", "Issue": "",
+            "Pages": "1-14", "DOI": "incomplete",
+        }):
+            with self.subTest(detail=detail):
+                record = scholar.build_scholar_record(row, detail, override)
+                for field, expected in {
+                    "doi": "10.1109/TITS.2026.3703652", "volume": "27",
+                    "issue": "10", "pages": "12737-12750",
+                }.items():
+                    self.assertEqual(record[field], expected)
+                self.assertEqual(record["citation_count"], 7)
+                self.assertIn("Published Oct. 2026", record["details"])
+                self.assertIn("number={10}", record["bibtex"])
+                self.assertIn("doi={10.1109/TITS.2026.3703652}", record["bibtex"])
+
+    def test_bibliographic_fields_still_fall_back_to_scholar_without_curated_values(self):
+        row = {"citation_id": "example", "title": "Example", "scholar_url": "example", "year": 2026}
+        detail = {"Journal": "Example Journal", "Volume": "2", "Issue": "3", "Pages": "4-5"}
+        for override in (None, {}, {"volume": "", "issue": "", "pages": ""}):
+            with self.subTest(override=override):
+                record = scholar.build_scholar_record(row, detail, override)
+                for field, source in (("volume", "Volume"), ("issue", "Issue"), ("pages", "Pages")):
+                    self.assertEqual(record[field], detail[source])
+
+    def test_published_snapshot_matches_curated_metadata_without_changing_check_dates(self):
+        payload = json.loads(scholar.PUBLICATIONS_OUTPUT_PATH.read_text(encoding="utf-8"))
+        record = next(item for section in payload["sections"] for item in section["items"] if item["id"] == "5nxA0vEk-isC")
+        override = scholar.load_overrides()["scholar_overrides"][record["id"]]
+        for field in ("details", "doi", "volume", "issue", "pages"):
+            self.assertEqual(record[field], override[field])
+        for section in payload["sections"]:
+            for item in section["items"]:
+                self.assertEqual(item["search_terms"], scholar.build_search_terms(item))
+        metrics = json.loads(scholar.METRICS_OUTPUT_PATH.read_text(encoding="utf-8"))
+        self.assertEqual(payload["checked_at"], metrics["checked_at"])
+
     def test_transient_fetch_is_retried_with_bounded_backoff(self):
         with patch.object(scholar, "urlopen", side_effect=[URLError("temporary"), io.BytesIO(b"ok")]) as fetch, patch.object(scholar.time, "sleep") as sleep:
             self.assertEqual(scholar.fetch_html("https://scholar.google.com"), "ok")

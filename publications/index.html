@@ -288,8 +288,11 @@ body_class: page-publications
           </a>
         </figure>
         {% endif %}
-        {% if item.scholar_url or item.bibtex %}
+        {% if item.doi or item.scholar_url or item.bibtex %}
         <div class="pub-actions">
+          {% if item.doi and item.doi != '' %}
+          <a class="pub-action" href="https://doi.org/{{ item.doi | escape }}" target="_blank" rel="noopener">Publisher</a>
+          {% endif %}
           {% if item.scholar_url and item.scholar_url != '' %}
           <a class="pub-action" href="{{ item.scholar_url }}" target="_blank" rel="noopener">Google Scholar</a>
           {% endif %}

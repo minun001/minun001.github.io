@@ -2,6 +2,7 @@
   group: primary
   area: Vehicle behavior prediction
   question: How can surrounding vehicle motion be anticipated?
+  role: First author
   approach: Temporal graph cross attention models vehicle interactions for front-vehicle trajectory prediction.
 - publication_id: ufrVoPGSRksC
   group: related

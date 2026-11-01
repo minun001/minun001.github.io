@@ -21,6 +21,7 @@
     <dl class="research-project-method">
       <div><dt>Question</dt><dd>{{ include.project.question | escape }}</dd></div>
       <div><dt>Approach</dt><dd>{{ include.project.approach | escape }}</dd></div>
+      {% if include.project.role %}<div><dt>Role</dt><dd>{{ include.project.role | escape }}</dd></div>{% endif %}
     </dl>
     {% endif %}
     <p class="research-project-source">{{ project_paper.venue | escape }} &middot; {{ project_paper.year }}</p>

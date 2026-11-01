@@ -6,12 +6,13 @@ const { runInNewContext } = require('node:vm');
 
 const read = (path) => readFileSync(join(__dirname, '..', path), 'utf8');
 
-test('Profile uses the requested graduate start year without inventing a month', () => {
+test('Profile separates overall graduate study from the Hanyang transfer without inventing a month', () => {
   const profile = read('profile/index.html');
   const graduate = profile.split('M.S. in Transportation and Logistics Engineering')[1].split('</div>')[0];
   assert.match(graduate, /2025 - Present/);
   assert.doesNotMatch(graduate, /Mar\. 2025/);
   assert.match(graduate, /Graduate studies: 2025 - Present/);
+  assert.match(graduate, /Hanyang University: 2026 - Present \(transfer\)/);
   assert.match(graduate, /Admitted to Hanyang University on July 31, 2026/);
 });
 
@@ -42,7 +43,7 @@ test('News keeps images absent and avoids claiming an unverified completed prese
   const euroma = news.split('<h3>EurOMA 2026 conference contribution</h3>')[1].split('</article>')[0];
   assert.ok(euroma);
   assert.doesNotMatch(euroma, /will be presented|was presented/);
-  for (const id of ['news-its-congress-2026', 'news-hanyang-admission-2026', 'news-safety-monitoring-2026']) {
+  for (const id of ['news-its-congress-2026', 'news-hanyang-admission-2026', 'news-tits-publication-2026']) {
     assert.ok(news.includes(`id="${id}"`));
     assert.ok(read('_includes/home-research.html').includes(`#${id}`));
   }
@@ -115,7 +116,7 @@ test('Past conference wording is neutral and featured updates are newest first',
   const news = read('news/index.html');
   const featured = news.split('aria-label="Featured updates"')[1].split('</section>')[0];
   assert.ok(featured.indexOf('Oct. 2026') < featured.indexOf('Jul. 31, 2026'));
-  assert.ok(featured.indexOf('Jul. 31, 2026') < featured.indexOf('Apr. 2026'));
+  assert.ok(featured.indexOf('news-tits-publication-2026') < featured.indexOf('Jul. 31, 2026'));
   const contribution = news.split('id="news-its-congress-2026"')[1].split('</article>')[0];
   assert.doesNotMatch(contribution, /scheduled|was presented|will be presented/);
   assert.doesNotMatch(read('_includes/home-research.html'), /Scheduled talk/);

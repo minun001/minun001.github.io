@@ -10,7 +10,7 @@
   "section_descriptions": {
     "international-journals": "Scholar-synced journal papers from international venues.",
     "domestic-journals": "Scholar-synced journal papers published in Korean venues.",
-    "international-conferences": "Scholar-synced international conference papers plus manually tracked upcoming records.",
+    "international-conferences": "Scholar-synced international conference papers plus manually tracked records.",
     "domestic-conferences": "Scholar-synced conference papers from Korean venues."
   },
   "scholar_overrides": {
@@ -76,7 +76,11 @@
       "display_title": "Anticipatory Driving Maneuver for Safety and Comfort: Temporal Graph Cross Attention-Based Front Vehicle Trajectory Prediction",
       "authors": "Hyunsik Min, Gyeongseon Baek, Yeeun Kim, Byeongjoon Noh",
       "summary": "This paper presents a temporal graph cross-attention framework for front-vehicle trajectory prediction with an emphasis on anticipatory driving, passenger comfort, and safety support.",
-      "details": "Accepted paper | 2026",
+      "details": "Published Oct. 2026 | Volume 27, Issue 10 | Pages 12737-12750",
+      "doi": "10.1109/TITS.2026.3703652",
+      "volume": "27",
+      "issue": "10",
+      "pages": "12737-12750",
       "journal_metrics": {
         "top_percent": 2,
         "top_label": "Top 2%",
@@ -210,7 +214,7 @@
       "display_venue": "ITS World Congress 2026",
       "authors": "Hyunsik Min, Byeongjoon Noh",
       "details": "Gangneung, South Korea | Oct. 19-23, 2026",
-      "summary": "This scheduled conference paper extends the trajectory-prediction line toward comfort-aware autonomous-driving support through temporal graph cross attention.",
+      "summary": "This conference contribution studies comfort-aware autonomous-driving support through temporal graph cross attention.",
       "topic_title": "Autonomous Driving",
       "topic_copy": "Comfort-aware prediction strategies for future driving systems.",
       "keywords": ["autonomous driving", "trajectory prediction", "its world congress", "conference"],
@@ -223,7 +227,7 @@
       "display_venue": "European Operations Management Association, The 2026 EurOMA Annual Conference",
       "authors": "Hyunsik Min, Youngseok Thomas Choi, Changwon Park, Habin Lee, Byeongjoon Noh",
       "details": "Vienna, Austria | Jun. 27-Jul. 2, 2026",
-      "summary": "This scheduled conference paper broadens the portfolio into operations management through a study of service routines, ontological granularity, and behavioral sequencing.",
+      "summary": "This conference contribution studies service routines through ontological granularity and behavioral sequencing.",
       "topic_title": "Operations Research",
       "topic_copy": "Service-routine structure and sequencing in operations contexts.",
       "keywords": ["operations management", "service routines", "euroma", "conference"],
