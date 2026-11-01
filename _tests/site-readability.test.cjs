@@ -74,10 +74,11 @@ test('Mobile Publications keeps full category labels and readable counts in comp
   assert.match(publications, /\.pub-meta-row\{grid-template-columns:3\.5rem minmax\(0,1fr\)/);
 });
 
-test('Home enlarges original publication figures without cropping them or changing carousel timing', () => {
+test('Home uses consistent research covers without changing carousel timing or the original-figure fallback', () => {
   const css = read('assets/home-research.css');
   const html = read('_includes/home-research.html');
   assert.match(css, /\.research-paper:first-child\{grid-column:1\/-1;display:grid/);
+  assert.match(css, /\.research-paper-cover img\{[^}]*aspect-ratio:16\/9;[^}]*object-fit:cover/);
   assert.match(css, /\.research-paper-figure img\{[^}]*height:260px;[^}]*object-fit:contain/);
   assert.match(css, /\.research-paper:first-child\{display:block\}/);
   assert.match(html, /data-interval="7000"/);

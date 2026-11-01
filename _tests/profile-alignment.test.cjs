@@ -20,7 +20,7 @@ test('Profile distinguishes current VITA research from past SAIL undergraduate r
 
 test('Projects retain all existing topics and periods while highlighting first-author work', () => {
   const projects = section('profile-projects');
-  assert.equal((projects.match(/<article class="about-project">/g) || []).length, 7);
+  assert.equal((projects.match(/<article class="about-project(?: [^"]+)?">/g) || []).length, 7);
   assert.match(projects.split('<details')[0], /TGCA: vehicle trajectory prediction/);
   assert.match(projects, /First author \| IEEE T-ITS, 2026/);
   for (const text of [

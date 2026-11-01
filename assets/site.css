@@ -1181,11 +1181,18 @@ body.theme-night .photo-note {
   max-width: 40rem;
 }
 
+.footer-navigation {
+  display: grid;
+  justify-items: start;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
 .footer-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
-  justify-content: flex-end;
+  gap: 0.2rem 1rem;
+  justify-content: flex-start;
 }
 
 .footer-link {
@@ -1209,6 +1216,12 @@ body.theme-night .photo-note {
   background: transparent;
   color: var(--accent);
   text-decoration-color: currentColor;
+}
+
+.footer-privacy {
+  color: var(--text-soft);
+  font-size: 0.8125rem;
+  font-weight: 500;
 }
 
 .footer-note {
@@ -1396,9 +1409,6 @@ body.theme-night .photo-note {
     grid-template-columns: 1fr;
   }
 
-  .footer-links {
-    justify-content: flex-start;
-  }
 }
 
 @media (max-width: 720px) {

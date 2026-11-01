@@ -3,9 +3,9 @@
   width: 1080
   height: 367
   short_title: Anticipatory driving
-  scene: /assets/img/research-slide-trajectory.webp
-  scene_small: /assets/img/research-slide-trajectory-small.webp
-  scene_alt: Scene illustration of vehicles approaching a merge, representing anticipatory driving research.
+  scene: /assets/img/research-slide-trajectory-v2.webp
+  scene_small: /assets/img/research-slide-trajectory-v2-small.webp
+  scene_alt: Scene illustration of vehicles on a city road with projected paths, representing trajectory prediction research.
 ufrVoPGSRksC:
   preview: /assets/img/paper-solarnexus-preview.webp
   width: 1080

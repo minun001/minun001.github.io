@@ -138,6 +138,12 @@ research_visuals: true
   .about-project-grid { row-gap: 2rem; }
   .profile-project-visual { margin: 0 0 1rem; }
   .profile-project-visual img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; }
+  .profile-project-featured { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 1.5rem; align-items: center; }
+  .profile-project-featured .profile-project-visual { margin: 0; }
+  .profile-project-featured .profile-project-visual img { max-height: 260px; }
+  .page-profile .about-page .profile-project-brief { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-soft); }
+  .profile-project-list { display: grid; gap: 1.25rem; }
+  .page-profile .about-page .profile-project-list .about-project + .about-project { padding-top: 1.25rem; border-top: 1px solid var(--border-soft); }
   .about-page .about-list { margin: 0; padding-left: 1.2rem; }
   .about-list li { padding-left: .2rem; }
   .about-list li + li { margin-top: 1rem; }
@@ -181,7 +187,10 @@ research_visuals: true
     .about-project-grid,
     .profile-detail-grid,
     .profile-toolkit { grid-template-columns: minmax(0, 1fr); }
-    .page-profile .about-page .about-jump { gap: 1rem; }
+    .profile-project-featured { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    .profile-project-featured .profile-project-visual { max-width: 24rem; }
+    .page-profile .about-page .about-jump { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .125rem .5rem; overflow: visible; }
+    .page-profile .about-page .about-jump a { justify-content: center; min-width: 0; padding-inline: .1rem; font-size: .9375rem; white-space: normal; text-align: center; }
     .about-jump-label-full { display: none; }
     .about-jump-label-short { display: inline; }
     .profile-sections { gap: 2.25rem; }
@@ -319,17 +328,19 @@ research_visuals: true
               <h2 id="profile-projects-title">Selected projects and grants</h2>
             </header>
             <div class="profile-section-content">
-              <div class="about-project-grid profile-projects-main">
-                <article class="about-project">
+              <div class="profile-projects-main">
+                <article class="about-project profile-project-featured">
                   <figure class="profile-project-visual">
                     <img src="{{ '/assets/img/research-trajectory-scene-v2.webp' | relative_url }}" srcset="{{ '/assets/img/research-trajectory-scene-v2-small.webp' | relative_url }} 480w, {{ '/assets/img/research-trajectory-scene-v2.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of vehicles navigating a highway merge." width="960" height="640" loading="lazy" decoding="async">
                   </figure>
-                  <h3>TGCA: vehicle trajectory prediction</h3>
-                  <p class="about-project-meta"><em>First author | IEEE T-ITS, 2026</em></p>
-                  <p>Temporal graph cross-attention for anticipatory driving, connecting vehicle prediction with safety, ride comfort, and traffic flow.</p>
-                  <p><a href="{{ '/publications/' | relative_url }}#publication-5nxA0vEk-isC">View publication &#8594;</a></p>
+                  <div class="profile-project-copy">
+                    <h3>TGCA: vehicle trajectory prediction</h3>
+                    <p class="about-project-meta"><em>First author | IEEE T-ITS, 2026</em></p>
+                    <p>Temporal graph cross-attention for anticipatory driving, connecting vehicle prediction with safety, ride comfort, and traffic flow.</p>
+                    <p><a href="{{ '/publications/' | relative_url }}#publication-5nxA0vEk-isC">View publication &#8594;</a></p>
+                  </div>
                 </article>
-                <article class="about-project">
+                <article class="about-project profile-project-brief">
                   <h3>AI-driven mobility simulation and prediction</h3>
                   <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Jul. 2024 - Present</em></p>
                   <p>Contributing to a KAIST-led project on urban-scale transportation simulation and prediction.</p>
@@ -337,7 +348,7 @@ research_visuals: true
               </div>
               <details class="profile-more">
                 <summary>Other projects and grants</summary>
-                <div class="about-project-grid">
+                <div class="profile-project-list">
                   <article class="about-project">
                     <h3>AI agent-based safety monitoring</h3>
                     <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Apr. 2026 - Present</em></p>
@@ -354,9 +365,6 @@ research_visuals: true
                     <p>Led NLP and LLM-based traffic-case analysis for sentencing prediction in the DSC Living Lab.</p>
                   </article>
                   <article class="about-project">
-                    <figure class="profile-project-visual">
-                      <img src="{{ '/assets/img/research-energy-scene.webp' | relative_url }}" srcset="{{ '/assets/img/research-energy-scene-small.webp' | relative_url }} 480w, {{ '/assets/img/research-energy-scene.webp' | relative_url }} 960w" sizes="(max-width: 640px) calc(100vw - 32px), 45vw" alt="Realistic illustration of photovoltaic panels and electrical equipment." width="960" height="640" loading="lazy" decoding="async">
-                    </figure>
                     <h3>Photovoltaic forecasting | BK21</h3>
                     <p class="about-project-meta"><em>Proposal Author &amp; Researcher | Feb. 2025 - Present</em></p>
                     <p>Deep learning for adaptive photovoltaic forecasting, with related work in SolarNexus.</p>
