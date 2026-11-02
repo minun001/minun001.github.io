@@ -1,7 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#103a63"/>
-  <polygon points="30,14 30,42 12,42" fill="#ffffff"/>
-  <polygon points="35,23 49,42 35,42" fill="#ffffff"/>
-  <polygon points="10,47 53,47 45,55 18,55" fill="#ffffff"/>
-  <circle cx="35" cy="14" r="4" fill="#8fc0ff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Hyunsik Min">
+  <rect width="64" height="64" rx="12" fill="#103a63"/>
+  <polygon points="8,16 12,16 12,28 24,28 24,16 28,16 28,48 24,48 24,32 12,32 12,48 8,48" fill="#ffffff"/>
+  <polygon points="36,48 36,16 40,16 46,28 52,16 56,16 56,48 52,48 52,28 46,40 40,28 40,48" fill="#ffffff"/>
 </svg>

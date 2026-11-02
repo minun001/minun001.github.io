@@ -196,12 +196,18 @@ test('Public effects are opt-in and cannot change private Workspace or Analytics
   assert.match(read('assets/site-signatures.css'), /prefers-reduced-motion: reduce/);
 });
 
-test('The favicon and touch icon use the new common identity instead of the old portrait', () => {
+test('The favicon and touch icon use the minimal two-color HM identity', () => {
   const head = read('_includes/head.html');
   assert.doesNotMatch(head, /blank-favicon/);
   for (const path of ['/favicon.ico', '/favicon.svg', '/assets/img/apple-touch-icon.png']) assert.ok(head.includes(path));
-  assert.match(read('about/index.html'), /\/favicon\.svg\?v=20261102a/);
-  assert.match(read('favicon.svg'), /viewBox="0 0 64 64"/);
+  assert.equal((head.match(/\?v=20261102c/g) || []).length, 3);
+  assert.match(read('about/index.html'), /\/favicon\.svg\?v=20261102c/);
+  const svg = read('favicon.svg');
+  assert.match(svg, /viewBox="0 0 64 64"/);
+  assert.match(svg, /aria-label="Hyunsik Min"/);
+  assert.equal((svg.match(/<polygon\b/g) || []).length, 2);
+  assert.deepEqual([...new Set([...svg.matchAll(/fill="(#[a-f0-9]+)"/g)].map(match => match[1]))], ['#103a63', '#ffffff']);
+  assert.doesNotMatch(svg, /<circle\b|<image\b|<text\b/);
   const ico = readFileSync(join(__dirname, '..', 'favicon.ico'));
   assert.equal(ico.readUInt16LE(2), 1);
   assert.equal(ico.readUInt16LE(4), 3);
