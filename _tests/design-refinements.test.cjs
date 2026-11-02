@@ -65,14 +65,37 @@ test('Footer separates contacts, private tools and privacy without removing dest
   assert.match(css, /\.footer-links \{[^}]*justify-content: flex-start/);
 });
 
-test('Quieter journal badges preserve their interaction hooks and the fireworks implementation', () => {
+test('Journal badges use coral, green and blue fills while preserving fireworks and their hooks', () => {
   const publications = read('publications/index.html');
   assert.match(publications, /\.pub-journal-chip\{[^}]*min-height:30px;[^}]*font-size:\.8125rem;[^}]*font-weight:600/);
-  assert.match(publications, /\.pub-journal-chip--top\{background:#e8eef4;color:#174265\}/);
+  assert.match(publications, /\.pub-journal-chip--top\{background:#ffe5df;color:#8f2d24\}/);
+  assert.match(publications, /\.pub-journal-chip--quartile\{background:#e0f5e8;color:#176239\}/);
+  assert.match(publications, /\.pub-journal-chip--if\{background:#e3efff;color:#245a91\}/);
   for (const name of ['pub-journal-chip--top', 'pub-journal-chip--quartile', 'pub-journal-chip--if', 'pub-chip-spark']) {
     assert.ok(publications.includes(name));
   }
   assert.match(read('assets/site.js'), /pub-chip-burst/);
   assert.match(read('_layouts/default.html'), /assets\/site\.css[^\n]*20261101b/);
   assert.match(read('_layouts/default.html'), /assets\/home-research\.css[^\n]*20261101b/);
+});
+
+test('Every colored journal badge keeps readable text and its matching firework palette', () => {
+  const publications = read('publications/index.html');
+  const script = read('assets/site.js');
+  const luminance = hex => {
+    const rgb = hex.match(/\w{2}/g).map(channel => {
+      const value = parseInt(channel, 16) / 255;
+      return value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4;
+    });
+    return rgb[0] * .2126 + rgb[1] * .7152 + rgb[2] * .0722;
+  };
+  for (const [kind, spark] of [['top', '#ff5f52'], ['quartile', '#49c47b'], ['if', '#5aa1ff']]) {
+    const colors = publications.match(new RegExp(`\\.pub-journal-chip--${kind}\\{background:#([a-f0-9]{6});color:#([a-f0-9]{6})\\}`));
+    assert.ok(colors, kind);
+    const [background, foreground] = [luminance(colors[1]), luminance(colors[2])];
+    const contrast = (Math.max(background, foreground) + .05) / (Math.min(background, foreground) + .05);
+    assert.ok(contrast >= 4.5, `${kind} contrast: ${contrast.toFixed(2)}:1`);
+    assert.match(script, new RegExp(`contains\\('pub-journal-chip--${kind}'\\)[\\s\\S]*?palette = \\[[^\\]]*'${spark}'`));
+  }
+  assert.match(script, /prefers-reduced-motion: reduce/);
 });
