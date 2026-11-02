@@ -770,11 +770,16 @@
     var minDistance = options && options.minDistance ? options.minDistance : 24;
     var maxDistance = options && options.maxDistance ? options.maxDistance : 52;
     var duration = options && options.duration ? options.duration : 900;
+    var anchor = options && options.anchor;
 
     burst.className = className;
     burst.setAttribute('aria-hidden', 'true');
-    burst.style.left = (rect.left + (rect.width / 2)) + 'px';
-    burst.style.top = (rect.top + (rect.height / 2)) + 'px';
+    function positionBurst() {
+      var bounds = anchor && anchor.isConnected ? anchor.getBoundingClientRect() : rect;
+      burst.style.left = (bounds.left + (bounds.width / 2)) + 'px';
+      burst.style.top = (bounds.top + (bounds.height / 2)) + 'px';
+    }
+    positionBurst();
 
     for (var index = 0; index < count; index += 1) {
       var spark = document.createElement('span');
@@ -795,7 +800,16 @@
     }
 
     document.body.appendChild(burst);
+    // Keyboard focus may smooth-scroll the badge after the celebration starts.
+    if (anchor) {
+      window.addEventListener('scroll', positionBurst, { capture: true, passive: true });
+      window.addEventListener('resize', positionBurst, { passive: true });
+    }
     window.setTimeout(function () {
+      if (anchor) {
+        window.removeEventListener('scroll', positionBurst, true);
+        window.removeEventListener('resize', positionBurst);
+      }
       burst.remove();
     }, duration);
   }
@@ -822,6 +836,7 @@
         palette = ['#e3f1ff', '#9ecfff', '#5aa1ff', '#ffffff'];
       }
       createCelebrationBurst(rect, palette, {
+        anchor: chip,
         className: 'pub-chip-burst',
         sparkClassName: 'pub-chip-spark',
         count: 12,
@@ -872,6 +887,7 @@
       badge.setAttribute('data-badge-burst-at', String(now));
 
       createCelebrationBurst(badge.getBoundingClientRect(), ['#fff3d6', '#ffd36f', '#f3a81d', '#ffffff'], {
+        anchor: badge,
         className: 'news-badge-burst',
         sparkClassName: 'news-badge-spark',
         count: 14,

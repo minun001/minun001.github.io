@@ -216,13 +216,15 @@ function burstFixture(reduced = false) {
     constructor(classes = []) {
       this.attrs = {};
       this.children = [];
+      this.isConnected = true;
+      this.rect = { left: 10, top: 10, width: 50, height: 30 };
       this.classList = { contains: name => classes.includes(name) };
       this.style = { setProperty() {} };
     }
     getAttribute(name) { return this.attrs[name] || null; }
     setAttribute(name, value) { this.attrs[name] = value; }
     hasAttribute(name) { return name in this.attrs; }
-    getBoundingClientRect() { return { left: 10, top: 10, width: 50, height: 30 }; }
+    getBoundingClientRect() { return this.rect; }
     appendChild(child) { this.children.push(child); }
     closest(selector) {
       const classes = selector.split('.').filter(Boolean);
@@ -238,12 +240,17 @@ function burstFixture(reduced = false) {
     createElement: () => new Element(),
     addEventListener(type, fn) { (listeners[type] ||= []).push(fn); },
   };
-  const window = { matchMedia: () => ({ matches: reduced }), setTimeout: fn => timers.push(fn) };
+  const windowEvents = new Map();
+  const window = {
+    matchMedia: () => ({ matches: reduced }), setTimeout: fn => timers.push(fn),
+    addEventListener(type, fn) { if (!windowEvents.has(type)) windowEvents.set(type, new Set()); windowEvents.get(type).add(fn); },
+    removeEventListener(type, fn) { windowEvents.get(type)?.delete(fn); },
+  };
   const source = read('assets/site.js').replace(/\}\)\(\);\s*$/, 'window.bindEffects = function () { bindPublicationChipEffects(); bindNewsBadgeEffects(); };})();');
   runInNewContext(source, { document, window, Element });
   window.bindEffects();
   return {
-    bursts, timers,
+    bursts, timers, windowEvents,
     element: classes => new Element(classes),
     emit(type, target) { for (const fn of listeners[type] || []) fn({ target, relatedTarget: null }); },
   };
@@ -281,4 +288,20 @@ test('Reduced motion suppresses both publication and award particle effects', ()
   f.emit('click', f.element(['news-badge', 'award']));
   assert.equal(f.bursts.length, 0);
   assert.equal(f.timers.length, 0);
+});
+
+test('Fireworks follow their badge during keyboard scrolling and remove tracking listeners', () => {
+  const f = burstFixture();
+  const chip = f.element(['pub-journal-chip', 'pub-journal-chip--top']);
+  f.emit('focusin', chip);
+  assert.equal(f.bursts[0].style.top, '25px');
+  chip.rect.top = 210;
+  for (const fn of f.windowEvents.get('scroll')) fn();
+  assert.equal(f.bursts[0].style.top, '225px');
+  chip.rect.left = 40;
+  for (const fn of f.windowEvents.get('resize')) fn();
+  assert.equal(f.bursts[0].style.left, '65px');
+  f.timers.forEach(fn => fn());
+  assert.equal(f.windowEvents.get('scroll').size, 0);
+  assert.equal(f.windowEvents.get('resize').size, 0);
 });
