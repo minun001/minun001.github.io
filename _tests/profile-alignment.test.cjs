@@ -63,13 +63,30 @@ test('Verified publication news replaces the unsupported acceptance year without
   assert.match(publication, /Oct\. 2026/);
   assert.match(publication, /27\(10\), 12737-12750/);
   assert.ok(publication.includes(`https://doi.org/${paper.doi}`));
-  assert.ok(news.indexOf('id="news-tits-publication-2026"') < news.indexOf('id="news-hanyang-admission-2026"'));
+  assert.ok(news.indexOf('id="news-tits-publication-2026"') < news.indexOf('id="news-hanyang-masters-2025"'));
   assert.doesNotMatch(news, /Trajectory prediction paper accepted by IEEE T-ITS/);
-  for (const id of ['news-safety-monitoring-2026', 'news-euroma-award-2026', 'news-hanyang-admission-2026']) {
+  for (const id of ['news-safety-monitoring-2026', 'news-euroma-award-2026', 'news-hanyang-masters-2025']) {
     assert.ok(news.includes(`id="${id}"`));
   }
-  assert.match(news, /admitted as a transfer student/i);
+  assert.match(news, /Started the M\.S\. program in Transportation and Logistics Engineering at Hanyang University in March 2025/);
   assert.doesNotMatch(news, /speaker diarization|<img\b/);
+});
+
+test('Home and News agree on the March 2025 Hanyang start and the correct archive year', () => {
+  const home = read('_includes/home-research.html');
+  const news = read('news/index.html');
+  const year = news.split('id="news-2025"')[1].split('id="news-2024"')[0];
+  const milestone = year.split('id="news-hanyang-masters-2025"')[1].split('</article>')[0];
+  assert.match(home, /#news-hanyang-masters-2025"><time datetime="2025-03">Mar\. 2025<\/time>/);
+  assert.match(news, /href="\?news=academic#news-hanyang-masters-2025"/);
+  assert.equal((news.match(/id="news-hanyang-masters-2025"/g) || []).length, 1);
+  assert.match(milestone, /data-news-kind="academic"/);
+  assert.match(milestone, /Mar\. 2025/);
+  assert.ok(year.indexOf('TRACS-LLM publication') < year.indexOf('id="news-hanyang-masters-2025"'));
+  assert.ok(year.indexOf('id="news-hanyang-masters-2025"') < year.indexOf('BK21 AIoT-Energy Project'));
+  for (const page of [home, news, read('profile/index.html')]) {
+    assert.doesNotMatch(page, /news-hanyang-admission-2026|2026-07-31|Jul\. 31, 2026|July 31, 2026|admitted as a transfer student/i);
+  }
 });
 
 test('Publications exposes DOI publisher links and keeps Scholar and BibTeX controls', () => {

@@ -6,14 +6,12 @@ const { runInNewContext } = require('node:vm');
 
 const read = (path) => readFileSync(join(__dirname, '..', path), 'utf8');
 
-test('Profile separates overall graduate study from the Hanyang transfer without inventing a month', () => {
+test('Profile uses the user-confirmed March 2025 Hanyang M.S. start', () => {
   const profile = read('profile/index.html');
   const graduate = profile.split('M.S. in Transportation and Logistics Engineering')[1].split('</div>')[0];
-  assert.match(graduate, /2025 - Present/);
-  assert.doesNotMatch(graduate, /Mar\. 2025/);
-  assert.match(graduate, /Graduate studies: 2025 - Present/);
-  assert.match(graduate, /Hanyang University: 2026 - Present \(transfer\)/);
-  assert.match(graduate, /Admitted to Hanyang University on July 31, 2026/);
+  assert.match(graduate, /Hanyang University, Department of Transportation and Logistics Engineering/);
+  assert.match(graduate, /Mar\. 2025 - Present/);
+  assert.doesNotMatch(graduate, /2026|transfer|Admitted|Graduate studies:/);
 });
 
 test('Research directions distinguish linked publications from informational cards', () => {
@@ -43,7 +41,7 @@ test('News keeps images absent and avoids claiming an unverified completed prese
   const euroma = news.split('<h3>EurOMA 2026 conference contribution</h3>')[1].split('</article>')[0];
   assert.ok(euroma);
   assert.doesNotMatch(euroma, /will be presented|was presented/);
-  for (const id of ['news-its-congress-2026', 'news-hanyang-admission-2026', 'news-tits-publication-2026']) {
+  for (const id of ['news-its-congress-2026', 'news-hanyang-masters-2025', 'news-tits-publication-2026']) {
     assert.ok(news.includes(`id="${id}"`));
     assert.ok(read('_includes/home-research.html').includes(`#${id}`));
   }
@@ -60,7 +58,8 @@ test('Workspace puts sign-in before its optional preview and keeps the dashboard
 test('News keeps known dates while ordering 2026 events newest first', () => {
   const news = read('news/index.html');
   const year = news.split('id="news-2026"')[1].split('id="news-2025"')[0];
-  assert.ok(year.indexOf('news-its-congress-2026') < year.indexOf('news-hanyang-admission-2026'));
+  assert.ok(year.indexOf('news-its-congress-2026') < year.indexOf('news-tits-publication-2026'));
+  assert.doesNotMatch(year, /news-hanyang-masters-2025/);
   assert.ok(year.indexOf('EurOMA 2026 conference contribution') < year.indexOf('news-euroma-award-2026'));
   assert.doesNotMatch(news, /Fall Conference Presentation on Traffic Sentencing/);
   assert.match(news, /conference presentation on traffic sentencing prediction<\/h3>\s*<div[^>]*><span class="news-date">Apr\. 2024/);
@@ -116,8 +115,9 @@ test('Research separates paper-linked work from exploratory directions without i
 test('Past conference wording is neutral and featured updates are newest first', () => {
   const news = read('news/index.html');
   const featured = news.split('aria-label="Featured updates"')[1].split('</section>')[0];
-  assert.ok(featured.indexOf('Oct. 2026') < featured.indexOf('Jul. 31, 2026'));
-  assert.ok(featured.indexOf('news-tits-publication-2026') < featured.indexOf('Jul. 31, 2026'));
+  assert.ok(featured.indexOf('Mar. 2025') > 0);
+  assert.ok(featured.indexOf('Oct. 2026') < featured.indexOf('Mar. 2025'));
+  assert.ok(featured.indexOf('news-tits-publication-2026') < featured.indexOf('Mar. 2025'));
   const contribution = news.split('id="news-its-congress-2026"')[1].split('</article>')[0];
   assert.doesNotMatch(contribution, /scheduled|was presented|will be presented/);
   assert.doesNotMatch(read('_includes/home-research.html'), /Scheduled talk/);
