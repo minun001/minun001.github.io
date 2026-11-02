@@ -3,6 +3,7 @@ layout: default
 title: Publications
 description: Research on trajectory prediction and autonomous driving, with related work in energy forecasting, legal AI, and urban sensing.
 body_class: page-publications
+page_effects: true
 ---
 <style>
   body.page-publications .publications-page{display:grid;gap:1.75rem}
@@ -76,8 +77,10 @@ body_class: page-publications
   .pub-journal-line{display:grid;gap:.5rem}
   .pub-journal-name{color:var(--text-title);font-weight:700}
   .pub-journal-metrics{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
-  .pub-journal-chip{position:relative;display:inline-flex;align-items:center;min-height:30px;padding:.25rem .5rem;border-radius:6px;background:#f1f4f7;color:var(--text-soft);font-size:.8125rem;font-weight:600;line-height:1.3;transition:transform .18s ease}
+  .pub-journal-chip{position:relative;display:inline-flex;align-items:center;min-height:30px;padding:.25rem .5rem;border:0;border-radius:6px;background:#f1f4f7;color:var(--text-soft);font-family:inherit;font-size:.8125rem;font-weight:600;line-height:1.3;cursor:pointer;transition:transform .18s ease}
   .pub-journal-chip:hover,.pub-journal-chip:focus-visible{transform:translateY(-1px)}
+  .pub-journal-chip:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+  @media(pointer:coarse){.pub-journal-chip{min-height:44px}}
   .pub-journal-chip--top{background:#ffe5df;color:#8f2d24}
   .pub-journal-chip--quartile{background:#e0f5e8;color:#176239}
   .pub-journal-chip--if{background:#e3efff;color:#245a91}
@@ -232,13 +235,13 @@ body_class: page-publications
                 <span class="pub-journal-name">{{ item.venue | escape }}</span>
                 <span class="pub-journal-metrics">
                   {% if item.journal_metrics.top_label %}
-                  <span class="pub-journal-chip pub-journal-chip--top">{{ item.journal_metrics.top_label }}</span>
+                  <button type="button" class="pub-journal-chip pub-journal-chip--top" aria-label="{{ item.journal_metrics.top_label | escape }}: play celebration">{{ item.journal_metrics.top_label }}</button>
                   {% endif %}
                   {% if item.journal_metrics.quartile_label %}
-                  <span class="pub-journal-chip pub-journal-chip--quartile">{{ item.journal_metrics.quartile_label }}</span>
+                  <button type="button" class="pub-journal-chip pub-journal-chip--quartile" aria-label="{{ item.journal_metrics.quartile_label | escape }}: play celebration">{{ item.journal_metrics.quartile_label }}</button>
                   {% endif %}
                   {% if item.journal_metrics.if_label %}
-                  <span class="pub-journal-chip pub-journal-chip--if">{{ item.journal_metrics.if_label }}</span>
+                  <button type="button" class="pub-journal-chip pub-journal-chip--if" aria-label="{{ item.journal_metrics.if_label | escape }}: play celebration">{{ item.journal_metrics.if_label }}</button>
                   {% endif %}
                 </span>
               </span>
@@ -249,7 +252,7 @@ body_class: page-publications
           </div>
           <div class="pub-meta-row">
             <span class="pub-meta-label">Authors</span>
-            <span class="pub-meta-value">{{ item.authors | escape }}</span>
+            <span class="pub-meta-value">{% include publication-authors.html authors=item.authors %}</span>
           </div>
           <div class="pub-meta-row" data-publication-citations>
             <span class="pub-meta-label">Citations</span>

@@ -3,6 +3,7 @@ layout: default
 title: News
 description: Research updates in mobility, trajectory prediction, energy forecasting, and selected academic milestones.
 body_class: page-news
+page_effects: true
 ---
 <style>
     .news-page{display:grid;gap:1.5rem}
@@ -45,7 +46,10 @@ body_class: page-news
     .news-meta-row{display:flex;flex-wrap:wrap;gap:.5rem .75rem;align-items:center}
     .news-date{color:var(--text-soft);font-size:.9375rem;line-height:1.5}
     .news-badge{position:relative;display:inline-flex;align-items:center;min-height:30px;padding:.3rem .6rem;border-radius:6px;background:#eaf0f6;color:var(--accent);font-size:.9rem;font-weight:700;line-height:1.3;transition:transform .18s ease}
-    .news-badge:hover,.news-badge:focus-visible{transform:translateY(-1px)}
+    button.news-badge{border:0;font-family:inherit;cursor:pointer}
+    .news-badge.award:hover,.news-badge.award:focus-visible{transform:translateY(-1px)}
+    .news-badge.award:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+    @media(pointer:coarse){button.news-badge{min-height:44px}}
     .news-badge.conference{background:#eaf0f6}
     .news-badge.journal{background:#eaf0f6}
     .news-badge.award{background:#edf1f5}
@@ -145,7 +149,7 @@ body_class: page-news
 
             <article class="timeline-item" id="news-euroma-award-2026" data-news-item data-news-kind="award">
               <h3>Harry Boer Best Student Award selection</h3>
-              <div class="news-meta-row"><span class="news-date">Apr. 2026</span><span class="news-badge award">Award</span></div>
+              <div class="news-meta-row"><span class="news-date">Apr. 2026</span><button type="button" class="news-badge award" aria-label="Award: play celebration">Award</button></div>
               <p>Service-routine research (EurOMA contribution 928) was selected for the Harry Boer Best Student Award.</p>
             </article>
 
@@ -165,7 +169,7 @@ body_class: page-news
           <div class="news-timeline">
             <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>National Outstanding Scholarship in Science and Engineering</h3>
-              <div class="news-meta-row"><span class="news-date">Dec. 2025</span><span class="news-badge award">Award</span></div>
+              <div class="news-meta-row"><span class="news-date">Dec. 2025</span><button type="button" class="news-badge award" aria-label="Award: play celebration">Award</button></div>
               <p>Selected for the national scholarship in science and engineering.</p>
             </article>
 
@@ -215,7 +219,7 @@ body_class: page-news
           <div class="news-timeline">
             <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>SCHU Portfolio and AI-SW Festival Awards</h3>
-              <div class="news-meta-row"><span class="news-date">Nov. 2024</span><span class="news-badge award">Award</span></div>
+              <div class="news-meta-row"><span class="news-date">Nov. 2024</span><button type="button" class="news-badge award" aria-label="Award: play celebration">Award</button></div>
               <p>Received major awards at the SCHU Portfolio Competition, AI-SW Festival, and SW Convergence University Academic Festival.</p>
             </article>
 
@@ -239,7 +243,7 @@ body_class: page-news
 
             <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>Outstanding Paper Award at KSCI Summer Conference</h3>
-              <div class="news-meta-row"><span class="news-date">Jul. 2024</span><span class="news-badge award">Award</span></div>
+              <div class="news-meta-row"><span class="news-date">Jul. 2024</span><button type="button" class="news-badge award" aria-label="Award: play celebration">Award</button></div>
               <p>The urban traffic noise study received the Outstanding Paper Award from the Korea Society of Computer and Information.</p>
             </article>
 
@@ -251,7 +255,7 @@ body_class: page-news
 
             <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>SW Convergence University Ideathon Award</h3>
-              <div class="news-meta-row"><span class="news-date">Jun. 2024</span><span class="news-badge award">Award</span></div>
+              <div class="news-meta-row"><span class="news-date">Jun. 2024</span><button type="button" class="news-badge award" aria-label="Award: play celebration">Award</button></div>
               <p>Received the grand prize at the SW Convergence University Ideathon.</p>
             </article>
 
@@ -286,7 +290,7 @@ body_class: page-news
           <div class="news-timeline">
             <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>2023 SW Idea Contest Award</h3>
-              <div class="news-meta-row"><span class="news-date">Dec. 2023</span><span class="news-badge award">Award</span></div>
+              <div class="news-meta-row"><span class="news-date">Dec. 2023</span><button type="button" class="news-badge award" aria-label="Award: play celebration">Award</button></div>
               <p>Received the grand prize at the 2023 Soonchunhyang SW Idea Contest.</p>
             </article>
 
@@ -306,7 +310,7 @@ body_class: page-news
           <div class="news-timeline">
             <article class="timeline-item" data-news-item data-news-kind="award">
               <h3>Big Data Analytics and Development Contest Recognition</h3>
-              <div class="news-meta-row"><span class="news-date">Dec. 2021</span><span class="news-badge award">Award</span></div>
+              <div class="news-meta-row"><span class="news-date">Dec. 2021</span><button type="button" class="news-badge award" aria-label="Award: play celebration">Award</button></div>
               <p>Received the Encouragement Award at the 5th Big Data Analytics and Development Contest.</p>
             </article>
           </div>

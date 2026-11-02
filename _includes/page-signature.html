@@ -1,0 +1,23 @@
+<button class="page-signature" type="button" data-page-signature="{{ include.kind | escape }}" aria-label="{{ include.label | escape }}" title="{{ include.label | escape }}" hidden>
+  <svg viewBox="0 0 96 40" aria-hidden="true" focusable="false">
+    {% case include.kind %}
+    {% when 'route' %}
+    <path class="signature-track" d="M8 30H30L54 10H88"/>
+    <path class="signature-trace" pathLength="1" d="M8 30H30L54 10H88"/>
+    <circle class="signature-traveler" r="3.5"/>
+    {% when 'sail' %}
+    <path class="signature-track" d="M4 33Q14 29 24 33T44 33T64 33T84 33H92"/>
+    <g class="signature-boat">
+      <path d="M24 29H54L48 35H30Z" fill="currentColor" stroke="none"/>
+      <path d="M38 6V25H26ZM42 12L53 25H42Z" fill="currentColor" stroke="none"/>
+      <circle cx="42" cy="6" r="2" fill="currentColor" stroke="none"/>
+    </g>
+    {% when 'graph' %}
+    <path class="signature-track" d="M12 29L47 10L82 29M12 29H82"/>
+    <path class="signature-trace" pathLength="1" d="M12 29L47 10L82 29L12 29"/>
+    <circle class="signature-node" cx="12" cy="29" r="4"/>
+    <circle class="signature-node" cx="47" cy="10" r="4"/>
+    <circle class="signature-node" cx="82" cy="29" r="4"/>
+    {% endcase %}
+  </svg>
+</button>

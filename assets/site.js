@@ -168,23 +168,23 @@
     var badges = [];
     if (metrics.top_label) {
       badges.push(
-        '<span class="pub-journal-chip pub-journal-chip--top" style="' + escapeAttribute(getTopPercentBadgeStyle(metrics.top_percent)) + '">' +
+        '<button type="button" class="pub-journal-chip pub-journal-chip--top" aria-label="' + escapeAttribute(metrics.top_label + ': play celebration') + '" style="' + escapeAttribute(getTopPercentBadgeStyle(metrics.top_percent)) + '">' +
           escapeHtml(metrics.top_label) +
-        '</span>'
+        '</button>'
       );
     }
     if (metrics.quartile_label) {
       badges.push(
-        '<span class="pub-journal-chip pub-journal-chip--quartile" style="' + escapeAttribute(getQuartileBadgeStyle(metrics.quartile_label)) + '">' +
+        '<button type="button" class="pub-journal-chip pub-journal-chip--quartile" aria-label="' + escapeAttribute(metrics.quartile_label + ': play celebration') + '" style="' + escapeAttribute(getQuartileBadgeStyle(metrics.quartile_label)) + '">' +
           escapeHtml(metrics.quartile_label) +
-        '</span>'
+        '</button>'
       );
     }
     if (metrics.if_label) {
       badges.push(
-        '<span class="pub-journal-chip pub-journal-chip--if" style="' + escapeAttribute(getImpactFactorBadgeStyle(metrics.impact_factor)) + '">' +
+        '<button type="button" class="pub-journal-chip pub-journal-chip--if" aria-label="' + escapeAttribute(metrics.if_label + ': play celebration') + '" style="' + escapeAttribute(getImpactFactorBadgeStyle(metrics.impact_factor)) + '">' +
           escapeHtml(metrics.if_label) +
-        '</span>'
+        '</button>'
       );
     }
     if (!badges.length) return venueName;
@@ -772,6 +772,7 @@
     var duration = options && options.duration ? options.duration : 900;
 
     burst.className = className;
+    burst.setAttribute('aria-hidden', 'true');
     burst.style.left = (rect.left + (rect.width / 2)) + 'px';
     burst.style.top = (rect.top + (rect.height / 2)) + 'px';
 
@@ -862,29 +863,15 @@
     if (document.documentElement.hasAttribute('data-news-effects-bound')) return;
     document.documentElement.setAttribute('data-news-effects-bound', 'true');
 
-    function getPalette(kind) {
-      if (kind === 'journal') return ['#dfffea', '#8fe8b0', '#2bc06d', '#ffffff'];
-      if (kind === 'conference') return ['#e1efff', '#8fc0ff', '#3f83f8', '#ffffff'];
-      if (kind === 'project') return ['#efe7ff', '#bea7ff', '#7c5cff', '#ffffff'];
-      if (kind === 'award') return ['#fff3d6', '#ffd36f', '#f3a81d', '#ffffff'];
-      return ['#ffffff', '#ffd166', '#8fc0ff', '#8fe8b0'];
-    }
-
     function triggerBadgeBurst(badge) {
-      if (!badge) return;
+      if (!badge || !badge.classList.contains('award')) return;
 
       var now = Date.now();
       var lastBurst = Number(badge.getAttribute('data-badge-burst-at') || '0');
       if (now - lastBurst < 900) return;
       badge.setAttribute('data-badge-burst-at', String(now));
 
-      var kind = 'all';
-      if (badge.classList.contains('journal')) kind = 'journal';
-      else if (badge.classList.contains('conference')) kind = 'conference';
-      else if (badge.classList.contains('project')) kind = 'project';
-      else if (badge.classList.contains('award')) kind = 'award';
-
-      createCelebrationBurst(badge.getBoundingClientRect(), getPalette(kind), {
+      createCelebrationBurst(badge.getBoundingClientRect(), ['#fff3d6', '#ffd36f', '#f3a81d', '#ffffff'], {
         className: 'news-badge-burst',
         sparkClassName: 'news-badge-spark',
         count: 14,
@@ -903,6 +890,12 @@
       var from = event.relatedTarget;
       if (from instanceof Element && badge.contains(from)) return;
       triggerBadgeBurst(badge);
+    });
+    ['click', 'focusin'].forEach(function (type) {
+      document.addEventListener(type, function (event) {
+        if (!(event.target instanceof Element)) return;
+        triggerBadgeBurst(event.target.closest('.news-badge.award'));
+      });
     });
   }
 

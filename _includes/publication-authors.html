@@ -1,0 +1,11 @@
+{%- assign owner_name = site.data['google-scholar-publications'].profile_name | default: site.title -%}
+{%- assign authors = include.authors | split: ',' -%}
+{%- for raw_author in authors -%}
+  {%- assign author = raw_author | strip -%}
+  {%- if author == owner_name -%}
+    <b class="pub-author-self">{{ author | escape }}</b>
+  {%- else -%}
+    {{ author | escape }}
+  {%- endif -%}
+  {%- unless forloop.last -%}{{ ', ' }}{%- endunless -%}
+{%- endfor -%}

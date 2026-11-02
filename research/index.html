@@ -4,6 +4,7 @@ title: Research
 description: Vehicle prediction, traffic understanding, and scene-to-action reasoning by Hyunsik Min.
 body_class: page-research
 research_visuals: true
+page_effects: true
 ---
 <style>
   .research-chapter { display: grid; gap: var(--section-space); }
@@ -48,7 +49,7 @@ research_visuals: true
   </nav>
 
   <section class="research-chapter-section" id="research-directions" aria-labelledby="research-directions-title">
-    <header><h2 id="research-directions-title">Research directions</h2></header>
+    <header class="signature-heading"><h2 id="research-directions-title">Research directions</h2>{% include page-signature.html kind='graph' label='Play a research connection animation' %}</header>
     {% include research-direction-cards.html group='primary' id_prefix='research' sizes='(max-width: 640px) 96px, (max-width: 980px) 176px, 370px' %}
   </section>
 

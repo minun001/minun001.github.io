@@ -13,6 +13,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ "/assets/site.css" | relative_url }}?v=20261101b">
+  {% if page.page_effects %}
+  <link rel="stylesheet" href="{{ '/assets/site-signatures.css' | relative_url }}?v=20261102a">
+  {% endif %}
   {% if page.home_design %}
   <link rel="stylesheet" href="{{ "/assets/home-research.css" | relative_url }}?v=20261101b">
   {% endif %}
@@ -110,7 +113,10 @@
   <script src="{{ '/assets/site-analytics-config.js' | relative_url }}?v=20261011a"></script>
   <script src="{{ '/assets/visitor-tracker.js' | relative_url }}?v=20261011a"></script>
   {% endif %}
-  <script src="{{ "/assets/site.js" | relative_url }}?v=20261031a"></script>
+  <script src="{{ "/assets/site.js" | relative_url }}?v=20261102a"></script>
+  {% if page.page_effects %}
+  <script src="{{ '/assets/site-signatures.js' | relative_url }}?v=20261102a" defer></script>
+  {% endif %}
   {% if page.home_design %}
   <script src="{{ "/assets/home-research.js" | relative_url }}?v=20261004e"></script>
   {% endif %}
