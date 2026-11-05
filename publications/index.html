@@ -222,17 +222,20 @@ page_effects: true
       {% for item in section.items %}
       {% assign legacy_record_index = legacy_record_index | plus: 1 %}
       {% assign visual = site.data.publication_visuals[item.id] %}
+      {% assign fulltext = site.data.publication_fulltexts[item.id] %}
+      {% assign display_venue = fulltext.conference | default: item.venue %}
+      {% assign publication_scholar_url = item.scholar_url | default: fulltext.scholar_url %}
       <article class="pub-item{% unless item.image and item.image != '' %} pub-item-text{% endunless %}" id="publication-{{ item.id | escape }}" data-publication-item data-search="{{ item.search_terms | escape }}" data-short-title="{{ visual.short_title | default: item.title | escape }}">
         <span class="publication-anchor-compat" id="publication-record-{{ legacy_record_index }}" aria-hidden="true"></span>
         <p class="pub-record-year">{{ item.year }}</p>
-        <h3>{{ item.title | escape }}</h3>
+        <h3>{% if fulltext %}<a href="{{ fulltext.path | relative_url }}">{{ item.title | escape }}</a>{% else %}{{ item.title | escape }}{% endif %}</h3>
         <div class="pub-meta">
           <div class="pub-meta-row">
             <span class="pub-meta-label">{% if section.key contains 'journals' %}Journal{% else %}Venue{% endif %}</span>
             <span class="pub-meta-value">
               {% if item.journal_metrics and item.journal_metrics.top_label %}
               <span class="pub-journal-line">
-                <span class="pub-journal-name">{{ item.venue | escape }}</span>
+                <span class="pub-journal-name">{{ display_venue | escape }}</span>
                 <span class="pub-journal-metrics">
                   {% if item.journal_metrics.top_label %}
                   <button type="button" class="pub-journal-chip pub-journal-chip--top" aria-label="{{ item.journal_metrics.top_label | escape }}: play celebration">{{ item.journal_metrics.top_label }}</button>
@@ -246,7 +249,7 @@ page_effects: true
                 </span>
               </span>
               {% else %}
-              {{ item.venue | escape }}
+              {{ display_venue | escape }}
               {% endif %}
             </span>
           </div>
@@ -291,13 +294,17 @@ page_effects: true
           </a>
         </figure>
         {% endif %}
-        {% if item.doi or item.scholar_url or item.bibtex %}
+        {% if item.doi or item.scholar_url or item.bibtex or fulltext %}
         <div class="pub-actions">
+          {% if fulltext %}
+          <a class="pub-action" href="{{ fulltext.path | relative_url }}">Abstract and full paper</a>
+          <a class="pub-action" href="{{ fulltext.pdf_path | relative_url }}">PDF</a>
+          {% endif %}
           {% if item.doi and item.doi != '' %}
           <a class="pub-action" href="https://doi.org/{{ item.doi | escape }}" target="_blank" rel="noopener">Publisher</a>
           {% endif %}
-          {% if item.scholar_url and item.scholar_url != '' %}
-          <a class="pub-action" href="{{ item.scholar_url }}" target="_blank" rel="noopener">Google Scholar</a>
+          {% if publication_scholar_url and publication_scholar_url != '' %}
+          <a class="pub-action" href="{{ publication_scholar_url | escape }}" target="_blank" rel="noopener">Google Scholar</a>
           {% endif %}
           {% if item.bibtex and section.key contains 'journals' %}
           <button class="pub-action" type="button" data-bibtex-target="bibtex-{{ item.id }}">Cite</button>

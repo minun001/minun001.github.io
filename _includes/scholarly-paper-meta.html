@@ -1,0 +1,12 @@
+{% assign paper = site.data.publication_fulltexts[page.paper_id] %}
+{% if paper %}
+<meta name="citation_title" content="{{ paper.title | escape }}">
+{% for author in paper.authors %}
+<meta name="citation_author" content="{{ author.name | escape }}">
+<meta name="citation_author_institution" content="{{ author.affiliation | escape }}">
+{% endfor %}
+<meta name="citation_publication_date" content="{{ paper.publication_date | escape }}">
+<meta name="citation_conference_title" content="{{ paper.conference | escape }}">
+<meta name="citation_pdf_url" content="{{ paper.pdf_path | absolute_url }}">
+<meta name="DC.Description" content="{{ paper.abstract | escape }}">
+{% endif %}

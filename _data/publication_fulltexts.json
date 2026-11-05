@@ -1,0 +1,54 @@
+{
+  "manual-its-world-congress-2026": {
+    "title": "Comfort-Centric Trajectory Prediction for Autonomous Driving via Temporal Graph Cross Attention",
+    "path": "/publications/comfort-centric-trajectory-prediction/",
+    "pdf_path": "/assets/papers/min-2026-its-world-congress.pdf",
+    "conference": "32nd Gangneung ITS World Congress 2026",
+    "publication_date": "2026/10/19",
+    "event_details": "Gangneung, Republic of Korea; October 19-23, 2026",
+    "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=2AUQlE8AAAAJ&citation_for_view=2AUQlE8AAAAJ:8k81kl-MbHgC",
+    "authors": [
+      {
+        "name": "Hyunsik Min",
+        "affiliation": "Department of Transportation and Logistics Engineering, Hanyang University, Republic of Korea"
+      },
+      {
+        "name": "Byeongjoon Noh",
+        "affiliation": "Department of Transportation and Logistics Engineering, Hanyang University, Republic of Korea"
+      }
+    ],
+    "abstract": "Advanced autonomous driving (AD) systems are expected to go beyond collision avoidance by considering passenger ride comfort, traffic flow stability, and user trust. Reactive control often leads to frequent and abrupt interventions, which can degrade comfort and undermine confidence in autonomous operation, highlighting the need for predictive driving strategies that anticipate surrounding vehicle behavior. While prior studies have mainly focused on surrounding or rear vehicles, proactive anticipation of front vehicle behavior remains critical in interactive traffic environments. This study proposes a front vehicle trajectory prediction framework that models spatiotemporal interactions as graph representations extracted from monocular dashcam video and forecasts future trajectories using a Temporal Graph Cross Attention (TGCA) mechanism. TGCA selectively emphasizes behaviorally influential vehicles by capturing temporally aligned interaction patterns across consecutive frames. We validated the feasibility and applicability of the proposed framework through real-world dashcam experiments. The proposed model achieved a 5-second prediction MAE of approximately 0.09. These results indicate that front vehicle trajectory prediction can serve as a practical and effective foundation for prediction-driven anticipatory driving strategies in future AD systems operating under realistic sensing constraints."
+  },
+  "manual-euroma-2026": {
+    "title": "Theorising Service Routines through Ontological Granularity and Behavioural Sequencing",
+    "path": "/publications/theorising-service-routines/",
+    "pdf_path": "/assets/papers/min-2026-euroma-service-routines.pdf",
+    "conference": "2026 Annual EurOMA Conference",
+    "publication_date": "2026/06/27",
+    "event_details": "Vienna, Austria; June 27-July 2, 2026",
+    "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=2AUQlE8AAAAJ&citation_for_view=2AUQlE8AAAAJ:MXK_kJrjxJIC",
+    "authors": [
+      {
+        "name": "Hyunsik Min",
+        "affiliation": "Soonchunhyang University, Republic of Korea"
+      },
+      {
+        "name": "Youngseok Thomas Choi",
+        "affiliation": "Kingston University London, UK"
+      },
+      {
+        "name": "Changwon Park",
+        "affiliation": "Middlesex University, UK"
+      },
+      {
+        "name": "Habin Lee",
+        "affiliation": "Brunel University of London, UK"
+      },
+      {
+        "name": "Byeongjoon Noh",
+        "affiliation": "Soonchunhyang University, Republic of Korea"
+      }
+    ],
+    "abstract": "Digital trace data offer unprecedented access to service encounters, yet translating them into mechanism-based theory remains difficult. Drawing on critical realism and behavioural operations management, this paper introduces ontological granularity tuning as a method for moving between observable digital residues and generative routines. Using movement-tracking logs from 2,871 exhibition visitors (90,420 zone-visits), we operationalise five behavioural blocks and apply computational sequence analysis and K-Means clustering. We identify four stable routine archetypes, with a dominant “high-activity exploratory-browsing” routine anchored by spatial affordances, reframing service-routine theorising as a retroductive, granularity-sensitive process."
+  }
+}
