@@ -81,7 +81,7 @@ test('Home uses consistent research covers without changing carousel timing or t
   assert.match(css, /\.research-paper-figure img\{[^}]*height:260px;[^}]*object-fit:contain/);
   assert.match(css, /\.research-paper:first-child\{display:block\}/);
   assert.match(html, /data-interval="7000"/);
-  assert.match(html, /href="\{\{ paper\.image \| relative_url \}\}"/);
+  assert.match(html, /\?paper=\{\{ paper\.id \| url_encode \}\}&amp;type=figure/);
 });
 
 test('Profile uses the supplied portrait with a face-safe crop in the existing frame', () => {

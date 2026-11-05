@@ -29,6 +29,9 @@
   {% if script_bundle == 'analytics' %}
   <link rel="stylesheet" href="{{ '/assets/analytics.css' | relative_url }}?v=20261011a">
   {% endif %}
+  {% if script_bundle == 'publication-media' %}
+  <link rel="stylesheet" href="{{ '/assets/publication-viewer.css' | relative_url }}?v=20261105a">
+  {% endif %}
 </head>
 {% assign current_url = page.url | replace: 'index.html', '' %}
 {% if current_url == '' %}
@@ -107,6 +110,8 @@
   {% elsif script_bundle == 'analytics' %}
     <script src="{{ '/assets/site-analytics-config.js' | relative_url }}?v=20261011a"></script>
     <script src="{{ '/assets/analytics.js' | relative_url }}?v=20261011a"></script>
+  {% elsif script_bundle == 'publication-media' %}
+    <script src="{{ '/assets/publication-viewer.js' | relative_url }}?v=20261105a" defer></script>
   {% endif %}
   {% assign tracked_paths = '/|/profile/|/research/|/publications/|/news/' | split: '|' %}
   {% if tracked_paths contains current_url %}

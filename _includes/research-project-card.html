@@ -7,7 +7,7 @@
 {% assign project_visual = site.data.publication_visuals[project_paper.id] %}
 <article class="research-project{% if include.compact %} research-project--compact{% endif %}" data-research-publication="{{ project_paper.id | escape }}">
   {% if project_paper.image and project_paper.image != '' %}
-  <a class="research-project-figure" href="{{ project_paper.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open original figure for {{ project_paper.title | escape }} (new tab)">
+  <a class="research-project-figure" href="{{ '/viewer/' | relative_url }}?paper={{ project_paper.id | url_encode }}&amp;type=figure" target="_blank" rel="noopener" aria-label="Open original figure for {{ project_paper.title | escape }} (new tab)">
     <img src="{{ project_visual.preview | default: project_paper.image | relative_url }}" alt="{{ project_paper.image_alt | default: project_paper.title | escape }}"{% if project_visual.width %} width="{{ project_visual.width }}" height="{{ project_visual.height }}"{% endif %} loading="lazy" decoding="async">
     <span>View full-size figure <span aria-hidden="true">&#8599;</span></span>
   </a>

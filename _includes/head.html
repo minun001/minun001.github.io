@@ -2,6 +2,4 @@
 {% if page.paper_id %}{% include scholarly-paper-meta.html %}{% endif %}
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" href="{{ '/favicon.ico' | relative_url }}?v=20261102c">
-<link rel="icon" type="image/svg+xml" sizes="any" href="{{ '/favicon.svg' | relative_url }}?v=20261102c">
-<link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/img/apple-touch-icon.png' | relative_url }}?v=20261102c">
+{% include favicons.html %}

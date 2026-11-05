@@ -51,10 +51,10 @@ test("Home uses readable research covers while keeping original figures availabl
   assert.match(selected, /class="research-paper-cover-link"/);
   assert.match(selected, /aria-label="Read publication:/);
   assert.match(selected, /visual\.scene_alt \| escape/);
-  assert.match(selected, /href="\{\{ paper\.image \| relative_url \}\}"/);
+  assert.match(selected, /\/viewer\/' \| relative_url \}\}\?paper=\{\{ paper\.id \| url_encode \}\}&amp;type=figure/);
   assert.match(selected, /elsif paper\.image/);
-  assert.match(readFileSync(join(__dirname, '../_includes/research-project-card.html'), 'utf8'), /href="\{\{ project_paper\.image \| relative_url \}\}"/);
-  assert.match(readFileSync(join(__dirname, '../publications/index.html'), 'utf8'), /href="\{\{ item\.image \| relative_url \}\}"/);
+  assert.match(readFileSync(join(__dirname, '../_includes/research-project-card.html'), 'utf8'), /\?paper=\{\{ project_paper\.id \| url_encode \}\}&amp;type=figure/);
+  assert.match(readFileSync(join(__dirname, '../publications/index.html'), 'utf8'), /\?paper=\{\{ item\.id \| url_encode \}\}&amp;type=figure/);
   assert.match(selected, /visual\.short_title \| default: paper\.title/);
 });
 

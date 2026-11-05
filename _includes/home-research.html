@@ -56,7 +56,7 @@
           </figure>
         </a>
         {% elsif paper.image and paper.image != '' %}
-        <a class="research-paper-figure-link" href="{{ paper.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open original figure for {{ paper.title | escape }} (new tab)">
+        <a class="research-paper-figure-link" href="{{ '/viewer/' | relative_url }}?paper={{ paper.id | url_encode }}&amp;type=figure" target="_blank" rel="noopener" aria-label="Open original figure for {{ paper.title | escape }} (new tab)">
           <figure class="research-paper-figure">
             <img src="{{ visual.preview | default: paper.image | relative_url }}" alt="{{ paper.image_alt | default: paper.title | escape }}"{% if visual.width %} width="{{ visual.width }}" height="{{ visual.height }}"{% endif %} loading="lazy" decoding="async">
             <figcaption>View full-size figure <span aria-hidden="true">&#8599;</span></figcaption>

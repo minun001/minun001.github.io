@@ -288,7 +288,7 @@ page_effects: true
         {% endif %}
         {% if item.image and item.image != '' %}
         <figure class="pub-image pub-image--original">
-          <a href="{{ item.image | relative_url }}" target="_blank" rel="noopener" aria-label="Open original figure for {{ item.title | escape }}">
+          <a href="{{ '/viewer/' | relative_url }}?paper={{ item.id | url_encode }}&amp;type=figure" target="_blank" rel="noopener" aria-label="Open original figure for {{ item.title | escape }}">
             <img src="{{ visual.preview | default: item.image | relative_url }}" alt="{{ item.image_alt | default: item.title | escape }}"{% if visual.width %} width="{{ visual.width }}" height="{{ visual.height }}"{% endif %} loading="lazy" decoding="async">
             <span class="pub-image-link">Open original figure <span aria-hidden="true">&#8599;</span></span>
           </a>
@@ -298,7 +298,7 @@ page_effects: true
         <div class="pub-actions">
           {% if fulltext %}
           <a class="pub-action" href="{{ fulltext.path | relative_url }}">Abstract and full paper</a>
-          <a class="pub-action" href="{{ fulltext.pdf_path | relative_url }}">PDF</a>
+          <a class="pub-action" href="{{ '/viewer/' | relative_url }}?paper={{ item.id | url_encode }}&amp;type=pdf">PDF</a>
           {% endif %}
           {% if item.doi and item.doi != '' %}
           <a class="pub-action" href="https://doi.org/{{ item.doi | escape }}" target="_blank" rel="noopener">Publisher</a>

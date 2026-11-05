@@ -1,0 +1,70 @@
+---
+layout: default
+title: Publication viewer
+description: Original research figures and full papers by Hyunsik Min.
+body_class: page-publication-media
+script_bundle: publication-media
+robots: noindex,follow
+show_footer: false
+include_public_analytics: false
+---
+<article class="publication-viewer">
+  <a class="media-back" href="{{ '/publications/' | relative_url }}">Back to Publications</a>
+  <header>
+    <p class="media-kind" id="media-kind" hidden></p>
+    <h1 id="media-title">Publication viewer</h1>
+    <p id="media-status" role="status" aria-live="polite">Select a figure or PDF from Publications.</p>
+  </header>
+  <nav class="media-actions" id="media-actions" aria-label="Document controls" hidden>
+    <a id="media-download" download>Download original file</a>
+    <a id="media-original" target="_blank" rel="noopener">Open original file</a>
+  </nav>
+  <figure class="media-figure" id="media-figure-frame" hidden>
+    <img id="media-figure" alt="">
+  </figure>
+  <p class="media-help" id="media-pdf-help" hidden>If this browser cannot display the PDF below, use Open original file or Download original file.</p>
+  <section class="media-pdf" id="media-pdf" aria-label="PDF reader" hidden>
+    <div class="media-pager" aria-label="PDF page controls">
+      <button id="pdf-previous" type="button" disabled>Previous page</button>
+      <output id="pdf-page" role="status" aria-live="polite">Loading PDF...</output>
+      <button id="pdf-next" type="button" disabled>Next page</button>
+    </div>
+    <canvas id="pdf-canvas" role="img" aria-label="PDF page"></canvas>
+    <details class="media-page-text"><summary>Page text</summary><p id="pdf-text"></p></details>
+  </section>
+  <noscript>
+    <p>JavaScript is required for this viewer. The original files remain available below.</p>
+    <ul>
+      {% for section in site.data['google-scholar-publications'].sections %}
+      {% for paper in section.items %}
+      {% assign fulltext = site.data.publication_fulltexts[paper.id] %}
+      {% if paper.image and paper.image != '' %}<li><a href="{{ paper.image | relative_url }}">{{ paper.title | escape }}: original figure</a></li>{% endif %}
+      {% if fulltext %}<li><a href="{{ fulltext.pdf_path | relative_url }}">{{ paper.title | escape }}: original PDF</a></li>{% endif %}
+      {% endfor %}
+      {% endfor %}
+    </ul>
+  </noscript>
+</article>
+<script id="publication-media-data" type="application/json">
+{
+{%- assign wrote_record = false -%}
+{%- for section in site.data['google-scholar-publications'].sections -%}
+{%- for paper in section.items -%}
+{%- assign fulltext = site.data.publication_fulltexts[paper.id] -%}
+{%- assign has_media = false -%}
+{%- if paper.image and paper.image != '' -%}{%- assign has_media = true -%}{%- endif -%}
+{%- if fulltext -%}{%- assign has_media = true -%}{%- endif -%}
+{%- if has_media -%}
+{%- if wrote_record -%},{%- endif -%}
+{{ paper.id | jsonify | replace: '<', '\u003c' }}: {
+  "title": {{ paper.title | jsonify | replace: '<', '\u003c' }},
+  "figure": {% if paper.image and paper.image != '' %}{{ paper.image | relative_url | jsonify | replace: '<', '\u003c' }}{% else %}""{% endif %},
+  "figure_alt": {{ paper.image_alt | default: paper.title | jsonify | replace: '<', '\u003c' }},
+  "pdf": {% if fulltext %}{{ fulltext.pdf_path | relative_url | jsonify | replace: '<', '\u003c' }}{% else %}""{% endif %}
+}
+{%- assign wrote_record = true -%}
+{%- endif -%}
+{%- endfor -%}
+{%- endfor -%}
+}
+</script>
