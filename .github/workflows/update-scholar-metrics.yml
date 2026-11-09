@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/update-scholar-metrics.yml"
       - "tools/update_scholar_metrics.py"
+      - "tools/scholar_profile.py"
       - "tools/scholar_publication_overrides.json"
       - "tools/scholar_local_fallback.ps1"
       - "tools/register_scholar_local_fallback_task.ps1"

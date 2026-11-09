@@ -17,6 +17,15 @@ METRICS_HTML = """
 </table>
 """
 
+PROFILE_ROW = """
+<tr data-extra='row' class='extra gsc_a_tr'>
+  <td class='gsc_a_t'><a class='gsc_a_at extra' data-extra='title' href='/citations?view_op=view_citation&amp;citation_for_view=2AUQlE8AAAAJ:example'>Example <b>paper</b></a>
+  <div class='extra gs_gray'>Hyunsik Min, Another Author</div><div class='gs_gray'>Example Journal</div></td>
+  <td class='gsc_a_c'><a href='/scholar?cites=123' class='gsc_a_ac extra' data-extra='count'><span>1,234</span></a></td>
+  <td data-extra='year' class='gsc_a_y'><span>2026</span></td>
+</tr>
+"""
+
 
 class ScholarRefreshTests(unittest.TestCase):
     def setUp(self):
@@ -33,8 +42,9 @@ class ScholarRefreshTests(unittest.TestCase):
                 "citations": {"all": 52}, "h_index": {"all": 3}, "i10_index": {"all": 2},
             },
             scholar.PUBLICATIONS_OUTPUT_PATH: {
+                "citation_schema_version": 2,
                 "checked_at": checked_at, "total_records": 1,
-                "sections": [{"count": 1, "items": [{"source": "scholar"}]}],
+                "sections": [{"count": 1, "items": [{"source": "scholar", "citation_source": "scholar", "citation_count": 52, "citation_checked_at": checked_at}]}],
             },
         }
 
@@ -69,7 +79,8 @@ class ScholarRefreshTests(unittest.TestCase):
             elif kind == "boolean":
                 metrics["citations"]["all"] = True
             elif kind == "manual_only":
-                archive["sections"][0]["items"][0]["source"] = "manual"
+                record = archive["sections"][0]["items"][0]
+                record.update(source="manual", citation_source=None, citation_count=None, citation_checked_at=None)
             with self.subTest(kind=kind), patch.object(scholar, "load_json_if_exists", side_effect=payloads.get):
                 self.assertIsNone(scholar.last_successful_check(self.today))
 
@@ -109,11 +120,12 @@ class ScholarRefreshTests(unittest.TestCase):
             scholar.main()
 
     def test_hidden_records_are_not_requested_and_success_reports_updated(self):
-        rows = [{"citation_id": "hidden", "scholar_url": "hidden"}, {"citation_id": "visible", "scholar_url": "visible"}]
+        rows = [{"citation_id": "hidden", "scholar_url": "hidden", "title": "Hidden", "citation_count": 0}, {"citation_id": "visible", "scholar_url": "visible", "title": "Visible", "citation_count": 7}]
         overrides = {"profile_name": "Example", "scholar_overrides": {"hidden": {"hidden": True}}}
-        with patch.object(scholar, "load_overrides", return_value=overrides), patch.object(scholar, "fetch_html", side_effect=[METRICS_HTML, "detail"]) as fetch, patch.object(scholar, "parse_profile_rows", return_value=rows), patch.object(scholar, "parse_detail_page", return_value={}), patch.object(scholar, "build_scholar_record", return_value={"id": "visible"}), patch.object(scholar, "build_publications_payload", return_value={"total_records": 1}), patch.object(scholar, "write_json"), patch.object(scholar, "write_publications_payload_if_changed", return_value=True), patch.object(scholar, "report_refresh") as report:
+        with patch.object(scholar, "load_overrides", return_value=overrides), patch.object(scholar, "fetch_html", side_effect=[METRICS_HTML]) as fetch, patch.object(scholar, "parse_profile_rows", return_value=rows), patch.object(scholar, "parse_detail_page") as detail, patch.object(scholar, "build_scholar_record", return_value={"id": "visible"}), patch.object(scholar, "build_publications_payload", return_value={"total_records": 1}), patch.object(scholar, "write_json"), patch.object(scholar, "write_publications_payload_if_changed", return_value=True), patch.object(scholar, "report_refresh") as report:
             self.assertEqual(scholar.main(), "updated")
-            self.assertEqual([call.args[0] for call in fetch.call_args_list], [scholar.PROFILE_URL, "visible"])
+            self.assertEqual([call.args[0] for call in fetch.call_args_list], [scholar.PROFILE_URL])
+            detail.assert_not_called()
             self.assertEqual(report.call_args.args[0], "updated")
 
     def test_actions_outputs_distinguish_deferred_from_updated(self):
@@ -196,12 +208,119 @@ class ScholarRefreshTests(unittest.TestCase):
             self.assertTrue(output.call_args.args[0].startswith("::error::"))
 
     def test_failed_detail_request_does_not_update_aggregate_metrics(self):
-        row = {"scholar_url": "https://scholar.google.com/detail"}
+        row = {"citation_id": "example", "title": "Example", "scholar_url": "https://scholar.google.com/detail"}
         with patch.dict(scholar.os.environ, {"GITHUB_ACTIONS": "true"}), patch.object(scholar, "load_overrides", return_value={}), patch.object(scholar, "fetch_html", side_effect=[METRICS_HTML, "Captcha"]), patch.object(scholar, "parse_profile_rows", return_value=[row]), patch.object(scholar, "write_json") as write, patch("builtins.print") as output:
             with self.assertRaises(RuntimeError):
-                scholar.main()
+                scholar.main(refresh_details=True)
             write.assert_not_called()
             self.assertTrue(output.call_args.args[0].startswith("::error::"))
+
+    def test_profile_counts_accept_attribute_order_extra_classes_nested_text_and_commas(self):
+        rows = scholar.parse_profile_rows(PROFILE_ROW)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["citation_count"], 1234)
+        self.assertEqual(rows[0]["title"], "Example paper")
+        self.assertEqual(rows[0]["year"], 2026)
+        self.assertEqual(rows[0]["venue_row"], "Example Journal")
+        self.assertIn("citation_for_view=2AUQlE8AAAAJ:example", rows[0]["scholar_url"])
+
+    def test_explicit_empty_citation_anchor_is_a_verified_zero(self):
+        page = PROFILE_ROW.replace("<span>1,234</span>", "")
+        self.assertEqual(scholar.parse_profile_rows(page)[0]["citation_count"], 0)
+
+    def test_missing_unreadable_or_truncated_counts_never_become_zero(self):
+        for page in (
+            PROFILE_ROW.replace("gsc_a_ac extra", "unknown"),
+            PROFILE_ROW.replace("1,234", "unavailable"),
+            PROFILE_ROW.replace("1,234", "-1"),
+            PROFILE_ROW.replace("</tr>", ""),
+        ):
+            with self.subTest(page=page), self.assertRaises(RuntimeError):
+                scholar.parse_profile_rows(page)
+
+    def test_unreadable_profile_count_keeps_both_published_snapshots(self):
+        page = METRICS_HTML + PROFILE_ROW.replace("1,234", "unavailable")
+        with patch.object(scholar, "fetch_html", return_value=page), patch.object(scholar, "write_json") as metrics_write, patch.object(scholar, "write_publications_payload_if_changed") as archive_write:
+            with self.assertRaisesRegex(RuntimeError, "citation count is unreadable"):
+                scholar.main()
+            metrics_write.assert_not_called()
+            archive_write.assert_not_called()
+
+    def test_partial_profile_and_duplicate_ids_cannot_publish(self):
+        for page in (PROFILE_ROW + "<button id='gsc_bpf_more'>Show more</button>", PROFILE_ROW * 2):
+            with self.subTest(page=page), self.assertRaises(RuntimeError):
+                scholar.parse_profile_rows(page)
+        self.assertEqual(len(scholar.parse_profile_rows(PROFILE_ROW + "<button disabled id='gsc_bpf_more'>Show more</button>")), 1)
+
+    def test_verifying_screen_is_detected_without_captcha_text(self):
+        with self.assertRaises(scholar.ScholarAccessBlocked):
+            scholar.reject_access_challenge("<html><title>Verifying...</title></html>")
+
+    def test_citation_schema_and_per_paper_dates_are_required_for_freshness(self):
+        for kind in ("legacy", "missing_count", "negative", "boolean", "old_date", "unknown_with_count"):
+            payloads = self.snapshots()
+            archive = payloads[scholar.PUBLICATIONS_OUTPUT_PATH]
+            record = archive["sections"][0]["items"][0]
+            if kind == "legacy":
+                archive.pop("citation_schema_version")
+            elif kind == "missing_count":
+                record.pop("citation_count")
+            elif kind == "negative":
+                record["citation_count"] = -1
+            elif kind == "boolean":
+                record["citation_count"] = True
+            elif kind == "old_date":
+                record["citation_checked_at"] = (self.today - timedelta(days=1)).isoformat()
+            else:
+                archive["total_records"] = archive["sections"][0]["count"] = 2
+                archive["sections"][0]["items"].append({"citation_source": None, "citation_count": 0})
+            with self.subTest(kind=kind), patch.object(scholar, "load_json_if_exists", side_effect=payloads.get):
+                self.assertIsNone(scholar.last_successful_check(self.today))
+
+    def test_daily_check_uses_one_request_and_preserves_curated_metadata(self):
+        overrides = scholar.load_overrides()
+        previous = scholar.load_json_if_exists(scholar.PUBLICATIONS_OUTPUT_PATH)
+        old_record = next(item for section in previous["sections"] for item in section["items"] if item["id"] == "5nxA0vEk-isC")
+        row = {"citation_id": old_record["id"], "title": old_record["title"], "scholar_url": old_record["scholar_url"], "citation_count": 9, "year": old_record["year"]}
+        with patch.object(scholar, "fetch_html", return_value=METRICS_HTML) as fetch, patch.object(scholar, "parse_profile_rows", return_value=[row]), patch.object(scholar, "write_json") as write, patch.object(scholar, "write_publications_payload_if_changed", return_value=True) as archive_write:
+            scholar.main()
+        fetch.assert_called_once_with(scholar.PROFILE_URL)
+        archive = archive_write.call_args.args[0]
+        updated = next(item for section in archive["sections"] for item in section["items"] if item["id"] == old_record["id"])
+        for field in ("title", "authors", "doi", "volume", "issue", "pages", "details", "image", "summary"):
+            self.assertEqual(updated[field], old_record[field], field)
+        self.assertEqual(updated["citation_count"], 9)
+        self.assertEqual(updated["citation_source"], "scholar")
+        self.assertEqual(updated["citation_checked_at"], archive["checked_at"])
+        self.assertEqual(write.call_args.args[1]["checked_at"], archive["checked_at"])
+
+    def test_manual_record_citations_use_explicit_id_without_replacing_its_identity(self):
+        overrides = scholar.load_overrides()
+        manual = overrides["manual_records"][0]
+        row = {"citation_id": manual["scholar_citation_id"], "title": "Scholar title", "scholar_url": "https://scholar.google.com/citations?citation_for_view=2AUQlE8AAAAJ:8k81kl-MbHgC", "citation_count": 3}
+        record = scholar.build_manual_record(manual)
+        scholar.update_citation(record, row, self.today.isoformat())
+        self.assertEqual(record["id"], "manual-its-world-congress-2026")
+        self.assertEqual(record["source"], "manual")
+        self.assertEqual(record["title"], manual["display_title"])
+        self.assertEqual(record["citation_count"], 3)
+        self.assertEqual(record["citation_source"], "scholar")
+        self.assertEqual(record["scholar_url"], row["scholar_url"])
+        scholar.update_citation(record, None, self.today.isoformat())
+        self.assertIsNone(record["citation_count"])
+        self.assertIsNone(record["citation_checked_at"])
+
+    def test_manual_metadata_with_verified_scholar_citations_can_be_fresh(self):
+        payloads = self.snapshots()
+        payloads[scholar.PUBLICATIONS_OUTPUT_PATH]["sections"][0]["items"][0]["source"] = "manual"
+        with patch.object(scholar, "load_json_if_exists", side_effect=payloads.get):
+            self.assertEqual(scholar.last_successful_check(self.today), self.today)
+
+    def test_local_fallback_can_run_on_battery_and_retries_failures_without_waking_pc(self):
+        script = Path("tools/register_scholar_local_fallback_task.ps1").read_text(encoding="utf-8")
+        for flag in ("-AllowStartIfOnBatteries", "-DontStopIfGoingOnBatteries", "-RestartCount 2", "-RestartInterval (New-TimeSpan -Hours 2)", "-WindowStyle Hidden"):
+            self.assertIn(flag, script)
+        self.assertNotIn("-WakeToRun", script)
 
     def test_bibtex_uses_and_between_individual_authors(self):
         for authors, expected in [

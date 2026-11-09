@@ -209,6 +209,7 @@
   "manual_records": [
     {
       "id": "manual-its-world-congress-2026",
+      "scholar_citation_id": "8k81kl-MbHgC",
       "category": "international-conferences",
       "display_title": "Comfort-Centric Trajectory Prediction for Autonomous Driving via Temporal Graph Cross Attention",
       "display_venue": "ITS World Congress 2026",
@@ -222,6 +223,7 @@
     },
     {
       "id": "manual-euroma-2026",
+      "scholar_citation_id": "MXK_kJrjxJIC",
       "category": "international-conferences",
       "display_title": "Theorising Service Routines through Ontological Granularity and Behavioural Sequencing",
       "display_venue": "European Operations Management Association, The 2026 EurOMA Annual Conference",

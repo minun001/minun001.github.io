@@ -185,7 +185,7 @@ page_effects: true
         </div>
       </div>
       <a class="pub-scholar-link" href="https://scholar.google.com/citations?user=2AUQlE8AAAAJ&amp;hl=en" target="_blank" rel="noopener">View profile</a>
-      <p class="pub-scholar-note" data-scholar-updated>Last checked on {{ scholar_metrics.checked_at_display }}.</p>
+      <p class="pub-scholar-note" data-scholar-updated>Last verified on <time datetime="{{ scholar_metrics.checked_at | escape }}">{{ scholar_metrics.checked_at_display }}</time>.</p>
     </article>
   </section>
 
@@ -260,7 +260,7 @@ page_effects: true
           <div class="pub-meta-row" data-publication-citations>
             <span class="pub-meta-label">Citations</span>
             <span class="pub-meta-value">
-              {% if item.source == 'scholar' and item.citation_count != nil %}
+              {% if item.citation_source == 'scholar' and item.citation_count != nil %}
                 {% if item.scholar_url and item.scholar_url != '' %}
               <a class="pub-citation-link" href="{{ item.scholar_url | escape }}" target="_blank" rel="noopener" aria-label="Cited by {{ item.citation_count }} on Google Scholar: {{ item.title | escape }}">Cited by <strong>{{ item.citation_count }}</strong></a>
                 {% else %}
@@ -319,7 +319,7 @@ page_effects: true
 
   <p class="pub-empty" data-publication-empty hidden>No publication matched that search yet.</p>
 
-  <p class="pub-citation-note">Per-paper citations checked <time datetime="{{ publication_archive.checked_at | escape }}">{{ publication_archive.checked_at_display | escape }}</time>.</p>
+  <p class="pub-citation-note">Citation counts reflect the last successful Scholar check: <time datetime="{{ publication_archive.checked_at | escape }}">{{ publication_archive.checked_at_display | escape }}</time>. Automatic checks run daily; new citations may appear later on Scholar.</p>
   <nav class="chapter-nav" aria-label="Continue through site chapters">
     <a class="chapter-link" href="{{ '/research/' | relative_url }}">
       <span>Previous chapter</span>

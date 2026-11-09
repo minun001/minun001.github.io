@@ -40,7 +40,7 @@ if ([string]::IsNullOrWhiteSpace($ScriptPath)) {
 $resolvedScriptPath = (Resolve-Path -LiteralPath $ScriptPath).Path
 $taskTime = Resolve-TaskTime $At
 $powerShellExe = Join-Path $env:WINDIR "System32\WindowsPowerShell\v1.0\powershell.exe"
-$arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$resolvedScriptPath`""
+$arguments = "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$resolvedScriptPath`""
 if (-not [string]::IsNullOrWhiteSpace($Python)) {
     $resolvedPython = (Resolve-Path -LiteralPath $Python).Path
     $arguments += " -Python `"$resolvedPython`""
@@ -54,6 +54,10 @@ $principal = New-ScheduledTaskPrincipal `
     -RunLevel Limited
 $settings = New-ScheduledTaskSettingsSet `
     -StartWhenAvailable `
+    -AllowStartIfOnBatteries `
+    -DontStopIfGoingOnBatteries `
+    -RestartCount 2 `
+    -RestartInterval (New-TimeSpan -Hours 2) `
     -ExecutionTimeLimit (New-TimeSpan -Minutes 30) `
     -MultipleInstances IgnoreNew
 

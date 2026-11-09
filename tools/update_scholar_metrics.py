@@ -12,8 +12,12 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import parse_qs, urljoin, urlparse
 from urllib.request import Request, urlopen
+
+if __package__:
+    from .scholar_profile import parse_profile_rows
+else:
+    from scholar_profile import parse_profile_rows
 
 
 PROFILE_URL = "https://scholar.google.com/citations?user=2AUQlE8AAAAJ&hl=en&cstart=0&pagesize=100"
@@ -59,7 +63,7 @@ class ScholarAccessBlocked(RuntimeError):
 
 def reject_access_challenge(page: str) -> None:
     lowered = page.lower()
-    if any(marker in lowered for marker in ("captcha", "unusual traffic", "automated queries", "/sorry/")):
+    if any(marker in lowered for marker in ("captcha", "unusual traffic", "automated queries", "/sorry/")) or re.search(r"<title>\s*verifying[.\s\u2026]*</title>", lowered):
         raise ScholarAccessBlocked("Google Scholar returned an access challenge")
 
 
@@ -117,13 +121,23 @@ def last_successful_check(today: date) -> date | None:
             if type(count) is not int or count < 0:
                 return None
         sections = publications["sections"]
+        if publications.get("citation_schema_version") != 2:
+            return None
         records = [record for section in sections for record in section["items"]]
         if not records or len(records) != publications["total_records"]:
             return None
         if any(section["count"] != len(section["items"]) for section in sections):
             return None
-        if not any(record.get("source") == "scholar" for record in records):
+        verified = [record for record in records if record.get("citation_source") == "scholar"]
+        if not verified:
             return None
+        for record in records:
+            count = record.get("citation_count")
+            if record.get("citation_source") == "scholar":
+                if type(count) is not int or count < 0 or record.get("citation_checked_at") != checked.isoformat():
+                    return None
+            elif count is not None or record.get("citation_checked_at") is not None:
+                return None
         return checked
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         return None
@@ -205,43 +219,6 @@ def parse_metrics(profile_html: str) -> dict[str, dict[str, int]]:
         raise RuntimeError(f"Failed to parse metrics from Google Scholar: missing {sorted(missing)}")
 
     return metric_map
-
-
-def parse_profile_rows(profile_html: str) -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    for row_html in re.findall(r"<tr class=\"gsc_a_tr\">(.*?)</tr>", profile_html, flags=re.DOTALL):
-        title_match = re.search(
-            r'href=\"([^\"]*citation_for_view=[^\"]+)\" class=\"gsc_a_at\">(.*?)</a>',
-            row_html,
-            flags=re.DOTALL,
-        )
-        if not title_match:
-            continue
-
-        raw_href = html.unescape(title_match.group(1))
-        full_href = urljoin(BASE_URL, raw_href)
-        query = parse_qs(urlparse(full_href).query)
-        citation_for_view = query.get("citation_for_view", [""])[0]
-        citation_id = citation_for_view.split(":")[-1] if ":" in citation_for_view else citation_for_view
-        meta_values = [
-            clean_html_text(value)
-            for value in re.findall(r'<div class=\"gs_gray\">(.*?)</div>', row_html, flags=re.DOTALL)
-        ]
-        citation_count_match = re.search(r'class=\"gsc_a_ac[^"]*\">(\d+)</a>', row_html)
-        year_match = re.search(r'class=\"gsc_a_y\".*?>(\d{4})<', row_html, flags=re.DOTALL)
-
-        rows.append(
-            {
-                "citation_id": citation_id,
-                "scholar_url": full_href,
-                "title": clean_html_text(title_match.group(2)),
-                "authors_row": meta_values[0] if len(meta_values) > 0 else "",
-                "venue_row": meta_values[1] if len(meta_values) > 1 else "",
-                "citation_count": int(citation_count_match.group(1)) if citation_count_match else 0,
-                "year": int(year_match.group(1)) if year_match else None,
-            }
-        )
-    return rows
 
 
 def parse_detail_page(detail_html: str) -> dict[str, str]:
@@ -446,12 +423,12 @@ def prefer_record(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]
     left_score = (
         (1 if left.get("source") == "manual" else 0),
         (1 if left.get("image") else 0),
-        left.get("citation_count", 0),
+        left.get("citation_count") or 0,
     )
     right_score = (
         (1 if right.get("source") == "manual" else 0),
         (1 if right.get("image") else 0),
-        right.get("citation_count", 0),
+        right.get("citation_count") or 0,
     )
     return left if left_score >= right_score else right
 
@@ -495,9 +472,7 @@ def build_scholar_record(
         detail_map.get("Journal")
         or detail_map.get("Conference")
         or detail_map.get("Source")
-        or override.get("display_venue")
-        if override
-        else None
+        or (override.get("display_venue") if override else None)
     )
     venue = venue or row.get("venue_row", "")
     category = classify_record(venue, detail_map, override)
@@ -521,7 +496,7 @@ def build_scholar_record(
         "topic_title": (override.get("topic_title") if override else None) or topic_title,
         "topic_copy": (override.get("topic_copy") if override else None) or topic_copy,
         "year": year,
-        "citation_count": row.get("citation_count", 0),
+        "citation_count": row.get("citation_count"),
         "keywords": list(override.get("keywords", [])) if override else [],
         "doi": (override.get("doi") if override else None) or detail_map.get("DOI", ""),
         "image": (override.get("image") if override else None) or "",
@@ -551,7 +526,7 @@ def build_manual_record(manual_record: dict[str, Any]) -> dict[str, Any]:
         "topic_title": manual_record.get("topic_title", "Research Paper"),
         "topic_copy": manual_record.get("topic_copy", "Tracked manually for the publication archive."),
         "year": manual_record.get("year"),
-        "citation_count": manual_record.get("citation_count", 0),
+        "citation_count": None,
         "keywords": manual_record.get("keywords", []),
         "doi": manual_record.get("doi", ""),
         "image": manual_record.get("image", ""),
@@ -572,14 +547,14 @@ def sort_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
         records,
         key=lambda record: (
             -(record.get("year") or 0),
-            -record.get("citation_count", 0),
+            -(record.get("citation_count") or 0),
             record.get("title", "").lower(),
         ),
     )
 
 
-def build_metrics_payload(metrics: dict[str, dict[str, int]], profile_name: str) -> dict[str, Any]:
-    now = datetime.now(KST)
+def build_metrics_payload(metrics: dict[str, dict[str, int]], profile_name: str, *, checked_at: datetime | None = None) -> dict[str, Any]:
+    now = checked_at or datetime.now(KST)
     display_date = f"{now.strftime('%B')} {now.day}, {now.year}"
     return {
         "profile_name": profile_name,
@@ -595,8 +570,9 @@ def build_metrics_payload(metrics: dict[str, dict[str, int]], profile_name: str)
 def build_publications_payload(
     overrides: dict[str, Any],
     records: list[dict[str, Any]],
+    *, checked_at: datetime | None = None,
 ) -> dict[str, Any]:
-    now = datetime.now(KST)
+    now = checked_at or datetime.now(KST)
     display_date = f"{now.strftime('%B')} {now.day}, {now.year}"
     sections: list[dict[str, Any]] = []
     for key in overrides["section_order"]:
@@ -612,6 +588,7 @@ def build_publications_payload(
         )
 
     return {
+        "citation_schema_version": 2,
         "profile_name": overrides["profile_name"],
         "source_url": overrides["source_url"],
         "checked_at": now.strftime("%Y-%m-%d"),
@@ -634,12 +611,40 @@ def write_publications_payload_if_changed(payload: dict[str, Any]) -> bool:
     return True
 
 
-def main(*, skip_if_fresh: bool = False, defer_on_block: bool = False, max_stale_days: int = 3) -> str:
+def cached_details(row: dict[str, Any], cached: dict[str, Any]) -> dict[str, str]:
+    """Keep bibliographic data independent of daily citation-only profile checks."""
+    details = {
+        "title": row["title"],
+        "Authors": cached.get("authors") or row.get("authors_row", ""),
+        "Publication date": str(row.get("year") or cached.get("year") or ""),
+        "Description": cached.get("summary", ""),
+        "DOI": cached.get("doi", ""),
+        "Volume": cached.get("volume", ""),
+        "Issue": cached.get("issue", ""),
+        "Pages": cached.get("pages", ""),
+    }
+    venue_field = "Conference" if "conferences" in cached.get("category", "") else "Journal"
+    details[venue_field] = cached.get("venue") or row.get("venue_row", "")
+    return details
+
+
+def update_citation(record: dict[str, Any], row: dict[str, Any] | None, checked_at: str) -> None:
+    count = row.get("citation_count") if row else None
+    if row is not None and (type(count) is not int or count < 0):
+        raise RuntimeError("Unverified citation count; snapshots retained")
+    record["citation_count"] = count
+    record["citation_source"] = "scholar" if row else None
+    record["citation_checked_at"] = checked_at if row else None
+    if row:
+        record["scholar_url"] = row["scholar_url"]
+
+
+def main(*, skip_if_fresh: bool = False, defer_on_block: bool = False, max_stale_days: int = 3, refresh_details: bool = False) -> str:
     if max_stale_days < 1:
         raise ValueError("max_stale_days must be at least 1")
     today = datetime.now(KST).date()
     checked = last_successful_check(today)
-    if skip_if_fresh and checked == today:
+    if skip_if_fresh and checked == today and not refresh_details:
         print(f"Google Scholar snapshots already checked on {today} (KST); no request made.")
         report_refresh("fresh", checked, today)
         return "fresh"
@@ -651,6 +656,11 @@ def main(*, skip_if_fresh: bool = False, defer_on_block: bool = False, max_stale
         if not rows:
             raise RuntimeError("Google Scholar returned no readable publication rows")
 
+        archive = load_json_if_exists(PUBLICATIONS_OUTPUT_PATH) or {}
+        cached = {record["id"]: record for section in archive.get("sections", []) for record in section["items"]}
+        rows_by_id = {row["citation_id"]: row for row in rows}
+        verified_at = datetime.now(KST)
+        citation_date = verified_at.date().isoformat()
         override_map: dict[str, dict[str, Any]] = overrides.get("scholar_overrides", {})
         records: list[dict[str, Any]] = []
         detail_requests = 0
@@ -658,22 +668,26 @@ def main(*, skip_if_fresh: bool = False, defer_on_block: bool = False, max_stale
             override = override_map.get(row.get("citation_id", ""))
             if override and override.get("hidden"):
                 continue
-            if detail_requests:
-                time.sleep(1)
-            detail_requests += 1
-            detail_html = fetch_html(row["scholar_url"])
-            detail_map = parse_detail_page(detail_html)
+            detail_map = cached_details(row, cached.get(row["citation_id"], {}))
+            if refresh_details:
+                if detail_requests:
+                    time.sleep(1)
+                detail_requests += 1
+                detail_map = parse_detail_page(fetch_html(row["scholar_url"]))
             record = build_scholar_record(row, detail_map, override)
             if record:
+                update_citation(record, row, citation_date)
                 records.append(record)
 
         for manual_record in overrides.get("manual_records", []):
-            records.append(build_manual_record(manual_record))
+            record = build_manual_record(manual_record)
+            update_citation(record, rows_by_id.get(manual_record.get("scholar_citation_id")), citation_date)
+            records.append(record)
 
         records = dedupe_records(records)
 
-        metrics_payload = build_metrics_payload(metrics, overrides["profile_name"])
-        publications_payload = build_publications_payload(overrides, records)
+        metrics_payload = build_metrics_payload(metrics, overrides["profile_name"], checked_at=verified_at)
+        publications_payload = build_publications_payload(overrides, records, checked_at=verified_at)
         write_json(METRICS_OUTPUT_PATH, metrics_payload)
         publications_changed = write_publications_payload_if_changed(publications_payload)
         print(
@@ -705,6 +719,7 @@ def main(*, skip_if_fresh: bool = False, defer_on_block: bool = False, max_stale
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Refresh verified Google Scholar snapshots without fine-grained duplicate requests.")
     parser.add_argument("--skip-if-fresh", action="store_true", help="Skip network access when both snapshots were checked today (KST).")
+    parser.add_argument("--refresh-details", action="store_true", help="Also refresh bibliographic details. Optional; daily citation updates use the profile only.")
     parser.add_argument("--defer-on-block", action="store_true", help="Keep a recent verified snapshot on an external access failure; report deferred, not updated.")
     parser.add_argument("--max-stale-days", type=int, default=3, help="Fail on access errors once the verified snapshot reaches this age (default: 3 days).")
     main(**vars(parser.parse_args()))
